@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillShopBalanceInvoiceApplyMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceApply" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="invoiceapply_no" property="invoiceapplyNo" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="DATE" />
+    <result column="customer_no" property="customerNo" jdbcType="CHAR" />  
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="taxpayer_id" property="taxpayerId" jdbcType="VARCHAR" />
+    <result column="post_pay_date" property="postPayDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="export_num" property="exportNum" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="invoice_type" property="invoiceType" jdbcType="TINYINT" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="pre_invoice" property="preInvoice" jdbcType="TINYINT" />
+    <result column="mall_address" property="mallAddress" jdbcType="VARCHAR" />
+    <result column="mall_tel" property="mallTel" jdbcType="VARCHAR" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="mailing_address" property="mailingAddress" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, invoiceapply_no, company_no, invoice_apply_date, customer_no, currency, amount, 
+    taxpayer_id, post_pay_date, status, export_num, name, bsgroups_no, mall_no, invoice_type, 
+    bank_name, bank_account, pre_invoice, mall_address, mall_tel, contact_name, tel, 
+    mailing_address, create_user, create_time, update_user, update_time, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+        <if test="null!=params.invoiceapplyNo and ''!=params.invoiceapplyNo" >    
+        AND invoiceapply_no = #{params.invoiceapplyNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >    
+        AND company_no = #{params.companyNo}
+      </if>
+       <if test="null!=params.mallNo and ''!=params.mallNo" >  
+        AND mall_no = #{params.mallNo}
+      </if>
+        <if test="null!=params.customerNo and ''!=params.customerNo" >      
+        AND customer_no = #{params.customerNo}
+      </if>
+        <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+      <if test="null!=params.createUser and ''!=params.createUser" >
+        AND create_user = #{params.createUser}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_shop_balance_invoice_apply
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_shop_balance_invoice_apply WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_invoice_apply WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_invoice_apply WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_shop_balance_invoice_apply
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceApply" >
+    DELETE FROM bill_shop_balance_invoice_apply
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceApply" >
+    INSERT INTO bill_shop_balance_invoice_apply (id, invoiceapply_no, company_no, 
+      invoice_apply_date, customer_no, currency, 
+      amount, taxpayer_id, post_pay_date, 
+      status, export_num, name, 
+      bsgroups_no, mall_no, invoice_type, 
+      bank_name, bank_account, pre_invoice, 
+      mall_address, mall_tel, contact_name, 
+      tel, mailing_address, create_user, 
+      create_time, update_user, update_time, 
+      remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{invoiceapplyNo,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, 
+      #{invoiceApplyDate,jdbcType=DATE}, #{customerNo,jdbcType=CHAR}, #{currency,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{taxpayerId,jdbcType=VARCHAR}, #{postPayDate,jdbcType=DATE}, 
+      #{status,jdbcType=TINYINT}, #{exportNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{bsgroupsNo,jdbcType=CHAR}, #{mallNo,jdbcType=CHAR}, #{invoiceType,jdbcType=TINYINT}, 
+      #{bankName,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, #{preInvoice,jdbcType=TINYINT}, 
+      #{mallAddress,jdbcType=VARCHAR}, #{mallTel,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{mailingAddress,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceApply" >
+    INSERT INTO bill_shop_balance_invoice_apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="invoiceapplyNo != null" >
+        invoiceapply_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date,
+      </if>
+      <if test="customerNo != null" >
+        customer_no,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="taxpayerId != null" >
+        taxpayer_id,
+      </if>
+      <if test="postPayDate != null" >
+        post_pay_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="exportNum != null" >
+        export_num,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="invoiceType != null" >
+        invoice_type,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="preInvoice != null" >
+        pre_invoice,
+      </if>
+      <if test="mallAddress != null" >
+        mall_address,
+      </if>
+      <if test="mallTel != null" >
+        mall_tel,
+      </if>
+      <if test="contactName != null" >
+        contact_name,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="mailingAddress != null" >
+        mailing_address,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceapplyNo != null" >
+        #{invoiceapplyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        #{invoiceApplyDate,jdbcType=DATE},
+      </if>
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxpayerId != null" >
+        #{taxpayerId,jdbcType=VARCHAR},
+      </if>
+      <if test="postPayDate != null" >
+        #{postPayDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="exportNum != null" >
+        #{exportNum,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceType != null" >
+        #{invoiceType,jdbcType=TINYINT},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="preInvoice != null" >
+        #{preInvoice,jdbcType=TINYINT},
+      </if>
+      <if test="mallAddress != null" >
+        #{mallAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mallTel != null" >
+        #{mallTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="mailingAddress != null" >
+        #{mailingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceApply" >
+    UPDATE bill_shop_balance_invoice_apply
+    <set >
+      <if test="invoiceapplyNo != null" >
+        invoiceapply_no = #{invoiceapplyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date = #{invoiceApplyDate,jdbcType=DATE},
+      </if>
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxpayerId != null" >
+        taxpayer_id = #{taxpayerId,jdbcType=VARCHAR},
+      </if>
+      <if test="postPayDate != null" >
+        post_pay_date = #{postPayDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="exportNum != null" >
+        export_num = #{exportNum,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceType != null" >
+        invoice_type = #{invoiceType,jdbcType=TINYINT},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="preInvoice != null" >
+        pre_invoice = #{preInvoice,jdbcType=TINYINT},
+      </if>
+      <if test="mallAddress != null" >
+        mall_address = #{mallAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mallTel != null" >
+        mall_tel = #{mallTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="mailingAddress != null" >
+        mailing_address = #{mailingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceApply" >
+    UPDATE bill_shop_balance_invoice_apply
+    SET invoiceapply_no = #{invoiceapplyNo,jdbcType=CHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      invoice_apply_date = #{invoiceApplyDate,jdbcType=DATE},
+      customer_no = #{customerNo,jdbcType=CHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      taxpayer_id = #{taxpayerId,jdbcType=VARCHAR},
+      post_pay_date = #{postPayDate,jdbcType=DATE},
+      status = #{status,jdbcType=TINYINT},
+      export_num = #{exportNum,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      mall_no = #{mallNo,jdbcType=CHAR},
+      invoice_type = #{invoiceType,jdbcType=TINYINT},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      pre_invoice = #{preInvoice,jdbcType=TINYINT},
+      mall_address = #{mallAddress,jdbcType=VARCHAR},
+      mall_tel = #{mallTel,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      mailing_address = #{mailingAddress,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

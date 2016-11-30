@@ -1,0 +1,1750 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillSalesOutstandingAnalysisMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSalesOutstandingAnalysis" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+    <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="province_no" property="provinceNo" jdbcType="VARCHAR" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo1" jdbcType="CHAR" />
+    <result column="organ_name" property="organName1" jdbcType="VARCHAR" />
+    <result column="biz_no" property="organNo2" jdbcType="CHAR" />
+    <result column="biz_name" property="organName2" jdbcType="VARCHAR" />
+    <result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+    <result column="bsgroups_name" property="bsgroupsName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="cmcdist_no" property="cmcdistNo" jdbcType="CHAR" />
+    <result column="cmcdist_name" property="cmcdistName" jdbcType="VARCHAR" />
+    <result column="region_no" property="regionNo" jdbcType="CHAR" />
+    <result column="region_name" property="regionName" jdbcType="VARCHAR" />
+    <result column="sale_type" property="saleType" jdbcType="VARCHAR" />
+    <result column="biz_type" property="bizType" jdbcType="VARCHAR" />
+    <result column="source_type" property="sourceType" jdbcType="INTEGER" />
+    <result column="shop_level" property="shopLevel" jdbcType="VARCHAR" />
+    <result column="sale_mode" property="saleMode" jdbcType="VARCHAR" />
+    <result column="retail_type" property="retailType" jdbcType="VARCHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="multi" property="multi" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <!-- <result column="assistant_no" property="assistantNo" jdbcType="VARCHAR" />
+    <result column="assistant_name" property="assistantName" jdbcType="VARCHAR" /> -->
+	<result column="wildcard_no" property="wildcardNo" jdbcType="VARCHAR" />
+    <result column="wildcard_name" property="wildcardName" jdbcType="VARCHAR" />
+    <result column="activity_no" property="activityNo" jdbcType="VARCHAR" />
+    <result column="activity_type_name" property="activityTypeStr" jdbcType="VARCHAR" />
+    <result column="pro_no" property="proNo" jdbcType="VARCHAR" />
+    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="pro_start_time" property="proStartDate" jdbcType="DATE" />
+    <result column="pro_end_time" property="proEndDate" jdbcType="DATE" />
+    <result column="strength" property="strength" jdbcType="DECIMAL" />
+    <result column="virtual_flag_str" property="virtualFlagStr" jdbcType="VARCHAR" />
+    <result column="properties_str" property="propertiesStr" jdbcType="VARCHAR" />
+    <result column="launch_type_name" property="launchTypeStr" jdbcType="VARCHAR"/>
+    <result column="rate" property="rate" jdbcType="DECIMAL" />
+    <result column="rate_code" property="rateCode" jdbcType="VARCHAR" />
+    <result column="rate_name" property="rateName" jdbcType="VARCHAR" />
+    <result column="billing_code" property="billingCode" jdbcType="VARCHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="root_category_no" property="rootCategoryNo" jdbcType="CHAR" />
+    <result column="root_category_name" property="rootCategoryName" jdbcType="VARCHAR" />
+    <result column="sub_category_name" property="subCategoruName" jdbcType="VARCHAR" />
+    <result column="balance_base" property="balanceBase" jdbcType="BIT" />
+    <result column="season_no" property="seasonNo" jdbcType="CHAR" />
+    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+    <result column="year_code" property="yearCode" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="sell_season" property="sellSeason" jdbcType="VARCHAR" />
+    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+    <result column="style_name" property="styleName" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="color_no" property="colorNo" jdbcType="CHAR" />
+    <result column="color_name" property="colorName" jdbcType="CHAR" />
+    <result column="out_date" property="outDate" jdbcType="DATE" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="tag_amount" property="tagAmount" jdbcType="DECIMAL" />
+    <result column="disc_amount" property="discPrice" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="sales_amount" property="salesAmount" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="cost" jdbcType="DECIMAL" />
+    <result column="deduct_amount" property="deductAmount" jdbcType="DECIMAL" />
+    <result column="contract_rate" property="contractRate" jdbcType="DECIMAL" />
+    <result column="conprice_deduct_amount" property="conpriceDeductAmount" jdbcType="DECIMAL" />
+    <result column="conprice_ladder_amount" property="conpriceLadderAmount" jdbcType="DECIMAL" />
+    <result column="prom_plusbuckle_amount" property="promPlusbuckleAmount" jdbcType="DECIMAL" />
+    <result column="back_amount" property="backAmount" jdbcType="DECIMAL" />
+    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+    <result column="gross_margin_rate" property="grossMarginRate" jdbcType="DECIMAL" />
+    <result column="deduction_rate" property="deductionRate" jdbcType="DECIMAL" />
+    <result column="conprice_deduct_rate" property="conpriceDeductRate" jdbcType="DECIMAL" />
+    <result column="conprice_ladder_rate" property="conpriceLadderRate" jdbcType="DECIMAL" />
+    <result column="prom_plusbuckle_rate" property="promPlusbuckleRate" jdbcType="DECIMAL" />
+    <result column="the_discount_rate" property="theDiscountRate" jdbcType="DECIMAL" />
+    <result column="the_margin_rate" property="theMarginRate" jdbcType="DECIMAL" />
+    <result column="reimbursement_rate" property="reimbursementRate" jdbcType="DECIMAL" />
+    <result column="salesamount_discount" property="salesamountDiscount" jdbcType="DECIMAL" />
+    <result column="salesamount_prodiscount" property="salesamountProdiscount" jdbcType="DECIMAL" />
+    <result column="synthesize_return_rate" property="synthesizeReturnRate" jdbcType="DECIMAL" />
+    <result column="balance_base_name" property="balanceBaseName" jdbcType="VARCHAR" />
+    <result column="discount_type_name" property="rateTypeStr" jdbcType="VARCHAR" />
+    <result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+    <result column="rate_discount" property="rateDiscount" jdbcType="DECIMAL" />
+    <result column="virtual_amount" property="virtualAmount" jdbcType="DECIMAL" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="VARCHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="difference_amount" property="differenceAmount" jdbcType="DECIMAL" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="sd_gross_margin_rate" property="sdGrossMarginRate" jdbcType="DECIMAL" />
+    <result column="sd_the_margin_rate" property="sdTheMarginRate" jdbcType="DECIMAL" />
+    <result column="purchase_season" property="purchaseSeason" jdbcType="VARCHAR" />
+    <result column="item_flag" property="itemFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="TotalResultMap" type="cn.wonhigh.retail.fas.common.model.BillSalesOutstandingAnalysis" >
+  	<result column="total" property="total" jdbcType="INTEGER" />
+  	<result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="tag_amount" property="tagAmount" jdbcType="DECIMAL" />
+    <result column="disc_amount" property="discPrice" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="sales_amount" property="salesAmount" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="cost" jdbcType="DECIMAL" />
+    <result column="deduct_amount" property="deductAmount" jdbcType="DECIMAL" />
+    <result column="contract_rate" property="contractRate" jdbcType="DECIMAL" />
+    <result column="conprice_deduct_amount" property="conpriceDeductAmount" jdbcType="DECIMAL" />
+    <result column="conprice_ladder_amount" property="conpriceLadderAmount" jdbcType="DECIMAL" />
+    <result column="prom_plusbuckle_amount" property="promPlusbuckleAmount" jdbcType="DECIMAL" />
+    <result column="back_amount" property="backAmount" jdbcType="DECIMAL" />
+    <result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+    <result column="virtual_amount" property="virtualAmount" jdbcType="DECIMAL" />
+    <result column="difference_amount" property="differenceAmount" jdbcType="DECIMAL" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, zone_no, zone_name, province_no, province_name, organ_no1, organ_name1, organ_no2, 
+    organ_name2, bsgroups_no, bsgroups_name, mall_no, mall_name, cmcdist_no, cmcdist_name, 
+    region_no, region_name, sale_type, biz_type, shop_level, sale_mode, retail_type, 
+    major, multi, shop_no, short_name, full_name, assistant_no, assistant_name, activity_no, 
+    activity_type, pro_no, pro_name, pro_start_date, pro_end_date, strength, virtual_flag, 
+    properties, rate, rate_code, rate_name, billing_code, sku_no, item_no, size_no, item_code, 
+    item_name, barcode, brand_no, brand_name, category_no, category_name, root_category_no, 
+    root_category_name, balance_base, season_no, season_name, year_code, year, sell_season, 
+    style_no, style_name, gender, orderfrom, style, color_no, color_name, out_date, qty, 
+    tag_amount, disc_price, amount, sales_amount, cost, deduct_amount, contract_rate, 
+    conprice_deduct_amount, conprice_ladder_amount, prom_plusbuckle_amount, back_amount, 
+    discount_rate, gross_margin_rate, deduction_rate, conprice_deduct_rate, conprice_ladder_rate, 
+    prom_plusbuckle_rate, the_discount_rate, the_margin_rate, reimbursement_rate, salesamount_discount, 
+    salesamount_prodiscount
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_sales_outstanding_analysis
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+ 
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_sales_outstanding_analysis WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_sales_outstanding_analysis WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_sales_outstanding_analysis
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillSalesOutstandingAnalysis" >
+    DELETE FROM bill_sales_outstanding_analysis
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+ 
+  <!-- pos 及 gms 销售单据合并查询，查询符合条件的记录数 wangyj -->
+  <select id="findSalesOutstandingAnalysisCount" resultMap="TotalResultMap" parameterType="map" >
+  	/*#mycat:balance=select 1 from bill_shop_balance where sharding_flag='${params.shardingFlag}' */
+   	SELECT COUNT(*) total,
+   		sum(tb.qty) qty,
+		sum(tb.tagAmount) tagAmount,
+		sum(tb.sale_amount) sale_amount,
+		sum(tb.disc_amount) disc_amount,
+		sum(tb.amount) amount,
+		sum(tb.virtual_amount) virtual_amount,
+		sum(tb.unit_cost) unit_cost,
+		sum(tb.region_cost) region_cost,
+		sum(tb.headquarter_cost) headquarter_cost,
+		sum(tb.purchase_price) purchase_price,
+		sum(tb.deduct_amount) deduct_amount,
+		sum(tb.conprice_deduct_amount) conprice_deduct_amount,
+		sum(tb.conprice_ladder_amount) conprice_ladder_amount,
+		sum(tb.prom_plusbuckle_amount) prom_plusbuckle_amount,
+		sum(tb.balance_amount - tb.deduct_amount - tb.difference_amount) back_amount,
+		sum(tb.difference_amount) difference_amount
+   	FROM(
+		<if test="null != params.queryType and '' != params.queryType and 1 == params.queryType">
+			<include refid="queryGmsSaleCountSql" />
+		</if>
+		<if test="null != params.queryType and '' != params.queryType and 2 == params.queryType">
+			SELECT sp.*,odr.* FROM 
+			(
+			<include refid="queryOrderCountSql" />
+			) odr 
+			INNER JOIN
+			 (
+			 <include refid="queryShopCountSql" />
+			) sp ON sp.shop_no = odr.shop_no1
+			<if test="null != params.month and '' != params.month">
+			 	<include refid="monthCondition" />
+			 </if>
+		</if>
+		<if test="null != params.queryType and '' != params.queryType and 3 == params.queryType">
+			(SELECT sp.*,odr.* FROM 
+				(
+				<include refid="queryOrderCountSql" />
+				) odr 
+				INNER JOIN
+				 (
+				 <include refid="queryShopCountSql" />
+				) sp ON sp.shop_no = odr.shop_no1
+			 <!-- where sp.company_no= 'C0001'-->
+			 <if test="null != params.month and '' != params.month">
+			 	<include refid="monthCondition" />
+			 </if>
+			)
+		
+			UNION ALL
+			
+			(
+			<include refid="queryGmsSaleCountSql" />
+			)
+		</if>
+	) tb
+	<!-- <include refid="queryCommonSql" /> -->
+  </select>
+ 
+  <!-- pos 及 gms 销售单据合并查询，查询符合条件的信息记录 wangyj -->
+  <select id="findSalesOutstandingAnalysis" resultMap="BaseResultMap" parameterType="map" >
+  	/*#mycat:balance=select 1 from bill_shop_balance where sharding_flag='${params.shardingFlag}' */
+      SELECT tb.*,
+		<!--  小类-->
+		cty3.name sub_category_name,
+	   	<!--  中类-->
+	  	cty2.`name` root_category_name,
+	  	<!-- 大类 -->
+	  	cty.`name` category_name,
+	  	cty.category_no category_no1,
+	  	le.`name` YEAR,
+	  	<!--  年份-->
+	  	le1.`name` sell_season,
+	  	<!--  产品季节-->
+	  	le5.`name` purchase_season,
+	  	<!--  季节-->
+	  	it.item_flag,
+	  	'' style_name,
+	  	<!--  新旧款-->
+	  	le2.name gender,
+	  	<!--  性别-->
+	  	le3.`name` orderfrom,
+	  	<!--  订货形式-->
+	  	le4.`name` style,
+	  	<!--  风格-->
+		it.color_no color_name,
+		<!-- 毛利率 （终端收入-总部成本）/终端收入*100%-->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) gross_margin_rate,
+		<!-- 森达毛利率 （终端收入-总部成本）/终端收入*100%-->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) sd_gross_margin_rate,
+		<!-- 扣费率 （扣费/终端收入**100%-->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (tb.deduct_amount / tb.balance_amount) END) deduction_rate,
+		<!-- 合同正价扣费率＝合同正价扣费/终端收入*100% -->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (tb.conprice_deduct_amount / tb.balance_amount) END ) conprice_deduct_rate ,
+		<!-- 合同阶梯扣加扣率 -->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) conprice_ladder_rate, 
+	    <!-- 促销活动加扣率 -->
+	    (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END) prom_plusbuckle_rate,
+	    
+	    <!-- 净折扣率 ＝ （终端收入-合同阶梯扣加扣-促销活动加扣）/牌价*100% -->
+		(CASE WHEN tb.tagAmount = 0 THEN 0 ELSE ((tb.balance_amount - tb.conprice_ladder_amount - tb.prom_plusbuckle_amount) / tb.tagAmount) END) the_discount_rate,
+	    
+	    <!-- 净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+	  	((CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) 
+			- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) 
+			- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END))  the_margin_rate,
+			
+		<!-- 森达净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+	  	((CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) 
+			- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) 
+			- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END))  sd_the_margin_rate,
+		<!-- 综合回款扣率 ＝ （牌价额 － 扣费） / 终端收入 -->
+		(CASE WHEN tb.amount = 0 THEN 0 ELSE ((tb.tagAmount - tb.deduct_amount) / tb.amount) END) synthesize_return_rate,
+		<!-- 回款额 -->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE tb.balance_amount - tb.deduct_amount - tb.difference_amount END) back_amount, 
+		<!-- 回款率 -->
+		(CASE WHEN tb.tagAmount = 0 THEN 0 ELSE ((tb.balance_amount - tb.deduct_amount - tb.difference_amount) / tb.tagAmount) END) reimbursement_rate
+
+	FROM(
+		<if test="null != params.queryType and '' != params.queryType and 1 == params.queryType">
+			<include refid="queryGmsSaleListSql" />
+		</if>
+		<if test="null != params.queryType and '' != params.queryType and 2 == params.queryType">
+			SELECT sp.*,odr.* FROM 
+			(
+			<include refid="queryOrderListSql" />
+			) odr 
+			INNER JOIN
+			 (
+			 <include refid="queryShopListSql" />
+			) sp ON sp.shop_no = odr.shop_no1
+			<if test="null != params.month and '' != params.month">
+			 	<include refid="monthCondition" />
+			</if>
+		</if>
+		<if test="null != params.queryType and '' != params.queryType and 3 == params.queryType">
+			(SELECT sp.*,odr.* FROM 
+				(
+				<include refid="queryOrderListSql" />
+				) odr 
+				INNER JOIN
+				 (
+				 <include refid="queryShopListSql" />
+				) sp ON sp.shop_no = odr.shop_no1
+			 <!-- where sp.company_no= 'C0001'-->
+			 <if test="null != params.month and '' != params.month">
+			 	<include refid="monthCondition" />
+			 </if>
+			)
+		
+			UNION ALL
+			
+			(
+			<include refid="queryGmsSaleListSql" />
+			)
+		</if>
+	) tb
+	<include refid="queryCommonSql" />
+	order by 
+		tb.company_no,
+		tb.zone_no,
+		tb.organ_no,
+		tb.biz_no,
+		tb.brand_no,
+		cty.category_no,
+		cty2.category_no,
+		tb.shop_no,
+		tb.out_date
+	
+	<if test="null != page and '' != page">
+	LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</if>
+   </select>
+    
+  <sql id="queryOrderListSql">
+  	SELECT om.company_no,
+		om.company_name,
+  		om.shop_no shop_no1, 
+		om.wildcard_no,
+		om.wildcard_name,
+		od.discount_code,
+		od.discount,
+		om.business_type,
+		CASE WHEN om.business_type = 3 THEN '内购' ELSE '门店'  END biz_type,
+		1 source_type,
+		CASE WHEN od.balance_base = 1 THEN '牌价结算' ELSE '销售价结算' END balance_base_name,
+		'' mall_balance_no,
+		od.order_no,
+		od.item_no,
+		od.item_code,
+		od.item_name,
+		od.category_no,
+		od.brand_no,
+		od.brand_name,
+		od.brand_unit_no,
+		od.brand_unit_name,
+		om.out_date,
+		od.qty,
+		od.tag_price,
+		od.sale_price,
+		od.discount_type,
+		od.discount_type_name,
+		od.rate_pro_no pro_no,
+		od.rate_pro_name pro_name,
+		od.billing_code,
+		od.discount /100 rate,
+		IFNULL(od.discount_code,'') rate_code,
+		od.discount_name rate_name,
+		od.activity_type_name,
+		od.pro_start_time,
+		od.pro_end_time,
+		od.launch_type_name,
+		CASE WHEN od.virtual_flag = 0 THEN '虚数' ELSE '实数' END virtual_flag_str,
+		CASE WHEN od.properties = 1 THEN '满送' WHEN od.properties = 2 THEN '满减' 
+		WHEN od.properties = 3 THEN '折扣' WHEN od.properties = 4 THEN '其他' END properties_str,
+		od.rate_discount /100 rate_discount,
+		od.strength,
+		(CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) balance_amount,
+		od.disc_price * IFNULL(od.qty, 0) disc_amount,<!-- 折后价收入-->
+		od.tag_price * IFNULL(od.qty, 0) tagAmount,<!-- 牌价额-->
+		od.sale_price * IFNULL(od.qty, 0) sale_amount,
+		od.amount,<!-- 终端销售收入-->
+		od.amount * (IFNULL(od.rate_discount,0) /100) virtual_amount,
+		od.unit_cost * IFNULL(od.qty, 0) unit_cost ,
+		od.region_cost * IFNULL(od.qty, 0) region_cost,
+		od.headquarter_cost * IFNULL(od.qty, 0) headquarter_cost,
+		od.purchase_price,
+		ROUND(IFNULL(od.discount,0) / 100 * (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END),2) deduct_amount, <!-- 扣费-->
+		 <!-- 合同相关信息-->
+		(IFNULL(rabse.rate, 0) /100) contract_rate,<!-- 合同扣率-->
+		(CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) * (IFNULL(rabse.rate, 0) / 100) conprice_deduct_amount,<!-- 合同正价扣费 -->
+		CASE WHEN od.discount_type in (2,6) THEN (IFNULL(od.discount,0) / 100 * (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END)) 
+		- (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) * (IFNULL(rabse.rate, 0) / 100) ELSE 0 END  conprice_ladder_amount,<!-- 合同阶梯加扣 -->
+			
+		CASE WHEN od.discount_type = 3 THEN (IFNULL(od.discount,0) / 100 * (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END)) 
+		- (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) * (IFNULL(rabse.rate, 0) / 100) ELSE 0 END  prom_plusbuckle_amount,<!-- 促销活动加扣 -->
+		
+		(CASE WHEN (od.tag_price * IFNULL(od.qty, 0)) = 0 THEN 0 ELSE (od.amount / (od.tag_price * IFNULL(od.qty, 0))) END ) discount_rate, <!-- 折扣率 -->
+	  	
+	  	<!-- CASE WHEN om.business_type = 3 THEN 0 ELSE (CASE WHEN sbb.sales_amount is null OR sbb.sales_amount - IFNULL(sbb.prepayment_amount,0) - IFNULL(sbb.used_prepayment_amount,0) = 0 THEN 0 ELSE 
+		(od.amount - ROUND(IFNULL(od.discount,0) / 100 * (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END),2) 
+		- ((CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) 
+		/ (sbb.sales_amount - IFNULL(sbb.prepayment_amount,0) - IFNULL(sbb.used_prepayment_amount,0))) * IFNULL(sbb.mall_billing_amount,0)) END) END difference_amount -->
+		0 difference_amount
+	 FROM order_dtl od LEFT JOIN order_main om ON od.order_no = om.order_no
+		<!-- LEFT JOIN `order_promotion_dtl` pro ON od.id = pro.`order_dtl_id` and SUBSTRING_INDEX(od.pro_no,'|',-1) = pro.pro_no -->
+		<!-- LEFT JOIN `rate_pro` rapro ON (select max(id) from rate_pro rapro1 where SUBSTRING_INDEX(od.pro_no,'|',-1) = rapro1.pro_no AND om.shop_no = rapro1.shop_no) = rapro.id-->
+	 LEFT JOIN `rate_basic` rabse ON om.shop_no = rabse.shop_no and rabse.start_date &lt;= om.out_date and rabse.end_date &gt;= om.out_date and rabse.rate_type = 1
+		<!-- LEFT JOIN (select oa.order_dtl_id ,GROUP_CONCAT(oa.assistant_no SEPARATOR ",") assistant_no,GROUP_CONCAT(oa.assistant_name SEPARATOR ",") assistant_name -->
+		<!-- from order_assistant oa GROUP BY oa.order_dtl_id) oat on od.id = oat.order_dtl_id -->
+	 <!-- LEFT JOIN bill_shop_balance_brand sbb on om.balance_no = sbb.balance_no and od.brand_no = sbb.brand_no -->
+	 WHERE 1=1
+	 <include refid="posOrderQueryCodition" />
+	
+	UNION ALL
+	
+	SELECT rem.company_no,
+		rem.company_name,
+		rem.shop_no shop_no1, 
+		rem.wildcard_no,
+		rem.wildcard_name,
+		red.discount_code,
+		red.discount,
+		rem.business_type,
+		CASE WHEN rem.business_type = 3 THEN '内购' ELSE '门店'  END biz_type,
+		1 source_type,
+		CASE WHEN red.balance_base = 1 THEN '牌价结算' ELSE '销售价结算' END balance_base_name,
+		'' mall_balance_no,
+		red.business_no,
+		red.item_no,
+		red.item_code,
+		red.item_name,
+		red.category_no,
+		red.brand_no,
+		red.brand_name,
+		red.brand_unit_no,
+		red.brand_unit_name,
+		rem.out_date,
+		red.qty,
+		red.tag_price,
+		red.sale_price,
+		red.discount_type,
+		red.discount_type_name,
+		red.rate_pro_no pro_no,
+		red.rate_pro_name pro_name,
+		red.billing_code,
+		red.discount /100 rate,
+		IFNULL(red.discount_code,'') rate_code,
+		red.discount_name rate_name,
+		red.activity_type_name,
+		red.pro_start_time,
+		red.pro_end_time,
+		red.launch_type_name,
+		CASE WHEN red.virtual_flag = 0 THEN '虚数' ELSE '实数' END virtual_flag_str,
+		CASE WHEN red.properties = 1 THEN '满送' WHEN red.properties = 2 THEN '满减' 
+		WHEN red.properties = 3 THEN '折扣' WHEN red.properties = 4 THEN '其他' END properties_str,
+		red.rate_discount /100 rate_discount,
+		red.strength,
+		(CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) balance_amount,
+		red.disc_price * IFNULL(red.qty, 0) disc_amount,<!-- 折后价收入-->
+		red.tag_price * IFNULL(red.qty, 0) tagAmount,<!-- 牌价额-->
+		red.sale_price * IFNULL(red.qty, 0) sale_amount,
+		red.amount,<!-- 终端销售收入-->
+		red.amount * (IFNULL(red.rate_discount,0) /100) virtual_amount,
+		red.unit_cost * IFNULL(red.qty, 0) unit_cost ,
+		red.region_cost * IFNULL(red.qty, 0) region_cost,
+		red.headquarter_cost * IFNULL(red.qty, 0) headquarter_cost,
+		red.purchase_price,
+		ROUND(IFNULL(red.discount,0) / 100 * (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END),2) deduct_amount, <!-- 扣费-->
+		<!-- 合同相关信息-->
+		(IFNULL(rabse.rate, 0) /100) contract_rate,<!-- 合同扣率-->
+		(CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) * (IFNULL(rabse.rate, 0) / 100) conprice_deduct_amount,<!-- 合同正价扣费 -->
+		CASE WHEN red.discount_type in (2,6) THEN (IFNULL(red.discount,0) / 100 * (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END)) 
+		- (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) * (IFNULL(rabse.rate, 0) / 100) ELSE 0 END  conprice_ladder_amount,<!-- 合同阶梯加扣 -->
+			
+		CASE WHEN red.discount_type = 3 THEN (IFNULL(red.discount,0) / 100 * (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END)) 
+		- (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) * (IFNULL(rabse.rate, 0) / 100) ELSE 0 END  prom_plusbuckle_amount,<!-- 促销活动加扣 -->
+
+		(CASE WHEN (red.tag_price * IFNULL(red.qty, 0)) = 0 THEN 0 ELSE red.amount / (red.tag_price * IFNULL(red.qty, 0)) END ) discount_rate, <!-- 折扣率 -->
+		
+		<!-- CASE WHEN rem.business_type = 3 THEN 0 ELSE (CASE WHEN sbb.sales_amount is null OR sbb.sales_amount - IFNULL(sbb.prepayment_amount,0) - IFNULL(sbb.used_prepayment_amount,0) = 0 THEN 0 ELSE 
+		(red.amount - ROUND(IFNULL(red.discount,0) / 100 * (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END),2)
+		- ((CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) 
+		/ (sbb.sales_amount - IFNULL(sbb.prepayment_amount,0) - IFNULL(sbb.used_prepayment_amount,0))) * IFNULL(sbb.mall_billing_amount,0)) END) END difference_amount  --><!-- 差异金额-->
+		0 difference_amount
+	 FROM return_exchange_dtl red LEFT JOIN return_exchange_main rem ON red.business_no = rem.business_no
+	 <!-- LEFT JOIN `order_promotion_dtl` pro ON red.id = pro.`order_dtl_id` and SUBSTRING_INDEX(red.pro_no,'|',-1) = pro.pro_no  -->
+	 <!-- LEFT JOIN `rate_pro` rapro ON (select max(id) from rate_pro rapro1 where SUBSTRING_INDEX(red.pro_no,'|',-1) = rapro1.pro_no AND rem.shop_no = rapro1.shop_no) = rapro.id-->
+	 LEFT JOIN `rate_basic` rabse ON rem.shop_no = rabse.shop_no and rabse.start_date &lt;= rem.out_date and rabse.end_date &gt;= rem.out_date and rabse.rate_type = 1
+	 <!-- LEFT JOIN (select oa.order_dtl_id ,GROUP_CONCAT(oa.assistant_no SEPARATOR ",") assistant_no,GROUP_CONCAT(oa.assistant_name SEPARATOR ",") assistant_name  -->
+	 <!-- from order_assistant oa GROUP BY oa.order_dtl_id) oat on red.id = oat.order_dtl_id -->
+	 <!-- LEFT JOIN bill_shop_balance_brand sbb on rem.balance_no = sbb.balance_no and red.brand_no = sbb.brand_no -->
+	 WHERE 1=1
+	 <include refid="posReturnQueryCodition" />
+  </sql>
+  
+  <!-- 查询门店信息记录的部分sql -->
+  <sql id="queryShopListSql">
+  	SELECT g.zone_no,
+		z. NAME AS zone_name,
+		g.organ_no,
+		g. NAME AS organ_name,
+		bg.organ_no biz_no,
+		bg.`name` biz_name,
+		b.bsgroups_no,
+		b. NAME AS bsgroups_name,
+		r.region_no,
+		r. NAME AS region_name,
+		s.province_no,
+		g. NAME AS province_name,
+	  	m.`name` mall_name,
+		cmt.name cmcdist_name,
+		s.major,
+		s.startup_time,
+		s.shop_level,
+		s.category_code,
+		s.shop_no,
+		s.short_name,
+		s.full_name,
+		le.`name` sale_mode,
+		le1.`name` retail_type,
+		le2.`name` multi,
+		le3.`name` statusName,
+		s.shop_classify,
+		s.open_date,
+		s.employe_amount,
+		s.area,
+		s.area_left,
+		s.area_total
+	FROM
+		shop s
+	<!-- LEFT JOIN company c ON s.company_no = c.company_no -->
+	LEFT JOIN organ bg ON s.biz_city_no = bg.organ_no
+	LEFT JOIN organ g ON bg.parent_no = g.organ_no
+	LEFT JOIN zone_info z ON g.zone_no = z.zone_no
+	LEFT JOIN mall m ON s.mall_no = m.mall_no
+	LEFT JOIN bsgroups b ON m.bsgroups_no = b.bsgroups_no
+	LEFT JOIN region r ON s.region_no = r.region_no
+	LEFT JOIN cmcdist cmt ON s.cmcdist_no = cmt.cmcdist_no 
+	LEFT JOIN lookup_entry le ON s.sale_mode = le.`code` AND le.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_A')
+	LEFT JOIN lookup_entry le1 ON s.retail_type = le1.`code` AND le1.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_B')
+	LEFT JOIN lookup_entry le2 ON s.multi = le2.`code` AND le2.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_C')
+	LEFT JOIN lookup_entry le3 ON s.`status` = le3.`code` AND le3.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_STATUS')
+	LEFT JOIN lookup_entry le4 ON s.shop_level = le4.`code` AND le4.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_LEVEL')
+	WHERE 1 = 1
+	<include refid="shopQueryCodition" />
+  </sql>
+  
+  
+  <sql id="queryOrderCountSql">
+  	SELECT om.company_no,
+		om.company_name,
+  		om.shop_no shop_no1,
+		om.business_type,
+		CASE WHEN om.business_type = 3 THEN '内购' ELSE '门店'  END biz_type,
+		od.order_no,
+		od.item_no,
+		od.item_code,
+		od.item_name,
+		od.category_no,
+		od.brand_no,
+		od.brand_name,
+		od.brand_unit_no,
+		od.brand_unit_name,
+		om.out_date,
+		od.qty,
+		od.tag_price,
+		od.sale_price,
+		od.discount /100 rate,
+		IFNULL(od.discount_code,'') rate_code,
+		(CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) balance_amount,
+		od.disc_price * IFNULL(od.qty, 0) disc_amount,<!-- 折后价收入-->
+		od.tag_price * IFNULL(od.qty, 0) tagAmount,<!-- 牌价额-->
+		od.sale_price * IFNULL(od.qty, 0) sale_amount,
+		od.amount,<!-- 终端销售收入-->
+		od.amount * (IFNULL(od.rate_discount,0) /100) virtual_amount,
+		od.unit_cost * IFNULL(od.qty, 0) unit_cost ,
+		od.region_cost * IFNULL(od.qty, 0) region_cost,
+		od.headquarter_cost * IFNULL(od.qty, 0) headquarter_cost,
+		od.purchase_price,
+		ROUND(IFNULL(od.discount,0) / 100 * (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END),2) deduct_amount, <!-- 扣费-->
+		 <!-- 合同相关信息-->
+		(CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) * (IFNULL(rabse.rate, 0) / 100) conprice_deduct_amount,<!-- 合同正价扣费 -->
+		CASE WHEN od.discount_type in (2,6) THEN (IFNULL(od.discount,0) / 100 * (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END)) 
+		- (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) * (IFNULL(rabse.rate, 0) / 100) ELSE 0 END  conprice_ladder_amount,<!-- 合同阶梯加扣 -->
+			
+		CASE WHEN od.discount_type = 3 THEN (IFNULL(od.discount,0) / 100 * (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END)) 
+		- (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) * (IFNULL(rabse.rate, 0) / 100) ELSE 0 END  prom_plusbuckle_amount,<!-- 促销活动加扣 -->
+		
+	  	<!-- CASE WHEN om.business_type = 3 THEN 0 ELSE (CASE WHEN sbb.sales_amount is null OR sbb.sales_amount - IFNULL(sbb.prepayment_amount,0) - IFNULL(sbb.used_prepayment_amount,0) = 0 THEN 0 ELSE 
+		(od.amount - ROUND(IFNULL(od.discount,0) / 100 * (CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END),2) 
+		- ((CASE WHEN od.balance_base = 1 THEN (od.tag_price * IFNULL(od.qty, 0)) ELSE od.amount END) 
+		/ (sbb.sales_amount - IFNULL(sbb.prepayment_amount,0) - IFNULL(sbb.used_prepayment_amount,0))) * IFNULL(sbb.mall_billing_amount,0)) END) END difference_amount -->
+		0 difference_amount
+	 FROM order_dtl od LEFT JOIN order_main om ON od.order_no = om.order_no
+		<!-- LEFT JOIN `order_promotion_dtl` pro ON od.id = pro.`order_dtl_id` and SUBSTRING_INDEX(od.pro_no,'|',-1) = pro.pro_no -->
+		<!-- LEFT JOIN `rate_pro` rapro ON (select max(id) from rate_pro rapro1 where SUBSTRING_INDEX(od.pro_no,'|',-1) = rapro1.pro_no AND om.shop_no = rapro1.shop_no) = rapro.id-->
+	 LEFT JOIN `rate_basic` rabse ON om.shop_no = rabse.shop_no and rabse.start_date &lt;= om.out_date and rabse.end_date &gt;= om.out_date and rabse.rate_type = 1
+		<!-- LEFT JOIN (select oa.order_dtl_id ,GROUP_CONCAT(oa.assistant_no SEPARATOR ",") assistant_no,GROUP_CONCAT(oa.assistant_name SEPARATOR ",") assistant_name -->
+		<!-- from order_assistant oa GROUP BY oa.order_dtl_id) oat on od.id = oat.order_dtl_id -->
+	 <!-- LEFT JOIN bill_shop_balance_brand sbb on om.balance_no = sbb.balance_no and od.brand_no = sbb.brand_no -->
+	 WHERE 1=1
+	 <include refid="posOrderQueryCodition" />
+	
+	UNION ALL
+	
+	SELECT rem.company_no,
+		rem.company_name,
+		rem.shop_no shop_no1,
+		rem.business_type,
+		CASE WHEN rem.business_type = 3 THEN '内购' ELSE '门店'  END biz_type,
+		red.business_no order_no,
+		red.item_no,
+		red.item_code,
+		red.item_name,
+		red.category_no,
+		red.brand_no,
+		red.brand_name,
+		red.brand_unit_no,
+		red.brand_unit_name,
+		rem.out_date,
+		red.qty,
+		red.tag_price,
+		red.sale_price,
+		red.discount /100 rate,
+		IFNULL(red.discount_code,'') rate_code,
+		(CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) balance_amount,
+		red.disc_price * IFNULL(red.qty, 0) disc_amount,<!-- 折后价收入-->
+		red.tag_price * IFNULL(red.qty, 0) tagAmount,<!-- 牌价额-->
+		red.sale_price * IFNULL(red.qty, 0) sale_amount,
+		red.amount,<!-- 终端销售收入-->
+		red.amount * (IFNULL(red.rate_discount,0) /100) virtual_amount,
+		red.unit_cost * IFNULL(red.qty, 0) unit_cost ,
+		red.region_cost * IFNULL(red.qty, 0) region_cost,
+		red.headquarter_cost * IFNULL(red.qty, 0) headquarter_cost,
+		red.purchase_price,
+		ROUND(IFNULL(red.discount,0) / 100 * (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END),2) deduct_amount, <!-- 扣费-->
+		<!-- 合同相关信息-->
+		(CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) * (IFNULL(rabse.rate, 0) / 100) conprice_deduct_amount,<!-- 合同正价扣费 -->
+		CASE WHEN red.discount_type in (2,6) THEN (IFNULL(red.discount,0) / 100 * (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END)) 
+		- (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) * (IFNULL(rabse.rate, 0) / 100) ELSE 0 END  conprice_ladder_amount,<!-- 合同阶梯加扣 -->
+			
+		CASE WHEN red.discount_type = 3 THEN (IFNULL(red.discount,0) / 100 * (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END)) 
+		- (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) * (IFNULL(rabse.rate, 0) / 100) ELSE 0 END  prom_plusbuckle_amount,<!-- 促销活动加扣 -->
+
+		<!-- CASE WHEN rem.business_type = 3 THEN 0 ELSE (CASE WHEN sbb.sales_amount is null OR sbb.sales_amount - IFNULL(sbb.prepayment_amount,0) - IFNULL(sbb.used_prepayment_amount,0) = 0 THEN 0 ELSE 
+		(red.amount - ROUND(IFNULL(red.discount,0) / 100 * (CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END),2)
+		- ((CASE WHEN red.balance_base = 1 THEN (red.tag_price * IFNULL(red.qty, 0)) ELSE red.amount END) 
+		/ (sbb.sales_amount - IFNULL(sbb.prepayment_amount,0) - IFNULL(sbb.used_prepayment_amount,0))) * IFNULL(sbb.mall_billing_amount,0)) END) END difference_amount  --><!-- 差异金额-->
+		0 difference_amount
+	 FROM return_exchange_dtl red LEFT JOIN return_exchange_main rem ON red.business_no = rem.business_no
+	 <!-- LEFT JOIN `order_promotion_dtl` pro ON red.id = pro.`order_dtl_id` and SUBSTRING_INDEX(red.pro_no,'|',-1) = pro.pro_no  -->
+	 <!-- LEFT JOIN `rate_pro` rapro ON (select max(id) from rate_pro rapro1 where SUBSTRING_INDEX(red.pro_no,'|',-1) = rapro1.pro_no AND rem.shop_no = rapro1.shop_no) = rapro.id-->
+	 LEFT JOIN `rate_basic` rabse ON rem.shop_no = rabse.shop_no and rabse.start_date &lt;= rem.out_date and rabse.end_date &gt;= rem.out_date and rabse.rate_type = 1
+	 <!-- LEFT JOIN (select oa.order_dtl_id ,GROUP_CONCAT(oa.assistant_no SEPARATOR ",") assistant_no,GROUP_CONCAT(oa.assistant_name SEPARATOR ",") assistant_name  -->
+	 <!-- from order_assistant oa GROUP BY oa.order_dtl_id) oat on red.id = oat.order_dtl_id -->
+	 <!-- LEFT JOIN bill_shop_balance_brand sbb on rem.balance_no = sbb.balance_no and red.brand_no = sbb.brand_no -->
+	 WHERE 1=1
+	 <include refid="posReturnQueryCodition" />
+  </sql>
+  
+  <!-- 查询门店信息记录的部分sql -->
+  <sql id="queryShopCountSql">
+  	SELECT g.zone_no,
+		z. NAME AS zone_name,
+		g.organ_no,
+		g. NAME AS organ_name,
+		bg.organ_no biz_no,
+		bg.`name` biz_name,
+		s.shop_no,
+		s.short_name,
+		s.full_name
+	FROM
+		shop s
+	<!-- LEFT JOIN company c ON s.company_no = c.company_no -->
+	LEFT JOIN organ bg ON s.biz_city_no = bg.organ_no
+	LEFT JOIN organ g ON bg.parent_no = g.organ_no
+	LEFT JOIN zone_info z ON g.zone_no = z.zone_no
+	WHERE 1 = 1
+	<include refid="shopQueryCodition" />
+  </sql>
+  
+  <!-- pos 正常销售单据查询条件 -->
+  <sql id="posOrderQueryCodition">
+  	AND om.status IN ('30', '41') 
+  	<if test="null!=params" >
+	  	<if test="null == params.month or '' == params.month">
+		 	AND om.out_date &gt;=  '${params.outDateStart} 00:00:00' AND om.out_date &lt;=  '${params.outDateEnd} 23:59:59'
+		</if>
+		<if test="null!=params.queryCondition1 and ''!=params.queryCondition1">
+			AND om.business_type IN(${params.queryCondition1})
+		</if>
+		
+		<if test="null!=params.itemSql and ''!=params.itemSql" >
+			AND od.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+		</if>
+		
+		<if test="null!=params.shopNos and ''!=params.shopNos">
+			AND om.shop_no IN
+			<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+				#{shopNos, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<!-- <if test="null!=params.actionCategory and ''!=params.actionCategory">
+			AND rapro.activity_type = #{params.actionCategory}
+		</if> -->
+		<if test="null!=params.proNo and ''!=params.proNo">
+			AND od.rate_pro_no = #{params.proNo}
+		</if>
+		<if test="null!=params.proName and ''!=params.proName">
+			AND od.rate_pro_name = #{params.proName}
+		</if>
+		<if test="null!=params.discountCode and ''!=params.discountCode">
+			AND od.discount_code = #{params.discountCode}
+		</if>
+		
+		<if test="null!=params.brandNos and ''!=params.brandNos">
+			AND od.brand_no IN
+			<foreach collection="params.brandNos" index="index" item="brandNo" open="(" separator="," close=")">
+				#{brandNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND od.brand_unit_no = #{params.brandUnitNo}
+		</if>
+		<!-- <if test="null == params.queryCondition1" >
+			AND om.business_type IN(0,1,2,3,6)
+		</if> -->
+		<if test="null != params.orderNo and '' != params.orderNo">
+			AND om.order_no = #{params.orderNo}
+		</if>
+		<if test="null!=params.categoryNos and ''!=params.categoryNos">
+			AND left(od.category_no,2) IN
+			<foreach collection="params.categoryNos" index="index" item="categoryNo" open="(" separator="," close=")">
+				#{categoryNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.properties and ''!=params.properties">
+			AND od.properties = #{params.properties}
+		</if>
+		<if test="null!=params.companyNos and ''!=params.companyNos">
+			AND om.company_no IN
+			<foreach collection="params.companyNos" index="index" item="companyNo" open="(" separator="," close=")">
+				#{companyNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null != params.shardingFlag and '' != params.shardingFlag ">
+			 AND od.sharding_flag = #{params.shardingFlag}
+		</if>
+	</if>
+  </sql>
+  
+  <!-- pos 退换货单据查询条件 -->
+  <sql id="posReturnQueryCodition">
+ 	AND rem.status IN ('30', '41')
+  	<if test="null!=params" >
+	  	<if test="null == params.month or '' == params.month">
+		  AND rem.out_date &gt;=  '${params.outDateStart} 00:00:00' AND rem.out_date &lt;=  '${params.outDateEnd} 23:59:59'
+		</if>
+		<if test="null!=params.queryCondition1 and ''!=params.queryCondition1">
+			AND rem.business_type IN(${params.queryCondition1})
+		</if>
+		<if test="null!=params.itemSql and ''!=params.itemSql" >
+			AND red.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+		</if>
+		<if test="null!=params.shopNos and ''!=params.shopNos">
+			AND rem.shop_no IN
+			<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+				#{shopNos, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<!-- <if test="null!=params.actionCategory and ''!=params.actionCategory">
+			AND rapro.activity_type = #{params.actionCategory}
+		</if> -->
+		<if test="null!=params.proNo and ''!=params.proNo">
+			AND red.rate_pro_no = #{params.proNo}
+		</if>
+		<if test="null!=params.proName and ''!=params.proName">
+			AND red.rate_pro_name = #{params.proName}
+		</if>
+		<if test="null!=params.discountCode and ''!=params.discountCode">
+			AND red.discount_code = #{params.discountCode}
+		</if>
+		<if test="null!=params.brandNos and ''!=params.brandNos">
+			AND red.brand_no IN
+			<foreach collection="params.brandNos" index="index" item="brandNo" open="(" separator="," close=")">
+				#{brandNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND red.brand_unit_no = #{params.brandUnitNo}
+		</if>
+		<!-- <if test="null == params.queryCondition1" >
+			AND rem.business_type IN(0,1,2,3,6)
+		</if> -->
+		<if test="null != params.orderNo and '' != params.orderNo">
+			AND rem.business_no = #{params.orderNo}
+		</if>
+		<if test="null!=params.categoryNos and ''!=params.categoryNos">
+			AND left(red.category_no,2) IN
+			<foreach collection="params.categoryNos" index="index" item="categoryNo" open="(" separator="," close=")">
+				#{categoryNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.properties and ''!=params.properties">
+			AND red.properties = #{params.properties}
+		</if>
+		<if test="null!=params.companyNos and ''!=params.companyNos">
+			AND rem.company_no IN
+			<foreach collection="params.companyNos" index="index" item="companyNo" open="(" separator="," close=")">
+				#{companyNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null != params.shardingFlag and '' != params.shardingFlag ">
+			 AND red.sharding_flag = #{params.shardingFlag}
+		</if> 
+	</if>
+  </sql>
+  
+  <!-- 门店信息查询条件 -->
+  <sql id="shopQueryCodition">
+  	<if test="null!=params" >
+	    <if test="null!=params.shopNos and ''!=params.shopNos" >
+	        and s.shop_no IN
+	         <foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+	   			#{shopNos, jdbcType=CHAR}
+	  		 </foreach>
+	    </if>
+		
+		<!-- <if test="null!=params.companyNos and ''!=params.companyNos">
+			AND c.company_no IN
+			<foreach collection="params.companyNos" index="index" item="companyNo" open="(" separator="," close=")">
+				#{companyNo, jdbcType=CHAR}
+			</foreach>
+		</if> -->
+		
+		<if test="null!=params.organNos and ''!=params.organNos">
+			AND g.organ_no IN
+			<foreach collection="params.organNos" index="index" item="organNo" open="(" separator="," close=")">
+				#{organNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.zoneNos and ''!=params.zoneNos">
+			AND z.zone_no IN
+			<foreach collection="params.zoneNos" index="index" item="zoneNo" open="(" separator="," close=")">
+				#{zoneNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+	</if>
+  </sql>
+  
+  <sql id="gmsQueryCondition">
+  	<if test="null!=params" >
+	  	AND (
+	      <if test="null!=params.queryCondition2 and ''!=params.queryCondition2" >
+	       	${params.queryCondition2}
+	      </if>
+		  <!-- <if test="null == params.queryCondition2" >
+		    (bsb.bill_type = 1371) 
+			OR (bsb.bill_type = 1335 AND bsb.biz_type IN (3,21,22,30,29)) 3:其他出库 ;21:批发出库;22:过季退货;30:客残退货,29:批发出库(店出) 
+			OR (bsb.bill_type = 1361 AND bsb.biz_type IN (7,25) )
+			OR (bsb.bill_type = 1335 AND bsb.biz_type in (2,23,24,13)) 2:客残销售 ;23:团购出库;24:团购退货;13:领用
+			OR bsb.bill_type = 1342   报废单（直接）
+			OR (bsb.bill_type = 1355 AND bsb.biz_type in (8,10,26)) 索赔单 10=索赔单(库存盘差)
+			OR (bsb.bill_type = 2005 AND bsb.biz_type = 35)
+		   </if> -->
+		  )
+		  <if test="null == params.month or '' == params.month">
+		  	and bsb.send_date &gt;=  '${params.outDateStart} 00:00:00' AND bsb.send_date &lt;=  '${params.outDateEnd} 23:59:59'
+		  </if>
+		
+		<if test="null!=params.itemSql and ''!=params.itemSql" >
+			AND bsb.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+		</if>
+		
+  		<if test="null != params.orderNo and '' != params.orderNo">
+			AND bsb.bill_no = #{params.orderNo}
+		</if>
+		<if test="null!=params.brandNos and ''!=params.brandNos">
+			AND bsb.brand_no IN
+			<foreach collection="params.brandNos" index="index" item="brandNo" open="(" separator="," close=")">
+				#{brandNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND bsb.brand_unit_no = #{params.brandUnitNo}
+		</if>
+		<if test="null!=params.companyNos and ''!=params.companyNos">
+			AND bsb.saler_no IN
+			<foreach collection="params.companyNos" index="index" item="companyNo" open="(" separator="," close=")">
+				#{companyNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.zoneNos and ''!=params.zoneNos">
+			AND bsb.zone_no_from IN
+			<foreach collection="params.zoneNos" index="index" item="zoneNo" open="(" separator="," close=")">
+				#{zoneNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.organNos and ''!=params.organNos">
+			AND bsb.organ_no_from IN
+			<foreach collection="params.organNos" index="index" item="organNo" open="(" separator="," close=")">
+				#{organNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.categoryNos and ''!=params.categoryNos">
+			AND left(bsb.category_no,2) IN
+			<foreach collection="params.categoryNos" index="index" item="categoryNo" open="(" separator="," close=")">
+				#{categoryNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null!=params.customerNos and ''!=params.customerNos">
+			AND bsb.buyer_no IN
+			<foreach collection="params.customerNos" index="index" item="customerNo" open="(" separator="," close=")">
+				#{customerNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="null != params.month and '' != params.month">
+			AND CASE WHEN ${params.innerBuySql}
+			THEN (SELECT sbd.balance_month FROM inside_purchase_balance_date sbd where bsb.saler_no = sbd.company_no
+					and (bsb.send_date BETWEEN sbd.`balance_start_date` AND sbd.`balance_end_date`) and sbd.bill_type = 1) = #{params.month}
+			WHEN ${params.transferSql} 
+			THEN (SELECT tbd.balance_month FROM transfer_balance_date tbd where bsb.saler_no = tbd.saler_no <if test="params.isPe == true">and tbd.buyer_no = bsb.buyer_no</if>
+					and (bsb.send_date BETWEEN tbd.`balance_start_date` AND tbd.`balance_end_date`)) = #{params.month}
+			ELSE EXTRACT(YEAR_MONTH FROM bsb.send_date) = #{params.month} END
+		</if>
+	</if>
+  </sql>
+  
+  <sql id="monthCondition">
+  	WHERE 
+		(CASE WHEN odr.business_type = 3 
+		THEN(
+			EXISTS(
+				SELECT sbd.balance_month FROM inside_purchase_balance_date sbd 
+				WHERE sbd.balance_month = #{params.month}
+					AND odr.company_no = sbd.company_no
+					AND odr.out_date BETWEEN sbd.`balance_start_date` AND sbd.`balance_end_date` 
+					AND sbd.bill_type = 1)
+			)
+		ELSE(
+			EXISTS(
+				SELECT 1 FROM shop_balance_date sbd 
+				WHERE sbd.month = #{params.month}
+					AND odr.shop_no1 = sbd.shop_no 
+					AND odr.out_date BETWEEN sbd.`balance_start_date` AND sbd.`balance_end_date`)
+			)
+		END )
+  </sql>
+  
+   <!-- 总部职能结算公司 -->
+  <sql id="headquaters_company_data">
+    <if test="null!=params" >
+   		<if test="null!=params.hqCompanyData and ''!=params.hqCompanyData" >
+       		  (${params.hqCompanyData})
+     	 </if>
+     </if>
+  </sql>
+  
+  <!-- 查询gms销售单据信息记录的部分sql -->
+  <sql id="queryGmsSaleListSql">
+  	SELECT
+  		bsb.zone_no_from zone_no,
+		bsb.zone_name_from zone_name,
+		bsb.organ_no_from organ_no,
+		bsb.organ_name_from organ_name,
+		'' biz_no,
+		'' biz_name,
+		'' bsgroups_no,
+		'' bsgroups_name,
+		'' region_no,
+		'' region_name,
+		'' province_no,
+		'' province_name,
+		'' mall_name,
+		'' cmcdist_name,
+		'' major,
+		'' startup_time,
+		'' shop_level,
+		'' category_code,
+		bsb.buyer_no shop_no,
+		bsb.buyer_name short_name,
+		'' full_name,
+		'' sale_mode,
+		'' retail_type,
+		'' multi,
+		'' statusName,
+		'' shop_classify,
+		null open_date,
+		'' employe_amount,
+		'' AREA,
+		'' area_left,
+		'' area_total,
+		bsb.saler_no company_no,
+		bsb.saler_name company_name,
+		CASE WHEN ${params.transferSql} THEN '001'  WHEN ${params.otherSql} THEN '004' 
+		WHEN ${params.innerBuySql} THEN '002' WHEN ${params.wholesaleSql} THEN '003' END shop_no1,
+		<!-- '' assistant_no, -->
+		<!-- '' assistant_name, -->
+		'' wildcard_no,
+		'' wildcard_name,
+		'' discount_code,
+		'' discount,
+		-1 business_type,
+		CASE WHEN (${params.transferSql}) THEN '调货'  WHEN ${params.otherSql} THEN '其他' 
+		WHEN ${params.innerBuySql} THEN '内购' WHEN ${params.wholesaleSql} THEN '批发'  END  biz_type,
+		0 source_type,
+		'销售价结算' balance_base_name,
+		'' mall_balance_no,
+		bsb.bill_no order_no,
+		bsb.item_no,
+		bsb.item_code,
+		bsb.item_name,
+		bsb.category_no,
+		bsb.brand_no,
+		bsb.brand_name,
+		bsb.brand_unit_no,
+		bsb.brand_unit_name,
+		bsb.send_date out_date,
+		bsb.send_qty qty,
+		bsb.tag_price,
+		0 sale_price,
+		0 discount_type,
+		'' discount_type_name,
+		'' pro_no,
+		'' pro_name,
+		'' billing_code,
+		0 rate,
+		'' rate_code,
+		'' rate_name,
+		'' activity_type_name,
+		null pro_start_time,
+		null pro_end_time,
+		'' launch_type_name,
+		'实数' virtual_flag_str,
+		'' properties_str,
+		0 rate_discount,
+		'' strength,
+		bsb.cost * IFNULL(bsb.send_qty, 0) balance_amount,
+		bsb.cost * IFNULL(bsb.send_qty, 0) disc_amount,
+		bsb.tag_price * IFNULL(bsb.send_qty, 0) tagAmount,
+		0 sale_amount,
+		bsb.cost * IFNULL(bsb.send_qty, 0) amount,
+		0 virtual_amount,
+		bsb.unit_cost * IFNULL(bsb.send_qty, 0) unit_cost ,
+		bsb.region_cost * IFNULL(bsb.send_qty, 0) region_cost,
+		<!-- 总部成本-->
+		bsb.headquarter_cost * IFNULL(bsb.send_qty, 0) headquarter_cost,
+		bsb.purchase_price,
+		0 deduct_amount,
+		<!-- 合同相关信息-->
+		<!-- bsb.send_qty * bsb.cost amount,-->
+		0 contract_rate,
+		0 conprice_deduct_amount,
+		0 conprice_ladder_amount,
+		0 prom_plusbuckle_amount,
+		(CASE WHEN bsb.tag_price * IFNULL(bsb.send_qty, 0) = 0 THEN 0 ELSE (bsb.cost * IFNULL(bsb.send_qty, 0) / (bsb.tag_price * IFNULL(bsb.send_qty, 0))) END) discount_rate,
+		0 difference_amount
+	FROM
+	  bill_sale_balance bsb
+	WHERE 1 = 1 
+	  <include refid="gmsQueryCondition" />
+  </sql>
+  
+  <!-- 查询gms销售单据信息记录的部分sql -->
+  <sql id="queryGmsSaleCountSql">
+  	SELECT 
+		bsb.zone_no_from zone_no,
+		bsb.zone_name_from zone_name,
+		bsb.organ_no_from organ_no,
+		bsb.organ_name_from organ_name,
+		'' biz_no,
+		'' biz_name,
+		bsb.buyer_no shop_no,
+		bsb.buyer_name short_name,
+		'' full_name,
+		bsb.saler_no company_no,
+		bsb.saler_name company_name,
+		bsb.buyer_no shop_no1,
+		-1 business_type,
+		CASE WHEN (${params.transferSql}) THEN '调货'  WHEN ${params.otherSql} THEN '其他' 
+		WHEN ${params.innerBuySql} THEN '内购' WHEN ${params.wholesaleSql} THEN '批发'  END  biz_type,
+		bsb.bill_no order_no,
+		bsb.item_no,
+		bsb.item_code,
+		bsb.item_name,
+		bsb.category_no,
+		bsb.brand_no,
+		bsb.brand_name,
+		bsb.brand_unit_no,
+		bsb.brand_unit_name,
+		bsb.send_date out_date,
+		bsb.send_qty qty,
+		bsb.tag_price,
+		0 sale_price,
+		0 rate,
+		'' rate_code,
+		bsb.cost * IFNULL(bsb.send_qty, 0) balance_amount,
+		bsb.cost * IFNULL(bsb.send_qty, 0) disc_amount,
+		bsb.tag_price * IFNULL(bsb.send_qty, 0) tagAmount,
+		0 sale_amount,
+		bsb.cost * IFNULL(bsb.send_qty, 0) amount,
+		0 virtual_amount,
+		bsb.unit_cost * IFNULL(bsb.send_qty, 0) unit_cost ,
+		bsb.region_cost * IFNULL(bsb.send_qty, 0) region_cost,
+		<!-- 总部成本-->
+		bsb.headquarter_cost * IFNULL(bsb.send_qty, 0) headquarter_cost,
+		bsb.purchase_price,
+		0 deduct_amount,
+		<!-- 合同相关信息-->
+		<!-- bsb.send_qty * bsb.cost amount,-->
+		0 conprice_deduct_amount,
+		0 conprice_ladder_amount,
+		0 prom_plusbuckle_amount,
+		0 difference_amount
+	FROM
+	  bill_sale_balance bsb
+	WHERE 1 = 1 
+	  <include refid="gmsQueryCondition" />
+  </sql>
+  
+  <sql id="queryCommonCountSql">
+  	INNER JOIN item it ON tb.item_no = it.item_no
+	LEFT JOIN category cty2 ON left(tb.category_no,4) = cty2.category_no
+	LEFT JOIN category cty ON left(tb.category_no,2) = cty.category_no
+	LEFT JOIN lookup_entry le ON it.years = le.`code` AND le.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'YEAR')
+	LEFT JOIN lookup_entry le1 ON it.sell_season = le1.`code` AND le1.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SELL_SEASON')
+	LEFT JOIN lookup_entry le2 ON it.gender = le2.`code` AND le2.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'GENDER')
+	LEFT JOIN brand bd ON tb.brand_no = bd.brand_no
+	where 1=1 -- AND @tb.company_no
+  </sql>
+  
+  <!-- 根据大类、品牌、季度、年份、性别 分类汇总gms 及 pos 销售单据信息 -->
+  <select id="findBillSaleCollectList" resultMap="BaseResultMap" parameterType="map">
+  /*#mycat:balance=select 1 from bill_shop_balance where sharding_flag='${params.shardingFlag}' */
+  	select 
+		tb1.company_no,
+ 		tb1.company_name,
+		tb1.zone_no,
+	  	tb1.zone_name,
+		tb1.organ_no,
+		tb1.organ_name,
+		tb1.biz_no,
+		tb1.biz_name,
+		<!--  小类-->
+		tb1.sub_category_name,
+	   	<!--  中类-->
+	  	tb1.root_category_name,
+	  	<!-- 大类 -->
+	  	tb1.category_name,
+	  	tb1.category_no1,
+	  	tb1.YEAR,
+	  	<!--  年份-->
+	  	tb1.sell_season,
+	  	<!--  新旧款-->
+	  	tb1.gender,
+	  	<!--  性别-->
+	  	tb1.orderfrom,
+	  	<!--  订货形式-->
+	  	tb1.style,
+	  	<!--  风格-->
+	  	tb1.color_name,
+	  	tb1.style_no,
+	  	tb1.bsgroups_no,
+	  	tb1.bsgroups_name,
+		tb1.region_no,
+		tb1.region_name,
+		tb1.province_no,
+	  	tb1.province_name,
+	  	tb1.mall_name,
+	  	tb1.cmcdist_name,
+		tb1.major,
+		tb1.startup_time,
+		tb1.shop_level,
+		tb1.category_code,
+		tb1.shop_no,
+		tb1.short_name,
+		tb1.full_name,
+		tb1.sale_mode,
+		tb1.retail_type,
+		tb1.multi,
+		tb1.statusName,
+		tb1.shop_classify,
+	  	tb1.open_date,
+		tb1.employe_amount,
+		tb1.AREA,
+		tb1.area_left,
+		tb1.area_total,
+		tb1.discount_code,
+		tb1.discount,
+		tb1.biz_type,
+		tb1.source_type,
+		tb1.mall_balance_no,
+		tb1.category_no1,
+		tb1.brand_no,
+	  	tb1.brand_name,
+	  	tb1.brand_unit_no,
+		tb1.brand_unit_name,
+		tb1.out_date,
+	  	sum(tb1.qty) qty,
+		tb1.tag_price,
+		tb1.discount_type,
+	  	tb1.pro_no,
+	  	tb1.pro_name,
+	  	tb1.billing_code,
+	  	CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE (sum(tb1.deduct_amount) / sum(tb1.balance_amount)) END rate,
+		tb1.rate_code,
+	  	tb1.activity_type_name,
+	  	tb1.pro_start_time,
+	  	tb1.pro_end_time,
+		tb1.launch_type_name,
+		tb1.virtual_flag_str,
+	  	tb1.properties_str,
+	  	tb1.strength,
+		sum(tb1.disc_amount) disc_amount,
+	  	sum(tb1.tagAmount) tagAmount,
+		sum(tb1.amount) amount,
+		sum(tb1.unit_cost) unit_cost,
+		sum(tb1.region_cost) region_cost,
+	    <!-- 总部成本-->
+	    sum(tb1.headquarter_cost) headquarter_cost,
+	    sum(tb1.purchase_price) purchase_price,
+		sum(tb1.deduct_amount) deduct_amount,
+		<!-- 合同相关信息-->
+	    <!-- bsb.send_qty * bsb.cost amount,-->
+	  	tb1.contract_rate,
+	  	sum(tb1.conprice_deduct_amount) conprice_deduct_amount,
+	  	sum(tb1.conprice_ladder_amount) conprice_ladder_amount,
+	  	sum(tb1.prom_plusbuckle_amount) prom_plusbuckle_amount,
+	  	sum(tb1.difference_amount) difference_amount,
+	  	CASE WHEN sum(tb1.tagAmount) = 0 THEN 0 ELSE (sum(tb1.amount) / sum(tb1.tagAmount)) END discount_rate,
+	  	
+		<!-- 毛利率 （终端收入-总部成本）/终端收入*100%-->
+		CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE ((sum(tb1.balance_amount) - sum(tb1.headquarter_cost)) / sum(tb1.balance_amount)) END gross_margin_rate,
+		<!-- 森达毛利率 （终端收入-采购成本）/终端收入*100%-->
+		CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE ((sum(tb1.balance_amount) - sum(tb1.purchase_price)) / sum(tb1.balance_amount)) END sd_gross_margin_rate,
+		<!-- 扣费率 （扣费/终端收入**100%-->
+		(CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE (sum(tb1.deduct_amount) / sum(tb1.balance_amount)) END) deduction_rate,
+					
+		<!-- 合同正价扣费率＝合同正价扣费/终端收入*100% -->
+		CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE (sum(tb1.conprice_deduct_amount) / sum(tb1.balance_amount)) END conprice_deduct_rate,
+		
+		<!-- 合同阶梯扣加扣率 = 合同阶梯扣加扣/终端收入*100% -->
+		CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE (sum(tb1.conprice_ladder_amount) / sum(tb1.balance_amount)) END conprice_ladder_rate, 
+		
+	    <!-- 促销活动加扣率 = 促销活动加扣/终端收入*100% -->
+	    CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE (sum(tb1.prom_plusbuckle_amount) / sum(tb1.balance_amount)) END prom_plusbuckle_rate,
+	    
+	    <!-- 净折扣率 ＝ （终端收入-合同阶梯扣加扣-促销活动加扣）/牌价*100% -->
+		CASE WHEN sum(tb1.tagAmount) = 0 THEN 0 ELSE ((sum(tb1.balance_amount) - sum(tb1.conprice_ladder_amount) 
+		- sum(tb1.prom_plusbuckle_amount)) / sum(tb1.tagAmount)) END the_discount_rate,
+		
+	    <!-- 净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+	  	CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE (((sum(tb1.balance_amount) - sum(tb1.headquarter_cost)) / sum(tb1.balance_amount)) 
+	  	- (sum(tb1.conprice_ladder_amount) / sum(tb1.balance_amount)) - (sum(tb1.prom_plusbuckle_amount) / sum(tb1.balance_amount))) END the_margin_rate,
+	  	<!-- 森达净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+	  	CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE (((sum(tb1.balance_amount) - sum(tb1.purchase_price)) / sum(tb1.balance_amount)) 
+	  	- (sum(tb1.conprice_ladder_amount) / sum(tb1.balance_amount)) - (sum(tb1.prom_plusbuckle_amount) / sum(tb1.balance_amount))) END sd_the_margin_rate,
+	  	<!-- 综合回款扣率 ＝ （牌价额 － 扣费） / 终端收入 -->
+		(CASE WHEN sum(tb1.amount) = 0 THEN 0 ELSE ((sum(tb1.tagAmount) - sum(tb1.deduct_amount)) / sum(tb1.amount)) END) synthesize_return_rate,
+		
+		(CASE WHEN sum(tb1.balance_amount) = 0 THEN 0 ELSE sum(tb1.balance_amount) - sum(tb1.deduct_amount) - sum(tb1.difference_amount) END) back_amount,
+		<!-- 回款率 =（终端收入-扣费）/牌价*100%-->
+		CASE WHEN sum(tb1.tagAmount) = 0 THEN 0 ELSE ((sum(tb1.balance_amount) - sum(tb1.deduct_amount)) / sum(tb1.tagAmount)) END reimbursement_rate
+	 	from (
+	 		<if test="null != params.queryType and '' != params.queryType and 1 == params.queryType">
+	 			SELECT tb.*,
+					<!--  小类-->
+					cty3.name sub_category_name,
+				   	<!--  中类-->
+				  	cty2.`name` root_category_name,
+				  	cty2.category_no category_no2,
+				  	<!-- 大类 -->
+				  	cty.`name` category_name,
+				  	cty.category_no category_no1,
+				  	le.`name` YEAR,
+				  	<!--  年份-->
+				  	le1.`name` sell_season,
+				  	<!--  季节-->
+				  	'' style_name,
+				  	<!--  新旧款-->
+				  	le2.name gender,
+				  	<!--  性别-->
+				  	le3.`name` orderfrom,
+				  	<!--  订货形式-->
+				  	le4.`name` style,
+				  	<!--  风格-->
+				  	it.color_no color_name,
+				  	it.style_no,
+				  	<!-- 毛利率 ＝ （终端收入-总部成本）/终端收入*100%-->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) gross_margin_rate,
+					<!-- 森达毛利率 （终端收入-采购成本）/终端收入*100%-->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) sd_gross_margin_rate,
+					<!-- 扣费率 -->
+					0 deduction_rate,
+				  	<!-- 净毛利率 = 毛利率 - 合同阶梯扣加扣率 - 促销活动加扣率-->
+				  	(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END)  the_margin_rate,
+				  	<!-- 森达净毛利率 -->
+				  	(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END)  sd_the_margin_rate,
+				  	<!-- 净折扣率 -->
+					0 the_discount_rate,
+					0 conprice_deduct_rate,
+					0 conprice_ladder_rate,
+					0 prom_plusbuckle_rate,
+					0 synthesize_return_rate,
+					0 back_amount,
+					0 reimbursement_rate
+				FROM (
+					<include refid="queryGmsSaleListSql" />
+				) tb
+				<include refid="queryCommonSql" />
+	 		</if>
+	 		<if test="null != params.queryType and '' != params.queryType and 2 == params.queryType">
+	 			SELECT tb.*,
+					<!--  小类-->
+					cty3.name sub_category_name,
+				   	<!--  中类-->
+				  	cty2.`name` root_category_name,
+				  	cty2.category_no category_no2,
+				  	<!-- 大类 -->
+				  	cty.`name` category_name,
+				  	cty.category_no category_no1,
+				  	le.`name` YEAR,
+				  	<!--  年份-->
+				  	le1.`name` sell_season,
+				  	<!--  季节-->
+				  	'' style_name,
+				  	<!--  新旧款-->
+				  	le2.name gender,
+				  	<!--  性别-->
+				  	le3.`name` orderfrom,
+				  	<!--  订货形式-->
+				  	le4.`name` style,
+				  	<!--  风格-->
+					it.color_no color_name,
+					it.style_no,
+					<!-- 毛利率 （终端收入-总部成本）/终端收入*100%-->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) gross_margin_rate,
+					<!-- 森达毛利率 （终端收入-采购成本）/终端收入*100%-->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) sd_gross_margin_rate,
+					<!-- 扣费率 （扣费/终端收入**100%-->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (tb.deduct_amount / tb.balance_amount) END) deduction_rate,
+					<!-- 合同正价扣费率＝合同正价扣费/终端收入*100% -->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (tb.conprice_deduct_amount / tb.balance_amount) END ) conprice_deduct_rate ,
+					<!-- 合同阶梯扣加扣率 -->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) conprice_ladder_rate, 
+				    <!-- 促销活动加扣率 -->
+				    (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END) prom_plusbuckle_rate,
+				    <!-- 净折扣率 ＝ （终端收入-合同阶梯扣加扣-促销活动加扣）/牌价*100% -->
+					(CASE WHEN tb.tagAmount = 0 THEN 0 ELSE ((tb.balance_amount - tb.conprice_ladder_amount - tb.prom_plusbuckle_amount) / tb.tagAmount) END) the_discount_rate,
+				    
+				    <!-- 净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+				  	((CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) 
+						- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) 
+						- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END))  the_margin_rate,
+					<!-- 森达净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+				  	((CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) 
+						- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) 
+						- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END))  sd_the_margin_rate,
+					<!-- 综合回款扣率 ＝ （牌价额 － 扣费） / 终端收入 -->
+					(CASE WHEN tb.amount = 0 THEN 0 ELSE ((tb.tagAmount - tb.deduct_amount) / tb.amount) END) synthesize_return_rate,
+					<!-- 回款额 -->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE tb.balance_amount - tb.deduct_amount - tb.difference_amount END) back_amount, 
+					<!-- 回款率 -->
+					(CASE WHEN tb.tagAmount = 0 THEN 0 ELSE ((tb.balance_amount - tb.deduct_amount - tb.difference_amount) / tb.tagAmount) END) reimbursement_rate
+				  FROM (SELECT sp.*,odr.* FROM 
+					(
+					<include refid="queryOrderListSql" />
+					) odr 
+					INNER JOIN
+					 (
+					 <include refid="queryShopListSql" />
+					) sp ON sp.shop_no = odr.shop_no1
+				 <!-- where sp.company_no= 'C0001'-->
+				 <if test="null != params.month and '' != params.month">
+				 	<include refid="monthCondition" />
+				 </if>
+				) tb
+				<include refid="queryCommonSql" />
+	 		</if>
+		 	<if test="null != params.queryType and '' != params.queryType and 3 == params.queryType">
+			 	SELECT tb.*,
+					<!--  小类-->
+					cty3.name sub_category_name,
+				   	<!--  中类-->
+				  	cty2.`name` root_category_name,
+				  	cty2.category_no category_no2,
+				  	<!-- 大类 -->
+				  	cty.`name` category_name,
+					cty.category_no category_no1,
+				  	le.`name` YEAR,
+				  	<!--  年份-->
+				  	le1.`name` sell_season,
+				  	<!--  季节-->
+				  	'' style_name,
+				  	<!--  新旧款-->
+				  	le2.name gender,
+				  	<!--  性别-->
+				  	le3.`name` orderfrom,
+				  	<!--  订货形式-->
+				  	le4.`name` style,
+				  	<!--  风格-->
+					it.color_no color_name,
+					it.style_no,
+					<!-- 毛利率 （终端收入-总部成本）/终端收入*100%-->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) gross_margin_rate,
+					<!-- 森达毛利率 （终端收入-采购成本）/终端收入*100%-->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) sd_gross_margin_rate,
+					<!-- 扣费率 （扣费/终端收入**100%-->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (tb.deduct_amount / tb.balance_amount) END) deduction_rate,
+					<!-- 合同正价扣费率＝合同正价扣费/终端收入*100% -->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (tb.conprice_deduct_amount / tb.balance_amount) END ) conprice_deduct_rate ,
+					<!-- 合同阶梯扣加扣率 -->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) conprice_ladder_rate, 
+				    <!-- 促销活动加扣率 -->
+				    (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END) prom_plusbuckle_rate,
+				    <!-- 净折扣率 ＝ （终端收入-合同阶梯扣加扣-促销活动加扣）/牌价*100% -->
+					(CASE WHEN tb.tagAmount = 0 THEN 0 ELSE ((tb.balance_amount - tb.conprice_ladder_amount - tb.prom_plusbuckle_amount) / tb.tagAmount) END) the_discount_rate,
+				    
+				    <!-- 净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+				  	((CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) 
+						- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) 
+						- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END))  the_margin_rate,
+					<!-- 森达净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+				  	((CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) 
+						- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) 
+						- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END))  sd_the_margin_rate,
+					<!-- 综合回款扣率 ＝ （牌价额 － 扣费） / 终端收入 -->
+					(CASE WHEN tb.amount = 0 THEN 0 ELSE ((tb.tagAmount - tb.deduct_amount) / tb.amount) END) synthesize_return_rate,
+					<!-- 回款额 -->
+					(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE tb.balance_amount - tb.deduct_amount - tb.difference_amount END) back_amount, 
+					<!-- 回款率 -->
+					(CASE WHEN tb.tagAmount = 0 THEN 0 ELSE ((tb.balance_amount - tb.deduct_amount - tb.difference_amount) / tb.tagAmount) END) reimbursement_rate
+				FROM(
+					(SELECT sp.*,odr.* FROM 
+						(
+						<include refid="queryOrderListSql" />
+						) odr 
+						INNER JOIN
+						 (
+						 <include refid="queryShopListSql" />
+						) sp ON sp.shop_no = odr.shop_no1
+					 <!-- where sp.company_no= 'C0001'-->
+					 <if test="null != params.month and '' != params.month">
+					 	<include refid="monthCondition" />
+					 </if>
+					)
+				
+					UNION ALL
+					
+					(
+					<include refid="queryGmsSaleListSql" />
+					)
+				) tb
+				<include refid="queryCommonSql" />
+			</if>
+		) tb1 
+		GROUP BY
+			<if test="params.groupBySql != null and '' != params.groupBySql">
+				${params.groupBySql}
+			</if>
+			tb1.biz_type,
+			tb1.biz_no,
+			tb1.organ_no,
+			tb1.zone_no,
+			tb1.company_no
+		ORDER BY
+			tb1.shop_no,
+			tb1.biz_no,
+			tb1.organ_no,
+			tb1.zone_no,
+			tb1.company_no
+		
+		<if test="null != page and '' != page">
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+		</if>
+  </select>
+  <!-- 根据大类、品牌、季度、年份、性别 分类汇总 的记录数 -->
+  <select id="findBillSaleCollectCount" parameterType="map" resultMap="TotalResultMap">
+  	/*#mycat:balance=select 1 from bill_shop_balance where sharding_flag='${params.shardingFlag}' */
+	   select COUNT(*) total,
+	   		sum(tb1.qty) qty,
+			sum(tb1.tagAmount) tagAmount,
+			sum(tb1.disc_amount) disc_amount,
+			sum(tb1.amount) amount,
+			sum(tb1.unit_cost) unit_cost,
+			sum(tb1.region_cost) region_cost,
+			sum(tb1.headquarter_cost) headquarter_cost,
+			sum(tb1.purchase_price) purchase_price,
+			sum(tb1.deduct_amount) deduct_amount,
+			sum(tb1.conprice_deduct_amount) conprice_deduct_amount,
+			sum(tb1.conprice_ladder_amount) conprice_ladder_amount,
+			sum(tb1.prom_plusbuckle_amount) prom_plusbuckle_amount,
+			sum(tb1.back_amount) back_amount,
+			sum(tb1.difference_amount) difference_amount
+	   from (SELECT
+	   		sum(tb.qty) qty,
+			sum(tb.tagAmount) tagAmount,
+			sum(tb.disc_amount) disc_amount,
+			sum(tb.amount) amount,
+			sum(tb.unit_cost) unit_cost,
+			sum(tb.region_cost) region_cost,
+			sum(tb.headquarter_cost) headquarter_cost,
+			sum(tb.purchase_price) purchase_price,
+			sum(tb.deduct_amount) deduct_amount,
+			sum(tb.conprice_deduct_amount) conprice_deduct_amount,
+			sum(tb.conprice_ladder_amount) conprice_ladder_amount,
+			sum(tb.prom_plusbuckle_amount) prom_plusbuckle_amount,
+			sum(tb.balance_amount - tb.deduct_amount - tb.difference_amount) back_amount,
+			sum(tb.difference_amount) difference_amount,
+			tb.brand_no,
+			bd.sys_no,
+			tb.shop_no,
+			tb.rate_code,
+		   	<!--  中类-->
+		  	cty2.`name` root_category_name,
+		  	<!-- 大类 -->
+		  	cty.`name` category_name,
+			cty.category_no category_no1,
+		  	le.`name` YEAR,
+		  	<!--  年份-->
+		  	le1.`name` sell_season,
+		  	<!--  季节-->
+		  	it.style_no
+		FROM(
+			<if test="null != params.queryType and '' != params.queryType and 1 == params.queryType">
+				<include refid="queryGmsSaleCountSql" />
+			</if>
+			<if test="null != params.queryType and '' != params.queryType and 2 == params.queryType">
+				SELECT sp.*,odr.* FROM 
+				( <include refid="queryOrderCountSql" />
+				) odr 
+				INNER JOIN
+				 (
+				 <include refid="queryShopCountSql" />
+				) sp ON sp.shop_no = odr.shop_no1
+				<if test="null != params.month and '' != params.month">
+				 	<include refid="monthCondition" />
+				</if>
+			</if>
+			<if test="null != params.queryType and '' != params.queryType and 3 == params.queryType">
+				(SELECT sp.*,odr.* FROM 
+				(
+					<include refid="queryOrderCountSql" />
+				) odr 
+				INNER JOIN
+				 (
+				 <include refid="queryShopCountSql" />
+				) sp ON sp.shop_no = odr.shop_no1
+				<if test="null != params.month and '' != params.month">
+				 	<include refid="monthCondition" />
+				 </if>
+				)
+				
+				UNION ALL
+				
+				(
+				<include refid="queryGmsSaleCountSql" />
+				)
+			</if>
+		) tb
+		<include refid="queryCommonCountSql" />
+		GROUP BY 
+		<if test="params.countGroupBySql != null and '' != params.countGroupBySql">
+			${params.countGroupBySql}
+		</if>
+		tb.biz_type,
+		tb.biz_no,
+		tb.organ_no,
+		tb.zone_no,
+		tb.company_no
+	) tb1 
+  </select>
+  
+  <!-- 查询销售回款分析明细，用于导出 -->
+  <select id="findSaleDetailForExport" resultMap="BaseResultMap" parameterType="map" >  
+  	/*#mycat:balance=select 1 from bill_shop_balance where sharding_flag='${params.shardingFlag}' */
+      SELECT tb.*,
+		<!-- 毛利率 （终端收入-总部成本）/终端收入*100%-->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) gross_margin_rate,
+		<!-- 森达毛利率 （终端收入-采购成本）/终端收入*100%-->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) sd_gross_margin_rate,
+		<!-- 扣费率 （扣费/终端收入**100%-->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (tb.deduct_amount / tb.balance_amount) END) deduction_rate,
+		<!-- 合同正价扣费率＝合同正价扣费/终端收入*100% -->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (tb.conprice_deduct_amount / tb.balance_amount) END ) conprice_deduct_rate ,
+		<!-- 合同阶梯扣加扣率 -->
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) conprice_ladder_rate, 
+	    <!-- 促销活动加扣率 -->
+	    (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END) prom_plusbuckle_rate,
+	    
+	    <!-- 净折扣率 ＝ （终端收入-合同阶梯扣加扣-促销活动加扣）/牌价*100% -->
+		(CASE WHEN tb.tagAmount = 0 THEN 0 ELSE ((tb.balance_amount - tb.conprice_ladder_amount - tb.prom_plusbuckle_amount) / tb.tagAmount) END) the_discount_rate,
+	    
+	    <!-- 净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+	  	((CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.headquarter_cost,0)) / tb.balance_amount) END) 
+			- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) 
+			- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END))  the_margin_rate,
+		<!-- 森达净毛利率 ＝ 毛利率-合同阶梯扣加扣率-促销活动加扣率-->
+	  	((CASE WHEN tb.balance_amount = 0 THEN 0 ELSE ((tb.balance_amount - IFNULL(tb.purchase_price,0)) / tb.balance_amount) END) 
+			- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type in (2,6) THEN tb.conprice_ladder_amount / tb.balance_amount ELSE 0 END) END) 
+			- (CASE WHEN tb.balance_amount = 0 THEN 0 ELSE (CASE WHEN tb.discount_type = 3 THEN tb.prom_plusbuckle_amount / tb.balance_amount ELSE 0 END) END))  sd_the_margin_rate,
+		<!-- 综合回款扣率 ＝ （牌价额 － 扣费） / 终端收入 -->
+		(CASE WHEN tb.amount = 0 THEN 0 ELSE ((tb.tagAmount - tb.deduct_amount) / tb.amount) END) synthesize_return_rate,
+		(CASE WHEN tb.balance_amount = 0 THEN 0 ELSE tb.balance_amount - tb.deduct_amount - tb.difference_amount END) back_amount, 
+		<!-- 回款率 -->
+		(CASE WHEN tb.tagAmount = 0 THEN 0 ELSE ((tb.balance_amount - tb.deduct_amount) / tb.tagAmount) END) reimbursement_rate
+	FROM(
+		<if test="null != params.queryType and '' != params.queryType and 1 == params.queryType">
+			<include refid="queryGmsSaleListSql" />
+		</if>
+		
+		<if test="null != params.queryType and '' != params.queryType and 2 == params.queryType">
+			SELECT sp.*,odr.* FROM 
+			(
+			<include refid="queryOrderListSql" />
+			) odr 
+			INNER JOIN
+			 (
+			 <include refid="queryShopListSql" />
+			) sp ON sp.shop_no = odr.shop_no1
+			<if test="null != params.month and '' != params.month">
+			 	<include refid="monthCondition" />
+			</if>
+		</if>
+		<if test="null != params.queryType and '' != params.queryType and 3 == params.queryType">
+			(SELECT sp.*,odr.* FROM 
+				(
+				<include refid="queryOrderListSql" />
+				) odr 
+				INNER JOIN
+				 (
+				 <include refid="queryShopListSql" />
+				) sp ON sp.shop_no = odr.shop_no1
+			 <!-- where sp.company_no= 'C0001'-->
+			 <if test="null != params.month and '' != params.month">
+			 	<include refid="monthCondition" />
+			 </if>
+			)
+		
+			UNION ALL
+			
+			(
+			<include refid="queryGmsSaleListSql" />
+			)
+		</if>
+	) tb
+	<if test="null != page and '' != page">
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</if>
+   </select>
+  
+  <sql id="queryShopListSqlExport">
+  	SELECT z.zone_no,
+		z. NAME AS zone_name,
+		g.organ_no,
+		g. NAME AS organ_name,
+		bg.organ_no biz_no,
+		bg.`name` biz_name,
+		s.region_no,
+		s.province_no,
+		g. NAME AS province_name,
+		s.`mall_no`,
+		s.cmcdist_no,
+		s.major,
+		s.startup_time,
+		s.shop_level,
+		s.category_code,
+		s.shop_no,
+		s.short_name,
+		s.full_name,
+		s.sale_mode,-- le.`name`
+		s.retail_type, -- le1.`name`
+		s.multi, -- le2.`name`
+		s.status, -- le3.`name`
+		s.shop_classify,
+		s.open_date,
+		s.employe_amount,
+		s.area,
+		s.area_left,
+		s.area_total
+	FROM
+		shop s
+	-- LEFT JOIN company c ON s.company_no = c.company_no
+	LEFT JOIN organ bg ON s.biz_city_no = bg.organ_no
+	LEFT JOIN organ g ON bg.parent_no = g.organ_no
+	LEFT JOIN zone_info z ON g.zone_no = z.zone_no
+	WHERE 1 = 1
+	<include refid="shopQueryCodition" />
+  </sql>
+  
+  <sql id="queryCommonSql">
+  	INNER JOIN item it ON tb.item_no = it.item_no
+	<!-- LEFT JOIN item_cost ic ON tb.item_no = ic.item_no AND ic.`year` = YEAR(tb.out_date) AND ic.`month` = month(tb.out_date) AND tb.company_no = ic.company_no -->
+	LEFT JOIN category cty3 ON tb.category_no = cty3.category_no
+	LEFT JOIN category cty2 ON left(tb.category_no,4) = cty2.category_no
+	LEFT JOIN category cty ON left(tb.category_no,2) = cty.category_no
+	LEFT JOIN lookup_entry le ON it.years = le.`code` AND le.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'YEAR')
+	LEFT JOIN lookup_entry le1 ON it.sell_season = le1.`code` AND le1.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SELL_SEASON')
+	LEFT JOIN lookup_entry le2 ON it.gender = le2.`code` AND le2.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'GENDER')
+	LEFT JOIN lookup_entry le3 ON it.orderfrom = le3.`code` AND le3.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'ORDER_STYLE')
+	LEFT JOIN lookup_entry le4 ON it.style = le4.`code` AND le4.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'ITEM_STYLE')
+	LEFT JOIN lookup_entry le5 ON it.purchase_season = le5.`code` AND le5.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SEASON')
+	where 1=1 
+  </sql>
+</mapper>

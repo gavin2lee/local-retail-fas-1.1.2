@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PEUtilMapper" >
+  <resultMap id="ContractDiscountMap" type="cn.wonhigh.retail.fas.common.model.ContractDiscount" >
+    <result column="price_basis" property="priceBasis" jdbcType="TINYINT" />
+    <result column="contract_discount_no" property="contractDiscountNo" jdbcType="CHAR" />
+    <result column="discount1" property="discount1" jdbcType="DECIMAL" />
+    <result column="discount2" property="discount2" jdbcType="DECIMAL" />
+    <result column="add_price" property="addPrice" jdbcType="DECIMAL" />
+    <result column="algorithm" property="algorithm" jdbcType="CHAR" />
+    <result column="not_tax_algorithm" property="notTaxAlgorithm" jdbcType="CHAR" />
+  </resultMap>
+  <select id="selectTagPriceByItemNo" resultType="java.math.BigDecimal" parameterType="java.lang.String" >
+    	SELECT 
+    		tag_price
+     		FROM item 
+     	 WHERE 1=1 
+		     AND item_no = #{itemNo}
+  </select>
+  <select id="selectLastContractDiscount" resultMap="ContractDiscountMap" parameterType="map" >
+    	SELECT 
+    		price_basis,
+    		contract_discount_no,
+    		discount1,
+    		discount2,
+    		add_price,
+    		algorithm,
+    		not_tax_algorithm
+     		FROM contract_discount 
+     	 WHERE 1=1 
+		     AND saler_no = #{params.salerNo}
+		     AND buyer_no = #{params.buyerNo}
+		     AND brand_no = #{params.brandNo}
+		     AND category_no = #{params.categoryNo}
+		     AND order_type IN (#{params.orderType},'3')
+		     AND contract_discount_type = #{params.contractDiscountType}
+		     AND effective_date &lt;= #{params.sendDate}
+		     ORDER BY effective_date DESC ,create_time DESC LIMIT 1
+  </select>
+  <select id="selectAsnDueDateByBillNo" resultType="java.util.Date" parameterType="java.lang.String" >
+	SELECT 
+	  CASE
+	    term_type 
+	    WHEN 1 
+	    THEN 
+	    (SELECT 
+	      CONCAT(LEFT(bill_date, 8), fixed_day)) 
+	    WHEN 2 
+	    THEN 
+	    (SELECT 
+	      DATE_ADD(bill_date, INTERVAL days DAY)) 
+	    WHEN 3 
+	    THEN 
+	    (SELECT 
+	      DATE_ADD(
+	        (SELECT 
+	          bill_date 
+	        FROM
+	          bill_invoice 
+	        WHERE FIND_IN_SET(balance_no, ref_bill_no)),
+	        INTERVAL days DAY
+	      )) 
+	    WHEN 4 
+	    THEN 
+	    (SELECT 
+	      DATE_ADD(
+	        CONCAT(
+	          LEFT(
+	            DATE_ADD(bill_date, INTERVAL 1 MONTH),
+	            8
+	          ),
+	          1
+	        ),
+	        INTERVAL days - 1 DAY
+	      )) 
+	    WHEN 5 
+	    THEN 
+	    (SELECT 
+	      DATE_ADD(
+	        supplier_send_date,
+	        INTERVAL days DAY
+	      )) 
+	    ELSE NULL 
+	  END due_date 
+	FROM
+	  (SELECT 
+	    pr.bill_date,
+	    pr.supplier_send_date,
+	    pr.balance_no,
+	    pts.`term_type`,
+	    pts.`days`,
+	    pts.`fixed_day` 
+	  FROM
+	    pay_relationship pr 
+	    LEFT JOIN pay_term_supplier pts 
+	      ON pr.supplier_no = pts.`supplier_no` 
+	      AND pr.`saler_no` = pts.`company_no` 
+	  WHERE `business_bill_no` = #{billNo}) G 
+  </select>
+  <select id="selectAdjustDueDateByBillNo" resultType="java.util.Date"  parameterType="java.lang.String" >
+	SELECT 
+	  CASE
+	    term_type 
+	    WHEN 1 
+	    THEN 
+	    (SELECT 
+	      CONCAT(LEFT(bill_date, 8), fixed_day)) 
+	    WHEN 2 
+	    THEN 
+	    (SELECT 
+	      DATE_ADD(bill_date, INTERVAL days DAY)) 
+	    WHEN 3 
+	    THEN 
+	    (SELECT 
+	      DATE_ADD(
+	        (SELECT 
+	          bill_date 
+	        FROM
+	          bill_invoice 
+	        WHERE FIND_IN_SET(balance_no, ref_bill_no)),
+	        INTERVAL days DAY
+	      )) 
+	    WHEN 4 
+	    THEN 
+	    (SELECT 
+	      DATE_ADD(
+	        CONCAT(
+	          LEFT(
+	            DATE_ADD(bill_date, INTERVAL 1 MONTH),
+	            8
+	          ),
+	          1
+	        ),
+	        INTERVAL days - 1 DAY
+	      )) 
+	    WHEN 5 
+	    THEN 
+	    (SELECT 
+	      DATE_ADD(
+	        supplier_send_date,
+	        INTERVAL days DAY
+	      )) 
+	    ELSE NULL 
+	  END due_date 
+	FROM
+	  (SELECT 
+	    pr.bill_date,
+	    pr.supplier_send_date,
+	    pr.balance_no,
+	    pts.`term_type`,
+	    pts.`days`,
+	    pts.`fixed_day` 
+	  FROM
+	  ( SELECT saler_no,buyer_no,send_date bill_date,send_date supplier_send_date,balance_no	  
+	   FROM bill_buy_balance WHERE original_bill_no = #{billNo} limit 1 ) pr
+	    LEFT JOIN pay_term_supplier pts 
+	      ON pr.saler_no = pts.`supplier_no` 
+	      AND pr.`buyer_no` = pts.`company_no` ) G 
+  </select>
+</mapper>

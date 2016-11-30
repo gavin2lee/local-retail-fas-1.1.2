@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.ItemApiMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.ItemDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="en_name" property="enName" jdbcType="VARCHAR" />
+    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="shoe_model" property="shoeModel" jdbcType="VARCHAR" />
+    <result column="ingredients" property="ingredients" jdbcType="VARCHAR" />
+    <result column="mainqdb" property="mainqdb" jdbcType="VARCHAR" />
+    <result column="lining" property="lining" jdbcType="VARCHAR" />
+    <result column="color_no" property="colorNo" jdbcType="CHAR" />
+    <result column="main_color" property="mainColor" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="root_category_no" property="rootCategoryNo" jdbcType="CHAR" />
+    <result column="repeatlisting" property="repeatlisting" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="heeltype" property="heeltype" jdbcType="VARCHAR" />
+    <result column="bottomtype" property="bottomtype" jdbcType="VARCHAR" />
+    <result column="size_kind" property="sizeKind" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="suggest_tag_price" property="suggestTagPrice" jdbcType="DECIMAL" />
+    <result column="purchase_tax_price" property="purchaseTaxPrice" jdbcType="DECIMAL" />
+    <result column="costtaxrate" property="costtaxrate" jdbcType="DECIMAL" />
+    <result column="saletaxrate" property="saletaxrate" jdbcType="DECIMAL" />
+    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="supplier_item_no" property="supplierItemNo" jdbcType="VARCHAR" />
+    <result column="supplier_item_name" property="supplierItemName" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="sell_season" property="sellSeason" jdbcType="VARCHAR" />
+    <result column="purchase_season" property="purchaseSeason" jdbcType="VARCHAR" />
+    <result column="sale_date" property="saleDate" jdbcType="DATE" />
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, item_no, code, name, full_name, en_name, sys_no, style_no, brand_no, shoe_model, 
+    ingredients, mainqdb, lining, color_no, main_color, root_category_no, category_no, repeatlisting, gender, 
+    heeltype, bottomtype, size_kind, status, tag_price, suggest_tag_price, purchase_tax_price, 
+    costtaxrate, saletaxrate, material_price, supplier_no, supplier_item_no, supplier_item_name, 
+    orderfrom, years, sell_season, purchase_season, sale_date, search_code, style, create_user, 
+    create_time, update_user, update_time, remark,
+    (SELECT full_name FROM supplier WHERE item.supplier_no = supplier.supplier_no) supplier_name,
+    (SELECT `name` FROM brand WHERE item.brand_no = brand.brand_no) brand_name,
+    (SELECT `name` FROM category WHERE item.category_no = category.category_no) category_name
+  </sql>
+  
+  <select id="findByItemNo" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM item WHERE item_no = #{itemNo} 
+  </select>
+  
+</mapper>

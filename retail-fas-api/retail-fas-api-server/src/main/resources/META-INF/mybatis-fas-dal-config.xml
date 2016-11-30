@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- changes from the defaults -->
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<!-- JdbcType enumeration. Most common are: NULL, VARCHAR and OTHER -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="defaultStatementTimeout" value="30"/>
+	</settings>
+ 
+	<plugins>
+		<plugin interceptor="cn.wonhigh.retail.backend.data.core.DataAccessInspector">
+			<property name="shopMode" value="1"/>
+		</plugin> 
+		  <plugin interceptor="cn.wonhigh.retail.backend.data.core.ShardingInterceptor">
+		  <property name="table" value="order_main"/>
+		  <property name="enable" value="false"/>
+		</plugin>  
+	</plugins>
+
+	<mappers>
+		<mapper resource="mapper/RegionCostAccountingMapper.xml"/>
+		<mapper resource="mapper/HeadquarterCostAccountingMapper.xml"/>
+		<mapper resource="mapper/CompanyAccountingPeriodMapper.xml"/>
+		<mapper resource="mapper/ShopSettlementMapper.xml"/>
+		<mapper resource="mapper/CodingRuleMapper.xml"/>
+
+		<!-- 单据池 -->
+		<mapper resource="mapper/BillBuyBalanceApiMapper.xml"/>
+		<mapper resource="mapper/BillSaleBalanceApiMapper.xml"/>
+		<mapper resource="mapper/BillSplitLogApiMapper.xml"/>
+		<mapper resource="mapper/SettleNewStyleDtlApiMapper.xml"/>
+		<mapper resource="mapper/SettlePathApiMapper.xml"/>
+		<mapper resource="mapper/SettlePathDtlApiMapper.xml"/>
+		<mapper resource="mapper/SupplierGroupRelApiMapper.xml"/>
+		<mapper resource="mapper/CurrencyMapper.xml"/>
+		<mapper resource="mapper/SelfShopBankInfoMapper.xml"/>
+		<mapper resource="mapper/BrandApiMapper.xml"/>
+		<mapper resource="mapper/OrganApiMapper.xml"/>
+
+		<mapper resource="mapper/BillCommonInvoiceRegisterMapper.xml"/>
+		<mapper resource="mapper/FinancialAccountApiMapper.xml"/>
+		<mapper resource="mapper/WholesaleControlApiMapper.xml"/>
+
+		<mapper resource="mapper/ItemApiMapper.xml"/>
+		<mapper resource="mapper/ItemCostMapper.xml"/>
+
+		<mapper resource="mapper/InsideBizTypeMapper.xml"/>
+		<mapper resource="mapper/UpdateCostMapper.xml"/>
+
+		<mapper resource="mapper/PriceQuotationListMapper.xml"/>
+		<mapper resource="mapper/PurchasePriceApiMapper.xml"/>
+
+		<mapper resource="mapper/WholesaleCustomerRemainingMapper.xml"/>
+		<mapper resource="mapper/OrderInfoApiMapper.xml"/>
+		<mapper resource="mapper/PriceEffectiveDateMapper.xml"/>
+		<mapper resource="mapper/PayRelationshipApiMapper.xml"/>
+		<mapper resource="mapper/BillBuyBalanceAdditionalMapper.xml"/>
+		
+		<mapper resource="mapper/CustomerOrderRemainMapper.xml"/>
+        <mapper resource="mapper/WholesaleCustomerRemainingDtlMapper.xml"/>
+        <mapper resource="mapper/WholesaleCustomerRemainingSumMapper.xml"/>
+        <mapper resource="mapper/SystemParamSetMapper.xml"/>
+        <mapper resource="mapper/BillSaleBalanceMapper.xml"/>
+        <mapper resource="mapper/TransferBalanceDateApiMapper.xml"/>
+        
+        <mapper resource="mapper/SupplierRateSetMapper.xml"/> 
+	<mapper resource="mapper/OtherDeductionMapper.xml"/>
+  <mapper resource="mapper/CustomerReceRelMapper.xml"/>
+  <mapper resource="mapper/BalanceDateMapper.xml"/>
+  </mappers>
+</configuration>

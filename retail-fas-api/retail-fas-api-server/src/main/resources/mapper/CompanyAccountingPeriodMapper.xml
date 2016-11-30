@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.CompanyAccountingPeriodMapper" >
+  
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CompanySettlePeriod" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="supplier_settle_time" property="supplierSettleTime" jdbcType="DATE" />
+    <result column="account_settle_time" property="accountSettleTime" jdbcType="DATE" />
+    <result column="sale_settle_time" property="saleSettleTime" jdbcType="DATE" />
+    <result column="transfer_settle_time" property="transferSettleTime" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, company_no, company_name, supplier_settle_time, account_settle_time, sale_settle_time, 
+    transfer_settle_time, create_user, update_user, create_time, update_time, remark
+  </sql>
+  
+  <select id="findBalanceDate" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List"/>
+     FROM company_settle_period WHERE company_no = #{params.companyNo}
+  </select>
+  
+  <resultMap id="BaseBrandSettleMap" type="cn.wonhigh.retail.fas.common.model.CompanyBrandSettlePeriod" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="supplier_settle_time" property="supplierSettleTime" jdbcType="DATE" />
+    <result column="account_settle_time" property="accountSettleTime" jdbcType="DATE" />
+    <result column="sale_settle_time" property="saleSettleTime" jdbcType="DATE" />
+    <result column="transfer_settle_time" property="transferSettleTime" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getCompanyBrandBalanceDate" resultMap="BaseBrandSettleMap" parameterType="map" >
+    SELECT id, company_no, company_name, brand_no, brand_name, supplier_settle_time, account_settle_time, 
+    sale_settle_time, transfer_settle_time, create_user, update_user, create_time, update_time, remark
+     FROM company_brand_settle_period WHERE company_no = #{params.companyNo} AND brand_no = #{params.brandNo}
+  </select>
+  
+</mapper>

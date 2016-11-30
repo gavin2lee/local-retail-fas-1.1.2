@@ -1,0 +1,1029 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ItemMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Item" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="en_name" property="enName" jdbcType="VARCHAR" />
+    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="shoe_model" property="shoeModel" jdbcType="VARCHAR" />
+    <result column="ingredients" property="ingredients" jdbcType="VARCHAR" />
+    <result column="mainqdb" property="mainqdb" jdbcType="VARCHAR" />
+    <result column="lining" property="lining" jdbcType="VARCHAR" />
+    <result column="color_no" property="colorNo" jdbcType="CHAR" />
+    <result column="main_color" property="mainColor" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="root_category_no" property="rootCategoryNo" jdbcType="CHAR" />
+    <result column="repeatlisting" property="repeatlisting" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="heeltype" property="heeltype" jdbcType="VARCHAR" />
+    <result column="bottomtype" property="bottomtype" jdbcType="VARCHAR" />
+    <result column="size_kind" property="sizeKind" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="suggest_tag_price" property="suggestTagPrice" jdbcType="DECIMAL" />
+    <result column="purchase_tax_price" property="purchaseTaxPrice" jdbcType="DECIMAL" />
+    <result column="costtaxrate" property="costtaxrate" jdbcType="DECIMAL" />
+    <result column="saletaxrate" property="saletaxrate" jdbcType="DECIMAL" />
+    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="supplier_item_no" property="supplierItemNo" jdbcType="VARCHAR" />
+    <result column="supplier_item_name" property="supplierItemName" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="years_name" property="yearsName" jdbcType="VARCHAR" />
+    <result column="sell_season" property="sellSeason" jdbcType="VARCHAR" />
+    <result column="purchase_season" property="purchaseSeason" jdbcType="VARCHAR" />
+    <result column="sale_date" property="saleDate" jdbcType="DATE" />
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, item_no, code, name, full_name, en_name, sys_no, style_no, brand_no, shoe_model, 
+    ingredients, mainqdb, lining, color_no, main_color, root_category_no, category_no, repeatlisting, gender, 
+    heeltype, bottomtype, size_kind, status, tag_price, suggest_tag_price, purchase_tax_price, 
+    costtaxrate, saletaxrate, material_price, supplier_no, supplier_item_no, supplier_item_name, 
+    orderfrom, years, sell_season, purchase_season, sale_date, search_code, style, create_user, 
+    create_time, update_user, update_time, remark,
+    (SELECT full_name FROM supplier WHERE item.supplier_no = supplier.supplier_no) supplier_name,
+    (SELECT name FROM brand WHERE item.brand_no = brand.brand_no) brand_name
+  </sql>
+  <sql id="condition" >
+    -- AND @brand_no 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo" >
+       AND item_no = #{params.itemNo} 
+      </if>
+      <if test="null!=params.code and ''!=params.code" >
+       AND code = #{params.code} 
+      </if>
+      <!-- 用于界面上模糊查询 -->
+	  <if test="null!=params.codeCondition and ''!=params.codeCondition">
+		and code LIKE CONCAT(#{params.codeCondition},'%')
+	  </if>
+	  <if test="null!=params.itemName and ''!=params.itemName">
+		and (name LIKE CONCAT('%',#{params.itemName},'%') or full_name  LIKE CONCAT('%',#{params.itemName},'%'))
+	  </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+       AND brand_no = #{params.brandNo} 
+      </if>
+      <if test="null!=params.name and ''!=params.name" >
+       AND NAME LIKE '%${params.name}%' 
+      </if>
+      <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (UPPER(code) LIKE UPPER(CONCAT('%',#{params.q},'%')) OR UPPER(name) LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+      <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(code) IN ${params.multiq} OR  UPPER(name) IN ${params.multiq} ) 
+	  </if>
+	  <if test="null!=params.status and ''!=params.status">
+		and status=#{params.status,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.rootCategoryNo and ''!=params.rootCategoryNo">
+		and root_category_no=#{params.rootCategoryNo,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.years and ''!=params.years">
+		and years = (SELECT l.code FROM lookup_entry l WHERE (l.name=#{params.years} or l.code=#{params.years}))
+	  </if>
+	  <if test="null != params.styleNos and '' != params.styleNos">
+	    <foreach collection="params.styleNos" item="styleNo" separator="," open="AND style_no in (" close=")" index=""> 
+			#{styleNo}  
+		</foreach>  
+	  </if>
+    </if>
+  </sql>
+  <sql id="styleCondition" >
+    -- AND @brand_no 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (UPPER(style_no) LIKE UPPER(CONCAT('%',#{params.q},'%')) OR UPPER(style_no) LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+      <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(style_no) IN ${params.multiq} OR  UPPER(style_no) IN ${params.multiq} ) 
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM item
+    WHERE id = #{id,jdbcType=INTEGER}
+    or code = #{code,jdbcType=VARCHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM item WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />,
+    (select entry.name from lookup_entry entry where entry.code = years) years_name
+     FROM item WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM item WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM item
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.Item" >
+    DELETE FROM item
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.Item" >
+    INSERT INTO item (id, item_no, code, 
+      name, full_name, en_name, 
+      sys_no, style_no, brand_no, 
+      shoe_model, ingredients, mainqdb, 
+      lining, color_no, main_color, 
+      category_no, repeatlisting, gender, 
+      heeltype, bottomtype, size_kind, 
+      status, tag_price, suggest_tag_price, 
+      purchase_tax_price, costtaxrate, saletaxrate, 
+      material_price, supplier_no, supplier_item_no, 
+      supplier_item_name, orderfrom, years, 
+      sell_season, purchase_season, sale_date, 
+      search_code, style, create_user, 
+      create_time, update_user, update_time, 
+      remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{itemNo,jdbcType=CHAR}, #{code,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, #{enName,jdbcType=VARCHAR}, 
+      #{sysNo,jdbcType=VARCHAR}, #{styleNo,jdbcType=CHAR}, #{brandNo,jdbcType=CHAR}, 
+      #{shoeModel,jdbcType=VARCHAR}, #{ingredients,jdbcType=VARCHAR}, #{mainqdb,jdbcType=VARCHAR}, 
+      #{lining,jdbcType=VARCHAR}, #{colorNo,jdbcType=CHAR}, #{mainColor,jdbcType=VARCHAR}, 
+      #{categoryNo,jdbcType=CHAR}, #{repeatlisting,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, 
+      #{heeltype,jdbcType=VARCHAR}, #{bottomtype,jdbcType=VARCHAR}, #{sizeKind,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{tagPrice,jdbcType=DECIMAL}, #{suggestTagPrice,jdbcType=DECIMAL}, 
+      #{purchaseTaxPrice,jdbcType=DECIMAL}, #{costtaxrate,jdbcType=DECIMAL}, #{saletaxrate,jdbcType=DECIMAL}, 
+      #{materialPrice,jdbcType=DECIMAL}, #{supplierNo,jdbcType=CHAR}, #{supplierItemNo,jdbcType=VARCHAR}, 
+      #{supplierItemName,jdbcType=VARCHAR}, #{orderfrom,jdbcType=VARCHAR}, #{years,jdbcType=VARCHAR}, 
+      #{sellSeason,jdbcType=VARCHAR}, #{purchaseSeason,jdbcType=VARCHAR}, #{saleDate,jdbcType=DATE}, 
+      #{searchCode,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.Item" >
+    INSERT INTO item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="fullName != null" >
+        full_name,
+      </if>
+      <if test="enName != null" >
+        en_name,
+      </if>
+      <if test="sysNo != null" >
+        sys_no,
+      </if>
+      <if test="styleNo != null" >
+        style_no,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="shoeModel != null" >
+        shoe_model,
+      </if>
+      <if test="ingredients != null" >
+        ingredients,
+      </if>
+      <if test="mainqdb != null" >
+        mainqdb,
+      </if>
+      <if test="lining != null" >
+        lining,
+      </if>
+      <if test="colorNo != null" >
+        color_no,
+      </if>
+      <if test="mainColor != null" >
+        main_color,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="repeatlisting != null" >
+        repeatlisting,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="heeltype != null" >
+        heeltype,
+      </if>
+      <if test="bottomtype != null" >
+        bottomtype,
+      </if>
+      <if test="sizeKind != null" >
+        size_kind,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="tagPrice != null" >
+        tag_price,
+      </if>
+      <if test="suggestTagPrice != null" >
+        suggest_tag_price,
+      </if>
+      <if test="purchaseTaxPrice != null" >
+        purchase_tax_price,
+      </if>
+      <if test="costtaxrate != null" >
+        costtaxrate,
+      </if>
+      <if test="saletaxrate != null" >
+        saletaxrate,
+      </if>
+      <if test="materialPrice != null" >
+        material_price,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierItemNo != null" >
+        supplier_item_no,
+      </if>
+      <if test="supplierItemName != null" >
+        supplier_item_name,
+      </if>
+      <if test="orderfrom != null" >
+        orderfrom,
+      </if>
+      <if test="years != null" >
+        years,
+      </if>
+      <if test="sellSeason != null" >
+        sell_season,
+      </if>
+      <if test="purchaseSeason != null" >
+        purchase_season,
+      </if>
+      <if test="saleDate != null" >
+        sale_date,
+      </if>
+      <if test="searchCode != null" >
+        search_code,
+      </if>
+      <if test="style != null" >
+        style,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null" >
+        #{enName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysNo != null" >
+        #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="styleNo != null" >
+        #{styleNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="shoeModel != null" >
+        #{shoeModel,jdbcType=VARCHAR},
+      </if>
+      <if test="ingredients != null" >
+        #{ingredients,jdbcType=VARCHAR},
+      </if>
+      <if test="mainqdb != null" >
+        #{mainqdb,jdbcType=VARCHAR},
+      </if>
+      <if test="lining != null" >
+        #{lining,jdbcType=VARCHAR},
+      </if>
+      <if test="colorNo != null" >
+        #{colorNo,jdbcType=CHAR},
+      </if>
+      <if test="mainColor != null" >
+        #{mainColor,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="repeatlisting != null" >
+        #{repeatlisting,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="heeltype != null" >
+        #{heeltype,jdbcType=VARCHAR},
+      </if>
+      <if test="bottomtype != null" >
+        #{bottomtype,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeKind != null" >
+        #{sizeKind,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="tagPrice != null" >
+        #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="suggestTagPrice != null" >
+        #{suggestTagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="purchaseTaxPrice != null" >
+        #{purchaseTaxPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="costtaxrate != null" >
+        #{costtaxrate,jdbcType=DECIMAL},
+      </if>
+      <if test="saletaxrate != null" >
+        #{saletaxrate,jdbcType=DECIMAL},
+      </if>
+      <if test="materialPrice != null" >
+        #{materialPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierItemNo != null" >
+        #{supplierItemNo,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierItemName != null" >
+        #{supplierItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderfrom != null" >
+        #{orderfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="years != null" >
+        #{years,jdbcType=VARCHAR},
+      </if>
+      <if test="sellSeason != null" >
+        #{sellSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseSeason != null" >
+        #{purchaseSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="saleDate != null" >
+        #{saleDate,jdbcType=DATE},
+      </if>
+      <if test="searchCode != null" >
+        #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null" >
+        #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.Item" >
+    UPDATE item
+    <set >
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null" >
+        en_name = #{enName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysNo != null" >
+        sys_no = #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="styleNo != null" >
+        style_no = #{styleNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="shoeModel != null" >
+        shoe_model = #{shoeModel,jdbcType=VARCHAR},
+      </if>
+      <if test="ingredients != null" >
+        ingredients = #{ingredients,jdbcType=VARCHAR},
+      </if>
+      <if test="mainqdb != null" >
+        mainqdb = #{mainqdb,jdbcType=VARCHAR},
+      </if>
+      <if test="lining != null" >
+        lining = #{lining,jdbcType=VARCHAR},
+      </if>
+      <if test="colorNo != null" >
+        color_no = #{colorNo,jdbcType=CHAR},
+      </if>
+      <if test="mainColor != null" >
+        main_color = #{mainColor,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="repeatlisting != null" >
+        repeatlisting = #{repeatlisting,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="heeltype != null" >
+        heeltype = #{heeltype,jdbcType=VARCHAR},
+      </if>
+      <if test="bottomtype != null" >
+        bottomtype = #{bottomtype,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeKind != null" >
+        size_kind = #{sizeKind,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="tagPrice != null" >
+        tag_price = #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="suggestTagPrice != null" >
+        suggest_tag_price = #{suggestTagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="purchaseTaxPrice != null" >
+        purchase_tax_price = #{purchaseTaxPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="costtaxrate != null" >
+        costtaxrate = #{costtaxrate,jdbcType=DECIMAL},
+      </if>
+      <if test="saletaxrate != null" >
+        saletaxrate = #{saletaxrate,jdbcType=DECIMAL},
+      </if>
+      <if test="materialPrice != null" >
+        material_price = #{materialPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierItemNo != null" >
+        supplier_item_no = #{supplierItemNo,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierItemName != null" >
+        supplier_item_name = #{supplierItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderfrom != null" >
+        orderfrom = #{orderfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="years != null" >
+        years = #{years,jdbcType=VARCHAR},
+      </if>
+      <if test="sellSeason != null" >
+        sell_season = #{sellSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseSeason != null" >
+        purchase_season = #{purchaseSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="saleDate != null" >
+        sale_date = #{saleDate,jdbcType=DATE},
+      </if>
+      <if test="searchCode != null" >
+        search_code = #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null" >
+        style = #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.Item" >
+    UPDATE item
+    SET item_no = #{itemNo,jdbcType=CHAR},
+      code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      en_name = #{enName,jdbcType=VARCHAR},
+      sys_no = #{sysNo,jdbcType=VARCHAR},
+      style_no = #{styleNo,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      shoe_model = #{shoeModel,jdbcType=VARCHAR},
+      ingredients = #{ingredients,jdbcType=VARCHAR},
+      mainqdb = #{mainqdb,jdbcType=VARCHAR},
+      lining = #{lining,jdbcType=VARCHAR},
+      color_no = #{colorNo,jdbcType=CHAR},
+      main_color = #{mainColor,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      repeatlisting = #{repeatlisting,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      heeltype = #{heeltype,jdbcType=VARCHAR},
+      bottomtype = #{bottomtype,jdbcType=VARCHAR},
+      size_kind = #{sizeKind,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      tag_price = #{tagPrice,jdbcType=DECIMAL},
+      suggest_tag_price = #{suggestTagPrice,jdbcType=DECIMAL},
+      purchase_tax_price = #{purchaseTaxPrice,jdbcType=DECIMAL},
+      costtaxrate = #{costtaxrate,jdbcType=DECIMAL},
+      saletaxrate = #{saletaxrate,jdbcType=DECIMAL},
+      material_price = #{materialPrice,jdbcType=DECIMAL},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_item_no = #{supplierItemNo,jdbcType=VARCHAR},
+      supplier_item_name = #{supplierItemName,jdbcType=VARCHAR},
+      orderfrom = #{orderfrom,jdbcType=VARCHAR},
+      years = #{years,jdbcType=VARCHAR},
+      sell_season = #{sellSeason,jdbcType=VARCHAR},
+      purchase_season = #{purchaseSeason,jdbcType=VARCHAR},
+      sale_date = #{saleDate,jdbcType=DATE},
+      search_code = #{searchCode,jdbcType=VARCHAR},
+      style = #{style,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findItemNameByNo" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT name FROM item WHERE item_no=#{itemNo}
+  </select>
+  
+  <!-- 商品表条件 -->
+	<sql id="conditionForItemBox">
+	 	<!-- 数据权限 by zeng.xa -->
+		and @i.brand_no
+		
+		<if test="null!=params">
+		    <if test="null!=params.itemNo and ''!=params.itemNo">
+				and i.item_no=#{params.itemNo,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.itemNos and ''!=params.itemNos">
+      			and i.item_no in (${params.itemNos})
+            </if>
+			<if test="null!=params.code and ''!=params.code">
+				 and i.code=#{params.code,jdbcType=VARCHAR} 
+			</if>
+			<!-- 用于界面上模糊查询 -->
+			<if test="null!=params.codeCondition and ''!=params.codeCondition">
+					and i.code LIKE CONCAT(#{params.codeCondition},'%')
+			</if>
+			<!-- combogrid自动完成功能 -->
+			<if test="null!=params.q and ''!=params.q">
+				and (i.code LIKE CONCAT('%',#{params.q},'%') 
+					or i.name LIKE CONCAT('%',#{params.q},'%')) 
+			</if>
+			<if test="null!=params.itemName and ''!=params.itemName">
+				and (i.name LIKE CONCAT('%',#{params.itemName},'%') or i.full_name  LIKE CONCAT('%',#{params.itemName},'%'))
+			</if>
+			<if test="null!=params.styleNo and ''!=params.styleNo">
+				and i.style_no=#{params.styleNo,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.brandNo and ''!=params.brandNo">
+				and i.brand_no=#{params.brandNo,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.lining and ''!=params.lining">
+				and i.lining=#{params.lining,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.colorNo and ''!=params.colorNo">
+				and i.color_no=#{params.colorNo,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.cateNo and ''!=params.cateNo">
+				and i.cate_no=#{params.cateNo,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.repeatlisting and ''!=params.repeatlisting">
+				and i.repeatlisting=#{params.repeatlisting,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.gender and ''!=params.gender">
+				and i.gender=#{params.gender,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.heeltype and ''!=params.heeltype">
+				and i.heeltype=#{params.heeltype,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.bottomtype and ''!=params.bottomtype">
+				and i.bottomtype=#{params.bottomtype,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.sizeKind and ''!=params.sizeKind">
+				and i.size_kind=#{params.sizeKind,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.status and ''!=params.status">
+				and i.status=#{params.status,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.tagPrice and ''!=params.tagPrice">
+				and i.tag_price=#{params.tagPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="null!=params.suggestTagPrice and ''!=params.suggestTagPrice">
+				and i.suggest_tag_price=#{params.suggestTagPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="null!=params.purchaseTaxPrice and ''!=params.purchaseTaxPrice">
+				and i.purchase_tax_price=#{params.purchaseTaxPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="null!=params.costtaxrate and ''!=params.costtaxrate">
+				and i.costtaxrate=#{params.costtaxrate,jdbcType=DECIMAL}
+			</if>
+			<if test="null!=params.saletaxrate and ''!=params.saletaxrate">
+				and i.saletaxrate=#{params.saletaxrate,jdbcType=DECIMAL}
+			</if>
+			<if test="null!=params.materialPrice and ''!=params.materialPrice">
+				and i.material_price=#{params.materialPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="null!=params.supplierNo and ''!=params.supplierNo">
+				and i.supplier_no=#{params.supplierNo,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.supplierItemNo and ''!=params.supplierItemNo">
+				and i.supplier_item_no=#{params.supplierItemNo,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.orderfrom and ''!=params.orderfrom">
+				and i.orderfrom=#{params.orderfrom,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.years and ''!=params.years">
+				and i.years = (SELECT l.code FROM lookup_entry l WHERE (l.name=#{params.years} or l.code=#{params.years}))
+			</if>
+			<if test="null!=params.season and ''!=params.season">
+				and i.purchase_season=#{params.season,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.creator and ''!=params.creator">
+				and i.creator LIKE CONCAT('%',#{params.creator},'%')
+			</if>
+			<if test="null!=params.createtmStart and ''!=params.createtmStart">
+				and i.createtm &gt;=#{params.createtmStart,jdbcType=TIMESTAMP}
+			</if>
+			<if test="null!=params.createtmEnd and ''!=params.createtmEnd">
+				and i.createtm
+				&lt;date_add(STR_TO_DATE(#{params.createtmEnd,jdbcType=TIMESTAMP},'%Y-%m-%d'),
+				INTERVAL 1 day)
+			</if>
+			<if test="null!=params.editor and ''!=params.editor">
+				and i.editor LIKE CONCAT('%',#{params.editor},'%')
+			</if>
+			<if test="null!=params.edittmStart and ''!=params.edittmStart">
+				and i.edittm &gt;=#{params.edittmStart,jdbcType=TIMESTAMP}
+			</if>
+			<if test="null!=params.edittmEnd and ''!=params.edittmEnd">
+				and i.edittm
+				&lt;date_add(STR_TO_DATE(#{params.edittmEnd,jdbcType=TIMESTAMP},'%Y-%m-%d'),
+				INTERVAL 1 day)
+			</if>
+			<if test="null!=params.remarks and ''!=params.remarks">
+				and i.remarks LIKE CONCAT('%',#{params.remarks},'%')
+			</if>
+			
+			<if test="null!=params.timeSeq and ''!=params.timeSeq">
+				and i.time_seq>#{params.timeSeq,jdbcType=BIGINT}
+			</if>
+			
+			<if test="null!=params.rootCategoryNo and ''!=params.rootCategoryNo">
+				and i.root_category_no=#{params.rootCategoryNo,jdbcType=VARCHAR}
+			</if>
+			
+			<if test="null!=params.brands and ''!=params.brands">
+				and FIND_IN_SET(i.brand_no,#{params.brands,jdbcType=VARCHAR})
+			</if>
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+		</if>
+	</sql>
+	
+	<select id="findComboGridDataByCondition" resultMap="BaseResultMap" parameterType="map">
+		SELECT 
+		  a.id,
+		  a.item_no,
+		  a.code,
+		  a.name,
+		  a.full_name,
+		  a.en_name,
+		  a.sys_no,
+		  a.style_no,  
+		  a.brand_no,
+		  a.shoe_model,
+		  a.ingredients,
+		  a.mainqdb,
+		  a.lining,
+		  a.color_no,
+		  a.category_no,
+		  a.root_category_no,
+		  a.repeatlisting,
+		  a.gender,
+		  a.heeltype,
+		  a.bottomtype,
+		  a.size_kind,
+		  a.status,
+		  a.tag_price,
+		  a.suggest_tag_price,
+		  a.purchase_tax_price,
+		  a.costtaxrate,
+		  a.saletaxrate,
+		  a.material_price,
+		  a.supplier_no,
+		  a.supplier_item_no,
+		  a.supplier_item_name,
+		  a.orderfrom,
+		  a.sell_season,
+		  a.purchase_season,
+		  a.sale_date,
+		  a.search_code,
+		  a.style,
+		  a.create_user,
+		  a.create_time,
+		  a.update_user,
+		  a.update_time,
+		  a.remark,
+		  a.years,
+		  a.time_seq,
+		  t1.name brand_name,
+		  t2.name color_name,
+		  (SELECT entry.name FROM lookup_entry entry WHERE entry.code = a.years) years_name
+		  <if test="null!=params.isForPrintItemNo and ''!=params.isForPrintItemNo">
+		   ,(SELECT category.name FROM category category WHERE category.category_no = a.category_no) category_name,
+	        (SELECT entry.name FROM lookup_entry entry WHERE entry.code = a.sell_season) sell_season_name,
+	        (SELECT entry.name FROM lookup_entry entry WHERE entry.code = a.gender) gender_name,
+	        (SELECT entry.name FROM lookup_entry entry WHERE entry.code = a.purchase_season) purchase_season_name
+		  </if>
+		  
+		FROM
+		(
+		  select 
+		   i.*
+		  from  
+		    item i  
+		   <if test="null==params.shopNo or params.shopNo eq ''.toString()" >
+				<!-- combogrid查询过滤brandNo -->
+				<if test="null!=params.storeNo and ''!=params.storeNo and null!=params.orderUnitNo and ''!=params.orderUnitNo" >
+					inner join  
+				    (SELECT 
+				     distinct obsr.brand_no
+				    FROM
+				      org_unit_brand_rel obsr 
+				    WHERE obsr.store_no = #{params.storeNo}
+				      AND obsr.order_unit_no = #{params.orderUnitNo} 
+				      ) b on i.brand_no = b.brand_no
+				</if>
+		  </if>
+		  <if test="null==params.shopNo or params.shopNo eq ''.toString()" >
+				<if test="null==params.storeNo or params.storeNo eq ''.toString()" >
+					<!-- combogrid查询过滤brandNo -->
+					<if test="null!=params.orderUnitNo and ''!=params.orderUnitNo" >
+					inner join  
+				    (SELECT 
+				     distinct obsr.brand_no
+				    FROM
+				      org_unit_brand_rel obsr 
+				    WHERE obsr.order_unit_no = #{params.orderUnitNo} 
+				      ) b on i.brand_no = b.brand_no
+					</if>
+				</if>
+			</if>
+	
+		  <if test="null!=params.shopNo and ''!=params.shopNo and null!=params.orderUnitNo and ''!=params.orderUnitNo" >
+			  inner join  
+			   (SELECT 
+			     distinct obsr.brand_no
+			    FROM
+			      org_unit_brand_rel obsr 
+			    WHERE obsr.store_no = #{params.shopNo}
+			      AND obsr.order_unit_no = #{params.orderUnitNo} 
+			      ) b on i.brand_no = b.brand_no
+		  </if>
+		  where 1=1
+		  <include refid="conditionForItemBox"/>
+		  LIMIT #{page.startRowNum} ,#{page.pageSize} 
+		  ) a 
+		  INNER JOIN brand t1  ON a.brand_no = t1.brand_no 
+		  INNER JOIN color_info t2  ON a.color_no = t2.color_no 
+		WHERE 1 = 1 
+	    <if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>  
+	   </if>
+	   <if test="orderByField == null or ''==orderByField">
+			 ORDER BY a.code ASC
+	   </if>
+		LIMIT 0,#{page.pageSize} 
+	</select>
+	<select id="findStyleNoCount" resultType="java.lang.Integer" parameterType="map"  >
+		SELECT
+			count(0)
+		FROM
+			(
+				SELECT
+					style_no
+				FROM
+					item
+				WHERE
+					style_no IS NOT NULL
+				AND trim(style_no) != '' 
+				<include refid="styleCondition" />
+				GROUP BY
+					style_no
+			) s
+	</select>
+	<select id="findStyleNo" resultMap="BaseResultMap" parameterType="map">
+			SELECT
+				id,style_no
+			FROM
+				item
+			WHERE
+				style_no IS NOT NULL
+			AND trim(style_no) != '' 
+			<include refid="styleCondition" />
+			GROUP BY
+				style_no
+		    <if test="orderByField != null and ''!=orderByField" >
+		      ORDER BY ${orderByField}
+		      <if test="orderByField" >
+		        ${orderBy}
+		      </if>
+		    </if>
+		     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</select>  
+	
+	<select id="findStyleCount" resultType="java.lang.Integer">
+	SELECT count(1) FROM (
+		SELECT
+			id,style_no
+		FROM
+			item
+		WHERE 1 = 1
+		-- AND @brand_no 
+	AND style_no IS NOT NULL
+	AND trim(style_no) != ''
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	<if test="null!=params.q and ''!=params.q">
+		AND (UPPER(style_no) LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+	  </if>
+		GROUP BY style_no
+	) s 
+	</select>
+	
+	<select id="findStyleList" resultMap="BaseResultMap" parameterType="map">
+	SELECT
+		id,style_no
+	FROM item WHERE 1 = 1
+	-- AND @brand_no 
+	AND style_no IS NOT NULL
+	AND trim(style_no) != ''
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	<if test="null!=params.q and ''!=params.q">
+		AND (UPPER(style_no) LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+	  </if>
+	<if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+	GROUP BY style_no
+	LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</select>
+	
+	<select id="findBLKItemInfo" resultMap="BaseResultMap" parameterType="map" >
+	SELECT a.item_no,a.`code`,a.`name`,a.brand_no,a.style_no FROM item as a , (
+		SELECT DISTINCT i.style_no FROM company_period_balance p 
+		LEFT JOIN item i ON p.item_no = i.item_no
+		WHERE 1=1
+		AND p.company_no = #{params.companyNo}
+		AND p.year=#{params.currentYear} 
+		AND p.`month`=#{params.currentMonth}
+		<if test="null != params.brandNos and '' != params.brandNos">
+		   AND p.brand_no in 
+		   <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+		   </foreach>  
+		 </if>
+     	<if test="null != params.itemNos and '' != params.itemNos">
+		   AND p.item_no in 
+		   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+				#{itemNo}  
+		   </foreach>  
+		 </if>
+	) as b
+	WHERE LENGTH(trim(ifnull(a.style_no,'')))&lt;&gt;0 and a.style_no = b.style_no 
+	AND a.item_no NOT IN (
+		SELECT ic.item_no FROM item_cost ic
+		WHERE 1=1
+		AND ic.lot = 'M'
+		AND ic.company_no = #{params.companyNo}
+		AND ic.year=#{params.currentYear}  
+		AND ic.`month`=#{params.currentMonth}
+		<if test="null != params.brandNos and '' != params.brandNos">
+		   AND ic.brand_no in 
+		   <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+		   </foreach>  
+		 </if>
+     	<if test="null != params.itemNos and '' != params.itemNos">
+		   AND ic.item_no in 
+		   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+				#{itemNo}  
+		   </foreach>  
+		 </if>	
+	 )
+	</select>
+  
+</mapper>

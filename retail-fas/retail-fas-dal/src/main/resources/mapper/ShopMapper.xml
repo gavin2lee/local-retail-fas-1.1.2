@@ -1,0 +1,1176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ShopMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Shop" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="store_no" property="storeNo" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organName" property="organName" jdbcType="VARCHAR"/>
+    <result column="biz_city_no" property="bizCityNo" jdbcType="CHAR" />
+    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+    <result column="open_date" property="openDate" jdbcType="DATE" />
+    <result column="close_date" property="closeDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="area" property="area" jdbcType="DECIMAL" />
+    <result column="area_left" property="areaLeft" jdbcType="DECIMAL" />
+    <result column="area_total" property="areaTotal" jdbcType="DECIMAL" />
+    <result column="area_unit" property="areaUnit" jdbcType="VARCHAR" />
+    <result column="province_no" property="provinceNo" jdbcType="VARCHAR" />
+    <result column="city_no" property="cityNo" jdbcType="VARCHAR" />
+    <result column="county_no" property="countyNo" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="zip_code" property="zipCode" jdbcType="VARCHAR" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="CHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="employe_amount" property="employeAmount" jdbcType="INTEGER" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="digits" property="digits" jdbcType="VARCHAR" />
+    <result column="startup_time" property="startupTime" jdbcType="VARCHAR" />
+    <result column="shutdown_time" property="shutdownTime" jdbcType="VARCHAR" />
+    <result column="shop_level" property="shopLevel" jdbcType="VARCHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="multi" property="multi" jdbcType="VARCHAR" />
+    <result column="sale_mode" property="saleMode" jdbcType="VARCHAR" />
+    <result column="retail_type" property="retailType" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="CHAR" />
+    <result column="region_no" property="regionNo" jdbcType="CHAR" />
+    <result column="cmcdist_no" property="cmcdistNo" jdbcType="CHAR" />
+    <result column="category_code" property="categoryCode" jdbcType="VARCHAR" />
+    <result column="shop_classify" property="shopClassify" jdbcType="VARCHAR" />
+    <result column="price_adjust_level" property="priceAdjustLevel" jdbcType="VARCHAR" />
+    <result column="on_line_flag" property="onLineFlag" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMapAssemble" type="cn.wonhigh.retail.fas.common.model.Shop" >
+  	<result column="companyNo" property="companyNo" jdbcType="VARCHAR" />
+  	<result column="companyName" property="companyName" jdbcType="VARCHAR" />
+  	<result column="zoneNo" property="zoneNo" jdbcType="VARCHAR"/>
+  	<result column="zoneName" property="zoneName" jdbcType="VARCHAR"/>
+  	<result column="mallNo" property="mallNo" jdbcType="VARCHAR"/>
+  	<result column="mallName" property="mallName" jdbcType="VARCHAR"/>
+  	<result column="organNo" property="organNo" jdbcType="VARCHAR"/>
+  	<result column="organName" property="organName" jdbcType="VARCHAR"/>
+  	<result column="bsgroupsNo" property="bsgroupsNo" jdbcType="VARCHAR"/>
+  	<result column="bsgroupsName" property="bsgroupsName" jdbcType="VARCHAR"/>
+  	<result column="regionNo" property="regionNo" jdbcType="VARCHAR"/>
+  	<result column="regionName" property="regionName" jdbcType="VARCHAR"/>
+  	<result column="brandNo" property="brandNo" jdbcType="CHAR" />
+    <result column="brandName" property="brandName" jdbcType="VARCHAR" />
+    <result column="retailType" property="retailType" jdbcType="VARCHAR" />
+  </resultMap> 
+  
+  <resultMap id="BaseResultMapShopBrand" type="cn.wonhigh.retail.fas.common.model.ShopBrand" >
+  	 <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+     <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMapShopAndCompany" type="cn.wonhigh.retail.fas.common.model.Shop" >
+  	 <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+  	 <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+     <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+  	 <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+     <result column="name" property="companyName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="ShopExtentionResult" type="cn.wonhigh.retail.fas.common.dto.ShopExtensionDto" >
+  	 <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+     <result column="attribute_detail_no" property="attributeDetailNo" jdbcType="VARCHAR" />
+     <result column="attribute_detail_name" property="attributeDetailName" jdbcType="VARCHAR" />
+     <result column="attribute_no" property="attributeNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    id, shop_no, code, store_no, company_no, search_code, short_name, full_name, organ_no, 
+    biz_city_no, sys_no, open_date, close_date, status, area, area_left, area_total, 
+    area_unit, province_no, city_no, county_no, address, zip_code, contact_name, tel, 
+    fax, email, channel_no, location, employe_amount, pay_type, digits, startup_time, 
+    shutdown_time, shop_level, major, multi, sale_mode, retail_type, mall_no, region_no, 
+    cmcdist_no, category_code, shop_classify, price_adjust_level, on_line_flag, create_user, 
+    create_time, update_user, update_time, remark
+  </sql>
+  <sql id="condition" >
+  		/*organ_type_no*/
+  		-- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+          and status = #{params.status} 
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+          and shop_no = #{params.shopNo} 
+      </if>
+     <if test="null!=params.brandNo and ''!=params.brandNo" >
+       	 and shop_no in (select shop_no from shop_brand where brand_no = #{params.brandNo} )
+      </if>
+      <if test="null!=params.mainBrandNos and ''!=params.mainBrandNos" >
+       	 and shop_no in (select shop_no from shop_brand where brand_flag =1 AND brand_no IN ${params.mainBrandNos})
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND shop_no IN 
+         	<foreach collection="params.shopNos" index="index" item="shopNo" open="(" separator="," close=")">
+   				#{shopNo, jdbcType=CHAR}
+  			</foreach>
+      </if>
+      <if test="null!=params.shopNoLike and ''!=params.shopNoLike" >
+          and shop_no like  '%${params.shopNoLike}%'
+      </if>
+      <if test="null!=params.shortNameLike and ''!=params.shortNameLike" >
+          and short_name like  '%${params.shortNameLike}%'
+      </if>
+       <if test="null!=params.shortName and ''!=params.shortName" >
+          and short_name like  '%${params.shortName}%'
+      </if>
+       <if test="null!=params.fullName and ''!=params.fullName" >
+          and full_name like  '%${params.fullName}%'
+      </if>
+       <if test="null!=params.biCityNo and ''!=params.bizCityNo" >
+          and biz_city_no = #{params.bizCityNo} 
+      </if>
+       <if test="null!=params.shopShortName and ''!=params.shopShortName" >
+          and short_name =   #{params.shopShortName} 
+      </if>
+      <if test="null!=params.mallNo and ''!=params.mallNo" >
+          and mall_no = #{params.mallNo} 
+      </if>
+      <if test="null!=params.bsgroupsNo and ''!=params.bsgroupsNo" >
+          and EXISTS(SELECT 'X' FROM mall WHERE shop.mall_no = mall.mall_no AND mall.bsgroups_no = #{params.bsgroupsNo})
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" > 
+          and company_no = #{params.companyNo} 
+      </if>
+       <if test="null!=params.organNo and ''!=params.organNo" > 
+          and organ_no = #{params.organNo} 
+      </if>
+       <if test="null!=params.parentOrganNo and ''!=params.parentOrganNo" > 
+          and organ_no IN(SELECT o.organ_no  FROM  organ o WHERE o.`organ_level`=2 AND o.parent_no=#{params.parentOrganNo}) 
+      </if>      
+       <if test="null!=params.multiOrganNo and ''!=params.multiOrganNo">
+        AND organ_no IN
+        <foreach collection="params.multiOrganNo" item="item" index="index" open="(" separator="," close=")">  
+        	#{item}
+        </foreach>
+      </if>
+       <if test="null!=params.organNos and ''!=params.organNos" >
+        AND organ_no IN ${params.organNos}
+      </if>
+       <if test="null!=params.parentOrganNos and ''!=params.parentOrganNos" > 
+          and organ_no IN(SELECT o.organ_no  FROM  organ o WHERE o.`organ_level`=2 AND o.parent_no IN ${params.parentOrganNos}) 
+      </if> 
+      <if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+          and shop_no in ${params.shopNoLists} 
+      </if>
+       <if test="null!=params.brandNos and ''!=params.brandNos" >     
+          and shop_no IN(SELECT o.shop_no  FROM  shop_brand o WHERE o.brand_no  IN ${params.brandNos}) 
+     </if>
+       <if test="null!=params.cityNos and ''!=params.cityNos" >
+          and biz_city_no IN #{params.cityNos} 
+      </if>
+      <if test="null!=params.payType and ''!=params.payType">
+      	and pay_type = #{params.payType}
+      </if>
+       <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+			AND (shop_no LIKE CONCAT(#{params.q},'%') OR short_name LIKE CONCAT('%',#{params.q},'%')) 
+	  </if>
+      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" > 
+          and company_no in ${params.multiCompanyNo} 
+      </if>
+      <if test="null!=params.multiMallNo and ''!=params.multiMallNo" >
+          and mall_no in ${params.multiMallNo} 
+      </if>
+      <if test="null!=params.multiBsgroupsNo and ''!=params.multiBsgroupsNo" >
+          and EXISTS(SELECT 'X' FROM mall WHERE shop.mall_no = mall.mall_no AND mall.bsgroups_no in ${params.multiBsgroupsNo})
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >     
+          and shop_no IN(SELECT o.shop_no  FROM  shop_brand o WHERE o.brand_no  IN ${params.multiBrandNo}) 
+     </if>
+      <if test="null!=params.shopStatus and ''!=params.shopStatus" >
+          and (status = 1 or (status = 2  and close_date &gt;= (select date_sub(curdate(), interval 2 month))  and  close_date &lt;=  (select curdate())))   
+      </if>
+    </if>
+  </sql>
+  
+  <sql id="scondition" >
+  		-- AND @s.company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+          and s.status = #{params.status} 
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+          and s.shop_no = #{params.shopNo} 
+      </if>
+     <if test="null!=params.brandNo and ''!=params.brandNo" >
+       	 and s.shop_no in (select shop_no from shop_brand where brand_no = #{params.brandNo} )
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND s.shop_no IN 
+         	<foreach collection="params.shopNos" index="index" item="shopNo" open="(" separator="," close=")">
+   				#{shopNo, jdbcType=CHAR}
+  			</foreach>
+      </if>
+      <if test="null!=params.shopNoLike and ''!=params.shopNoLike" >
+          and s.shop_no like  '%${params.shopNoLike}%'
+      </if>
+      <if test="null!=params.shortNameLike and ''!=params.shortNameLike" >
+          and s.short_name like  '%${params.shortNameLike}%'
+      </if>
+       <if test="null!=params.shortName and ''!=params.shortName" >
+          and s.short_name like  '%${params.shortName}%'
+      </if>
+       <if test="null!=params.fullName and ''!=params.fullName" >
+          and s.full_name like  '%${params.fullName}%'
+      </if>
+       <if test="null!=params.biCityNo and ''!=params.bizCityNo" >
+          and s.biz_city_no = #{params.bizCityNo} 
+      </if>
+      <if test="null!=params.mallNo and ''!=params.mallNo" >
+          and s.mall_no = #{params.mallNo} 
+      </if>
+      <if test="null!=params.bsgroupsNo and ''!=params.bsgroupsNo" >
+          and EXISTS(SELECT 'X' FROM mall WHERE shop.mall_no = mall.mall_no AND mall.bsgroups_no = #{params.bsgroupsNo})
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" > 
+          and s.company_no = #{params.companyNo} 
+      </if>
+       <if test="null!=params.organNo and ''!=params.organNo" > 
+          and s.organ_no = #{params.organNo} 
+      </if>
+       <if test="null!=params.parentOrganNo and ''!=params.parentOrganNo" > 
+          and s.organ_no IN(SELECT o.organ_no  FROM  organ o WHERE o.`organ_level`=2 AND o.parent_no=#{params.parentOrganNo}) 
+      </if>      
+       <if test="null!=params.multiOrganNo and ''!=params.multiOrganNo">
+        AND s.organ_no IN
+        <foreach collection="params.multiOrganNo" item="item" index="index" open="(" separator="," close=")">  
+        	#{item}
+        </foreach>
+      </if>
+       <if test="null!=params.organNos and ''!=params.organNos" >
+        AND s.organ_no IN ${params.organNos}
+      </if>
+       <if test="null!=params.parentOrganNos and ''!=params.parentOrganNos" > 
+          and s.organ_no IN(SELECT o.organ_no  FROM  organ o WHERE o.`organ_level`=2 AND o.parent_no IN ${params.parentOrganNos}) 
+      </if> 
+      <if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+          and s.shop_no in ${params.shopNoLists} 
+      </if>
+       <if test="null!=params.brandNos and ''!=params.brandNos" >     
+          and s.shop_no IN(SELECT o.shop_no  FROM  shop_brand o WHERE o.brand_no  IN ${params.brandNos}) 
+     </if>
+       <if test="null!=params.cityNos and ''!=params.cityNos" >
+          and s.biz_city_no IN #{params.cityNos} 
+      </if>
+      <if test="null!=params.payType and ''!=params.payType">
+      	and s.pay_type = #{params.payType}
+      </if>
+       <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+			AND (shop_no LIKE CONCAT(#{params.q},'%') OR short_name LIKE CONCAT('%',#{params.q},'%')) 
+	  </if>
+      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" > 
+          and s.company_no in ${params.multiCompanyNo} 
+      </if>
+      <if test="null!=params.multiMallNo and ''!=params.multiMallNo" >
+          and s.mall_no in ${params.multiMallNo} 
+      </if>
+      <if test="null!=params.multiBsgroupsNo and ''!=params.multiBsgroupsNo" >
+          and EXISTS(SELECT 'X' FROM mall WHERE shop.mall_no = mall.mall_no AND mall.bsgroups_no in ${params.multiBsgroupsNo})
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >     
+          and s.shop_no IN(SELECT o.shop_no  FROM  shop_brand o WHERE o.brand_no  IN ${params.multiBrandNo}) 
+     </if>
+    </if>
+  </sql>
+  
+   <sql id="shopAndOrganCondition" >
+  		-- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNoLike and ''!=params.shopNoLike" >
+          and shop_no like  '%${params.shopNoLike}%'
+      </if>
+      <if test="null!=params.shortNameLike and ''!=params.shortNameLike" >
+          and short_name like  '%${params.shortNameLike}%'
+      </if>
+      <if test="null!=params.organName and ''!=params.organName" >
+          AND organ.name LIKE  '${params.organName}%'
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" > 
+          and company_no = #{params.companyNo} 
+      </if>
+    </if>    
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM shop
+    WHERE id = #{id,jdbcType=INTEGER}
+    or shop_no = #{shopNo,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM shop WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    	  <include refid="Base_Column_List" />
+     FROM shop
+      WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectShopAndOrganCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM shop LEFT JOIN organ ON organ.`organ_no`=shop.`organ_no` WHERE 1=1 
+    <include refid="shopAndOrganCondition" />
+  </select>
+  <select id="selectShopAndOrganByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    	 shop.id, shop.shop_no, shop.code, shop.store_no, shop.company_no, shop.search_code, shop.short_name, shop.full_name, shop.organ_no,
+		shop.biz_city_no, shop.sys_no, shop.open_date, shop.close_date, shop.status, shop.area, shop.area_left, shop.area_total,
+		shop.area_unit, shop.province_no, shop.city_no, shop.county_no, shop.address, shop.zip_code, shop.contact_name, tel,
+		shop.fax, shop.email, shop.channel_no, shop.location, shop.employe_amount, shop.pay_type, shop.digits, shop.startup_time,
+		shop.shutdown_time, shop.shop_level, shop.major, shop.multi, shop.sale_mode, shop.retail_type, shop.mall_no, shop.region_no,
+		shop.cmcdist_no, shop.category_code, shop.shop_classify, shop.price_adjust_level, shop.on_line_flag, shop.create_user,
+		shop.create_time, shop.update_user, shop.update_time, shop.remark,
+		organ.`name` AS organName
+     FROM shop LEFT JOIN organ ON organ.`organ_no`=shop.`organ_no`
+      WHERE 1=1 
+    <include refid="shopAndOrganCondition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM shop WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectSubsiInfo" resultMap="BaseResultMapAssemble" parameterType="map">
+  	SELECT 
+		s.company_no AS companyNo,c.name AS companyName,g.zone_no AS zoneNo,z.name AS zoneName,g.parent_no AS organNo
+		, g1.name AS organName,b.bsgroups_no AS bsgroupsNo,b.name AS bsgroupsName,r.region_no AS regionNo,r.name AS regionName,m.mall_no AS mallNo,
+		m.name AS mallName,s.shop_no AS shopNo ,s.short_name AS shortName,s.full_name AS fullName,s.short_name AS shopName,s.retail_type AS retailType,
+		sb.brand_no AS brandNo, sbr.name as  brandName   FROM shop s 
+		LEFT JOIN company c ON s.company_no=c.company_no
+		 LEFT JOIN organ g ON s.biz_city_no = g.organ_no
+	     LEFT JOIN organ g1 ON g.parent_no =  g1.organ_no
+		LEFT JOIN zone_info z ON g.zone_no=z.zone_no
+		LEFT JOIN mall m ON s.mall_no=m.mall_no
+		LEFT JOIN  bsgroups b  ON  m.bsgroups_no=b.bsgroups_no
+		#left join  cmcdist t  on s.cmcdist_no=t.cmcdist_no
+		LEFT JOIN region r ON s.region_no=r.region_no
+		LEFT JOIN   shop_brand  sb  ON  s.shop_no = sb.shop_no  and  sb.brand_flag =1 
+		LEFT JOIN   brand  sbr  ON  sb.brand_no = sbr.brand_no 
+		WHERE 1=1 
+		<!-- 
+		<if test="companyNo !=null and ''!=companyNo">
+			AND  c.company_no=#{companyNo}
+		</if>
+		- AND @s.company_no
+		 -->	
+		
+		<if test="shopNo != null and ''!=shopNo">
+			AND  s.shop_no=#{shopNo}
+		</if>
+		<if test="payType != null and ''!=payType">
+			AND s.pay_type =#{payType}
+		</if>
+		<if test="status != null and ''!=status">
+			AND s.status =#{status}
+		</if>
+		LIMIT 0,1
+  </select>
+  
+  <select id="selectSubsiInfoList" resultMap="BaseResultMapAssemble" parameterType="map">
+  	SELECT 
+		s.company_no AS companyNo,c.name AS companyName,g.zone_no AS zoneNo,z.name AS zoneName,g.parent_no AS organNo,
+		g1.name AS organName,b.bsgroups_no AS bsgroupsNo,b.name AS bsgroupsName,r.region_no AS regionNo,r.name AS regionName,m.mall_no AS mallNo,
+		m.name AS mallName,s.shop_no AS shopNo ,s.short_name AS shortName,s.full_name AS fullName,s.short_name AS shopName,s.retail_type AS retailType FROM shop s 
+		LEFT JOIN company c ON s.company_no=c.company_no
+		#LEFT JOIN organ g ON s.organ_no=g.organ_no
+		LEFT JOIN organ g ON s.biz_city_no = g.organ_no
+	    LEFT JOIN organ g1 ON g.parent_no =  g1.organ_no
+		LEFT JOIN zone_info z ON g.zone_no=z.zone_no
+		LEFT JOIN mall m ON s.mall_no=m.mall_no
+		LEFT JOIN  bsgroups b  ON  m.bsgroups_no=b.bsgroups_no
+		#left join  cmcdist t  on s.cmcdist_no=t.cmcdist_no
+		LEFT JOIN region r ON s.region_no=r.region_no
+		WHERE 1=1 
+		
+		<!-- 
+		- AND @s.company_no
+		<if test="companyNo !=null and ''!=companyNo">
+			AND  c.company_no=#{companyNo}
+		</if>
+		 -->
+		 <if test="params.queryCondition != null and ''!=params.queryCondition">
+		 	<include refid="scondition" />
+		 </if>
+		 <if test="params.queryCondition == null and ''==params.queryCondition">
+		 
+		 	<if test="params.shopNo != null and ''!=params.shopNo">
+				AND  s.shop_no=#{params.shopNo}
+			</if>
+			<if test="params.payType != null and ''!=params.payType">
+				AND s.pay_type =#{params.payType}
+			</if>
+			<if test="params.status != null and ''!=params.status">
+				AND s.status =#{params.status}
+			</if>
+			<if test="null!=params.companyNo and ''!=params.companyNo" >
+	          and s.company_no like  '%${params.companyNo}%'
+	       </if>
+	        <if test="null!=params.shortNameLike and ''!=params.shortNameLike" >
+	          and s.short_name like  '%${params.shortNameLike}%'
+	      </if>
+	       <if test="null!=params.shortName and ''!=params.shortName" >
+	          and s.short_name like  '%${params.shortName}%'
+	      </if>
+		 <if test="orderByField != null and ''!=orderByField" >
+      		ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+    	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+		 </if>	
+  </select>
+			
+   <select id="selectShopBrandInfo" resultMap="BaseResultMapShopBrand" parameterType="map">
+  	SELECT  DISTINCT c.`brand_unit_no` as brand_no,c.`name`,s.`shop_no` FROM  shop_brand  s 
+     LEFT JOIN brand b ON s.`brand_no` = b.`brand_no` 
+     LEFT JOIN brand_unit c ON b.`sys_no` = c.`brand_unit_no`  
+		WHERE 1=1  AND s.brand_flag =1 
+		<!-- 
+		<if test="companyNo !=null and ''!=companyNo">
+			AND  c.company_no=#{companyNo}
+		</if>
+		 -->
+		<if test="shopNo != null and ''!=shopNo">
+			AND  s.shop_no=#{shopNo}
+		</if>
+		<if test="name != null and ''!=name">
+			AND  c.name=#{name}
+		</if>
+		LIMIT 0,1
+  </select>
+  
+  <select id="selectShopInfoByPayTypeWithoutDataAuthority" resultMap="BaseResultMap" parameterType="String">
+  	 SELECT 
+    <include refid="Base_Column_List" />
+     FROM shop WHERE 1=1 
+     AND pay_type = #{payType,jdbcType=CHAR}
+  </select>
+  
+  <!-- 根据店铺编码查询公司和店铺	 -->
+  <select id="selectShopInfoListByShopNos" resultMap="BaseResultMapShopAndCompany" parameterType="map">
+	SELECT 
+	<include refid="Base_Column_List" />,(SELECT name FROM company WHERE company.company_no = s.company_no ) AS name
+	FROM shop s WHERE 1=1
+	-- AND @s.company_no
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </select>
+  
+  <!-- 根据公司 店铺 商场 品牌 店铺小类获取店铺编码 -->
+  <select id="getShopBySelfCheckin" parameterType="map" resultType="java.lang.String">
+  	SELECT DISTINCT
+		s.shop_no
+	FROM
+		shop s
+	WHERE
+		1 = 1
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.companyNo and ''!=params.companyNo">
+			and s.company_no = #{params.companyNo,jdbcType=CHAR}
+		</if>
+		<if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+          and s.shop_no in ${params.shopNoLists} 
+      	</if>
+      	<if test="null!=params.mallNoLists and ''!=params.mallNoLists" >
+          and s.mall_no in ${params.mallNoLists} 
+      	</if>
+      	<if test="null!=params.brandNoLists and ''!=params.brandNoLists" >     
+          and s.shop_no IN(SELECT o.shop_no FROM  shop_brand o WHERE o.brand_no IN ${params.brandNoLists}) 
+     	</if>
+      	<if test="null!=params.retailType and ''!=params.retailType" >
+          and s.retail_type in ${params.retailType} 
+      	</if>
+      	<if test="null!=params.bizCityNoLists and ''!=params.bizCityNoLists" >
+          and s.biz_city_no in(SELECT o.organ_no FROM organ o WHERE o.parent_no in ${params.bizCityNoLists})  
+      </if>
+	</if>
+  </select>
+  
+  <select id="fetchShopRegion" resultMap="ShopExtentionResult">
+	Select 
+		a.shop_no,a.brand_no,a.attribute_detail_no,a.attribute_no,rg.`name` as attribute_detail_name
+	From 
+		shop_extension a  
+	INNER JOIN region rg ON rg.region_no = a.attribute_detail_no	
+	where  a.attribute_no = 'part_area' 
+	order by a.shop_no,a.brand_no
+	limit 0,200000
+  </select>
+  
+   <select id="fetchShopOrgan" resultMap="ShopExtentionResult">
+	 	Select 
+		a.shop_no,a.brand_no,a.attribute_detail_no,a.attribute_no,CONCAT(o.name,',',rg.`name`) as attribute_detail_name
+	From 
+		shop_extension a  
+	INNER JOIN organ rg ON rg.organ_no = a.attribute_detail_no
+	inner join organ o on o.organ_no = rg.parent_no
+	where  a.attribute_no = 'business_city_no' 
+	order by a.shop_no,a.brand_no 
+	limit 0,200000
+  </select>
+  
+  <!-- 根据条件查询店铺属性的管理城市及片区信息 wang.yj -->
+  <select id="findShopExtentionByCondition" resultMap="ShopExtentionResult" parameterType="map">
+	 Select 
+		a.shop_no,a.brand_no,a.attribute_detail_no,a.attribute_no,
+		<if test="'business_city_no' == params.attributeType">CONCAT(o.name,',',rg.`name`)</if>
+		<if test="'part_area' == params.attributeType">rg.`name`</if> as attribute_detail_name
+	From shop_extension a  
+	<if test="'business_city_no' == params.attributeType">
+		INNER JOIN organ rg ON rg.organ_no = a.attribute_detail_no
+		inner join organ o on o.organ_no = rg.parent_no
+	</if>
+	<if test="'part_area' == params.attributeType">
+		INNER JOIN region rg ON rg.region_no = a.attribute_detail_no
+	</if>
+	where a.attribute_no = #{params.attributeType}
+	and a.shop_no = #{params.shopNo} and a.brand_no = #{params.brandNo}
+	limit 1
+  </select>
+  
+  <!-- 根据公司查询店铺对应的商场 -->
+  <select id="findMallInfo" resultMap="BaseResultMap" parameterType="map">
+  	SELECT
+		s.shop_no,s.short_name,
+		m.mall_no,m.`name` mall_name
+	FROM
+		shop s
+	LEFT JOIN mall m ON s.mall_no = m.mall_no
+	WHERE 1=1
+	-- AND @s.company_no
+	<if test="null!=params">
+		<if test="null!=params.companyNo and ''!=params.companyNo">
+			AND s.company_no = #{params.companyNo,jdbcType=CHAR}
+		</if>
+	</if>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM shop
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.Shop" >
+    DELETE FROM shop
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.Shop" >
+    INSERT INTO shop (id, shop_no, code, 
+      store_no, company_no, search_code, 
+      short_name, full_name, organ_no, 
+      biz_city_no, sys_no, open_date, 
+      close_date, status, area, 
+      area_left, area_total, area_unit, 
+      province_no, city_no, county_no, 
+      address, zip_code, contact_name, 
+      tel, fax, email, channel_no, 
+      location, employe_amount, pay_type, 
+      digits, startup_time, shutdown_time, 
+      shop_level, major, multi, 
+      sale_mode, retail_type, mall_no, 
+      region_no, cmcdist_no, category_code, 
+      shop_classify, price_adjust_level, on_line_flag, 
+      create_user, create_time, update_user, 
+      update_time, remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{shopNo,jdbcType=CHAR}, #{code,jdbcType=VARCHAR}, 
+      #{storeNo,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, #{searchCode,jdbcType=VARCHAR}, 
+      #{shortName,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, #{organNo,jdbcType=CHAR}, 
+      #{bizCityNo,jdbcType=CHAR}, #{sysNo,jdbcType=VARCHAR}, #{openDate,jdbcType=DATE}, 
+      #{closeDate,jdbcType=DATE}, #{status,jdbcType=TINYINT}, #{area,jdbcType=DECIMAL}, 
+      #{areaLeft,jdbcType=DECIMAL}, #{areaTotal,jdbcType=DECIMAL}, #{areaUnit,jdbcType=VARCHAR}, 
+      #{provinceNo,jdbcType=VARCHAR}, #{cityNo,jdbcType=VARCHAR}, #{countyNo,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{zipCode,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{channelNo,jdbcType=CHAR}, 
+      #{location,jdbcType=VARCHAR}, #{employeAmount,jdbcType=INTEGER}, #{payType,jdbcType=VARCHAR}, 
+      #{digits,jdbcType=VARCHAR}, #{startupTime,jdbcType=VARCHAR}, #{shutdownTime,jdbcType=VARCHAR}, 
+      #{shopLevel,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{multi,jdbcType=VARCHAR}, 
+      #{saleMode,jdbcType=VARCHAR}, #{retailType,jdbcType=VARCHAR}, #{mallNo,jdbcType=CHAR}, 
+      #{regionNo,jdbcType=CHAR}, #{cmcdistNo,jdbcType=CHAR}, #{categoryCode,jdbcType=VARCHAR}, 
+      #{shopClassify,jdbcType=VARCHAR}, #{priceAdjustLevel,jdbcType=VARCHAR}, #{onLineFlag,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.Shop" >
+    INSERT INTO shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="storeNo != null" >
+        store_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="searchCode != null" >
+        search_code,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="fullName != null" >
+        full_name,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+      <if test="bizCityNo != null" >
+        biz_city_no,
+      </if>
+      <if test="sysNo != null" >
+        sys_no,
+      </if>
+      <if test="openDate != null" >
+        open_date,
+      </if>
+      <if test="closeDate != null" >
+        close_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="areaLeft != null" >
+        area_left,
+      </if>
+      <if test="areaTotal != null" >
+        area_total,
+      </if>
+      <if test="areaUnit != null" >
+        area_unit,
+      </if>
+      <if test="provinceNo != null" >
+        province_no,
+      </if>
+      <if test="cityNo != null" >
+        city_no,
+      </if>
+      <if test="countyNo != null" >
+        county_no,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="zipCode != null" >
+        zip_code,
+      </if>
+      <if test="contactName != null" >
+        contact_name,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="fax != null" >
+        fax,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="employeAmount != null" >
+        employe_amount,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="digits != null" >
+        digits,
+      </if>
+      <if test="startupTime != null" >
+        startup_time,
+      </if>
+      <if test="shutdownTime != null" >
+        shutdown_time,
+      </if>
+      <if test="shopLevel != null" >
+        shop_level,
+      </if>
+      <if test="major != null" >
+        major,
+      </if>
+      <if test="multi != null" >
+        multi,
+      </if>
+      <if test="saleMode != null" >
+        sale_mode,
+      </if>
+      <if test="retailType != null" >
+        retail_type,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="regionNo != null" >
+        region_no,
+      </if>
+      <if test="cmcdistNo != null" >
+        cmcdist_no,
+      </if>
+      <if test="categoryCode != null" >
+        category_code,
+      </if>
+      <if test="shopClassify != null" >
+        shop_classify,
+      </if>
+      <if test="priceAdjustLevel != null" >
+        price_adjust_level,
+      </if>
+      <if test="onLineFlag != null" >
+        on_line_flag,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNo != null" >
+        #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="searchCode != null" >
+        #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="bizCityNo != null" >
+        #{bizCityNo,jdbcType=CHAR},
+      </if>
+      <if test="sysNo != null" >
+        #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="openDate != null" >
+        #{openDate,jdbcType=DATE},
+      </if>
+      <if test="closeDate != null" >
+        #{closeDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=DECIMAL},
+      </if>
+      <if test="areaLeft != null" >
+        #{areaLeft,jdbcType=DECIMAL},
+      </if>
+      <if test="areaTotal != null" >
+        #{areaTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="areaUnit != null" >
+        #{areaUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceNo != null" >
+        #{provinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="countyNo != null" >
+        #{countyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=CHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="employeAmount != null" >
+        #{employeAmount,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="digits != null" >
+        #{digits,jdbcType=VARCHAR},
+      </if>
+      <if test="startupTime != null" >
+        #{startupTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shutdownTime != null" >
+        #{shutdownTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLevel != null" >
+        #{shopLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="multi != null" >
+        #{multi,jdbcType=VARCHAR},
+      </if>
+      <if test="saleMode != null" >
+        #{saleMode,jdbcType=VARCHAR},
+      </if>
+      <if test="retailType != null" >
+        #{retailType,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="regionNo != null" >
+        #{regionNo,jdbcType=CHAR},
+      </if>
+      <if test="cmcdistNo != null" >
+        #{cmcdistNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryCode != null" >
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopClassify != null" >
+        #{shopClassify,jdbcType=VARCHAR},
+      </if>
+      <if test="priceAdjustLevel != null" >
+        #{priceAdjustLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="onLineFlag != null" >
+        #{onLineFlag,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.Shop" >
+    UPDATE shop
+    <set >
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNo != null" >
+        store_no = #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="searchCode != null" >
+        search_code = #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="bizCityNo != null" >
+        biz_city_no = #{bizCityNo,jdbcType=CHAR},
+      </if>
+      <if test="sysNo != null" >
+        sys_no = #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="openDate != null" >
+        open_date = #{openDate,jdbcType=DATE},
+      </if>
+      <if test="closeDate != null" >
+        close_date = #{closeDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=DECIMAL},
+      </if>
+      <if test="areaLeft != null" >
+        area_left = #{areaLeft,jdbcType=DECIMAL},
+      </if>
+      <if test="areaTotal != null" >
+        area_total = #{areaTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="areaUnit != null" >
+        area_unit = #{areaUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceNo != null" >
+        province_no = #{provinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        city_no = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="countyNo != null" >
+        county_no = #{countyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        zip_code = #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        fax = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=CHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="employeAmount != null" >
+        employe_amount = #{employeAmount,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="digits != null" >
+        digits = #{digits,jdbcType=VARCHAR},
+      </if>
+      <if test="startupTime != null" >
+        startup_time = #{startupTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shutdownTime != null" >
+        shutdown_time = #{shutdownTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLevel != null" >
+        shop_level = #{shopLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        major = #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="multi != null" >
+        multi = #{multi,jdbcType=VARCHAR},
+      </if>
+      <if test="saleMode != null" >
+        sale_mode = #{saleMode,jdbcType=VARCHAR},
+      </if>
+      <if test="retailType != null" >
+        retail_type = #{retailType,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="regionNo != null" >
+        region_no = #{regionNo,jdbcType=CHAR},
+      </if>
+      <if test="cmcdistNo != null" >
+        cmcdist_no = #{cmcdistNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryCode != null" >
+        category_code = #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopClassify != null" >
+        shop_classify = #{shopClassify,jdbcType=VARCHAR},
+      </if>
+      <if test="priceAdjustLevel != null" >
+        price_adjust_level = #{priceAdjustLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="onLineFlag != null" >
+        on_line_flag = #{onLineFlag,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.Shop" >
+    UPDATE shop
+    SET shop_no = #{shopNo,jdbcType=CHAR},
+      code = #{code,jdbcType=VARCHAR},
+      store_no = #{storeNo,jdbcType=CHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      search_code = #{searchCode,jdbcType=VARCHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      organ_no = #{organNo,jdbcType=CHAR},
+      biz_city_no = #{bizCityNo,jdbcType=CHAR},
+      sys_no = #{sysNo,jdbcType=VARCHAR},
+      open_date = #{openDate,jdbcType=DATE},
+      close_date = #{closeDate,jdbcType=DATE},
+      status = #{status,jdbcType=TINYINT},
+      area = #{area,jdbcType=DECIMAL},
+      area_left = #{areaLeft,jdbcType=DECIMAL},
+      area_total = #{areaTotal,jdbcType=DECIMAL},
+      area_unit = #{areaUnit,jdbcType=VARCHAR},
+      province_no = #{provinceNo,jdbcType=VARCHAR},
+      city_no = #{cityNo,jdbcType=VARCHAR},
+      county_no = #{countyNo,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      zip_code = #{zipCode,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=CHAR},
+      location = #{location,jdbcType=VARCHAR},
+      employe_amount = #{employeAmount,jdbcType=INTEGER},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      digits = #{digits,jdbcType=VARCHAR},
+      startup_time = #{startupTime,jdbcType=VARCHAR},
+      shutdown_time = #{shutdownTime,jdbcType=VARCHAR},
+      shop_level = #{shopLevel,jdbcType=VARCHAR},
+      major = #{major,jdbcType=VARCHAR},
+      multi = #{multi,jdbcType=VARCHAR},
+      sale_mode = #{saleMode,jdbcType=VARCHAR},
+      retail_type = #{retailType,jdbcType=VARCHAR},
+      mall_no = #{mallNo,jdbcType=CHAR},
+      region_no = #{regionNo,jdbcType=CHAR},
+      cmcdist_no = #{cmcdistNo,jdbcType=CHAR},
+      category_code = #{categoryCode,jdbcType=VARCHAR},
+      shop_classify = #{shopClassify,jdbcType=VARCHAR},
+      price_adjust_level = #{priceAdjustLevel,jdbcType=VARCHAR},
+      on_line_flag = #{onLineFlag,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

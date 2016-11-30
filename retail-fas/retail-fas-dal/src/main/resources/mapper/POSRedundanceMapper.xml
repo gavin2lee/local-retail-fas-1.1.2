@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.POSRedundanceMapper" >
+  <resultMap id="OrderMainResultMap" type="cn.wonhigh.retail.fas.common.model.OrderMain" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="out_date" property="outDate" jdbcType="DATE" />
+    <result column="business_type" property="businessType" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_no" property="createUserNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_no" property="updateUserNo" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" /> 
+  </resultMap>
+  
+  <resultMap id="OrderDtlResultMap" type="cn.wonhigh.retail.fas.common.model.OrderDtl" >
+  	<id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ReturnExchangeMainResultMap" type="cn.wonhigh.retail.fas.common.model.ReturnExchangeMain" >
+  	<id column="id" property="id" jdbcType="CHAR" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="out_date" property="outDate" jdbcType="DATE" />
+    <result column="business_mode" property="businessMode" jdbcType="INTEGER" />
+    <result column="business_type" property="businessType" jdbcType="INTEGER" />
+    <result column="create_user_no" property="createUserNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_no" property="updateUserNo" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="ReturnExchangeDtlResultMap" type="cn.wonhigh.retail.fas.common.model.ReturnExchangeDtl" >
+  	<id column="id" property="id" jdbcType="CHAR" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getOrderMain" resultMap="OrderMainResultMap" parameterType="java.util.Map" >
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	SELECT
+		id,order_no,company_no,company_name,shop_no,shop_name,out_date,business_type,
+		create_time,create_user_no,create_user,
+		update_time,update_user_no,update_user
+	FROM order_main om
+	WHERE 1=1
+		AND update_time BETWEEN #{params.startTime} AND #{params.endTime}
+		AND (fas_bill_code IS NULL OR company_no IS NULL OR company_no != (
+			SELECT company_no 
+			FROM shop_company sc
+			WHERE 1=1
+				AND sc.shop_no = om.shop_no
+				AND sc.effective_date &lt;= om.out_date
+			ORDER BY sc.effective_date DESC
+			LIMIT 1)
+		)
+	LIMIT 100
+  </select>
+  
+  <select id="getOrderMainByOrderNo" resultMap="OrderMainResultMap" parameterType="java.util.Map" >
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	SELECT
+		id,order_no,company_no,company_name,shop_no,shop_name,out_date,business_type,
+		create_time,create_user_no,create_user,
+		update_time,update_user_no,update_user
+	FROM order_main
+	WHERE 1=1
+		AND order_no = #{params.orderNo}
+  </select>
+  
+  <update id="updateOrderMain" parameterType="map">
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	UPDATE order_main
+	<set >
+	  <if test="params.fasBillCode != null" >
+        fas_bill_code = #{params.fasBillCode,jdbcType=VARCHAR},
+      </if>
+      <if test="params.companyNo != null" >
+        company_no = #{params.companyNo,jdbcType=CHAR},
+      </if>
+      <if test="params.companyName != null" >
+        company_name = #{params.companyName,jdbcType=VARCHAR},
+      </if>
+         year  = YEAR(`out_date`),
+         month = MONTH(`out_date`)      
+    </set>
+    WHERE id = #{params.id}
+  </update>
+  
+  <select id="getOrderDtl" resultMap="OrderDtlResultMap" parameterType="java.util.Map" >
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	SELECT
+		id,order_no,item_no,item_code,item_name,brand_no,brand_name
+	FROM order_dtl od
+	WHERE 1=1
+		AND update_time BETWEEN #{params.startTime} AND #{params.endTime}
+		<!-- AND (brand_unit_no IS NULL OR brand_unit_no != (SELECT sys_no FROM brand b WHERE b.brand_no = od.brand_no)) -->
+	LIMIT 100
+  </select>
+  
+  <update id="updateOrderDtl" parameterType="map">
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	UPDATE order_dtl
+	<set >
+      <if test="params.brandUnitNo != null" >
+        brand_unit_no = #{params.brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="params.brandUnitName != null" >
+        brand_unit_name = #{params.brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="params.unitCost != null" >
+        unit_cost = #{params.unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="params.regionCost != null" >
+        region_cost = #{params.regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="params.headquarterCost != null" >
+        headquarter_cost = #{params.headquarterCost,jdbcType=DECIMAL},
+      </if>
+      <if test="params.tagPriceNation != null" >
+        tag_price_nation = #{params.tagPriceNation,jdbcType=DECIMAL},
+      </if>
+      <if test="params.purchasePrice != null" >
+        purchase_price = #{params.purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="params.materialPrice != null" >
+        material_price = #{params.materialPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="params.factoryPrice != null" >
+        factory_price = #{params.factoryPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{params.id}
+  </update>
+  
+  <select id="getReturnExchangeMain" resultMap="ReturnExchangeMainResultMap" parameterType="java.util.Map" >
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	SELECT
+		id,business_no,company_no,company_name,shop_no,shop_name,out_date,business_mode,business_type,
+		create_time,create_user_no,create_user,
+		update_time,update_user_no,update_user
+	FROM return_exchange_main rem
+	WHERE 1=1
+		AND update_time BETWEEN #{params.startTime} AND #{params.endTime}
+		AND (fas_bill_code IS NULL OR company_no IS NULL OR company_no != (
+			SELECT company_no 
+			FROM shop_company sc
+			WHERE 1=1
+				AND sc.shop_no = rem.shop_no
+				AND sc.effective_date &lt;= rem.out_date
+			ORDER BY sc.effective_date DESC
+			LIMIT 1)
+		)
+	LIMIT 100
+  </select>
+  
+  <select id="getReturnExchangeMainByBuinessNo" resultMap="ReturnExchangeMainResultMap" parameterType="java.util.Map" >
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	SELECT
+		id,business_no,company_no,company_name,shop_no,shop_name,out_date,business_mode,business_type,
+		create_time,create_user_no,create_user,
+		update_time,update_user_no,update_user
+	FROM return_exchange_main
+	WHERE 1=1
+		AND business_no = #{params.businessNo}
+  </select>
+  
+  <update id="updateReturnExchangeMain" parameterType="map">
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	UPDATE return_exchange_main
+	<set >
+      <if test="params.fasBillCode != null" >
+        fas_bill_code = #{params.fasBillCode,jdbcType=VARCHAR},
+      </if>
+      <if test="params.companyNo != null" >
+        company_no = #{params.companyNo,jdbcType=CHAR},
+      </if>
+      <if test="params.companyName != null" >
+        company_name = #{params.companyName,jdbcType=VARCHAR},
+      </if>
+       year  = YEAR(`out_date`),
+       month = MONTH(`out_date`) 
+    </set>
+    WHERE id = #{params.id}
+  </update>
+  
+  <select id="getReturnExchangeDtl" resultMap="ReturnExchangeDtlResultMap" parameterType="java.util.Map" >
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	SELECT
+		id,business_no,item_no,item_code,item_name,brand_no,brand_name
+	FROM return_exchange_dtl red
+	WHERE 1=1
+		AND update_time BETWEEN #{params.startTime} AND #{params.endTime}
+		<!-- AND (brand_unit_no IS NULL OR brand_unit_no != (SELECT sys_no FROM brand b WHERE b.brand_no = red.brand_no)) -->
+	LIMIT 100
+  </select>
+  
+  <update id="updateReturnExchangeDtl" parameterType="map">
+	/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag= '${params.shardingFlag}'*/
+	UPDATE return_exchange_dtl
+	<set >
+      <if test="params.brandUnitNo != null" >
+        brand_unit_no = #{params.brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="params.brandUnitName != null" >
+        brand_unit_name = #{params.brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="params.unitCost != null" >
+        unit_cost = #{params.unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="params.regionCost != null" >
+        region_cost = #{params.regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="params.headquarterCost != null" >
+        headquarter_cost = #{params.headquarterCost,jdbcType=DECIMAL},
+      </if>
+      <if test="params.tagPriceNation != null" >
+        tag_price_nation = #{params.tagPriceNation,jdbcType=DECIMAL},
+      </if>
+      <if test="params.purchasePrice != null" >
+        purchase_price = #{params.purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="params.materialPrice != null" >
+        material_price = #{params.materialPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="params.factoryPrice != null" >
+        factory_price = #{params.factoryPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{params.id}
+  </update>
+  
+</mapper>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ConBalanceTypeMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ConBalanceType" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="INTEGER" />
+    <result column="balance_code" property="balanceCode" jdbcType="VARCHAR" />
+    <result column="balance_name" property="balanceName" jdbcType="VARCHAR" />
+    <result column="part_type" property="partType" jdbcType="TINYINT" />
+    <result column="business_type" property="businessType" jdbcType="TINYINT" />
+    <result column="is_balance" property="isBalance" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, balance_no, balance_code, balance_name, part_type, business_type, is_balance, 
+    status, create_user, create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+       AND balance_no = #{params.balanceNo}
+      </if>
+      <if test="null!=params.balanceNos and ''!=params.balanceNos" >
+       AND balance_no IN (${params.balanceNos})
+      </if>
+      <if test="null!=params.partType and ''!=params.partType" >
+       AND part_type = #{params.partType}
+      </if>
+      <if test="null!=params.businessType and ''!=params.businessType" >
+       AND business_type = #{params.businessType}
+      </if>
+      <if test="null!=params.isBalance and ''!=params.isBalance" >
+       AND is_balance = #{params.isBalance}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+       AND status = #{params.status}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from con_balance_type
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from con_balance_type where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM con_balance_type WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from con_balance_type where 1=1 
+    <include refid="condition" />
+    order by balance_no
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from con_balance_type
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.String" >
+    delete from con_balance_type
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ConBalanceType" >
+    insert into con_balance_type (id, balance_no, balance_code, 
+      balance_name, part_type, business_type, 
+      is_balance, status, create_user, 
+      create_time, update_user, update_time
+      )
+    values (#{id,jdbcType=CHAR}, #{balanceNo,jdbcType=INTEGER}, #{balanceCode,jdbcType=VARCHAR}, 
+      #{balanceName,jdbcType=VARCHAR}, #{partType,jdbcType=TINYINT}, #{businessType,jdbcType=TINYINT}, 
+      #{isBalance,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ConBalanceType" >
+    insert into con_balance_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="balanceCode != null" >
+        balance_code,
+      </if>
+      <if test="balanceName != null" >
+        balance_name,
+      </if>
+      <if test="partType != null" >
+        part_type,
+      </if>
+      <if test="businessType != null" >
+        business_type,
+      </if>
+      <if test="isBalance != null" >
+        is_balance,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=INTEGER},
+      </if>
+      <if test="balanceCode != null" >
+        #{balanceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceName != null" >
+        #{balanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="partType != null" >
+        #{partType,jdbcType=TINYINT},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=TINYINT},
+      </if>
+      <if test="isBalance != null" >
+        #{isBalance,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ConBalanceType" >
+    update con_balance_type
+    <set >
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=INTEGER},
+      </if>
+      <if test="balanceCode != null" >
+        balance_code = #{balanceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceName != null" >
+        balance_name = #{balanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="partType != null" >
+        part_type = #{partType,jdbcType=TINYINT},
+      </if>
+      <if test="businessType != null" >
+        business_type = #{businessType,jdbcType=TINYINT},
+      </if>
+      <if test="isBalance != null" >
+        is_balance = #{isBalance,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ConBalanceType" >
+    update con_balance_type
+    set balance_no = #{balanceNo,jdbcType=INTEGER},
+      balance_code = #{balanceCode,jdbcType=VARCHAR},
+      balance_name = #{balanceName,jdbcType=VARCHAR},
+      part_type = #{partType,jdbcType=TINYINT},
+      business_type = #{businessType,jdbcType=TINYINT},
+      is_balance = #{isBalance,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

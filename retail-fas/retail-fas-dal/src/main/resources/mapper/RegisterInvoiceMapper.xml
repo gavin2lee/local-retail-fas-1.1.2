@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.RegisterInvoiceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.RegisterInvoice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+    <result column="assistant_id" property="assistantId" jdbcType="VARCHAR" />
+    <result column="assistant_no" property="assistantNo" jdbcType="VARCHAR" />
+    <result column="assistant_name" property="assistantName" jdbcType="VARCHAR" />
+    <result column="out_date" property="outDate" jdbcType="DATE" />
+    <result column="register_date" property="registerDate" jdbcType="DATE" />
+    <result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+    <result column="should_amount" property="shouldAmount" jdbcType="DECIMAL" />
+    <result column="actual_amount" property="actualAmount" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="confirm_flag" property="confirmFlag" jdbcType="SMALLINT" />
+    <result column="order_no1" property="orderNo" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_no" property="createUserNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="auditor_no" property="auditorNo" jdbcType="VARCHAR" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="terminal_number" property="terminalNumber" jdbcType="VARCHAR"/>
+    <result column="diffAmount" property="diffAmount" jdbcType="DECIMAL"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_no, shop_name, bill_no, assistant_id, assistant_no, assistant_name, out_date, register_date, 
+    should_amount, actual_amount, remark, status, order_no, confirm_flag, create_time, create_user_no, 
+    create_user, audit_time, auditor_no, auditor, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      
+      <if test="params.shopNo!=null and ''!=params.shopNo">
+      	and shop_no = #{params.shopNo}
+      </if>
+      
+      <if test="null!=params.createTimeStart and ''!=params.createTimeStart">
+       	   and out_date &gt;= #{params.createTimeStart}
+      </if>
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd">
+       	   and out_date &lt;= #{params.createTimeEnd}
+      </if>
+      
+      <if test="null!=params.startDate and ''!=params.startDate">
+       	   and out_date &gt;= #{params.startDate}
+      </if>
+      <if test="null!=params.endDate and ''!=params.endDate">
+       	   and out_date &lt;= #{params.endDate}
+      </if>
+      <if test="null!=params.confirmFlag and ''!=params.confirmFlag">
+       	   and confirm_flag = #{params.confirmFlag}
+      </if>
+      <if test="params.shopNoList!=null and params.shopNoList!=''" >
+		   <foreach collection="params.shopNoList" item="shopNo" open="AND shop_no in(" separator="," close=")">
+		      '${shopNo}'
+		   </foreach>
+	  	</if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM register_invoice
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+  	SELECT COUNT(1) FROM (
+	    SELECT id FROM register_invoice WHERE 1=1 
+	    <include refid="condition" />
+	    <if test="params.groupByField != null and ''!=params.groupByField" >
+	      GROUP BY ${params.groupByField}
+	    </if>
+    ) A
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT ri.*,(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account ssta WHERE ri.shop_no = ssta.shop_no) 
+    	terminal_number , (ri.should_amount-actual_amount) diffAmount,
+    	(SELECT GROUP_CONCAT(order_no) FROM register_invoice WHERE bill_no = ri.bill_no) order_no1 
+    	FROM register_invoice ri where 1=1
+    <include refid="condition" />
+    <if test="params.groupByField != null and ''!=params.groupByField" >
+      GROUP BY ${params.groupByField}
+    </if>
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM register_invoice WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="findByBillNo" resultMap="BaseResultMap" parameterType="map">
+  	SELECT
+		ri.order_no,ri.shop_no,ri.shop_name,om.amount sale_amount,ri.out_date
+	FROM
+		register_invoice ri
+	JOIN order_main om ON ri.order_no = om.order_no
+	WHERE
+		1 = 1
+	<if test="null!=params" >
+     <if test="null!=params.billNo and ''!=params.billNo" >
+       AND ri.bill_no = #{params.billNo}
+     </if>
+    </if>
+	UNION ALL
+	SELECT
+		ri.order_no,ri.shop_no,ri.shop_name,rem.amount sale_amount,ri.out_date
+	FROM
+		register_invoice ri
+	JOIN return_exchange_main rem ON ri.order_no = rem.business_no
+	WHERE
+		1 = 1
+	<if test="null!=params" >
+     <if test="null!=params.billNo and ''!=params.billNo" >
+       AND ri.bill_no = #{params.billNo}
+     </if>
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM register_invoice
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.RegisterInvoice" >
+    DELETE FROM register_invoice
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.RegisterInvoice" >
+    INSERT INTO register_invoice (id, shop_no, shop_name, 
+      assistant_id, assistant_no, assistant_name, 
+      out_date, register_date, should_amount, 
+      actual_amount, remark, status, 
+      confirm_flag, create_time, create_user_no, 
+      create_user, audit_time, auditor_no, 
+      auditor, update_user, update_time
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{shopNo,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{assistantId,jdbcType=VARCHAR}, #{assistantNo,jdbcType=VARCHAR}, #{assistantName,jdbcType=VARCHAR}, 
+      #{outDate,jdbcType=DATE}, #{registerDate,jdbcType=DATE}, #{shouldAmount,jdbcType=DECIMAL}, 
+      #{actualAmount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, 
+      #{confirmFlag,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserNo,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, #{auditorNo,jdbcType=VARCHAR}, 
+      #{auditor,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.RegisterInvoice" >
+    INSERT INTO register_invoice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="assistantId != null" >
+        assistant_id,
+      </if>
+      <if test="assistantNo != null" >
+        assistant_no,
+      </if>
+      <if test="assistantName != null" >
+        assistant_name,
+      </if>
+      <if test="outDate != null" >
+        out_date,
+      </if>
+      <if test="registerDate != null" >
+        register_date,
+      </if>
+      <if test="shouldAmount != null" >
+        should_amount,
+      </if>
+      <if test="actualAmount != null" >
+        actual_amount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="confirmFlag != null" >
+        confirm_flag,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="auditorNo != null" >
+        auditor_no,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantId != null" >
+        #{assistantId,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantNo != null" >
+        #{assistantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantName != null" >
+        #{assistantName,jdbcType=VARCHAR},
+      </if>
+      <if test="outDate != null" >
+        #{outDate,jdbcType=DATE},
+      </if>
+      <if test="registerDate != null" >
+        #{registerDate,jdbcType=DATE},
+      </if>
+      <if test="shouldAmount != null" >
+        #{shouldAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualAmount != null" >
+        #{actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="confirmFlag != null" >
+        #{confirmFlag,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserNo != null" >
+        #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditorNo != null" >
+        #{auditorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.RegisterInvoice" >
+    UPDATE register_invoice
+    <set >
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantId != null" >
+        assistant_id = #{assistantId,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantNo != null" >
+        assistant_no = #{assistantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantName != null" >
+        assistant_name = #{assistantName,jdbcType=VARCHAR},
+      </if>
+      <if test="outDate != null" >
+        out_date = #{outDate,jdbcType=DATE},
+      </if>
+      <if test="registerDate != null" >
+        register_date = #{registerDate,jdbcType=DATE},
+      </if>
+      <if test="shouldAmount != null" >
+        should_amount = #{shouldAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualAmount != null" >
+        actual_amount = #{actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="confirmFlag != null" >
+        confirm_flag = #{confirmFlag,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditorNo != null" >
+        auditor_no = #{auditorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.RegisterInvoice" >
+    UPDATE register_invoice
+    SET shop_no = #{shopNo,jdbcType=VARCHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      assistant_id = #{assistantId,jdbcType=VARCHAR},
+      assistant_no = #{assistantNo,jdbcType=VARCHAR},
+      assistant_name = #{assistantName,jdbcType=VARCHAR},
+      out_date = #{outDate,jdbcType=DATE},
+      register_date = #{registerDate,jdbcType=DATE},
+      should_amount = #{shouldAmount,jdbcType=DECIMAL},
+      actual_amount = #{actualAmount,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      confirm_flag = #{confirmFlag,jdbcType=SMALLINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      auditor_no = #{auditorNo,jdbcType=VARCHAR},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

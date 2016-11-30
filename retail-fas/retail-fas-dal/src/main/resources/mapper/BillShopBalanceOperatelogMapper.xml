@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillShopBalanceOperatelogMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillShopBalanceOperatelog" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="operate_no" property="operateNo" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    <result column="remark_desc" property="remarkDesc" jdbcType="VARCHAR" />
+    <result column="mall_number_amount" property="mallNumberAmount" jdbcType="DECIMAL" />
+    <result column="mall_billing_amount" property="mallBillingAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, company_name, shop_no, short_name, month, balance_start_date, balance_end_date, 
+    balance_no, operate_no, create_user, create_time, sharding_flag, remark_desc, mall_number_amount, 
+    mall_billing_amount
+  </sql>
+  <sql id="condition" >
+   -- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+       <if test="null!=params.startMonth and ''!=params.startMonth" >
+        AND month  &gt;= '${params.startMonth}'
+      </if> 
+      <if test="null!=params.endMonth and ''!=params.endMonth" >
+        AND month  &lt;= '${params.endMonth}'
+      </if> 
+        <if test="null!=params.shopNo and ''!=params.shopNo" >    
+        AND shop_no = #{params.shopNo}
+      </if>
+       <if test="null!=params.shopNos and ''!=params.shopNos" >    
+        AND shop_no = #{params.shopNos}
+      </if>
+      <if test="null!=params.month and ''!=params.month" >  
+        AND month = #{params.month}
+      </if>
+       <if test="null!=params.startDate and ''!=params.startDate" >
+        AND balance_start_date  &gt;=  #{params.startDate}  
+      </if>  
+      <if test="null!=params.endDate and ''!=params.endDate" >
+        AND balance_end_date  &lt;=   #{params.endDate}  
+      </if> 
+      <if test="null!=params.balanceNo and ''!=params.balanceNo" >  
+        AND (balance_no IS not NULL OR balance_no != '')
+      </if>
+            order by create_time desc  
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_shop_balance_operatelog
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_shop_balance_operatelog WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_operatelog WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_operatelog WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_shop_balance_operatelog
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceOperatelog" >
+    DELETE FROM bill_shop_balance_operatelog
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceOperatelog" >
+    INSERT INTO bill_shop_balance_operatelog (id, company_no, company_name, 
+      shop_no, short_name, month, 
+      balance_start_date, balance_end_date, balance_no, 
+      operate_no, create_user, create_time, 
+      sharding_flag, remark_desc, mall_number_amount, 
+      mall_billing_amount)
+    VALUES (#{id,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{shopNo,jdbcType=CHAR}, #{shortName,jdbcType=VARCHAR}, #{month,jdbcType=CHAR}, 
+      #{balanceStartDate,jdbcType=DATE}, #{balanceEndDate,jdbcType=DATE}, #{balanceNo,jdbcType=CHAR}, 
+      #{operateNo,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{shardingFlag,jdbcType=CHAR}, #{remarkDesc,jdbcType=VARCHAR}, #{mallNumberAmount,jdbcType=DECIMAL}, 
+      #{mallBillingAmount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceOperatelog" >
+    INSERT INTO bill_shop_balance_operatelog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date,
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="operateNo != null" >
+        operate_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+      <if test="remarkDesc != null" >
+        remark_desc,
+      </if>
+      <if test="mallNumberAmount != null" >
+        mall_number_amount,
+      </if>
+      <if test="mallBillingAmount != null" >
+        mall_billing_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="operateNo != null" >
+        #{operateNo,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+      <if test="remarkDesc != null" >
+        #{remarkDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNumberAmount != null" >
+        #{mallNumberAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="mallBillingAmount != null" >
+        #{mallBillingAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceOperatelog" >
+    UPDATE bill_shop_balance_operatelog
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="operateNo != null" >
+        operate_no = #{operateNo,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag = #{shardingFlag,jdbcType=CHAR},
+      </if>
+      <if test="remarkDesc != null" >
+        remark_desc = #{remarkDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNumberAmount != null" >
+        mall_number_amount = #{mallNumberAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="mallBillingAmount != null" >
+        mall_billing_amount = #{mallBillingAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceOperatelog" >
+    UPDATE bill_shop_balance_operatelog
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      month = #{month,jdbcType=CHAR},
+      balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      operate_no = #{operateNo,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      sharding_flag = #{shardingFlag,jdbcType=CHAR},
+      remark_desc = #{remarkDesc,jdbcType=VARCHAR},
+      mall_number_amount = #{mallNumberAmount,jdbcType=DECIMAL},
+      mall_billing_amount = #{mallBillingAmount,jdbcType=DECIMAL}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

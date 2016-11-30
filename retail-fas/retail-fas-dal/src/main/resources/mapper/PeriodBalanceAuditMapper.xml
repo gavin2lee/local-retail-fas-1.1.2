@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PeriodBalanceAuditMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PeriodBalanceAudit" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, year, month,brand_unit_no, brand_unit_name, status, create_user, create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null !=params.companyNo and ''!=params.companyNo">
+		AND company_no= #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null !=params.year and ''!=params.year">
+		AND year = #{params.year,jdbcType=CHAR}
+	  </if>
+	  <if test="null !=params.month and ''!=params.month">
+		AND month = #{params.month,jdbcType=CHAR}
+	  </if>
+	  <if test="null !=params.status and ''!=params.status">
+		AND status = #{params.status}
+	  </if>
+	  <if test="null != params.brandUnitNo and ''!=params.brandUnitNo">
+		AND brand_unit_no = #{params.brandUnitNo,jdbcType=CHAR}
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM period_balance_audit
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM period_balance_audit WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    id, company_no, year, month,brand_unit_no, brand_unit_name, status, create_user, create_time, update_user, update_time,
+    (SELECT name FROM company WHERE period_balance_audit.company_no = company.company_no) company_name
+     FROM period_balance_audit WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField">
+		ORDER BY create_time DESC
+	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM period_balance_audit WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM period_balance_audit
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.PeriodBalanceAudit" >
+    DELETE FROM period_balance_audit
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.PeriodBalanceAudit" >
+     INSERT INTO period_balance_audit (id, company_no, year, 
+      month, brand_unit_no, brand_unit_name, 
+      status, create_user, create_time, 
+      update_user, update_time)
+    VALUES (#{id,jdbcType=INTEGER}, #{companyNo,jdbcType=CHAR}, #{year,jdbcType=CHAR}, 
+      #{month,jdbcType=CHAR}, #{brandUnitNo,jdbcType=CHAR}, #{brandUnitName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.PeriodBalanceAudit" >
+   INSERT INTO period_balance_audit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=CHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.PeriodBalanceAudit" >
+    UPDATE period_balance_audit
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=CHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.PeriodBalanceAudit" >
+     UPDATE period_balance_audit
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      year = #{year,jdbcType=CHAR},
+      month = #{month,jdbcType=CHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <insert id="insertPeriodBalanceAudit" parameterType="map" useGeneratedKeys="true" keyProperty="params.id">
+   INSERT INTO period_balance_audit (company_no, year, month, brand_unit_no, brand_unit_name, status, create_user, create_time)
+  VALUES (#{params.companyNo, jdbcType=CHAR},
+  		  #{params.year, jdbcType=CHAR},
+  		  #{params.month, jdbcType=CHAR},
+  		  #{params.brandUnitNo, jdbcType=CHAR},
+  		  #{params.brandUnitName, jdbcType=VARCHAR},
+  		  #{params.status, jdbcType=INTEGER},
+  		  #{params.createUser, jdbcType=VARCHAR},
+  		  #{params.createTime, jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updatePeriodBalanceAudit" parameterType="map">
+  update period_balance_audit set status = #{params.status,jdbcType=INTEGER}, update_user=#{params.updateUser,jdbcType=VARCHAR}, update_time=#{params.updateTime,jdbcType=TIMESTAMP}
+  where company_no = #{params.companyNo, jdbcType=CHAR} AND year = #{params.year, jdbcType=CHAR} AND month = #{params.month, jdbcType=CHAR} AND brand_unit_no = #{params.brandUnitNo, jdbcType=CHAR} AND status = #{params.oldStatus, jdbcType=INTEGER} 
+  </update>
+  
+  <select id="countPeriodBalanceAudit" parameterType="map" resultType="java.lang.Integer">
+	  select count(1) as s
+	  from period_balance_audit a
+	  where 1=1 
+	  -- AND @a.company_no
+	  <if test="null != params">
+	  	<if test="null!=params.companyNo and ''!=params.companyNo">
+	  	and a.company_no = #{params.companyNo, jdbcType=CHAR}
+	  	</if>
+	  	<if test="null!=params.companyNos and ''!=params.companyNos">
+	  		<foreach collection="params.companyNos" item="companyNo" open="AND a.company_no in(" separator="," close=")">
+		      '${companyNo}'
+		    </foreach>
+	  	</if>
+	  	<if test="null!=params.year and ''!=params.year">
+	  	and a.year = #{params.year, jdbcType=CHAR}
+	  	</if>
+	  	<if test="null!=params.month and ''!=params.month">
+	  	and a.month = #{params.month, jdbcType=CHAR}
+	  	</if>
+	  	<if test="null!=params.createUser and ''!=params.createUser">
+	  	and a.create_user = #{params.createUser, jdbcType=CHAR}
+	  	</if>
+	  </if>
+  </select>
+  
+   <select id="queryPeriodBalanceAuditByPage" parameterType="map" resultMap="BaseResultMap">
+  select a.*, b.name as company_name
+  from period_balance_audit a left join company b on a.company_no = b.company_no
+  where 1=1 
+  -- AND @a.company_no
+  <if test="null != params">
+  	<if test="null!=params.companyNo and ''!=params.companyNo">
+  	and a.company_no = #{params.companyNo, jdbcType=CHAR}
+  	</if>
+  	<if test="null!=params.companyNos and ''!=params.companyNos">
+  		<foreach collection="params.companyNos" item="companyNo" open="AND a.company_no in(" separator="," close=")">
+	      '${companyNo}'
+	    </foreach>
+  	</if>
+  	<if test="null!=params.year and ''!=params.year">
+  	and a.year = #{params.year, jdbcType=CHAR}
+  	</if>
+  	<if test="null!=params.month and ''!=params.month">
+  	and a.month = #{params.month, jdbcType=CHAR}
+  	</if>
+  	<if test="null!=params.createUser and ''!=params.createUser">
+  	and a.create_user = #{params.createUser, jdbcType=CHAR}
+  	</if>
+  </if>
+  order by a.create_time desc
+  LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  
+  </select>
+  
+</mapper>

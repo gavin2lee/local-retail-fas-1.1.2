@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SettleNewStyleDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SettleNewStyleDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+    <result column="season_no" property="seasonNo" jdbcType="CHAR" />
+    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+    <result column="year_code" property="yearCode" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, style_no, season_no, season_name, year_code, year, create_user, create_time, update_user, 
+    update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.styleNo and ''!=params.styleNo" >
+        and style_no = #{params.styleNo}
+      </if>
+      <if test="null!=params.seasonName and ''!=params.seasonName" >
+        and season_name like '%${params.seasonName}%'
+      </if>
+      <if test="null!=params.year and ''!=params.year" >
+        and year like '%${params.year}%'
+      </if>
+      <if test="null!=params.querySeason and ''!=params.querySeason" >
+        and season_name = #{params.querySeason}
+      </if>
+      <if test="null!=params.queryYear and ''!=params.queryYear" >
+        and year = #{params.queryYear}
+      </if>
+      <if test="null!=params.yearCode and ''!=params.yearCode" >
+        and year_code = #{params.yearCode}
+      </if>
+      <if test="null!=params.seasonNo and ''!=params.seasonNo" >
+        and (season_no = #{params.seasonNo} OR season_no = 'ALL')
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM settle_new_style_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM settle_new_style_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_new_style_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_new_style_dtl WHERE 1=1 
+    <include refid="condition" />
+      ORDER BY update_time ASC
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM settle_new_style_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.SettleNewStyleDtl" >
+    DELETE FROM settle_new_style_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SettleNewStyleDtl" >
+    INSERT INTO settle_new_style_dtl (id, style_no, 
+      season_no, season_name, year, year_code,
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{id,jdbcType=INTEGER}, #{styleNo,jdbcType=CHAR}, 
+      #{seasonNo,jdbcType=CHAR}, #{seasonName,jdbcType=VARCHAR}, #{year,jdbcType=CHAR}, #{yearCode,jdbcType=CHAR},
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SettleNewStyleDtl" >
+    INSERT INTO settle_new_style_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="styleNo != null" >
+        style_no,
+      </if>
+      <if test="seasonNo != null" >
+        season_no,
+      </if>
+      <if test="seasonName != null" >
+        season_name,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="yearCode != null" >
+        year_code,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="styleNo != null" >
+        #{styleNo,jdbcType=CHAR},
+      </if>
+      <if test="seasonNo != null" >
+        #{seasonNo,jdbcType=CHAR},
+      </if>
+      <if test="seasonName != null" >
+        #{seasonName,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=CHAR},
+      </if>
+      <if test="yearCode != null" >
+        #{yearCode,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SettleNewStyleDtl" >
+    UPDATE settle_new_style_dtl
+    <set >
+      <if test="styleNo != null" >
+        style_no = #{styleNo,jdbcType=CHAR},
+      </if>
+      <if test="seasonNo != null" >
+        season_no = #{seasonNo,jdbcType=CHAR},
+      </if>
+      <if test="seasonName != null" >
+        season_name = #{seasonName,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=CHAR},
+      </if>
+      <if test="yearCode != null" >
+        year_code = #{yearCode,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SettleNewStyleDtl" >
+    UPDATE settle_new_style_dtl
+    SET style_no = #{styleNo,jdbcType=CHAR},
+      season_no = #{seasonNo,jdbcType=CHAR},
+      season_name = #{seasonName,jdbcType=VARCHAR},
+      year = #{year,jdbcType=CHAR},
+      year_code = #{yearCode,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <delete id="deleteByStyleNo" parameterType="java.lang.String">
+  		DELETE FROM settle_new_style_dtl WHERE style_no = #{styleNo}
+  </delete>
+</mapper>

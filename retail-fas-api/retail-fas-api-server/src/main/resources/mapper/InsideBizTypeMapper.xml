@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.InsideBizTypeMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.model.InsideBizTypeModel" >
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="biz_type_code" property="bizTypeCode" jdbcType="VARCHAR" />
+    <result column="biz_type_name" property="bizTypeName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="carry_over_cost" property="carryOverCost" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ibt.company_no, ibt.company_name, ibt.biz_type_code, ibt.biz_type_name,
+    ibt.status, ibt.carry_over_cost, ibt.remark
+  </sql>
+  <sql id="condition" >
+	<if test="null!=companyNo and ''!=companyNo">
+		AND ibt.company_no = #{companyNo}
+	</if>
+	<if test="null!=bizTypeCode and ''!=bizTypeCode">
+		AND ibt.biz_type_code = #{bizTypeCode}
+	</if>
+	<if test="null != status and '' != status">
+		and ibt.status = #{status}
+	</if>
+	<if test="null != shopNo and '' != shopNo">
+		and ibtd.shop_no = #{shopNo} and ibtd.dtl_type = 1
+	</if>
+  </sql>
+  <select id="findInsideBizTypeByCodition" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM inside_biz_type ibt
+     <if test="null != shopNo and '' != shopNo">
+     LEFT JOIN inside_biz_type_detail ibtd on ibtd.type_id = ibt.id
+     </if>
+     WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <resultMap id="ClientResultMap" type="cn.wonhigh.retail.fas.api.model.InsideBizTypeModel" extends="BaseResultMap">
+    <result column="shop_no" property="clientNo" jdbcType="CHAR" />
+    <result column="shop_name" property="clientName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 根据公司或业务类型编号查询客户信息 -->
+  <select id="findClientListByCodition" resultMap="ClientResultMap" parameterType="map" >
+     SELECT 
+	    ibt.company_no, ibt.company_name, ibt.biz_type_code, ibt.biz_type_name,
+	    ibt.status, ibt.carry_over_cost, ibt.remark,ibtd.shop_no,ibtd.shop_name
+     FROM inside_biz_type ibt 
+     LEFT JOIN inside_biz_type_detail ibtd on ibtd.type_id = ibt.id
+     WHERE ibtd.dtl_type = 2 
+    <include refid="condition" />
+  </select>
+ 
+</mapper>

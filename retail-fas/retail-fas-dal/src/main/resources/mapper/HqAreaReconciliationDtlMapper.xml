@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.HqAreaReconciliationDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.HqAreaReconciliationDto" >
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="bill_cost" property="billCost" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+    
+    <result column="area_cost" property="areaCost" jdbcType="DECIMAL" />
+    <result column="purchase_cost" property="purchaseCost" jdbcType="DECIMAL" />
+    <result column="factory_purchase_Sum" property="factoryPurchaseSum" jdbcType="DECIMAL" />
+    <result column="purchase_amount" property="purchaseAmount" jdbcType="DECIMAL" />
+    <result column="area_amount" property="areaAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <!-- 总部地区厂商明细结果集 -->
+  <sql id="Conn_Column_List" >
+  A.bill_type,
+  A.biz_type,
+  A.zone_no_from,
+  A.zone_name_from,
+  A.saler_no,
+  A.saler_name,
+  A.zone_no,
+  A.zone_name,
+  A.buyer_no,
+  A.buyer_name,
+  A.order_unit_no,
+  A.order_unit_name,
+  A.send_date,
+  A.receive_date,
+  A.item_no,
+  A.item_code,
+  A.item_name,
+  A.brand_no,
+  A.brand_name,
+  A.category_no,
+  A.category_name,
+  A.receive_qty,
+  E.name years,
+  D.name season,
+  F.name orderfrom,
+  B.category_no one_level_category_no,
+  B.name one_level_category_name,
+  C.brand_unit_no brand_unit_no,
+  C.name brand_unit_name,
+  AVG(A.cost) cost,
+  SUM(A.send_qty) send_qty,
+  SUM(A.send_qty * A.cost) purchase_amount 
+  </sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.salerNo and ''!=params.salerNo" >
+        AND A.saler_no = #{params.salerNo}
+      </if>    
+      <if test="null!=params.bizType and ''!=params.bizType" >
+        AND A.biz_type = #{params.bizType}
+      </if>    
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+        AND A.buyer_no = #{params.buyerNo}
+      </if>
+	  <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND A.brand_no = #{params.brandNo}
+      </if>   
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+        AND A.send_date &gt;= #{params.sendDateStart}
+      </if> 
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND A.send_date &lt;= #{params.sendDateEnd}
+      </if> 
+      <if test="null!=params.itemCode and ''!=params.itemCode" >
+        AND A.item_code = #{params.itemCode}
+      </if> 
+      <if test="null!=params.oneLevelCategoryNo and ''!=params.oneLevelCategoryNo" >
+        AND A.category_no like '${params.oneLevelCategoryNo}%'
+      </if> 
+      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+		AND A.brand_no like '${params.brandUnitNo}%'
+	 </if> 
+    </if>
+  </sql>
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+	SELECT COUNT(1) FROM(SELECT COUNT(1) as s
+	FROM
+		bill_sale_balance A 
+    LEFT JOIN category B 
+        ON LEFT(A.`category_no`, 2) = B.`category_no` 
+ 	LEFT JOIN brand_unit C 
+        ON LEFT(A.brand_no, 2) = C.`brand_unit_no` 
+    LEFT JOIN lookup_entry D 
+        ON D.`code` = A.season 
+        AND D.lookup_id = '6' 
+    LEFT JOIN lookup_entry E 
+	    ON E.`code` = A.years 
+	    AND E.lookup_id = '5' 
+  	LEFT JOIN lookup_entry F 
+	    ON F.`code` = A.orderfrom 
+	    AND F.lookup_id = '29' 
+	WHERE 1 = 1
+		AND A.bill_type IN (1301, 1333)
+		AND A.is_split = 1 
+	<include refid="condition" />
+	GROUP BY
+		A.saler_no,
+		A.buyer_no,
+		brand_unit_no,
+		A.biz_type,
+		A.ITEM_CODE  ) temp
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Conn_Column_List" />
+	FROM
+		bill_sale_balance A 
+    LEFT JOIN category B 
+        ON LEFT(A.`category_no`, 2) = B.`category_no` 
+ 	LEFT JOIN brand_unit C 
+        ON LEFT(A.brand_no, 2) = C.`brand_unit_no` 
+    LEFT JOIN lookup_entry D 
+        ON D.`code` = A.season 
+        AND D.lookup_id = '6' 
+    LEFT JOIN lookup_entry E 
+	    ON E.`code` = A.years 
+	    AND E.lookup_id = '5' 
+  	LEFT JOIN lookup_entry F 
+	    ON F.`code` = A.orderfrom 
+	    AND F.lookup_id = '29' 
+	WHERE 1 = 1
+		AND A.bill_type IN (1301, 1333)
+		AND A.is_split = 1 
+    <include refid="condition" />
+	GROUP BY 
+		A.saler_no,
+		A.buyer_no,
+		brand_unit_no,
+		A.biz_type,
+		A.ITEM_CODE 
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField" >
+      	ORDER BY 
+      		  A.zone_no,
+			  A.buyer_no,
+			  A.order_unit_no 
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+   <include refid="Conn_Column_List" />
+	FROM
+		bill_sale_balance A 
+    LEFT JOIN category B 
+        ON LEFT(A.`category_no`, 2) = B.`category_no` 
+ 	LEFT JOIN brand_unit C 
+        ON LEFT(A.brand_no, 2) = C.`brand_unit_no` 
+    LEFT JOIN lookup_entry D 
+        ON D.`code` = A.season 
+        AND D.lookup_id = '6' 
+    LEFT JOIN lookup_entry E 
+	    ON E.`code` = A.years 
+	    AND E.lookup_id = '5' 
+  	LEFT JOIN lookup_entry F 
+	    ON F.`code` = A.orderfrom 
+	    AND F.lookup_id = '29' 
+	WHERE 1 = 1
+		AND A.bill_type IN (1301, 1333)
+		AND A.is_split = 1 
+    <include refid="condition" />
+     GROUP BY 
+		A.saler_no,
+		A.buyer_no,
+		brand_unit_no,
+		A.biz_type,
+		A.ITEM_CODE 
+     <if test="params.groupBy != null and ''!=params.groupBy" >
+      	GROUP BY #{params.groupBy}
+     </if>
+  </select>
+  
+  <!-- 明细对账合计行 -->
+  <select id="selectTotalRow" resultMap="BaseResultMap"  parameterType="map">
+  	SELECT 
+	    '合计' saler_name ,
+	  	 SUM(temp.send_qty) send_qty ,
+	 	 SUM(temp.purchase_amount) purchase_amount
+	FROM
+    (SELECT 
+  		 <include refid="Conn_Column_List" />
+	FROM
+		bill_sale_balance A 
+    LEFT JOIN category B 
+        ON LEFT(A.`category_no`, 2) = B.`category_no` 
+ 	LEFT JOIN brand_unit C 
+        ON LEFT(A.brand_no, 2) = C.`brand_unit_no` 
+    LEFT JOIN lookup_entry D 
+        ON D.`code` = A.season 
+        AND D.lookup_id = '6' 
+    LEFT JOIN lookup_entry E 
+	    ON E.`code` = A.years 
+	    AND E.lookup_id = '5' 
+  	LEFT JOIN lookup_entry F 
+	    ON F.`code` = A.orderfrom 
+	    AND F.lookup_id = '29' 
+	WHERE 1 = 1
+		AND A.bill_type IN (1301, 1333)
+		AND A.is_split = 1 
+    <include refid="condition" />
+     GROUP BY 
+		A.saler_no,
+		A.buyer_no,
+		brand_unit_no,
+		A.biz_type,
+		A.ITEM_CODE  ) temp 
+  </select>
+  
+  <!-- 出货明细表 -->
+  <sql id="shipment_Column_List">
+  A.bill_type,
+  A.biz_type,
+  A.bill_no,
+  A.saler_no,
+  A.saler_name,
+  A.zone_no,
+  A.zone_name,
+  A.buyer_no,
+  A.buyer_name,
+  A.order_unit_no,
+  A.order_unit_name,
+  A.item_code,
+  A.item_name,
+  C.category_no one_level_category_no,
+  C.name one_level_category_name,
+  D.brand_unit_no brand_unit_no,
+  D.name brand_unit_name,
+  F.name years,
+  E.name season,
+  G.name orderfrom,
+  SUM(A.send_qty) send_qty,
+  A.cost area_cost,
+  AVG(B.cost) purchase_cost,
+  A.tag_price,
+  SUM(A.send_qty * A.cost) area_amount,
+  SUM(A.send_qty * B.cost) purchase_amount 
+  </sql>
+  
+  <select id="selectShipmentCount" resultType="java.lang.Integer" >
+	SELECT COUNT(1) FROM(SELECT COUNT(1) as s
+	FROM
+		bill_buy_balance A 
+	LEFT JOIN 
+	    (SELECT 
+	      * 
+	    FROM
+	      bill_sale_balance tmp 
+	    WHERE tmp.`is_split` = 1 
+	      AND tmp.`bill_type` IN ('1301', '1333')) B 
+	    ON A.bill_no = B.bill_no 
+	  LEFT JOIN category C 
+	    ON LEFT(A.`category_no`, 2) = C.`category_no` 
+	  LEFT JOIN brand_unit D 
+	    ON LEFT(A.brand_no, 2) = D.`brand_unit_no` 
+	  LEFT JOIN lookup_entry E 
+	    ON E.`code` = A.season 
+	    AND E.lookup_id = '6' 
+	  LEFT JOIN lookup_entry F 
+	    ON F.`code` = A.years 
+	    AND F.lookup_id = '5' 
+	  LEFT JOIN lookup_entry G 
+	    ON G.`code` = A.orderfrom 
+	    AND G.lookup_id = '29' 
+	WHERE 1 = 1 
+	  AND A.bill_type IN ('1301', '1333') 
+	  AND A.is_split = 1 
+	<include refid="condition" />
+	GROUP BY 
+	  A.saler_no,
+	  A.buyer_no,
+	  A.item_code,
+	  A.biz_type,
+	  D.brand_unit_no ) temp
+  </select>
+  
+  <select id="selectShipmentByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="shipment_Column_List" />
+	FROM
+		bill_buy_balance A 
+	LEFT JOIN 
+	    (SELECT 
+	      * 
+	    FROM
+	      bill_sale_balance tmp 
+	    WHERE tmp.`is_split` = 1 
+	      AND tmp.`bill_type` IN ('1301', '1333')) B 
+	    ON A.bill_no = B.bill_no 
+	  LEFT JOIN category C 
+	    ON LEFT(A.`category_no`, 2) = C.`category_no` 
+	  LEFT JOIN brand_unit D 
+	    ON LEFT(A.brand_no, 2) = D.`brand_unit_no` 
+	  LEFT JOIN lookup_entry E 
+	    ON E.`code` = A.season 
+	    AND E.lookup_id = '6' 
+	  LEFT JOIN lookup_entry F 
+	    ON F.`code` = A.years 
+	    AND F.lookup_id = '5' 
+	  LEFT JOIN lookup_entry G 
+	    ON G.`code` = A.orderfrom 
+	    AND G.lookup_id = '29' 
+	WHERE 1 = 1 
+	  AND A.bill_type IN ('1301', '1333') 
+	  AND A.is_split = 1 
+    <include refid="condition" />
+	GROUP BY 
+	  A.saler_no, 
+	  A.buyer_no,
+	  A.item_code,
+	  A.biz_type,
+	  D.brand_unit_no 
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField" >
+      	ORDER BY 
+      		  A.zone_no,
+			  A.buyer_no,
+			  A.order_unit_no 
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+   <!-- 出货明细合计行 -->
+  <select id="selectShipmentTotalRow" resultMap="BaseResultMap"  parameterType="map">
+  	SELECT 
+	   	 '合计' saler_name,
+		 SUM(send_qty) send_qty,
+		 SUM(area_amount) area_amount,
+		 SUM(area_amount) purchase_amount
+	FROM
+    (SELECT 
+  		 <include refid="shipment_Column_List" />
+	FROM
+		bill_buy_balance A 
+	LEFT JOIN 
+	    (SELECT 
+	      * 
+	    FROM
+	      bill_sale_balance tmp 
+	    WHERE tmp.`is_split` = 1 
+	      AND tmp.`bill_type` IN ('1301', '1333')) B 
+	    ON A.bill_no = B.bill_no 
+	  LEFT JOIN category C 
+	    ON LEFT(A.`category_no`, 2) = C.`category_no` 
+	  LEFT JOIN brand_unit D 
+	    ON LEFT(A.brand_no, 2) = D.`brand_unit_no` 
+	  LEFT JOIN lookup_entry E 
+	    ON E.`code` = A.season 
+	    AND E.lookup_id = '6' 
+	  LEFT JOIN lookup_entry F 
+	    ON F.`code` = A.years 
+	    AND F.lookup_id = '5' 
+	  LEFT JOIN lookup_entry G 
+	    ON G.`code` = A.orderfrom 
+	    AND G.lookup_id = '29' 
+	WHERE 1 = 1 
+	  AND A.bill_type IN ('1301', '1333') 
+	  AND A.is_split = 1 
+    <include refid="condition" />
+	GROUP BY 
+	  A.saler_no, 
+	  A.buyer_no,
+	  A.item_code,
+	  A.biz_type,
+	  D.brand_unit_no ) temp
+  </select>
+  
+</mapper>

@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SaleSettlementDeductionMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SaleSettlementDeduction" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="VARCHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="settlement_period" property="settlementPeriod" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="rate_type" property="rateType" jdbcType="SMALLINT" />
+    <result column="rental" property="rental" jdbcType="DECIMAL" />
+    <result column="rate" property="rate" jdbcType="DECIMAL" />
+    <result column="base_amount" property="baseAmount" jdbcType="DECIMAL" />
+    <result column="base_rate" property="baseRate" jdbcType="DECIMAL" />
+    <result column="exceed_base_rate" property="exceedBaseRate" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="creator_no" property="creatorNo" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="editor_no" property="editorNo" jdbcType="VARCHAR" />
+    <result column="editor" property="editor" jdbcType="VARCHAR" />
+    <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, zone_no, zone_name, organ_no, organ_name, shop_no, shop_name, brand_no, brand_name, 
+    settlement_period, start_date, end_date, rate_type, rental, rate, base_amount, base_rate, 
+    exceed_base_rate, status, creator_no, creator, create_time, editor_no, editor, edit_time, 
+    remarks
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+       <if test="null!=params.zoneNo and ''!=params.zoneNo" >
+        AND zone_no = #{params.zoneNo}
+      </if>    
+	  <if test="null!=params.shopNo and ''!=params.shopNo" >
+        AND shop_no = #{params.shopNo}
+      </if>    
+	  <if test="null!=params.settlementPeriod and ''!=params.settlementPeriod" >
+        AND settlement_period = #{params.settlementPeriod}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM sale_settlement_deduction
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM sale_settlement_deduction WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM sale_settlement_deduction WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM sale_settlement_deduction WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM sale_settlement_deduction
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.SaleSettlementDeduction" >
+    DELETE FROM sale_settlement_deduction
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SaleSettlementDeduction" >
+    INSERT INTO sale_settlement_deduction (id, zone_no, zone_name, 
+      organ_no, organ_name, shop_no, 
+      shop_name, brand_no, brand_name, 
+      settlement_period, start_date, end_date, 
+      rate_type, rental, rate, 
+      base_amount, base_rate, exceed_base_rate, 
+      status, creator_no, creator, 
+      create_time, editor_no, editor, 
+      edit_time, remarks)
+    VALUES (#{id,jdbcType=VARCHAR}, #{zoneNo,jdbcType=VARCHAR}, #{zoneName,jdbcType=VARCHAR}, 
+      #{organNo,jdbcType=VARCHAR}, #{organName,jdbcType=VARCHAR}, #{shopNo,jdbcType=VARCHAR}, 
+      #{shopName,jdbcType=VARCHAR}, #{brandNo,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{settlementPeriod,jdbcType=VARCHAR}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{rateType,jdbcType=SMALLINT}, #{rental,jdbcType=DECIMAL}, #{rate,jdbcType=DECIMAL}, 
+      #{baseAmount,jdbcType=DECIMAL}, #{baseRate,jdbcType=DECIMAL}, #{exceedBaseRate,jdbcType=DECIMAL}, 
+      #{status,jdbcType=SMALLINT}, #{creatorNo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{editorNo,jdbcType=VARCHAR}, #{editor,jdbcType=VARCHAR}, 
+      #{editTime,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SaleSettlementDeduction" >
+    INSERT INTO sale_settlement_deduction
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="zoneName != null" >
+        zone_name,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+      <if test="organName != null" >
+        organ_name,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="settlementPeriod != null" >
+        settlement_period,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="rateType != null" >
+        rate_type,
+      </if>
+      <if test="rental != null" >
+        rental,
+      </if>
+      <if test="rate != null" >
+        rate,
+      </if>
+      <if test="baseAmount != null" >
+        base_amount,
+      </if>
+      <if test="baseRate != null" >
+        base_rate,
+      </if>
+      <if test="exceedBaseRate != null" >
+        exceed_base_rate,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="creatorNo != null" >
+        creator_no,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="editorNo != null" >
+        editor_no,
+      </if>
+      <if test="editor != null" >
+        editor,
+      </if>
+      <if test="editTime != null" >
+        edit_time,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneName != null" >
+        #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementPeriod != null" >
+        #{settlementPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="rateType != null" >
+        #{rateType,jdbcType=SMALLINT},
+      </if>
+      <if test="rental != null" >
+        #{rental,jdbcType=DECIMAL},
+      </if>
+      <if test="rate != null" >
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="baseAmount != null" >
+        #{baseAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="baseRate != null" >
+        #{baseRate,jdbcType=DECIMAL},
+      </if>
+      <if test="exceedBaseRate != null" >
+        #{exceedBaseRate,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="creatorNo != null" >
+        #{creatorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editorNo != null" >
+        #{editorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="editor != null" >
+        #{editor,jdbcType=VARCHAR},
+      </if>
+      <if test="editTime != null" >
+        #{editTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SaleSettlementDeduction" >
+    UPDATE sale_settlement_deduction
+    <set >
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneName != null" >
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        organ_name = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementPeriod != null" >
+        settlement_period = #{settlementPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="rateType != null" >
+        rate_type = #{rateType,jdbcType=SMALLINT},
+      </if>
+      <if test="rental != null" >
+        rental = #{rental,jdbcType=DECIMAL},
+      </if>
+      <if test="rate != null" >
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="baseAmount != null" >
+        base_amount = #{baseAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="baseRate != null" >
+        base_rate = #{baseRate,jdbcType=DECIMAL},
+      </if>
+      <if test="exceedBaseRate != null" >
+        exceed_base_rate = #{exceedBaseRate,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="creatorNo != null" >
+        creator_no = #{creatorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editorNo != null" >
+        editor_no = #{editorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="editor != null" >
+        editor = #{editor,jdbcType=VARCHAR},
+      </if>
+      <if test="editTime != null" >
+        edit_time = #{editTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SaleSettlementDeduction" >
+    UPDATE sale_settlement_deduction
+    SET zone_no = #{zoneNo,jdbcType=VARCHAR},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      organ_no = #{organNo,jdbcType=VARCHAR},
+      organ_name = #{organName,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=VARCHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      settlement_period = #{settlementPeriod,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      rate_type = #{rateType,jdbcType=SMALLINT},
+      rental = #{rental,jdbcType=DECIMAL},
+      rate = #{rate,jdbcType=DECIMAL},
+      base_amount = #{baseAmount,jdbcType=DECIMAL},
+      base_rate = #{baseRate,jdbcType=DECIMAL},
+      exceed_base_rate = #{exceedBaseRate,jdbcType=DECIMAL},
+      status = #{status,jdbcType=SMALLINT},
+      creator_no = #{creatorNo,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      editor_no = #{editorNo,jdbcType=VARCHAR},
+      editor = #{editor,jdbcType=VARCHAR},
+      edit_time = #{editTime,jdbcType=TIMESTAMP},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

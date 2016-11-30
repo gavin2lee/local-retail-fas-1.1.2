@@ -1,0 +1,2919 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ExceptionPriceBillMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ExceptionPriceBill" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="cost_from" property="costFrom" jdbcType="TINYINT" />
+    <result column="base_cost" property="baseCost" jdbcType="DECIMAL" />
+    <result column="supplier_no" property="supplierNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="exception_reason" property="exceptionReason" jdbcType="VARCHAR"/>
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, bill_type, biz_type, order_unit_no, bill_date, item_no, item_code, item_name, 
+    sku_no, size_no, qty, cost, cost_from, base_cost, status, exception_reason,balance_type,
+    supplier_no,company_no,zone_no,create_user, create_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null != params.billTypeArray and ''!=params.billTypeArray">
+      	AND bill_type in
+      	<foreach item="billType" collection="params.billTypeArray" separator="," open="(" close=")">  
+      		#{billType, jdbcType=VARCHAR}
+    	</foreach>
+      </if>
+      <if test="null != params.orderUnitNo and '' != params.orderUnitNo">
+      	AND order_unit_no = #{params.orderUnitNo}
+      </if>
+      <if test="null != params.billDateStart and '' != params.billDateStart">
+      	AND bill_date &gt;= #{params.billDateStart}
+      </if>
+      <if test="null != params.billDateEnd and '' != params.billDateEnd">
+      	AND bill_date &lt;= #{params.billDateEnd}
+      </if>
+      <if test="null != params.billNo and '' != params.billNo">
+      	AND bill_no = #{params.billNo}
+      </if>
+      <if test="null != params.itemNo and '' != params.itemNo">
+      	AND item_no = #{params.itemNo}
+      </if>
+      <if test="null != params.status and '' != params.status">
+      	AND status = #{params.status}
+      </if>
+      <if test="null != params.balanceType and '' != params.balanceType">
+      	AND balance_type = #{params.balanceType}
+      </if>
+      <if test="null != params.zoneNo and '' != params.zoneNo">
+      	AND zone_no = #{params.zoneNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM exception_price_bill
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM exception_price_bill WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM exception_price_bill WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    order BY create_time desc
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM exception_price_bill WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM exception_price_bill
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.ExceptionPriceBill" >
+    DELETE FROM exception_price_bill
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ExceptionPriceBill" >
+    INSERT INTO exception_price_bill (id, bill_no, bill_type, biz_type,
+      order_unit_no, bill_date, item_no, 
+      item_code, item_name, sku_no, 
+      size_no, qty, cost, 
+      cost_from, base_cost, status, exception_reason,balance_type,supplier_no,company_no,zone_no
+      create_user, create_time)
+    VALUES (#{id,jdbcType=CHAR}, #{billNo,jdbcType=CHAR}, #{billType,jdbcType=INTEGER}, #{bizType,jdbcType=INTEGER}, 
+      #{orderUnitNo,jdbcType=CHAR}, #{billDate,jdbcType=DATE}, #{itemNo,jdbcType=CHAR}, 
+      #{itemCode,jdbcType=CHAR}, #{itemName,jdbcType=VARCHAR}, #{skuNo,jdbcType=CHAR}, 
+      #{sizeNo,jdbcType=VARCHAR}, #{qty,jdbcType=INTEGER}, #{cost,jdbcType=DECIMAL}, 
+      #{costFrom,jdbcType=TINYINT}, #{baseCost,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+      #{exceptionReason,jdbcType=VARCHAR},#{balanceType,jdbcType=INTEGER},#{supplierNo,jdbcType=VARCHAR},#{companyNo,jdbcType=VARCHAR},
+      #{zoneNo,jdbcType=VARCHAR},#{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ExceptionPriceBill" >
+    INSERT INTO exception_price_bill
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="bizType != null">
+      	biz_type,
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no,
+      </if>
+      <if test="billDate != null" >
+        bill_date,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="skuNo != null" >
+        sku_no,
+      </if>
+      <if test="sizeNo != null" >
+        size_no,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="costFrom != null" >
+        cost_from,
+      </if>
+      <if test="baseCost != null" >
+        base_cost,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="exceptionReason != null">
+      	exception_reason,
+      </if>
+      <if test="balanceType != null">
+      	balance_type,
+      </if>
+      <if test="supplierNo != null">
+      	supplier_no,
+      </if>
+      <if test="companyNo != null">
+      	company_no,
+      </if>
+      <if test="zoneNo != null">
+      	zone_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="bizType != null" >
+        #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="orderUnitNo != null" >
+        #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="billDate != null" >
+        #{billDate,jdbcType=DATE},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null" >
+        #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeNo != null" >
+        #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="costFrom != null" >
+        #{costFrom,jdbcType=TINYINT},
+      </if>
+      <if test="baseCost != null" >
+        #{baseCost,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="exceptionReason != null">
+      	#{exceptionReason,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceType != null">
+      	#{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="supplierNo != null">
+      	#{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+      	#{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null">
+      	#{zoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ExceptionPriceBill" >
+    UPDATE exception_price_bill
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="bizType != null">
+      	biz_type = #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="billDate != null" >
+        bill_date = #{billDate,jdbcType=DATE},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null" >
+        sku_no = #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeNo != null" >
+        size_no = #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="costFrom != null" >
+        cost_from = #{costFrom,jdbcType=TINYINT},
+      </if>
+      <if test="baseCost != null" >
+        base_cost = #{baseCost,jdbcType=DECIMAL},
+      </if>
+      <if test="supplierNo != null">
+      	supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+      	company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="exceptionReason != null">
+      	exception_reason = #{exceptionReason,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceType != null">
+      	balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="zoneNo != null">
+      	zone_no = #{zoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ExceptionPriceBill" >
+    UPDATE exception_price_bill
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      bill_type = #{billType,jdbcType=INTEGER},
+      biz_type = #{bizType,jdbcType=INTEGER},
+      order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      bill_date = #{billDate,jdbcType=DATE},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      sku_no = #{skuNo,jdbcType=CHAR},
+      size_no = #{sizeNo,jdbcType=VARCHAR},
+      qty = #{qty,jdbcType=INTEGER},
+      cost = #{cost,jdbcType=DECIMAL},
+      cost_from = #{costFrom,jdbcType=TINYINT},
+      base_cost = #{baseCost,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
+      exception_reason = #{exceptionReason,jdbcType=VARCHAR},
+      balance_type = #{balanceType,jdbcType=TINYINT},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      zone_no = #{zoneNo,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <!-- 更新到货单的价格 总部地区  -->
+   <update id="updateBuyAsnForAreaAndHq" >
+       UPDATE 
+		  bill_buy_balance A,
+		  company co1,
+		  company co2 
+		SET
+		  A.cost_checked = 1,
+		  A.cost = 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		WHERE A.balance_no IS NULL
+		  AND A.saler_no = co1.company_no 
+		  AND A.buyer_no = co2.company_no
+		  AND A.bill_type = 1301 
+		  AND A.buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1) 
+		  AND A.COST &lt;&gt;
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <!-- 更新到货单价格 总部厂商 -->
+   <update id="updateBuyAsnForHqAndSupplier" >
+       UPDATE 
+		  bill_buy_balance A 
+		SET
+		  A.cost_checked = 1,
+		  A.cost = IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE A.BUYER_NO = spd.company_no 
+		      AND A.path_no = spd.path_no) = 'CGJ' OR (ISNULL(A.path_no)),
+		    (SELECT 
+		      pp.purchase_price 
+		    FROM
+		      purchase_price pp 
+		    WHERE pp.status=100
+		      AND A.SALER_NO = pp.supplier_no 
+		      AND A.send_date &gt;= pp.effective_date 
+		      AND A.item_no = pp.item_no 
+		    ORDER BY pp.effective_date DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE A.BUYER_NO = spd.company_no 
+		        AND A.path_no = spd.path_no) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  ) 
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type IN (1301, 1333) 
+		  AND A.balance_type &lt;&gt; 4 
+		  AND A.buyer_no IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1) 
+		  AND A.COST &lt;&gt; IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE A.BUYER_NO = spd.company_no 
+		      AND A.path_no = spd.path_no) = 'CGJ' OR (ISNULL(A.path_no)),
+		    (SELECT 
+		      pp.purchase_price 
+		    FROM
+		      purchase_price pp 
+		    WHERE pp.status=100
+		      AND A.SALER_NO = pp.supplier_no 
+		      AND A.send_date &gt;= pp.effective_date 
+		      AND A.item_no = pp.item_no 
+		    ORDER BY pp.effective_date DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE A.BUYER_NO = spd.company_no 
+		        AND A.path_no = spd.path_no) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <!-- 更新到货单的价格 总部地区 -->
+   <update id="updateSaleAsnForHqAndArea" >
+       UPDATE 
+		  bill_sale_balance A 
+		SET
+		  A.cost_checked = 1,
+		  A.cost = 
+		  (SELECT 
+		    C.region_cost
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = 1301
+		  AND A.buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1) 
+		  AND A.COST &lt;&gt;
+		  (SELECT 
+		    C.region_cost
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <!-- 更新验收单价格 总部厂商 -->
+   <update id="updateBuyReceiptForHq" >
+       UPDATE 
+		  bill_buy_balance A 
+		SET
+		  A.cost_checked = 1,
+		  A.cost = IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE A.BUYER_NO = spd.company_no 
+		      AND A.path_no = spd.path_no) = 'CGJ',
+		    (SELECT 
+		      pp.`purchase_price` 
+		    FROM
+		      `purchase_price` pp 
+		    WHERE A.SALER_NO = pp.supplier_no 
+		      AND A.receive_date &gt;= `effective_date` 
+		      AND A.item_no = pp.item_no 
+		    ORDER BY pp.`effective_date` DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      c.`region_cost` 
+		    FROM
+		      region_cost_maintain c 
+		    WHERE A.receive_date &gt;= c.`effective_time` 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE A.BUYER_NO = spd.company_no 
+		        AND A.path_no = spd.path_no) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY c.`effective_time` DESC 
+		    LIMIT 0, 1)
+		  ) 
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type =1304 
+		  AND A.buyer_no IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1) 
+		  AND A.COST &lt;&gt; IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE A.BUYER_NO = spd.company_no 
+		      AND A.path_no = spd.path_no) = 'CGJ',
+		    (SELECT 
+		      pp.`purchase_price` 
+		    FROM
+		      `purchase_price` pp 
+		    WHERE A.SALER_NO = pp.supplier_no 
+		      AND A.receive_date &gt;= `effective_date` 
+		      AND A.item_no = pp.item_no 
+		    ORDER BY pp.`effective_date` DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      c.`region_cost` 
+		    FROM
+		      region_cost_maintain c 
+		    WHERE A.receive_date &gt;= c.`effective_time` 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE A.BUYER_NO = spd.company_no 
+		        AND A.path_no = spd.path_no) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY c.`effective_time` DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <!-- 更新验收单价格 包含总部地区 地区自购的验收单 -->
+   <update id="updateBuyReceiptForArea" >
+       UPDATE 
+		  bill_buy_balance A
+		SET
+		  A.cost_checked = 1,
+		  A.cost = 
+		  (SELECT 
+		    c.`region_cost` 
+		  FROM
+		    region_cost_maintain c 
+		  WHERE A.receive_date &gt;= c.`effective_time` 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          `financial_account` F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        `financial_account` F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY c.`effective_time` DESC 
+		  LIMIT 0, 1)
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = '1304' 
+		  AND A.BUYER_NO NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1)
+		  AND A.COST &lt;&gt;
+		  (SELECT 
+		    c.`region_cost` 
+		  FROM
+		    region_cost_maintain c 
+		  WHERE A.receive_date &gt;= c.`effective_time` 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          `financial_account` F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        `financial_account` F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY c.`effective_time` DESC 
+		  LIMIT 0, 1)  
+		  AND NOT ISNULL((SELECT 
+		    c.`region_cost` 
+		  FROM
+		    region_cost_maintain c 
+		  WHERE A.receive_date &gt;= c.`effective_time` 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          `financial_account` F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        `financial_account` F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY c.`effective_time` DESC 
+		  LIMIT 0, 1))
+   </update>
+   
+   <!-- 更新调货出库单的价格 地区间 -->
+   <update id="updateSaleTransferOut" >
+       UPDATE 
+		  bill_sale_balance A 
+		SET
+		  A.cost_checked = 1,
+		  A.cost = 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = 1371
+		  AND A.buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1) 
+		  AND A.COST &lt;&gt; 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <!--更新调货入库单的价格 地区间 -->
+   <update id="updateBuyTransferIn" >
+      UPDATE 
+		  bill_buy_balance A 
+		SET
+		  A.cost_checked = 1,
+		  A.cost = 
+		  (SELECT 
+		    C.region_cost
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.receive_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = 1372
+		  AND A.buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1) 
+		  AND A.COST &lt;&gt; 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.RECEIVE_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.RECEIVE_DATE &gt;= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <!--更新调货出库单价格  地区其他出库 -->
+   <update id="updateSaleTransferOutHQ" >
+       UPDATE 
+		  bill_sale_balance A 
+		SET
+		  A.cost_checked = 1,
+		  A.cost = 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.SALER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.SALER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.SALER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = 1371
+		  AND A.buyer_no IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1) 
+		  AND A.COST &lt;&gt; 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.SALER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.SALER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.SALER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.SALER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.SALER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.SALER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <!--更新调货入库单价格  地区其他出库 -->
+   <update id="updateBuyTransferInHQ" >
+      UPDATE 
+		  bill_buy_balance A 
+		SET
+		  A.cost_checked = 1,
+		  A.cost = 
+		  (SELECT 
+		    C.region_cost
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.receive_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.SALER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.SALER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.SALER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = 1372
+		  AND A.buyer_no IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1) 
+		  AND A.COST &lt;&gt; 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.RECEIVE_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.SALER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.SALER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.SALER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.RECEIVE_DATE &gt;= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.SALER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.SALER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.SALER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <update id="updateSaleAreaOthers" >
+	UPDATE 
+	  bill_sale_balance A 
+	SET
+	  A.cost_checked = 1,
+	  A.cost = 
+	  (SELECT 
+	    C.region_cost
+	  FROM
+	    region_cost_maintain C 
+	  WHERE A.SEND_DATE &gt;= C.effective_time 
+	    AND IF(
+	      ISNULL(
+	        (SELECT 
+	          PRICE_ZONE 
+	        FROM
+	          financial_account F 
+	        WHERE A.SALER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT 
+	        ZONE_NO 
+	      FROM
+	        COMPANY CO 
+	      WHERE A.SALER_NO = CO.COMPANY_NO),
+	      (SELECT 
+	        PRICE_ZONE 
+	      FROM
+	        financial_account F 
+	      WHERE A.SALER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY C.effective_time DESC 
+	  LIMIT 0, 1) 
+	WHERE (
+	    (
+	      A.bill_type = 1335
+	      AND A.biz_type = 3
+	    ) 
+	    OR (
+	      A.bill_type = 1361 
+	      AND A.biz_type IN (7, 25)
+	    )
+	  ) 
+	  AND A.balance_no IS NULL
+	  AND A.SALER_NO NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1)
+	  AND A.COST &lt;&gt; 
+	  (SELECT 
+	    C.region_cost 
+	  FROM
+	    region_cost_maintain C 
+	  WHERE A.SEND_DATE &gt;= C.effective_time 
+	    AND IF(
+	      ISNULL(
+	        (SELECT 
+	          PRICE_ZONE 
+	        FROM
+	          financial_account F 
+	        WHERE A.SALER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT 
+	        ZONE_NO 
+	      FROM
+	        COMPANY CO 
+	      WHERE A.SALER_NO = CO.COMPANY_NO),
+	      (SELECT 
+	        PRICE_ZONE 
+	      FROM
+	        financial_account F 
+	      WHERE A.SALER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY C.effective_time DESC 
+	  LIMIT 0, 1) 
+	  AND NOT ISNULL(
+	    (SELECT 
+	      C.region_cost 
+	    FROM
+	      region_cost_maintain C 
+	    WHERE A.SEND_DATE &gt;= C.effective_time
+	      AND IF(
+	        ISNULL(
+	          (SELECT 
+	            PRICE_ZONE 
+	          FROM
+	            financial_account F 
+	          WHERE A.SALER_NO = F.COMPANY_NO)
+	        ),
+	        (SELECT 
+	          ZONE_NO 
+	        FROM
+	          COMPANY CO 
+	        WHERE A.SALER_NO = CO.COMPANY_NO),
+	        (SELECT 
+	          PRICE_ZONE 
+	        FROM
+	          financial_account F 
+	        WHERE A.SALER_NO = F.COMPANY_NO)
+	      ) = C.ZONE_NO 
+	      AND A.ITEM_NO = C.ITEM_NO 
+	    ORDER BY C.effective_time DESC 
+	    LIMIT 0, 1)
+	  )
+   </update>
+   
+   <resultMap id="CheckConditionDtoMap" type="cn.wonhigh.retail.fas.common.dto.ExceptionPriceCheckDto" >
+    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="sale_date" property="saleDate" jdbcType="DATE" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+    <result column="price_zone" property="priceZone" jdbcType="CHAR" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 查询没有维护的地区价的货号的数量 -->
+  <select id="getRegionPriceExceptionsCount" resultType="java.lang.Integer">
+   select count(1) from (
+   	SELECT 
+		  A.buyer_no,
+		  A.item_no,
+		  A.item_code,
+		  A.item_name,
+		  A.brand_name,
+		  A.supplier_no,
+		  IF(
+		    ISNULL(
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        `financial_account` F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ),
+		    (SELECT 
+		      ZONE_NO 
+		    FROM
+		      COMPANY CO 
+		    WHERE A.BUYER_NO = CO.COMPANY_NO),
+		    (SELECT 
+		      PRICE_ZONE 
+		    FROM
+		      `financial_account` F 
+		    WHERE A.BUYER_NO = F.COMPANY_NO)
+		  ) price_zone,
+		  A.sale_date,
+		  (SELECT 
+		    c.`region_cost` 
+		  FROM
+		    region_cost_maintain c 
+		  WHERE A.sale_date &gt;= c.`effective_time` 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          `financial_account` F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        `financial_account` F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO
+		  ORDER BY c.`effective_time` DESC 
+		  LIMIT 0, 1) region_cost 
+		FROM
+		  (SELECT 
+		    buyer_no,
+		    item_no,
+		    item_code,
+		    item_name,
+		    brand_name,
+		    brand_no,
+		    supplier_no,cost,
+		    MIN(send_date) sale_date 
+		  FROM
+		    bill_buy_balance 
+		  WHERE balance_no IS NULL AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+		  -- AND @brand_no
+		 -- AND @company_no!buyer_no
+		  <if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND buyer_no IN ${params.companyNos} 
+		  </if>
+		  <if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		  </if>
+		  GROUP BY buyer_no,item_no, item_code) A 
+		WHERE ISNULL(
+		    (SELECT 
+		      c.`region_cost` 
+		    FROM
+		      region_cost_maintain c 
+		    WHERE A.sale_date &gt;= c.`effective_time` 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            `financial_account` F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          `financial_account` F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY c.`effective_time` DESC 
+		    LIMIT 0, 1)
+		  )
+    ) as tmp
+  </select>
+  
+  <!-- 查询没有维护地区价的商品 -->
+  <select id="getRegionPriceExceptionsByPage" resultMap="CheckConditionDtoMap" parameterType="map" >
+    SELECT 
+		  A.buyer_no,
+		  A.item_no,
+		  A.item_code,
+		  A.item_name,
+		  A.brand_name,
+		  A.supplier_no,
+		  IF(
+		    ISNULL(
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        `financial_account` F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ),
+		    (SELECT 
+		      ZONE_NO 
+		    FROM
+		      COMPANY CO 
+		    WHERE A.BUYER_NO = CO.COMPANY_NO),
+		    (SELECT 
+		      PRICE_ZONE 
+		    FROM
+		      `financial_account` F 
+		    WHERE A.BUYER_NO = F.COMPANY_NO)
+		  ) price_zone,
+		  A.sale_date,
+		  (SELECT 
+		    c.`region_cost` 
+		  FROM
+		    region_cost_maintain c 
+		  WHERE A.sale_date &gt;= c.`effective_time` 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          `financial_account` F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        `financial_account` F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO
+		  ORDER BY c.`effective_time` DESC 
+		  LIMIT 0, 1) region_cost 
+		FROM
+		  (SELECT 
+		    buyer_no,
+		    item_no,
+		    item_code,
+		    item_name,
+		    brand_name,
+		    brand_no,
+		    supplier_no,cost,
+		    MIN(send_date) sale_date 
+		  FROM
+		    bill_buy_balance 
+		  WHERE balance_no IS NULL AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+		  -- AND @brand_no
+		 -- AND @company_no!buyer_no
+		  <if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND buyer_no IN ${params.companyNos} 
+		  </if>
+		  <if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		  </if>
+		  GROUP BY buyer_no,item_no, item_code) A 
+		WHERE ISNULL(
+		    (SELECT 
+		      c.`region_cost` 
+		    FROM
+		      region_cost_maintain c 
+		    WHERE A.sale_date &gt;= c.`effective_time` 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            `financial_account` F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          `financial_account` F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY c.`effective_time` DESC 
+		    LIMIT 0, 1)
+		  )
+     	LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="getPurchasePriceExceptionsCount" resultType="java.lang.Integer">
+    SELECT COUNT(1) as s FROM 
+	(
+		SELECT 
+		  A.*,
+		  (SELECT 
+		    pp.`purchase_price` 
+		  FROM
+		    `purchase_price` pp 
+		  WHERE pp.status=100 AND A.SALER_NO = pp.supplier_no 
+		    AND A.sale_date &gt;= pp.effective_date 
+		    AND A.item_no = pp.item_no 
+		  ORDER BY pp.`effective_date` DESC 
+		  LIMIT 0, 1) purchase_price 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    item_no,
+		    item_code,
+		    item_name,
+		    brand_name,
+		    brand_no,
+		    MIN(send_date) sale_date 
+		  FROM
+		    bill_buy_balance t 
+		  WHERE NOT EXISTS 
+		    (SELECT 
+		      t1.`company_no` 
+		    FROM
+		      company t1 
+		    WHERE t.saler_no = t1.`company_no`) 
+		  AND (t.saler_no &lt;&gt; '000T' AND t.saler_no &lt;&gt; '009Z')
+		  AND t.balance_no IS NULL 
+		  AND t.send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+		  -- AND @brand_no
+		  -- AND @company_no!buyer_no
+		  <if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND t.buyer_no IN ${params.companyNos} 
+		  </if>
+		  <if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND t.brand_no IN ${params.brandNos}
+		  </if>
+		  GROUP BY saler_no,
+		    item_no,
+		    item_code) A 
+		WHERE ISNULL(
+		    (SELECT 
+		      pp.`purchase_price` 
+		    FROM
+		      `purchase_price` pp 
+		    WHERE pp.status=100
+		      AND A.SALER_NO = pp.supplier_no 
+		      AND A.sale_date &gt;= pp.effective_date 
+		      AND A.item_no = pp.item_no 
+		    ORDER BY pp.`effective_date` DESC 
+		    LIMIT 0, 1)
+		  )
+	) T
+  </select>
+  
+  <!-- 查询没有维护采购价的商品 -->
+   <select id="getPurchasePriceExceptionsByPage" resultMap="CheckConditionDtoMap" parameterType="map" >
+    SELECT 
+		  A.*,
+		  (SELECT 
+		    pp.`purchase_price` 
+		  FROM
+		    `purchase_price` pp 
+		  WHERE pp.status=100
+		    AND A.SALER_NO = pp.supplier_no 
+		    AND A.sale_date &gt;= pp.effective_date
+		    AND A.item_no = pp.item_no 
+		  ORDER BY pp.effective_date DESC 
+		  LIMIT 0, 1) purchase_price 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    item_no,
+		    item_code,
+		    item_name,
+		    brand_name,
+		    brand_no,
+		    MIN(send_date) sale_date 
+		  FROM
+		    bill_buy_balance t 
+		  WHERE NOT EXISTS 
+		    (SELECT 
+		      t1.`company_no` 
+		    FROM
+		      company t1 
+		    WHERE t.saler_no = t1.`company_no`) 
+		    AND (t.saler_no &lt;&gt; '000T' AND t.saler_no &lt;&gt; '009Z')
+		    AND t.balance_no IS NULL 
+		    AND t.send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+		    -- AND @brand_no
+		    -- AND @company_no!buyer_no
+		    <if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	  AND t.buyer_no IN ${params.companyNos} 
+		    </if>
+		    <if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		 		AND t.brand_no IN ${params.brandNos}
+		  	</if>
+		  GROUP BY saler_no,
+		    item_no,
+		    item_code) A 
+		WHERE ISNULL(
+		    (SELECT 
+		      pp.`purchase_price` 
+		    FROM
+		      `purchase_price` pp 
+		    WHERE pp.status=100 AND A.SALER_NO = pp.supplier_no 
+		      AND A.sale_date &gt;= pp.effective_date 
+		      AND A.item_no = pp.item_no 
+		    ORDER BY pp.`effective_date` DESC 
+		    LIMIT 0, 1)
+		  )
+     	LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  
+  <select id="findTagPriceExceptionsCount" resultType="java.lang.Integer">
+  	SELECT 
+	  COUNT(1) 
+	FROM
+	  (SELECT 
+	    1 
+	  FROM
+	    bill_buy_balance b 
+	  WHERE 1 = 1 
+	    <include refid="tag_exception_condtion" />
+	    AND NOT EXISTS 
+	    (SELECT 
+	      1 
+	    FROM
+	      price_quotation_list pql 
+	    WHERE pql.item_no = b.item_no 
+	      AND pql.organ_id = '0000' 
+	      AND pql.quotation_tactics = 0) 
+	  GROUP BY item_no,
+	    item_code,
+	    send_date) G 
+  </select>
+
+    <sql id="tag_exception_condtion" >
+	 		--	AND @brand_no 
+	 		AND buyer_no IN(SELECT company_no FROM financial_account WHERE financial_account.`group_lead_role` = '1' 
+  			AND financial_account.`status` = '1' 
+  			) AND bill_type in (1301,1333)
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	    	AND	send_date &gt;= '${params.sendDateStart} 00:00:00'
+		  </if>
+		  <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	  		AND	send_date &lt;= '${params.sendDateEnd} 23:59:59'
+		  </if>
+		  <if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		   AND buyer_no IN ${params.companyNos} 
+		  </if>
+		  <if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		   AND brand_no IN ${params.brandNos}
+		 </if>
+	      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+	        AND supplier_no  IN ${params.multiSupplierNo}
+	      </if>    
+	      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+	        AND LEFT(category_no,2) IN ${params.multiCategoryNo}
+	      </if>   
+	</sql>
+	
+  <!-- 牌价异常检查 -->
+  <select id="findTagPriceExceptionsByPage" resultMap="CheckConditionDtoMap" parameterType="map" >
+	SELECT 
+	  item_no,
+	  item_code,
+	  item_name,
+	  send_date sale_date,
+	  supplier_no saler_no,
+	  brand_no,
+	  brand_name
+	FROM
+	  bill_buy_balance b 
+	WHERE 1 = 1
+	  <include refid="tag_exception_condtion" />
+	  AND NOT EXISTS 
+	  (SELECT 
+	    1 
+	  FROM
+	    price_quotation_list pql 
+	  WHERE pql.item_no = b.item_no
+	  AND pql.organ_id='0000' AND pql.quotation_tactics=0
+	  )
+	  GROUP BY 
+	  item_no,
+	  item_code,
+	  send_date
+	  LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="getFasAllPriceExceptionsCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) s FROM
+	  	(SELECT
+			  A.buyer_no,
+			  A.item_no,
+			  A.brand_no,
+			  A.sale_date 
+			FROM (SELECT
+					buyer_no,
+			        saler_no,
+			        item_no,
+			        item_code,
+			        brand_no,
+			        MIN(send_date) sale_date
+			      FROM bill_buy_balance t
+			      WHERE NOT EXISTS(SELECT t1.company_no FROM company t1 WHERE t.saler_no = t1.company_no)
+			          AND (t.saler_no &lt;&gt; '000T' AND t.saler_no &lt;&gt; '009Z')
+			          -- AND @brand_no
+			      GROUP BY saler_no, item_no, item_code) A
+			WHERE ISNULL((SELECT
+			                pp.purchase_price
+			              FROM purchase_price pp
+			              WHERE pp.status=100 
+		      				  AND A.SALER_NO = pp.supplier_no 
+		      				  AND A.sale_date &gt;= pp.effective_date 
+			                  AND A.item_no = pp.item_no
+			              ORDER BY pp.effective_date DESC
+			              LIMIT 0, 1))
+		 UNION ALL
+			(SELECT
+			     A.buyer_no,
+			     A.item_no,
+				 A.brand_no,
+			     A.sale_date 
+			   FROM (SELECT
+				   buyer_no,
+				   item_no,
+				   brand_no,
+				   MIN(send_date) sale_date
+				 FROM bill_buy_balance
+				 WHERE buyer_no NOT IN(SELECT company_no FROM financial_account WHERE group_lead_role = 1 AND STATUS = 1)
+				      -- AND @brand_no
+				 GROUP BY buyer_no,item_no, item_code) A
+			   WHERE ISNULL((SELECT c.region_cost 
+			   					FROM region_cost_maintain c
+					 			WHERE A.sale_date &gt;= c.effective_time
+					     			AND IF(ISNULL((SELECT PRICE_ZONE  FROM financial_account F WHERE A.BUYER_NO = F.COMPANY_NO)),
+					     						(SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+					     						(SELECT PRICE_ZONE FROM financial_account F WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO
+					     			AND A.ITEM_NO = C.ITEM_NO
+					 			ORDER BY c.effective_time DESC
+					 			LIMIT 0, 1)
+					 		)
+			)
+		) T       
+		       
+  </select>
+  
+  <select id="getFasAllPriceExceptionsByPage" resultMap="CheckConditionDtoMap" parameterType="map" >
+	SELECT 
+	    buyer_no,
+	    NULL saler_no,
+	    item_no,
+	    item_code,
+	    item_name,
+	    NULL brand_no,
+	    brand_name,
+	    price_zone,
+	    sale_date
+	FROM (SELECT
+		  A.buyer_no,
+		  A.item_no,
+		  A.item_code,
+		  A.item_name,
+		  A.brand_name,
+		  IF( ISNULL( (SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO) ), (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO), (SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO) )    price_zone,
+		  A.sale_date,
+		  (SELECT c.`region_cost`
+		   FROM region_cost_maintain c
+		   WHERE A.sale_date &gt;= c.`effective_time`
+		       AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)),
+				     (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+				      (SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO
+		       AND A.ITEM_NO = C.ITEM_NO
+		   ORDER BY c.`effective_time` DESC
+		   LIMIT 0, 1)   region_cost
+		FROM (SELECT
+			buyer_no,
+			item_no,
+			item_code,
+			item_name,
+			brand_name,
+			brand_no,
+			MIN(send_date)    sale_date
+		      FROM bill_buy_balance
+		      WHERE buyer_no NOT IN(SELECT company_no FROM financial_account WHERE group_lead_role = 1 AND STATUS = 1)
+				-- AND @brand_no 
+		      GROUP BY buyer_no,item_no, item_code) A
+		WHERE ISNULL((SELECT c.`region_cost` 
+				FROM region_cost_maintain c
+				WHERE A.sale_date &gt;= c.`effective_time`
+				  AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)),
+						 (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+						 (SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO
+				  AND A.ITEM_NO = C.ITEM_NO
+				ORDER BY c.`effective_time` DESC
+				LIMIT 0, 1))) T 
+	UNION ALL 
+	SELECT 
+	    NULL buyer_no,
+	    saler_no,
+	    item_no,
+	    item_code,
+	    item_name,
+	    brand_no,
+	    brand_name,
+	    NULL price_zone,
+	    sale_date 
+	FROM (SELECT
+		  A.*,
+		  (SELECT pp.`purchase_price`
+		   FROM `purchase_price` pp
+		   WHERE pp.status=100 
+		       AND A.SALER_NO = pp.supplier_no 
+		       AND A.sale_date &gt;= pp.effective_date 
+		       AND A.item_no = pp.item_no
+		   ORDER BY pp.`effective_date` DESC
+		   LIMIT 0, 1)    purchase_price
+		FROM (SELECT
+			saler_no,
+			item_no,
+			item_code,
+			item_name,
+			brand_name,
+			brand_no,
+			MIN(send_date)    sale_date
+		      FROM bill_buy_balance t
+		      WHERE NOT EXISTS(SELECT t1.`company_no` FROM company t1 WHERE t.saler_no = t1.`company_no`)
+			  AND (t.saler_no &lt;&gt; '000T' AND t.saler_no &lt;&gt; '009Z')
+			  -- AND @brand_no 
+		      GROUP BY saler_no, item_no, item_code) A
+		WHERE ISNULL((SELECT
+				pp.`purchase_price`
+			      FROM `purchase_price` pp
+			      WHERE pp.status=100
+		      	   AND A.SALER_NO = pp.supplier_no 
+		      	   AND A.sale_date &gt;= pp.effective_date 
+				  AND A.item_no = pp.item_no
+			      ORDER BY pp.`effective_date` DESC
+			      LIMIT 0, 1))) T1 
+	 LIMIT #{page.startRowNum} ,#{page.pageSize}   		
+  </select>
+   
+   <update id="updateBuyAsnCostCheckForAreaAndHq" >
+       UPDATE 
+		  bill_buy_balance A,
+		  company co1,
+		  company co2 
+		SET
+		  A.cost_checked = 1
+		WHERE A.balance_no IS NULL
+		  AND A.saler_no = co1.company_no 
+		  AND A.buyer_no = co2.company_no
+		  AND A.bill_type = 1301
+		  AND A.buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1) 
+		  AND A.cost_checked &lt;&gt; 1
+		  AND A.COST =
+		  (SELECT 
+		    C.region_cost
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <update id="updateBuyAsnCostCheckForHqAndSupplier" >
+       UPDATE 
+		  bill_buy_balance A 
+		SET
+		  A.cost_checked = 1
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type IN ('1301', '1333') 
+		  AND A.balance_type &lt;&gt; 4 
+		  AND A.buyer_no IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1) 
+		  AND A.cost_checked &lt;&gt; 1
+		  AND A.COST = IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE A.BUYER_NO = spd.company_no 
+		      AND A.path_no = spd.path_no) = 'CGJ' OR (ISNULL(A.path_no)),
+		    (SELECT 
+		      pp.purchase_price 
+		    FROM
+		      purchase_price pp 
+		    WHERE A.SALER_NO = pp.supplier_no 
+		      AND A.send_date &gt;= effective_date
+		      AND A.item_no = pp.item_no 
+		    ORDER BY pp.effective_date DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      C.region_cost
+		    FROM
+		      region_cost_maintain C
+		    WHERE A.SEND_DATE &gt;= C.effective_time 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE A.BUYER_NO = spd.company_no 
+		        AND A.path_no = spd.path_no) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <update id="updateSaleAsnCostCheckForHqAndArea" >
+       UPDATE 
+		  bill_sale_balance A 
+		SET
+		  A.cost_checked = 1
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = '1301' 
+		  AND A.buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1) 
+		  AND A.cost_checked &lt;&gt;1
+		  AND A.COST =
+		  (SELECT 
+		    C.region_cost
+		  FROM
+		    region_cost_maintain c 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <update id="updateBuyReceiptCostCheckForHq" >
+       UPDATE 
+		  bill_buy_balance A 
+		SET
+		  A.cost_checked = 1
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type =1304 
+		  AND A.buyer_no IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1) 
+		  AND A.cost_checked &lt;&gt; 1
+		  AND A.COST = IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE A.BUYER_NO = spd.company_no 
+		      AND A.path_no = spd.path_no) = 'CGJ',
+		    (SELECT 
+		      pp.purchase_price
+		    FROM
+		      purchase_price pp 
+		    WHERE A.SALER_NO = pp.supplier_no 
+		      AND A.receive_date &gt;= effective_date 
+		      AND A.item_no = pp.item_no 
+		    ORDER BY pp.effective_date DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.receive_date &gt;= C.effective_time 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE A.BUYER_NO = spd.company_no 
+		        AND A.path_no = spd.path_no) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <update id="updateBuyReceiptCostCheckForArea" >
+       UPDATE 
+		  bill_buy_balance A
+		SET
+		  A.cost_checked = 1
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = 1304 
+		  AND A.BUYER_NO NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1)
+		  AND A.cost_checked &lt;&gt; 1
+		  AND A.COST = 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.receive_date &gt;= C.effective_time
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1)  
+		  AND NOT ISNULL((SELECT 
+		    C.region_cost
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.receive_date &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1))
+   </update>
+
+   <update id="updateSaleTransferOutCostCheck" >
+       UPDATE 
+		  bill_sale_balance A 
+		SET
+		  A.cost_checked = 1
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = 1371 
+		  AND A.buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1) 
+		  AND A.cost_checked &lt;&gt; 1
+		  AND A.COST = 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <update id="updateBuyTransferInCostCheck" >
+      UPDATE 
+		  bill_buy_balance A 
+		SET
+		  A.cost_checked = 1
+		WHERE A.balance_no IS NULL
+		  AND A.bill_type = 1372 
+		  AND A.buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1) 
+		  AND A.cost_checked &lt;&gt; 1
+		  AND A.COST = 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.RECEIVE_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.RECEIVE_DATE &gt;= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+
+   <update id="updateSaleAreaOthersCostCheck" >
+	UPDATE 
+	  bill_sale_balance A 
+	SET
+	  A.cost_checked = 1
+	WHERE (
+	    (
+	      A.bill_type = 1335
+	      AND A.biz_type = 3
+	    ) 
+	    OR (
+	      A.bill_type = 1361 
+	      AND A.biz_type IN (7, 25)
+	    )
+	  ) 
+	  AND A.balance_no IS NULL
+	  AND A.SALER_NO NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1)
+	  AND A.cost_checked &lt;&gt; 1
+	  AND A.COST =
+	  (SELECT 
+	    C.region_cost 
+	  FROM
+	    region_cost_maintain C 
+	  WHERE A.SEND_DATE &gt;= C.effective_time 
+	    AND IF(
+	      ISNULL(
+	        (SELECT 
+	          PRICE_ZONE 
+	        FROM
+	          financial_account F 
+	        WHERE A.SALER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT 
+	        ZONE_NO 
+	      FROM
+	        COMPANY CO 
+	      WHERE A.SALER_NO = CO.COMPANY_NO),
+	      (SELECT 
+	        PRICE_ZONE 
+	      FROM
+	        financial_account F 
+	      WHERE A.SALER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY C.effective_time DESC 
+	  LIMIT 0, 1) 
+	  AND NOT ISNULL(
+	    (SELECT 
+	      C.region_cost
+	      FROM
+	      region_cost_maintain C 
+	    WHERE A.SEND_DATE &gt;= C.effective_time 
+	      AND IF(
+	        ISNULL(
+	          (SELECT 
+	            PRICE_ZONE 
+	          FROM
+	            financial_account F 
+	          WHERE A.SALER_NO = F.COMPANY_NO)
+	        ),
+	        (SELECT 
+	          ZONE_NO 
+	        FROM
+	          COMPANY CO 
+	        WHERE A.SALER_NO = CO.COMPANY_NO),
+	        (SELECT 
+	          PRICE_ZONE 
+	        FROM
+	          financial_account F 
+	        WHERE A.SALER_NO = F.COMPANY_NO)
+	      ) = C.ZONE_NO 
+	      AND A.ITEM_NO = C.ITEM_NO 
+	    ORDER BY C.effective_time DESC 
+	    LIMIT 0, 1)
+	  )
+   </update>
+   
+   <update id="updateBuyAsnForAreaAndSupplier">
+   		UPDATE 
+		  bill_buy_balance A
+		SET
+		  A.cost_checked = 1,
+		  A.cost = 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.send_date &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1)
+		WHERE ( ( A.bill_type = 1301 AND A.biz_type IN (0, 1) ) 
+			OR A.bill_type = 1333 ) 
+		  AND (A.is_split IS NULL OR A.is_split != 1)
+		  AND A.balance_no IS NULL
+		  AND A.BUYER_NO NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1)
+		  AND A.COST &lt;&gt;
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.send_date &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1)  
+		  AND NOT ISNULL((SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.send_date &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1))
+   </update>
+   
+   <update id="updateBuyAsnCostCheckForAreaAndSupplier">
+   		UPDATE 
+		  bill_buy_balance A
+		SET
+		  A.cost_checked = 1
+		WHERE 
+			( ( A.bill_type = 1301 AND A.biz_type IN (0, 1) ) 
+			OR A.bill_type = 1333 ) 
+		  AND (A.is_split IS NULL OR A.is_split != 1)
+		  AND A.balance_no IS NULL
+		  AND A.BUYER_NO NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 and status=1)
+		  AND A.cost_checked &lt;&gt; 1
+		  AND A.COST =
+		  (SELECT 
+		    C.region_cost
+		  FROM
+		    region_cost_maintain C 
+		  WHERE A.SEND_DATE &gt;= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE A.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE A.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND A.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE A.SEND_DATE &gt;= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE A.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE A.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE A.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND A.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   
+   <resultMap id="BuyBalanceMap" type="cn.wonhigh.retail.fas.common.model.BillBuyBalance" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="ref_bill_type" property="refBillType" jdbcType="INTEGER" />
+    <result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="send_store_no" property="sendStoreNo" jdbcType="CHAR" />
+    <result column="send_store_name" property="sendStoreName" jdbcType="CHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="sku_id" property="skuId" jdbcType="CHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="bill_cost" property="billCost" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="exclusive_cost" property="exclusiveCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="balance_status" property="balanceStatus" jdbcType="TINYINT" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="is_split" property="isSplit" jdbcType="INTEGER" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="CHAR" />
+    
+    <result column="difference_qty" property="differenceQty" jdbcType="INTEGER" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="difference_amount" property="differenceAmount" jdbcType="DECIMAL" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="CHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="CHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+    <result column="cost_checked" property="costChecked" jdbcType="INTEGER"/>
+    <result column="gender_name" property="genderName" jdbcType="VARCHAR" />
+    <result column="supplier_group_name" property="supplierGroupName" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+   <resultMap id="SaleBalanceMap" type="cn.wonhigh.retail.fas.common.model.BillSaleBalance" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="ref_bill_type" property="refBillType" jdbcType="INTEGER" />
+    <result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="send_store_no" property="sendStoreNo" jdbcType="CHAR" />
+    <result column="send_store_name" property="sendStoreName" jdbcType="CHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="sku_id" property="skuId" jdbcType="CHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="bill_cost" property="billCost" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="exclusive_cost" property="exclusiveCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="balance_status" property="balanceStatus" jdbcType="TINYINT" />
+    <result column="is_split" property="isSplit" jdbcType="INTEGER" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+    
+    <result column="difference_qty" property="differenceQty" jdbcType="INTEGER" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="difference_amount" property="differenceAmount" jdbcType="DECIMAL" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="CHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="CHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+    
+    <result column="is_bill_invoice" property="isBillInvoice" jdbcType="INTEGER" />
+    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="VARCHAR" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="DATE" />
+    <result column="gender_name" property="genderName" jdbcType="VARCHAR" />
+    <result column="cost_checked" property="costChecked" jdbcType="INTEGER"/>
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL"/>
+    
+    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL"/>
+    <result column="deduction_remark" property="deductionRemark" jdbcType="VARCHAR"/>
+    
+    <result column="supplier_group_name" property="supplierGroupName" jdbcType="VARCHAR"/>
+    <result column="main_color" property="mainColor" jdbcType="VARCHAR"/>
+    
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL"/>
+    <result column="purchase_amount" property="purchaseAmount" jdbcType="DECIMAL"/>
+  </resultMap>
+  
+  <sql id="Bill_Balance_List" >
+    id, bill_no, bill_type, biz_type, ref_bill_no, ref_bill_type, original_bill_no, status, 
+    buyer_no, buyer_name, saler_no, saler_name, send_date, receive_date, supplier_no, 
+    supplier_name, item_no, item_code, item_name, brand_no, brand_name, category_no, 
+    category_name, cost, bill_cost, tax_rate, exclusive_cost, 
+    headquarter_cost, region_cost, unit_cost, send_qty, receive_qty, 
+    order_no, balance_no, balance_status, balance_type, is_split, path_no, cost_checked
+  </sql>
+  
+  <sql id="Sale_Balance_List" >
+    id, bill_no, bill_type, biz_type, ref_bill_no, ref_bill_type, original_bill_no, status, 
+    buyer_no, buyer_name, saler_no, saler_name, send_date, receive_date, send_store_no, 
+    send_store_name, receive_store_no, receive_store_name, sku_id, sku_no, supplier_no, 
+    supplier_name, item_no, item_code, item_name, brand_no, brand_name, category_no, 
+    category_name, cost, bill_cost, tax_rate, exclusive_cost,
+    headquarter_cost, region_cost, unit_cost, send_qty, receive_qty, 
+    order_no, balance_no, balance_type, balance_status, is_split, path_no, order_unit_no, 
+    order_unit_name, organ_no, organ_name, order_unit_no_from, order_unit_name_from, 
+    organ_no_from, organ_name_from, zone_no, zone_name, zone_no_from, zone_name_from ,cost_checked, tag_price
+  </sql>
+  
+   <!-- 查询buy表到货单价格异常的单据 -->
+   <select id="getBuyAsnRegionPrices" resultMap="BuyBalanceMap" parameterType="map" >
+   	SELECT 
+   		<include refid="Bill_Balance_List" /> 
+   	FROM BILL_BUY_BALANCE 
+   		WHERE 1=1 
+   		AND BILL_TYPE=1301 AND BALANCE_NO IS NULL 
+   		AND (cost &lt;&gt; region_cost OR cost =0 OR cost IS NULL)
+		AND buyer_no NOT IN (select company_no from financial_account where group_lead_role=1 and status=1)
+   		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  		<if test="null!=params and null != params.companyNos and '' != params.companyNos">
+	  		AND buyer_no IN ${params.companyNos} 
+	   </if>
+	   <if test="null!=params and null != params.brandNos and '' != params.brandNos">
+	  		AND brand_no IN ${params.brandNos}
+	   </if> 
+   </select>
+   
+   <!-- 查询验收单价格异常的单据 -->
+   <select id="getBuyReceiptRegionPrices" resultMap="BuyBalanceMap" parameterType="map" >
+   	SELECT 
+   		<include refid="Bill_Balance_List" /> 
+   	FROM BILL_BUY_BALANCE 
+   		WHERE 1=1 
+   		AND BILL_TYPE=1304 AND BALANCE_NO IS NULL 
+   		AND (cost &lt;&gt; region_cost OR cost =0 OR cost IS NULL)   		AND buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1)
+   		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+   		<if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND buyer_no IN ${params.companyNos} 
+		</if>
+		<if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		</if> 
+   </select>
+   
+   <!-- 查询buy表原残退厂单价格异常单据 -->
+   <select id="getBuyReturnRegionPrices" resultMap="BuyBalanceMap" parameterType="map" >
+   	SELECT 
+   		<include refid="Bill_Balance_List" /> 
+   	FROM BILL_BUY_BALANCE 
+   		WHERE 1=1 
+   		AND BILL_TYPE=1333 AND BALANCE_NO IS NULL 
+   		AND (cost &lt;&gt; region_cost OR cost =0 OR cost IS NULL)
+   		AND buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1)
+   		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+   		  <if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND buyer_no IN ${params.companyNos} 
+		  </if>
+		  <if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		  </if> 
+   </select>
+   
+   <!-- 查询调货入库单价格与地区价不一致的单据 -->
+   <select id="getBuyTransferInRegionPrices" resultMap="BuyBalanceMap" parameterType="map" >
+   	SELECT 
+   		<include refid="Bill_Balance_List" /> 
+   	FROM BILL_BUY_BALANCE 
+   		WHERE 1=1 
+   		AND BILL_TYPE=1372 AND BALANCE_NO IS NULL
+   		AND (cost &lt;&gt; region_cost OR cost =0 OR cost IS NULL)
+   		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+   		<if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND buyer_no IN ${params.companyNos} 
+		</if>
+		<if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		</if> 
+   </select>
+  
+  <!-- 查询sale表到货单的地区价与地区价不一致的单据 -->
+  <select id="getSaleAsnRegionPrices" resultMap="SaleBalanceMap" parameterType="map" >
+  	SELECT 
+  		<include refid="Bill_Balance_List" /> 
+  	FROM bill_sale_balance 
+   		WHERE 1=1 
+   		AND BILL_TYPE=1301 
+   		AND BALANCE_NO IS NULL
+   		AND (cost &lt;&gt; region_cost OR cost =0 OR cost IS NULL)
+		AND buyer_no NOT IN (SELECT company_no FROM financial_account WHERE group_lead_role=1 AND STATUS=1)
+   		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+   		<if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND saler_no IN ${params.companyNos} 
+		</if>
+		<if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		</if> 
+   </select>
+   
+   <!-- 查询跨区调货出库单的地区价与地区价不一致的单据 -->
+   <select id="getSaleTransferOutRegionPrices" resultMap="SaleBalanceMap" parameterType="map" >
+   	SELECT 
+   		<include refid="Bill_Balance_List" /> 
+   	FROM BILL_SALE_BALANCE 
+   		WHERE 1=1
+   		AND BILL_TYPE=1371 
+   		AND BALANCE_NO IS NULL 
+   		AND (cost &lt;&gt; region_cost OR cost =0 OR cost IS NULL)
+		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  		<if test="null!=params and null != params.companyNos and '' != params.companyNos">
+	  		AND saler_no IN ${params.companyNos} 
+	    </if>
+		<if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		</if> 
+   </select>
+   
+   <!-- 查询buy表到货单采购价有异常的单据 -->
+  <select id="getBuyAsnPurchasePrices" resultMap="BuyBalanceMap" parameterType="map" >
+  	SELECT 
+  		<include refid="Bill_Balance_List" /> 
+  	FROM bill_buy_balance 
+   		WHERE 1=1 
+   		AND BILL_TYPE=1301 
+   		AND BIZ_TYPE IN (0,1) 
+   		AND BALANCE_NO IS NULL 
+   		AND BUYER_NO IN (SELECT COMPANY_NO FROM FINANCIAL_ACCOUNT WHERE GROUP_LEAD_ROLE=1 AND STATUS=1)
+   		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+   		<if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND buyer_no IN ${params.companyNos} 
+		</if>
+		<if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		</if> 
+   </select>
+   
+   <!-- 查询验收单采购价异常的单据 -->
+   <select id="getBuyReceiptPurchasePrices" resultMap="BuyBalanceMap" parameterType="map" >
+   	SELECT 
+   		<include refid="Bill_Balance_List" /> 
+   	FROM BILL_BUY_BALANCE 
+   		WHERE 1=1 
+   		AND BILL_TYPE=1304 
+   		AND BIZ_TYPE IN (0,1) 
+   		AND BALANCE_NO IS NULL 
+   		AND BUYER_NO IN (SELECT COMPANY_NO FROM FINANCIAL_ACCOUNT WHERE GROUP_LEAD_ROLE=1 AND STATUS=1)
+   		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+   		<if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND buyer_no IN ${params.companyNos} 
+		</if>
+		<if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		</if> 
+   </select>
+   
+   <!-- 查询buy表原残退厂发货单有异常的单据 -->
+   <select id="getBuyReturnPurchasePrices" resultMap="BuyBalanceMap" parameterType="map" >
+   	SELECT 
+   		<include refid="Bill_Balance_List" /> 
+   	FROM BILL_BUY_BALANCE 
+   		WHERE 1=1 
+   		AND BILL_TYPE=1333 
+   		AND BALANCE_NO IS NULL 
+   		AND BUYER_NO IN (SELECT COMPANY_NO FROM FINANCIAL_ACCOUNT WHERE GROUP_LEAD_ROLE=1 AND STATUS=1)
+   		AND send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+   		  <if test="null!=params and null != params.companyNos and '' != params.companyNos">
+		  	AND buyer_no IN ${params.companyNos} 
+		  </if>
+		  <if test="null!=params and null != params.brandNos and '' != params.brandNos">
+		  	AND brand_no IN ${params.brandNos}
+		  </if> 
+   </select>
+   
+  <update id="updateBillBuyBalanceCost" parameterType="cn.wonhigh.retail.fas.common.model.BillBuyBalance" >
+    UPDATE bill_buy_balance SET cost = #{cost}, cost_checked = #{costChecked} WHERE id = #{id}
+  </update>
+  
+  <update id="updateBillSaleBalanceCost" parameterType="cn.wonhigh.retail.fas.common.model.BillBuyBalance" >
+    UPDATE bill_sale_balance SET cost = #{cost}, cost_checked = #{costChecked} WHERE bill_no = #{billNo} AND item_no = #{itemNo}
+  </update>
+   
+  <update id="updateSaleBalanceCost" parameterType="cn.wonhigh.retail.fas.common.model.BillSaleBalance" >
+    UPDATE bill_sale_balance SET cost = #{cost}, cost_checked = #{costChecked} WHERE bill_no = #{billNo} AND item_no = #{itemNo}
+  </update>
+   
+   
+</mapper>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CreditCardCheckMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CreditCardCheck" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="out_date" property="outDate" jdbcType="TIMESTAMP" />
+    <result column="terminal_number" property="terminalNumber" jdbcType="CHAR" />
+    <result column="credit_card_rate" property="creditCardRate" jdbcType="DECIMAL" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="income_amount" property="incomeAmount" jdbcType="DECIMAL" />
+    <result column="credit_card_account" property="creditCardAccount" jdbcType="DECIMAL" />
+    <result column="actual_income_amount" property="actualIncomeAmount" jdbcType="DECIMAL" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="credit_card_diff" property="creditCardDiff" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, out_date, terminal_number, shop_no, shop_name, brand_no, brand_name, 
+    mall_no, mall_name, income_amount, credit_card_account, actual_income_amount,
+    return_amount, credit_card_diff
+  </sql>
+  <sql id="om_condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo">
+		and om.shop_no = #{params.shopNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.companyNo and ''!=params.companyNo">
+		and om.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.startOutDate and ''!=params.startOutDate">
+		and om.out_date &gt;= '${params.startOutDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.endOutDate and ''!=params.endOutDate">
+		and om.out_date &lt;= '${params.endOutDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.businessTypeList and ''!=params.businessTypeList" >
+   		<foreach collection="params.businessTypeList" item="businessType" open="AND om.business_type in(" separator="," close=")">
+      		'${businessType}'
+    	</foreach >
+      </if>
+    </if>
+  </sql>
+  
+  <sql id="rem_condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo">
+		and rem.shop_no = #{params.shopNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.companyNo and ''!=params.companyNo">
+		and rem.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.startOutDate and ''!=params.startOutDate">
+		and rem.out_date &gt;= '${params.startOutDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.endOutDate and ''!=params.endOutDate">
+		and rem.out_date &lt;= '${params.endOutDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.businessTypeList and ''!=params.businessTypeList" >
+		<foreach collection="params.businessTypeList" item="businessType" open="AND rem.business_type in(" separator="," close=")">
+	  		'${businessType}'
+		</foreach >
+	  </if>
+    </if>
+  </sql>
+  
+  <select id="findCreditCardCheckCount" resultMap="BaseResultMap" parameterType="map">
+  	SELECT COUNT(1) total,SUM(amount) income_amount FROM (
+  		SELECT A.out_date,A.terminal_number,SUM(A.amount) amount FROM (
+			SELECT
+				om.out_date,
+				(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = om.shop_no) terminal_number,
+				op.amount,om.order_no,om.shop_no,
+				op.pay_code,op.pay_name
+			FROM
+				order_main om
+			LEFT JOIN order_payway op ON om.order_no = op.order_no
+			WHERE 1=1 AND op.pay_code = '04'
+			<include refid="om_condition" />
+			UNION ALL 
+			SELECT
+				rem.out_date,
+				(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = rem.shop_no) terminal_number,
+				op.amount,rem.business_no,rem.shop_no,
+				op.pay_code,op.pay_name
+			FROM
+				return_exchange_main rem
+			LEFT JOIN order_payway op ON rem.business_no = op.order_no
+			WHERE 1=1 AND op.pay_code = '04'
+			<include refid="rem_condition" />
+		) A
+		WHERE 1=1 
+		AND A.terminal_number IS NOT NULL
+		GROUP BY A.out_date,A.terminal_number
+  	) A
+  </select>
+  
+  <select id="findCreditCardCheckList" resultMap="BaseResultMap" parameterType="map">
+  	SELECT A.out_date,A.terminal_number,SUM(A.amount) income_amount FROM (
+		SELECT
+			om.out_date,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = om.shop_no) terminal_number,
+			op.amount,om.order_no,om.shop_no,
+			op.pay_code,op.pay_name
+		FROM
+			order_main om
+		LEFT JOIN order_payway op ON om.order_no = op.order_no
+		WHERE 1=1 AND op.pay_code = '04'
+		<include refid="om_condition" />
+		UNION ALL 
+		SELECT
+			rem.out_date,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = rem.shop_no) terminal_number,
+			op.amount,rem.business_no,rem.shop_no,
+			op.pay_code,op.pay_name
+		FROM
+			return_exchange_main rem
+		LEFT JOIN order_payway op ON rem.business_no = op.order_no
+		WHERE 1=1 AND op.pay_code = '04'
+		<include refid="rem_condition" />
+	) A
+	WHERE 1=1 
+	AND A.terminal_number IS NOT NULL
+	GROUP BY A.out_date,A.terminal_number
+	<if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  
+  <select id="getShopSaleDetail" resultMap="BaseResultMap" parameterType="map">
+  	SELECT A.* FROM (
+		SELECT
+			om.shop_no,om.shop_name,od.brand_unit_no,od.brand_unit_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = om.shop_no) terminal_number,
+			op.amount income_amount,op.pay_code,om.order_no
+		FROM 
+			order_main om
+		LEFT JOIN order_payway op ON om.order_no = op.order_no
+		LEFT JOIN order_dtl od ON om.order_no = od.order_no AND om.amount = od.amount
+		WHERE 1 = 1
+		AND op.pay_code = '04'
+		AND om.out_date = '${params.outDate}'
+		UNION ALL
+		SELECT
+			rem.shop_no,rem.shop_name,red.brand_unit_no,red.brand_unit_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = rem.shop_no) terminal_number,
+			op.amount income_amount,op.pay_code,rem.business_no
+		FROM
+			return_exchange_main rem
+		LEFT JOIN order_payway op ON rem.business_no = op.order_no
+		LEFT JOIN return_exchange_dtl red ON rem.business_no = red.business_no AND rem.amount = red.amount
+		WHERE 1 = 1
+		AND op.pay_code = '04'
+		AND rem.out_date = '${params.outDate}'
+	) A
+	WHERE 1=1
+	AND A.terminal_number IS NOT NULL
+  </select>
+  
+  <!-- 查询网易交易明细金额 -->
+  <select id="getOnlieIncomeAmount" resultType="java.math.BigDecimal" parameterType="map">
+  	SELECT IFNULL(SUM(amount),0) as amount FROM credit_card_transaction_dtl 
+  	WHERE terminal_number IN
+  	<foreach collection="params.terminalNumber" item="terminalNo" open="(" separator="," close=")">
+      '${terminalNo}'
+    </foreach>
+  	AND deal_time &gt;= '${params.outDate} 00:00:00' AND deal_time &lt;= '${params.outDate} 23:59:59'
+  </select>
+</mapper>

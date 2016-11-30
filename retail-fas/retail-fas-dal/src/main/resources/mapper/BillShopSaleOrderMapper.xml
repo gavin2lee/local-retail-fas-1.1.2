@@ -1,0 +1,1561 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillShopSaleOrderMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillShopSaleOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_type" property="orderType" jdbcType="TINYINT" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="biz_city_no" property="bizCityNo" jdbcType="CHAR" />
+    <result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+    <result column="region_no" property="regionNo" jdbcType="CHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="retail_type" property="retailType" jdbcType="VARCHAR" />
+    <result column="sale_date" property="saleDate" jdbcType="DATE" />
+    <result column="business_type" property="businessType" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="assistant_no" property="assistantNo" jdbcType="VARCHAR" />
+    <result column="assistant_name" property="assistantName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="item_flag" property="itemFlag" jdbcType="TINYINT" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="disc_price" property="discPrice" jdbcType="DECIMAL" />
+    <result column="settle_price" property="settlePrice" jdbcType="DECIMAL" />
+    <result column="reduce_price" property="reducePrice" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="tag_amount" property="tagAmount" jdbcType="DECIMAL" />
+    <result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+    <result column="settle_amount" property="settleAmount" jdbcType="DECIMAL" />
+    <result column="disc_amount" property="discAmount" jdbcType="DECIMAL" />
+    <result column="pref_price" property="prefPrice" jdbcType="DECIMAL" />
+    <result column="pro_no" property="proNo" jdbcType="VARCHAR" />
+    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="vip_discount" property="vipDiscount" jdbcType="DECIMAL" />
+    <result column="base_score" property="baseScore" jdbcType="INTEGER" />
+    <result column="pro_score" property="proScore" jdbcType="INTEGER" />
+    <result column="affect_flag" property="affectFlag" jdbcType="TINYINT" />
+    <result column="item_discount" property="itemDiscount" jdbcType="DECIMAL" />
+    <result column="is_balance" property="isBalance" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="mall_deduct_amount" property="mallDeductAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, order_no, order_type, company_no, zone_no, biz_city_no, bsgroups_no, 
+    region_no, mall_no, shop_no, retail_type, sale_date, business_type, status, assistant_no, 
+    assistant_name, category_no, brand_no, sku_no, item_no, size_no, qty, item_flag, 
+    tag_price, sale_price, disc_price, settle_price, reduce_price, amount, tag_amount, 
+    sale_amount, settle_amount, disc_amount, pref_price, pro_no, pro_name, discount, 
+    vip_discount, base_score, pro_score, affect_flag, item_discount, is_balance, balance_no, 
+    remark, mall_deduct_amount
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>    
+	  <if test="null!=params.zoneNo and ''!=params.zoneNo" >
+        AND zoneNo = #{params.zoneNo}
+      </if>    
+	  <if test="null!=params.bizCityNo and ''!=params.bizCityNo" >
+        AND biz_city_no = #{params.bizCityNo}
+      </if>    
+	  <if test="null!=params.mallNo and ''!=params.mallNo" >
+        AND mall_no = #{params.mallNo}
+      </if> 
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+        AND shop_no = #{params.shopNo}
+      </if>             
+      <if test="null!=params.startDate and ''!=params.startDate" >
+        AND sale_date  &gt;= #{params.startDate}
+      </if>  
+      <if test="null!=params.endDate and ''!=params.endDate" >
+        AND sale_date   &lt;=  #{params.endDate}
+      </if> 
+       <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND balance_no = #{params.balanceNo}
+      </if> 
+       <if test="null!=params.orderNo and ''!=params.orderNo" >
+        AND order_no = #{params.orderNo}
+      </if> 
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_shop_sale_order
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_shop_sale_order WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_sale_order WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_sale_order WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_shop_sale_order
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillShopSaleOrder" >
+    DELETE FROM bill_shop_sale_order
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <update id="updateBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillShopSaleOrder" >
+    UPDATE bill_shop_sale_order 
+    SET balance_no = #{balanceNo},is_balance = #{isBalance}
+    WHERE 1 = 1 
+      <if test="null!=companyNo and ''!=companyNo">
+        AND company_no = #{companyNo}
+      </if> 	 
+      <if test="null!=shopNo and ''!=shopNo" >
+        AND shop_no = #{shopNo}
+      </if>             
+      <if test="null!=startDate and ''!=startDate" >
+        AND sale_date  &gt;= #{startDate}
+      </if>  
+      <if test="null!=endDate and ''!=endDate" >
+        AND sale_date   &lt;=  #{endDate}
+      </if> 
+  </update>
+  
+   <select id="selSumByCategory" resultMap="BaseResultMap" parameterType="cn.wonhigh.retail.fas.common.model.BillShopSaleOrder" >
+    SELECT  category_no,SUM(qty) as qty,SUM(settle_amount) as settle_amount FROM  bill_shop_sale_order 
+     WHERE balance_no=#{balanceNo}  GROUP BY category_no
+  </select>
+  
+  <select id="selectSumAmount" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT  SUM(settle_amount) as settleAmount,SUM(disc_amount) as discAmount FROM  bill_shop_sale_order 
+     WHERE balance_no= #{balanceNo,jdbcType=VARCHAR} 
+  </select>  
+  
+  <select id="selectPromotions" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT  pro_no AS proNo,discount AS discount,SUM(settle_amount) as settleAmount, SUM(mall_deduct_amount) AS mallDeductAmount FROM  bill_shop_sale_order 
+     WHERE balance_no= #{balanceNo,jdbcType=VARCHAR} 
+  </select>  
+  
+  <select id="selectPaymentMethod" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT  SUM(settle_amount) as settleAmount,SUM(disc_amount) as discAmount FROM  bill_shop_sale_order 
+     WHERE balance_no= #{balanceNo,jdbcType=VARCHAR} 
+  </select>  
+  
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillShopSaleOrder" >
+    INSERT INTO bill_shop_sale_order (id, bill_no, order_no, 
+      order_type, company_no, zone_no, 
+      biz_city_no, bsgroups_no, region_no, 
+      mall_no, shop_no, retail_type, 
+      sale_date, business_type, status, 
+      assistant_no, assistant_name, category_no, 
+      brand_no, sku_no, item_no, size_no, 
+      qty, item_flag, tag_price, 
+      sale_price, disc_price, settle_price, 
+      reduce_price, amount, tag_amount, 
+      sale_amount, settle_amount, disc_amount, 
+      pref_price, pro_no, pro_name, 
+      discount, vip_discount, base_score, 
+      pro_score, affect_flag, item_discount, 
+      is_balance, balance_no, remark, 
+      mall_deduct_amount)
+    VALUES (#{id,jdbcType=INTEGER}, #{billNo,jdbcType=CHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{orderType,jdbcType=TINYINT}, #{companyNo,jdbcType=CHAR}, #{zoneNo,jdbcType=CHAR}, 
+      #{bizCityNo,jdbcType=CHAR}, #{bsgroupsNo,jdbcType=CHAR}, #{regionNo,jdbcType=CHAR}, 
+      #{mallNo,jdbcType=CHAR}, #{shopNo,jdbcType=CHAR}, #{retailType,jdbcType=VARCHAR}, 
+      #{saleDate,jdbcType=DATE}, #{businessType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{assistantNo,jdbcType=VARCHAR}, #{assistantName,jdbcType=VARCHAR}, #{categoryNo,jdbcType=CHAR}, 
+      #{brandNo,jdbcType=CHAR}, #{skuNo,jdbcType=CHAR}, #{itemNo,jdbcType=CHAR}, #{sizeNo,jdbcType=VARCHAR}, 
+      #{qty,jdbcType=INTEGER}, #{itemFlag,jdbcType=TINYINT}, #{tagPrice,jdbcType=DECIMAL}, 
+      #{salePrice,jdbcType=DECIMAL}, #{discPrice,jdbcType=DECIMAL}, #{settlePrice,jdbcType=DECIMAL}, 
+      #{reducePrice,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{tagAmount,jdbcType=DECIMAL}, 
+      #{saleAmount,jdbcType=DECIMAL}, #{settleAmount,jdbcType=DECIMAL}, #{discAmount,jdbcType=DECIMAL}, 
+      #{prefPrice,jdbcType=DECIMAL}, #{proNo,jdbcType=VARCHAR}, #{proName,jdbcType=VARCHAR}, 
+      #{discount,jdbcType=DECIMAL}, #{vipDiscount,jdbcType=DECIMAL}, #{baseScore,jdbcType=INTEGER}, 
+      #{proScore,jdbcType=INTEGER}, #{affectFlag,jdbcType=TINYINT}, #{itemDiscount,jdbcType=DECIMAL}, 
+      #{isBalance,jdbcType=CHAR}, #{balanceNo,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{mallDeductAmount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopSaleOrder" >
+    INSERT INTO bill_shop_sale_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="bizCityNo != null" >
+        biz_city_no,
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no,
+      </if>
+      <if test="regionNo != null" >
+        region_no,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="retailType != null" >
+        retail_type,
+      </if>
+      <if test="saleDate != null" >
+        sale_date,
+      </if>
+      <if test="businessType != null" >
+        business_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="assistantNo != null" >
+        assistant_no,
+      </if>
+      <if test="assistantName != null" >
+        assistant_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="skuNo != null" >
+        sku_no,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="sizeNo != null" >
+        size_no,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="itemFlag != null" >
+        item_flag,
+      </if>
+      <if test="tagPrice != null" >
+        tag_price,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="discPrice != null" >
+        disc_price,
+      </if>
+      <if test="settlePrice != null" >
+        settle_price,
+      </if>
+      <if test="reducePrice != null" >
+        reduce_price,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="tagAmount != null" >
+        tag_amount,
+      </if>
+      <if test="saleAmount != null" >
+        sale_amount,
+      </if>
+      <if test="settleAmount != null" >
+        settle_amount,
+      </if>
+      <if test="discAmount != null" >
+        disc_amount,
+      </if>
+      <if test="prefPrice != null" >
+        pref_price,
+      </if>
+      <if test="proNo != null" >
+        pro_no,
+      </if>
+      <if test="proName != null" >
+        pro_name,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="vipDiscount != null" >
+        vip_discount,
+      </if>
+      <if test="baseScore != null" >
+        base_score,
+      </if>
+      <if test="proScore != null" >
+        pro_score,
+      </if>
+      <if test="affectFlag != null" >
+        affect_flag,
+      </if>
+      <if test="itemDiscount != null" >
+        item_discount,
+      </if>
+      <if test="isBalance != null" >
+        is_balance,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="mallDeductAmount != null" >
+        mall_deduct_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=TINYINT},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="bizCityNo != null" >
+        #{bizCityNo,jdbcType=CHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="regionNo != null" >
+        #{regionNo,jdbcType=CHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="retailType != null" >
+        #{retailType,jdbcType=VARCHAR},
+      </if>
+      <if test="saleDate != null" >
+        #{saleDate,jdbcType=DATE},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="assistantNo != null" >
+        #{assistantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantName != null" >
+        #{assistantName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="skuNo != null" >
+        #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeNo != null" >
+        #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="itemFlag != null" >
+        #{itemFlag,jdbcType=TINYINT},
+      </if>
+      <if test="tagPrice != null" >
+        #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discPrice != null" >
+        #{discPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="settlePrice != null" >
+        #{settlePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="reducePrice != null" >
+        #{reducePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="tagAmount != null" >
+        #{tagAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="saleAmount != null" >
+        #{saleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settleAmount != null" >
+        #{settleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="discAmount != null" >
+        #{discAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prefPrice != null" >
+        #{prefPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="proNo != null" >
+        #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="proName != null" >
+        #{proName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="vipDiscount != null" >
+        #{vipDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="baseScore != null" >
+        #{baseScore,jdbcType=INTEGER},
+      </if>
+      <if test="proScore != null" >
+        #{proScore,jdbcType=INTEGER},
+      </if>
+      <if test="affectFlag != null" >
+        #{affectFlag,jdbcType=TINYINT},
+      </if>
+      <if test="itemDiscount != null" >
+        #{itemDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="isBalance != null" >
+        #{isBalance,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="mallDeductAmount != null" >
+        #{mallDeductAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopSaleOrder" >
+    UPDATE bill_shop_sale_order
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        order_type = #{orderType,jdbcType=TINYINT},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="bizCityNo != null" >
+        biz_city_no = #{bizCityNo,jdbcType=CHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="regionNo != null" >
+        region_no = #{regionNo,jdbcType=CHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="retailType != null" >
+        retail_type = #{retailType,jdbcType=VARCHAR},
+      </if>
+      <if test="saleDate != null" >
+        sale_date = #{saleDate,jdbcType=DATE},
+      </if>
+      <if test="businessType != null" >
+        business_type = #{businessType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="assistantNo != null" >
+        assistant_no = #{assistantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantName != null" >
+        assistant_name = #{assistantName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="skuNo != null" >
+        sku_no = #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeNo != null" >
+        size_no = #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="itemFlag != null" >
+        item_flag = #{itemFlag,jdbcType=TINYINT},
+      </if>
+      <if test="tagPrice != null" >
+        tag_price = #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discPrice != null" >
+        disc_price = #{discPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="settlePrice != null" >
+        settle_price = #{settlePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="reducePrice != null" >
+        reduce_price = #{reducePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="tagAmount != null" >
+        tag_amount = #{tagAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="saleAmount != null" >
+        sale_amount = #{saleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settleAmount != null" >
+        settle_amount = #{settleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="discAmount != null" >
+        disc_amount = #{discAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prefPrice != null" >
+        pref_price = #{prefPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="proNo != null" >
+        pro_no = #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="proName != null" >
+        pro_name = #{proName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="vipDiscount != null" >
+        vip_discount = #{vipDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="baseScore != null" >
+        base_score = #{baseScore,jdbcType=INTEGER},
+      </if>
+      <if test="proScore != null" >
+        pro_score = #{proScore,jdbcType=INTEGER},
+      </if>
+      <if test="affectFlag != null" >
+        affect_flag = #{affectFlag,jdbcType=TINYINT},
+      </if>
+      <if test="itemDiscount != null" >
+        item_discount = #{itemDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="isBalance != null" >
+        is_balance = #{isBalance,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="mallDeductAmount != null" >
+        mall_deduct_amount = #{mallDeductAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillShopSaleOrder" >
+    UPDATE bill_shop_sale_order
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=TINYINT},
+      company_no = #{companyNo,jdbcType=CHAR},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      biz_city_no = #{bizCityNo,jdbcType=CHAR},
+      bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      region_no = #{regionNo,jdbcType=CHAR},
+      mall_no = #{mallNo,jdbcType=CHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      retail_type = #{retailType,jdbcType=VARCHAR},
+      sale_date = #{saleDate,jdbcType=DATE},
+      business_type = #{businessType,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      assistant_no = #{assistantNo,jdbcType=VARCHAR},
+      assistant_name = #{assistantName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      sku_no = #{skuNo,jdbcType=CHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      size_no = #{sizeNo,jdbcType=VARCHAR},
+      qty = #{qty,jdbcType=INTEGER},
+      item_flag = #{itemFlag,jdbcType=TINYINT},
+      tag_price = #{tagPrice,jdbcType=DECIMAL},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
+      disc_price = #{discPrice,jdbcType=DECIMAL},
+      settle_price = #{settlePrice,jdbcType=DECIMAL},
+      reduce_price = #{reducePrice,jdbcType=DECIMAL},
+      amount = #{amount,jdbcType=DECIMAL},
+      tag_amount = #{tagAmount,jdbcType=DECIMAL},
+      sale_amount = #{saleAmount,jdbcType=DECIMAL},
+      settle_amount = #{settleAmount,jdbcType=DECIMAL},
+      disc_amount = #{discAmount,jdbcType=DECIMAL},
+      pref_price = #{prefPrice,jdbcType=DECIMAL},
+      pro_no = #{proNo,jdbcType=VARCHAR},
+      pro_name = #{proName,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=DECIMAL},
+      vip_discount = #{vipDiscount,jdbcType=DECIMAL},
+      base_score = #{baseScore,jdbcType=INTEGER},
+      pro_score = #{proScore,jdbcType=INTEGER},
+      affect_flag = #{affectFlag,jdbcType=TINYINT},
+      item_discount = #{itemDiscount,jdbcType=DECIMAL},
+      is_balance = #{isBalance,jdbcType=CHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      mall_deduct_amount = #{mallDeductAmount,jdbcType=DECIMAL}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 销售收入统计（扣率横排） -->
+  <sql id="discountSumOrderCondition" >
+  	WHERE 1=1
+  	-- AND @main.company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.companyNos and ''!=params.companyNos" >
+        AND main.company_no In ${params.companyNos}
+      </if>
+      <if test="null!=params.startOutDate and ''!=params.startOutDate" >
+        AND main.out_date &gt;= #{params.startOutDate}
+      </if>
+      <if test="null!=params.endOutDate and ''!=params.endOutDate" >
+        AND main.out_date &lt;= #{params.endOutDate}
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+        AND main.order_no = #{params.orderNo}
+      </if>
+      <if test="null!=params.orderBillType and ''!=params.orderBillType and params.orderBillType!=-1" >
+        AND main.order_type = #{params.orderBillType}
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND main.shop_no In ${params.shopNos}
+      </if>
+      <if test="null!=params.brandNos and ''!=params.brandNos" >
+        AND dtl.brand_no In ${params.brandNos}
+      </if>
+      <if test="null!=params.categoryNos and ''!=params.categoryNos" >
+        AND LEFT(dtl.category_no,2) In ${params.categoryNos}
+      </if>
+      <if test="null!=params.parentOrganNos and ''!=params.parentOrganNos" > 
+        AND s.organ_no IN(SELECT o.organ_no  FROM  organ o WHERE o.`organ_level`=2 AND o.parent_no IN ${params.parentOrganNos}) 
+      </if> 
+    </if>
+    AND main.status IN ('30', '41') 
+	AND main.business_type IN ('0', '1', '2', '6')
+  </sql>
+  
+  <sql id="discountSumReturnCondition" >
+  	WHERE 1=1
+    -- AND @main.company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.companyNos and ''!=params.companyNos" >
+        AND main.company_no In ${params.companyNos}
+      </if>
+      <if test="null!=params.startOutDate and ''!=params.startOutDate" >
+        AND main.out_date &gt;= #{params.startOutDate}
+      </if>
+      <if test="null!=params.endOutDate and ''!=params.endOutDate" >
+        AND main.out_date &lt;= #{params.endOutDate}
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+        AND main.business_no = #{params.orderNo}
+      </if>
+      <if test="null!=params.orderBillType and ''!=params.orderBillType and params.orderBillType!=-1" >
+        AND main.business_mode = #{params.orderBillType}
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND main.shop_no In ${params.shopNos}
+      </if>
+      <if test="null!=params.brandNos and ''!=params.brandNos" >
+        AND dtl.brand_no In ${params.brandNos}
+      </if>
+      <if test="null!=params.categoryNos and ''!=params.categoryNos" >
+        AND LEFT(dtl.category_no,2) In ${params.categoryNos}
+      </if>
+      <if test="null!=params.parentOrganNos and ''!=params.parentOrganNos" > 
+        AND s.organ_no IN(SELECT o.organ_no  FROM  organ o WHERE o.`organ_level`=2 AND o.parent_no IN ${params.parentOrganNos}) 
+      </if>
+    </if>
+    AND main.status IN ('30', '41') 
+	AND main.business_type IN ('0', '1', '2', '6')
+  </sql>
+  
+  <select id="selectDiscountSumCount" resultType="java.lang.Integer" >
+	SELECT COUNT(1) as s FROM (
+		SELECT * FROM (
+			SELECT main.shop_no,dtl.brand_no,main.out_date
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			JOIN order_dtl AS dtl ON main.`order_no` = dtl.`order_no`
+			<include refid="discountSumOrderCondition" />
+			UNION ALL
+			SELECT main.shop_no,dtl.brand_no,main.out_date
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			JOIN return_exchange_dtl AS dtl ON main.`business_no` = dtl.`business_no`
+			<include refid="discountSumReturnCondition" />
+		) AS a
+		GROUP BY a.shop_no,a.brand_no,a.out_date
+	) AS a
+  </select>
+  
+  <select id="selectDiscountSumColumn" resultType="java.lang.String" >
+	SELECT DISTINCT IFNULL(a.discount,'NULL') AS discount FROM (
+		SELECT dtl.discount
+		FROM shop AS s
+		JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+		JOIN order_dtl AS dtl ON main.`order_no` = dtl.`order_no`
+		<include refid="discountSumOrderCondition" />
+		UNION ALL
+		SELECT dtl.discount
+		FROM shop AS s
+		JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+		JOIN return_exchange_dtl AS dtl ON main.`business_no` = dtl.`business_no`
+		<include refid="discountSumReturnCondition" />
+	) AS a
+	ORDER BY a.discount
+  </select>
+  
+  <select id="selectDiscountSumTotal" resultType="java.util.HashMap" parameterType="map">
+	SELECT CAST(IFNULL(SUM(IF(a.balance_base = 1,a.tag_price * a.qty,a.amount)),0.00) AS CHAR) AS total, ${params.columns} FROM (
+		SELECT dtl.discount,dtl.amount,dtl.qty,dtl.tag_price,dtl.balance_base
+		FROM shop AS s
+		JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+		JOIN order_dtl AS dtl ON main.`order_no` = dtl.`order_no`
+		<include refid="discountSumOrderCondition" />
+		UNION ALL
+		SELECT dtl.discount,dtl.amount,dtl.qty,dtl.tag_price,dtl.balance_base
+		FROM shop AS s
+		JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+		JOIN return_exchange_dtl AS dtl ON main.`business_no` = dtl.`business_no`
+		<include refid="discountSumReturnCondition" />
+	) AS a
+  </select>
+  
+  <select id="selectDiscountSumData" resultType="java.util.HashMap" parameterType="map">
+	SELECT a.shop_no,a.shop_name,a.brand_no,a.brand_name,a.out_date,CAST(IFNULL(SUM(IF(a.balance_base = 1,a.tag_price * a.qty,a.amount)),0.00) AS CHAR) AS total, ${params.columns} FROM (
+		SELECT main.shop_no,main.shop_name,dtl.brand_no,dtl.brand_name,main.out_date,dtl.discount,dtl.amount,
+			dtl.qty,dtl.tag_price,dtl.balance_base
+		FROM shop AS s
+		JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+		JOIN order_dtl AS dtl ON main.`order_no` = dtl.`order_no`
+		<include refid="discountSumOrderCondition" /> 
+		UNION ALL
+		SELECT main.shop_no,main.shop_name,dtl.brand_no,dtl.brand_name,main.out_date,dtl.discount,dtl.amount,
+			dtl.qty,dtl.tag_price,dtl.balance_base
+		FROM shop AS s
+		JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+		JOIN return_exchange_dtl AS dtl ON main.`business_no` = dtl.`business_no`
+		<include refid="discountSumReturnCondition" />
+	) AS a
+	GROUP BY a.shop_no,a.brand_no,a.out_date
+	<if test="orderByField != null and '' != orderByField" >
+		order by ${orderByField}
+		<if test="orderByField" >
+			${orderBy}
+		</if>
+	</if>
+	<if test="page != null and '' != page" >
+		limit #{page.startRowNum} ,#{page.pageSize}
+	</if>
+  </select>
+  
+  <!-- 支付金额横排统计（按扣率汇总，按销售比重分摊） -->
+  <sql id="payWaySumOrderCondition" >
+  	WHERE 1=1
+  	-- AND @main.company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.companyNos and ''!=params.companyNos" >
+        AND main.company_no In ${params.companyNos}
+      </if>
+      <if test="null!=params.startOutDate and ''!=params.startOutDate" >
+        AND main.out_date &gt;= #{params.startOutDate}
+      </if>
+      <if test="null!=params.endOutDate and ''!=params.endOutDate" >
+        AND main.out_date &lt;= #{params.endOutDate}
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+        AND main.order_no = #{params.orderNo}
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND main.shop_no In ${params.shopNos}
+      </if>
+      <if test="null!=params.parentOrganNos and ''!=params.parentOrganNos" > 
+        AND s.organ_no IN (SELECT o.organ_no FROM organ o WHERE o.`organ_level`=2 AND o.parent_no IN ${params.parentOrganNos}) 
+      </if> 
+      <if test="null!=params.businessTypes and ''!=params.businessTypes" >
+      	AND main.business_type IN ${params.businessTypes}
+      </if>
+    </if>
+    AND main.status IN ('30', '41') 
+  </sql>
+  
+  <sql id="payWaySumReturnCondition" >
+  	WHERE 1=1
+    -- AND @main.company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.companyNos and ''!=params.companyNos" >
+        AND main.company_no In ${params.companyNos}
+      </if>
+      <if test="null!=params.startOutDate and ''!=params.startOutDate" >
+        AND main.out_date &gt;= #{params.startOutDate}
+      </if>
+      <if test="null!=params.endOutDate and ''!=params.endOutDate" >
+        AND main.out_date &lt;= #{params.endOutDate}
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+        AND main.business_no = #{params.orderNo}
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND main.shop_no In ${params.shopNos}
+      </if>
+      <if test="null!=params.parentOrganNos and ''!=params.parentOrganNos" > 
+        AND s.organ_no IN(SELECT o.organ_no  FROM  organ o WHERE o.`organ_level`=2 AND o.parent_no IN ${params.parentOrganNos}) 
+      </if>
+      <if test="null!=params.businessTypes and ''!=params.businessTypes" >
+      	AND main.business_type IN ${params.businessTypes}
+      </if>
+    </if>
+    AND main.status IN ('30', '41')
+  </sql>
+  
+  <select id="selectPayWaySumCount" resultType="java.lang.Integer" >
+  	SELECT COUNT(1) as s FROM (
+		SELECT * FROM (
+			SELECT main.shop_no,main.out_date,dtl.brand_no,dtl.discount_code,dtl.discount
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			JOIN order_dtl AS dtl ON main.`order_no` = dtl.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND dtl.brand_no IN ${params.brandNos}
+			</if>
+			UNION ALL
+			SELECT main.shop_no,main.out_date,dtl.brand_no,dtl.discount_code,dtl.discount
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			JOIN return_exchange_dtl AS dtl ON main.`business_no` = dtl.`business_no`
+			<include refid="payWaySumReturnCondition" />
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND dtl.brand_no IN ${params.brandNos}
+			</if>
+		) AS a
+		GROUP BY a.shop_no,a.out_date,a.brand_no,a.discount_code,a.discount
+	) AS a
+  </select>
+  
+  <select id="selectPayWaySumColumn" resultType="java.util.HashMap" >
+	SELECT DISTINCT a.pay_code,a. pay_name
+	FROM (
+		SELECT pay.pay_code,pay.pay_name
+		FROM shop AS s
+		JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+		JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+		<include refid="payWaySumOrderCondition" />
+		UNION ALL
+		SELECT pay.pay_code,pay.pay_name
+		FROM shop AS s
+		JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+		JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+		<include refid="payWaySumReturnCondition" />
+	) AS a
+	ORDER BY pay_code
+  </select>
+  
+  <select id="selectPayWaySumTotal" resultType="java.util.HashMap" parameterType="map">
+	SELECT SUM(a1.amount) AS amount,SUM(a1.tag_price) AS tag_price,ROUND(SUM((IFNULL(a1.amount/a1.all_amount,0))*a1.pay_amount),2) AS total,
+		${params.columns2}
+	FROM (
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.discount_code,dtl.discount,dtl.amount,dtl.tag_price * dtl.qty AS tag_price
+		FROM (
+			SELECT main.order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			GROUP BY main.order_no
+		) AS a
+		JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+		UNION ALL
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.discount_code,dtl.discount,dtl.amount,dtl.tag_price * dtl.qty AS tag_price
+		FROM (
+			SELECT main.business_no AS order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+			<include refid="payWaySumReturnCondition" />
+			GROUP BY main.business_no
+		) AS a
+		JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+	) AS a1
+  </select>
+  
+  <select id="selectPayWaySumData" resultType="java.util.HashMap" parameterType="map">
+	SELECT a1.shop_no,a1.shop_name,a1.out_date,
+		a1.brand_no,a1.brand_name,a1.discount_code,a1.discount,SUM(a1.amount) AS amount,SUM(a1.tag_price) AS tag_price,ROUND(SUM((IFNULL(a1.amount/a1.all_amount,0))*a1.pay_amount),2) AS total,
+		${params.columns2}
+	FROM (
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.discount_code,dtl.discount,dtl.amount,dtl.tag_price * dtl.qty AS tag_price
+		FROM (
+			SELECT main.order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			GROUP BY main.order_no
+		) AS a
+		JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+		UNION ALL
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.discount_code,dtl.discount,dtl.amount,dtl.tag_price * dtl.qty AS tag_price
+		FROM (
+			SELECT main.business_no AS order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+			<include refid="payWaySumReturnCondition" />
+			GROUP BY main.business_no
+		) AS a
+		JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+	) AS a1
+	GROUP BY a1.shop_no,a1.out_date,a1.brand_no,a1.discount_code,a1.discount
+	<if test="orderByField != null and '' != orderByField" >
+		order by ${orderByField}
+		<if test="orderByField" >
+			${orderBy}
+		</if>
+	</if>
+	<if test="page != null and '' != page" >
+		limit #{page.startRowNum} ,#{page.pageSize}
+	</if>
+  </select>
+  
+  <!-- 支付金额横排统计（按销售订单查询） -->
+  <select id="selectPayWayOrderCount" resultType="java.lang.Integer" >
+  	SELECT COUNT(1) as s FROM (
+		SELECT main.order_no
+		FROM shop AS s
+		JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+		<include refid="payWaySumOrderCondition" />
+		UNION ALL
+		SELECT main.business_no AS order_no
+		FROM shop AS s
+		JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+		<include refid="payWaySumReturnCondition" />
+	) AS a
+  </select>
+  
+  <select id="selectPayWayOrderTotal" resultType="java.util.HashMap" parameterType="map">
+  	SELECT IFNULL(SUM(pay.amount),0.00) AS amount,
+		${params.columns}
+	FROM (
+	  	SELECT main.all_amount,pay.pay_code,pay.amount
+		FROM shop AS s
+		JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+		LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+		<include refid="payWaySumOrderCondition" />
+		UNION ALL
+		SELECT main.all_amount,pay.pay_code,pay.amount
+		FROM shop AS s
+		JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+		LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+		<include refid="payWaySumReturnCondition" />
+	) pay
+  </select>
+  
+  <select id="selectPayWayOrderData" resultType="java.util.HashMap" parameterType="map">
+  	SELECT * FROM (
+	  	SELECT main.order_no,'正常销售' AS order_type,main.shop_no,main.shop_name,main.out_date,IFNULL(SUM(pay.amount),0.00) AS amount,
+			${params.columns} 
+		FROM shop AS s
+		JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+		LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+		<include refid="payWaySumOrderCondition" />
+		GROUP BY main.order_no
+		UNION ALL
+		SELECT main.business_no AS order_no,IF(main.business_mode = 1,'换货','退货') AS order_type,main.shop_no,main.shop_name,main.out_date,IFNULL(SUM(pay.amount),0.00) AS amount,
+			${params.columns}
+		FROM shop AS s
+		JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+		LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+		<include refid="payWaySumReturnCondition" />
+		GROUP BY main.business_no
+	) AS a
+	<if test="orderByField != null and '' != orderByField" >
+		order by ${orderByField}
+		<if test="orderByField" >
+			${orderBy}
+		</if>
+	</if>
+	<if test="orderByField == null or '' == orderByField " >
+	    ORDER BY out_date DESC
+	</if>
+	<if test="page != null and '' != page" >
+		limit #{page.startRowNum} ,#{page.pageSize}
+	</if>
+  </select>
+  
+  <!-- 支付金额横排统计（按销售订单查询-明细分摊，品牌汇总） -->
+  <select id="selectPayWayOrderBrandCount" resultType="java.lang.Integer" >
+	SELECT COUNT(1) as s FROM (
+		SELECT * FROM (
+			SELECT main.order_no,main.shop_no,dtl.brand_no,dtl.discount_code,dtl.discount
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			JOIN order_dtl AS dtl ON main.`order_no` = dtl.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND dtl.brand_no IN ${params.brandNos}
+			</if>
+			UNION ALL
+			SELECT main.business_no AS order_no,main.shop_no,dtl.brand_no,dtl.discount_code,dtl.discount
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			JOIN return_exchange_dtl AS dtl ON main.`business_no` = dtl.`business_no`
+			<include refid="payWaySumReturnCondition" />
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND dtl.brand_no IN ${params.brandNos}
+			</if>
+		) AS a
+		GROUP BY a.order_no,a.brand_no
+	) AS a
+  </select>
+  
+  <select id="selectPayWayOrderBrandTotal" resultType="java.util.HashMap" parameterType="map">
+	SELECT SUM(a1.amount) AS amount,SUM(a1.tag_price) AS tag_price,
+		${params.columns2}
+	FROM (
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.discount_code,dtl.discount,dtl.amount,dtl.tag_price * dtl.qty AS tag_price
+		FROM (
+			SELECT main.order_no,'正常销售' AS order_type,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			GROUP BY main.order_no
+		) AS a
+		JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+		UNION ALL
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.discount_code,dtl.discount,dtl.amount,dtl.tag_price * dtl.qty AS tag_price
+		FROM (
+			SELECT main.business_no AS order_no,IF(main.business_mode = 1,'换货','退货') AS order_type,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+			<include refid="payWaySumReturnCondition" />
+			GROUP BY main.business_no
+		) AS a
+		JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+	) AS a1
+  </select>
+  
+  <select id="selectPayWayOrderBrandData" resultType="java.util.HashMap" parameterType="map">
+	SELECT a1.order_no,a1.order_type,a1.shop_no,a1.shop_name,a1.brand_no,a1.brand_name,a1.out_date,SUM(a1.amount) AS amount,SUM(a1.tag_price) AS tag_price,
+		${params.columns2}
+	FROM (
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.discount_code,dtl.discount,dtl.amount,dtl.tag_price * dtl.qty AS tag_price
+		FROM (
+			SELECT main.order_no,'正常销售' AS order_type,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			GROUP BY main.order_no
+		) AS a
+		JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+		UNION ALL
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.discount_code,dtl.discount,dtl.amount,dtl.tag_price * dtl.qty AS tag_price
+		FROM (
+			SELECT main.business_no AS order_no,IF(main.business_mode = 1,'换货','退货') AS order_type,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+			<include refid="payWaySumReturnCondition" />
+			GROUP BY main.business_no
+		) AS a
+		JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+	) AS a1
+	GROUP BY a1.order_no,a1.brand_no
+	<if test="orderByField != null and '' != orderByField" >
+		order by ${orderByField}
+		<if test="orderByField" >
+			${orderBy}
+		</if>
+	</if>
+	<if test="orderByField == null or '' == orderByField " >
+	    ORDER BY shop_no,out_date DESC
+	</if>
+	<if test="page != null and '' != page" >
+		limit #{page.startRowNum} ,#{page.pageSize}
+	</if>
+  </select>
+  
+  <!-- 支付金额横排统计（按明细分摊，日统计） -->
+  <select id="selectPayWayDayCount" resultType="java.lang.Integer" >
+  	SELECT COUNT(1) as s FROM (
+		SELECT * FROM (
+			SELECT main.shop_no,main.out_date,dtl.brand_no
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			JOIN order_dtl AS dtl ON main.`order_no` = dtl.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND dtl.brand_no IN ${params.brandNos}
+			</if>
+			UNION ALL
+			SELECT main.shop_no,main.out_date,dtl.brand_no
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			JOIN return_exchange_dtl AS dtl ON main.`business_no` = dtl.`business_no`
+			<include refid="payWaySumReturnCondition" />
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND dtl.brand_no IN ${params.brandNos}
+			</if>
+		) AS a
+		GROUP BY a.shop_no,a.out_date,a.brand_no
+	) AS a
+  </select>
+  
+  <select id="selectPayWayDayTotal" resultType="java.util.HashMap" parameterType="map">
+	SELECT SUM(a1.amount) AS amount,SUM(a1.tag_price) AS tag_price,SUM(a1.order_amount) AS order_amount,SUM(a1.return_amount) AS return_amount,ROUND(SUM((IFNULL(a1.amount/a1.all_amount,0))*a1.pay_amount),2) AS total,
+		${params.columns2}
+	FROM (
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.amount,dtl.tag_price * dtl.qty AS tag_price,dtl.amount AS order_amount,0 AS return_amount
+		FROM (
+			SELECT main.order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			GROUP BY main.order_no
+		) AS a
+		JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+		UNION ALL
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.amount,dtl.tag_price * dtl.qty AS tag_price,0 AS order_amount,dtl.amount AS return_amount
+		FROM (
+			SELECT main.business_no AS order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+			<include refid="payWaySumReturnCondition" />
+			GROUP BY main.business_no
+		) AS a
+		JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+	) AS a1
+  </select>
+  
+  <select id="selectPayWayDayData" resultType="java.util.HashMap" parameterType="map">
+	SELECT a1.shop_no,a1.shop_name,a1.out_date,
+		a1.brand_no,a1.brand_name,SUM(a1.amount) AS amount,SUM(a1.tag_price) AS tag_price,SUM(a1.order_amount) AS order_amount,SUM(a1.return_amount) AS return_amount,ROUND(SUM((IFNULL(a1.amount/a1.all_amount,0))*a1.pay_amount),2) AS total,
+		${params.columns2}
+	FROM (
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.amount,dtl.tag_price * dtl.qty AS tag_price,dtl.amount AS order_amount,0 AS return_amount
+		FROM (
+			SELECT main.order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+			LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+			<include refid="payWaySumOrderCondition" />
+			GROUP BY main.order_no
+		) AS a
+		JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+		UNION ALL
+		SELECT a.*,dtl.brand_no,dtl.brand_name,dtl.amount,dtl.tag_price * dtl.qty AS tag_price,0 AS order_amount,dtl.amount AS return_amount
+		FROM (
+			SELECT main.business_no AS order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,
+				${params.columns}
+			FROM shop AS s
+			JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+			LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+			<include refid="payWaySumReturnCondition" />
+			GROUP BY main.business_no
+		) AS a
+		JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+		WHERE 1=1
+		<if test="null!=params.brandNos and ''!=params.brandNos" >
+			AND dtl.brand_no IN ${params.brandNos}
+		</if>
+	) AS a1
+	GROUP BY a1.shop_no,a1.out_date,a1.brand_no
+	<if test="orderByField != null and '' != orderByField" >
+		order by ${orderByField}
+		<if test="orderByField" >
+			${orderBy}
+		</if>
+	</if>
+	<if test="page != null and '' != page" >
+		limit #{page.startRowNum} ,#{page.pageSize}
+	</if>
+  </select>
+  
+  <!-- 支付金额横排统计（按明细分摊，月统计） -->
+  <select id="selectPayWayMonthCount" resultType="java.lang.Integer" >
+  	SELECT COUNT(1) as s FROM (
+		SELECT GROUP_CONCAT(CONCAT(AA.balance_start_date,'~',AA.balance_end_date)) balance_date,AA.* FROM (
+			SELECT bsb.balance_start_date,bsb.balance_end_date,A.* FROM (
+				SELECT
+					a1.shop_no,a1.shop_name,
+					a1.out_date,a1.month1,
+					YEAR(a1.out_date) year,MONTH(a1.out_date) month,
+					a1.brand_no,a1.brand_name,
+					SUM(a1.amount) AS amount,
+					SUM(a1.tag_price) AS tag_price,
+					SUM(a1.order_amount) AS order_amount,
+					SUM(a1.return_amount) AS return_amount,
+					ROUND(SUM((IFNULL(a1.amount/a1.all_amount,0))*a1.pay_amount),2) AS total
+				FROM (
+						SELECT
+							a.*, EXTRACT(YEAR_MONTH FROM a.out_date) month1,
+							dtl.brand_no,dtl.brand_name,
+							dtl.amount,dtl.tag_price * dtl.qty AS tag_price,
+							dtl.amount AS order_amount,
+							0 AS return_amount
+						FROM (
+						SELECT 
+							main.order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount
+							FROM shop AS s
+							JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+							LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+							<include refid="payWaySumOrderCondition" />
+							GROUP BY main.order_no
+						) AS a
+						JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+						WHERE 1=1
+						-- AND @dtl.brand_no
+						<if test="null!=params.brandNos and ''!=params.brandNos" >
+							AND dtl.brand_no IN ${params.brandNos}
+						</if>
+						UNION ALL
+						SELECT a.*,EXTRACT(YEAR_MONTH FROM a.out_date) month1,
+							dtl.brand_no,dtl.brand_name,dtl.amount,dtl.tag_price * dtl.qty AS tag_price,0 AS order_amount,dtl.amount AS return_amount
+						FROM (
+							SELECT 
+								main.business_no AS order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount
+							FROM shop AS s
+							JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+							LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+							<include refid="payWaySumReturnCondition" />
+							GROUP BY main.business_no
+						) AS a
+						JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+						WHERE 1=1
+						-- AND @dtl.brand_no
+						<if test="null!=params.brandNos and ''!=params.brandNos" >
+							AND dtl.brand_no IN ${params.brandNos}
+						</if>
+				) AS a1 
+				GROUP BY a1.shop_no,a1.month1,a1.brand_no
+			) A LEFT JOIN shop_balance_date bsb ON A.shop_no = bsb.shop_no AND A.month1 = bsb.month
+			WHERE 1=1
+			<if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+				AND bsb.balance_start_date &gt;= '${params.balanceStartDate}'
+			</if>
+			<if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+				AND bsb.balance_end_date &lt;= '${params.balanceEndDate}'
+			</if>
+		) AA
+		GROUP BY AA.balance_start_date,AA.balance_end_date,AA.shop_no,AA.month1,AA.brand_no
+	) AAA
+  </select>
+  
+  <select id="selectPayWayMonthTotal" resultType="java.util.HashMap" parameterType="map">
+	SELECT
+		SUM(AAA.amount) amount,
+		SUM(AAA.tag_price) tag_price,
+		SUM(AAA.order_amount) order_amount,
+		SUM(AAA.return_amount) return_amount,
+		SUM(AAA.total) total,
+		${params.columns3}
+	FROM (
+		SELECT GROUP_CONCAT(CONCAT(AA.balance_start_date,'~',AA.balance_end_date)) balance_date,AA.* FROM (
+			SELECT bsb.balance_start_date,bsb.balance_end_date,A.* FROM (
+				SELECT
+					a1.shop_no,a1.shop_name,
+					a1.out_date,a1.month1,
+					YEAR(a1.out_date) year,MONTH(a1.out_date) month,
+					a1.brand_no,a1.brand_name,
+					SUM(a1.amount) AS amount,
+					SUM(a1.tag_price) AS tag_price,
+					SUM(a1.order_amount) AS order_amount,
+					SUM(a1.return_amount) AS return_amount,
+					ROUND(SUM((IFNULL(a1.amount/a1.all_amount,0))*a1.pay_amount),2) AS total,
+					${params.columns2}
+				FROM (
+						SELECT
+							a.*, EXTRACT(YEAR_MONTH FROM a.out_date) month1,
+							dtl.brand_no,dtl.brand_name,
+							dtl.amount,dtl.tag_price * dtl.qty AS tag_price,
+							dtl.amount AS order_amount,
+							0 AS return_amount
+						FROM (
+						SELECT 
+							main.order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,${params.columns}
+							FROM shop AS s
+							JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+							LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+							<include refid="payWaySumOrderCondition" />
+							GROUP BY main.order_no
+						) AS a
+						JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+						WHERE 1=1
+						-- AND @dtl.brand_no
+						<if test="null!=params.brandNos and ''!=params.brandNos" >
+							AND dtl.brand_no IN ${params.brandNos}
+						</if>
+						UNION ALL
+						SELECT a.*,EXTRACT(YEAR_MONTH FROM a.out_date) month1,
+							dtl.brand_no,dtl.brand_name,dtl.amount,dtl.tag_price * dtl.qty AS tag_price,0 AS order_amount,dtl.amount AS return_amount
+						FROM (
+							SELECT 
+								main.business_no AS order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,${params.columns}
+							FROM shop AS s
+							JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+							LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+							<include refid="payWaySumReturnCondition" />
+							GROUP BY main.business_no
+						) AS a
+						JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+						WHERE 1=1
+						-- AND @dtl.brand_no
+						<if test="null!=params.brandNos and ''!=params.brandNos" >
+							AND dtl.brand_no IN ${params.brandNos}
+						</if>
+				) AS a1 
+				GROUP BY a1.shop_no,a1.month1,a1.brand_no
+			) A LEFT JOIN shop_balance_date bsb ON A.shop_no = bsb.shop_no AND A.month1 = bsb.month
+			WHERE 1=1
+			<if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+				AND bsb.balance_start_date &gt;= '${params.balanceStartDate}'
+			</if>
+			<if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+				AND bsb.balance_end_date &lt;= '${params.balanceEndDate}'
+			</if>
+		) AA
+		GROUP BY AA.balance_start_date,AA.balance_end_date,AA.shop_no,AA.month1,AA.brand_no
+	) AAA
+  </select>
+  
+  <select id="selectPayWayMonthData" resultType="java.util.HashMap" parameterType="map">
+	SELECT GROUP_CONCAT(CONCAT(AA.balance_start_date,'~',AA.balance_end_date)) balance_date,AA.* FROM (
+		SELECT bsb.balance_start_date,bsb.balance_end_date,A.* FROM (
+			SELECT
+				a1.shop_no,a1.shop_name,
+				a1.out_date,a1.month1,
+				YEAR(a1.out_date) year,MONTH(a1.out_date) month,
+				a1.brand_no,a1.brand_name,
+				SUM(a1.amount) AS amount,
+				SUM(a1.tag_price) AS tag_price,
+				SUM(a1.order_amount) AS order_amount,
+				SUM(a1.return_amount) AS return_amount,
+				ROUND(SUM((IFNULL(a1.amount/a1.all_amount,0))*a1.pay_amount),2) AS total,
+				${params.columns2}
+			FROM (
+					SELECT
+						a.*, EXTRACT(YEAR_MONTH FROM a.out_date) month1,
+						dtl.brand_no,dtl.brand_name,
+						dtl.amount,dtl.tag_price * dtl.qty AS tag_price,
+						dtl.amount AS order_amount,
+						0 AS return_amount
+					FROM (
+					SELECT 
+						main.order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,${params.columns}
+						FROM shop AS s
+						JOIN order_main AS main ON s.`shop_no` = main.`shop_no`
+						LEFT JOIN order_payway AS pay ON main.`order_no` = pay.`order_no`
+						<include refid="payWaySumOrderCondition" />
+						GROUP BY main.order_no
+					) AS a
+					JOIN order_dtl AS dtl ON a.`order_no` = dtl.`order_no`
+					WHERE 1=1
+					-- AND @dtl.brand_no
+					<if test="null!=params.brandNos and ''!=params.brandNos" >
+						AND dtl.brand_no IN ${params.brandNos}
+					</if>
+					UNION ALL
+					SELECT a.*,EXTRACT(YEAR_MONTH FROM a.out_date) month1,
+						dtl.brand_no,dtl.brand_name,dtl.amount,dtl.tag_price * dtl.qty AS tag_price,0 AS order_amount,dtl.amount AS return_amount
+					FROM (
+						SELECT 
+							main.business_no AS order_no,main.shop_no,main.shop_name,main.out_date,main.all_amount,IFNULL(SUM(pay.amount),0.00) AS pay_amount,${params.columns}
+						FROM shop AS s
+						JOIN return_exchange_main AS main ON s.`shop_no` = main.`shop_no`  
+						LEFT JOIN order_payway AS pay ON main.`business_no` = pay.`order_no`
+						<include refid="payWaySumReturnCondition" />
+						GROUP BY main.business_no
+					) AS a
+					JOIN return_exchange_dtl AS dtl ON a.`order_no` = dtl.`business_no`
+					WHERE 1=1
+					-- AND @dtl.brand_no
+					<if test="null!=params.brandNos and ''!=params.brandNos" >
+						AND dtl.brand_no IN ${params.brandNos}
+					</if>
+			) AS a1 
+			GROUP BY a1.shop_no,a1.month1,a1.brand_no
+		) A LEFT JOIN shop_balance_date bsb ON A.shop_no = bsb.shop_no AND A.month1 = bsb.month
+		WHERE 1=1
+		<if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+			AND bsb.balance_start_date &gt;= '${params.balanceStartDate}'
+		</if>
+		<if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+			AND bsb.balance_end_date &lt;= '${params.balanceEndDate}'
+		</if>
+	) AA
+	GROUP BY AA.balance_start_date,AA.balance_end_date,AA.shop_no,AA.month1,AA.brand_no
+	<if test="orderByField != null and '' != orderByField" >
+		order by ${orderByField}
+		<if test="orderByField" >
+			${orderBy}
+		</if>
+	</if>
+	<if test="page != null and '' != page" >
+		limit #{page.startRowNum} ,#{page.pageSize}
+	</if>
+  </select>
+  
+</mapper>

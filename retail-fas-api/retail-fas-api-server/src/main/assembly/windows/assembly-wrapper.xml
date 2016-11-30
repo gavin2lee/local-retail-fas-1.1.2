@@ -1,0 +1,44 @@
+﻿<assembly  
+    xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+	<id>Wrapper-3901</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<baseDirectory>Wrapper-3901</baseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory>./bin</directory>
+			<outputDirectory>bin</outputDirectory>
+			<includes>
+				<include>*.bat</include>
+				<include>*.exe</include>
+				<include>lib/*.jar</include>
+				<include>lib/*.dll</include>
+			</includes>
+			<fileMode>0744</fileMode>
+			<directoryMode>0744</directoryMode>
+		</fileSet>
+		<fileSet>
+			<directory>./bin</directory>
+			<outputDirectory>logs</outputDirectory>
+			<excludes>
+				<exclude>*</exclude>
+				<exclude>*.*</exclude>
+				<exclude>*/*</exclude>
+				<exclude>*/*.*</exclude>
+			</excludes>
+			<directoryMode>0744</directoryMode>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/config/${profiles.active}</directory>
+			<outputDirectory>conf</outputDirectory>
+			<includes>
+				<include>**/*.conf</include>
+			</includes>
+			<fileMode>0644</fileMode>
+			<directoryMode>0644</directoryMode>
+		</fileSet>
+	</fileSets>
+</assembly>

@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SupplierMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Supplier" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="opcode" property="opcode" jdbcType="VARCHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="biz_type" property="bizType" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="bank_account_name" property="bankAccountName" jdbcType="VARCHAR" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="tax_registry_no" property="taxRegistryNo" jdbcType="VARCHAR" />
+    <result column="tax_level" property="taxLevel" jdbcType="VARCHAR" />
+    <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+    <result column="identity_card" property="identityCard" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="province_no" property="provinceNo" jdbcType="VARCHAR" />
+    <result column="city_no" property="cityNo" jdbcType="VARCHAR" />
+    <result column="county_no" property="countyNo" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="zip_code" property="zipCode" jdbcType="VARCHAR" />
+    <result column="costtaxrate" property="costtaxrate" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, supplier_no, opcode, short_name, full_name, sys_no, status, biz_type, bank_name, 
+    bank_account, bank_account_name, contact_name, tel, tax_registry_no, tax_level, legal_person, 
+    identity_card, code, fax, email, province_no, city_no, county_no, address, zip_code, 
+    costtaxrate, create_user, create_time, update_user, update_time, search_code, remark
+  </sql>
+  <sql id="condition" >
+  	/*organ_type_no*/
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+       <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+       AND supplier_no = #{params.supplierNo}
+      </if>
+      <if test="null!=params.fullName and ''!=params.fullName" >
+        AND full_name LIKE '%${params.fullName}%' 
+      </if>
+      <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+			AND (UPPER(supplier_no) LIKE UPPER(CONCAT(#{params.q},'%')) OR short_name LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	   </if>
+      <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(supplier_no) IN ${params.multiq} OR short_name IN ${params.multiq} ) 
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM supplier
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM supplier WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM supplier WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM supplier WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="findByNoGroup" resultMap="BaseResultMap" parameterType="map">
+  	<!-- 这里使用not in查询是因为在supplier_group_rel中supplier为非空字段，使用not in比not exists快大约50倍 -->
+	SELECT
+	<include refid = "Base_Column_List" />
+	FROM
+		supplier
+	WHERE 1=1
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null != params.organTypeNo and '' != params.organTypeNo">
+      	AND organ_type_no = #{params.organTypeNo}
+      </if>
+    </if>
+    AND
+		supplier_no NOT IN (
+			SELECT
+				supplier_no
+			FROM
+				supplier_group_rel
+		)
+	AND STATUS = #{params.status}
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  <!-- 查询未分组供应商总数 -->
+    <select id="findByNoGroupCount" resultType="java.lang.Integer" parameterType="map">
+  	<!-- 这里使用not in查询是因为在supplier_group_rel中supplier为非空字段，使用not in比not exists快大约50倍 -->
+	SELECT
+		count(*)
+	FROM
+		supplier
+	WHERE 1=1
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null != params.organTypeNo and '' != params.organTypeNo">
+      	AND organ_type_no = #{params.organTypeNo}
+      </if>
+    </if>
+    AND
+		supplier_no NOT IN (
+			SELECT
+				supplier_no
+			FROM
+				supplier_group_rel
+		)
+	AND STATUS = #{params.status}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM supplier
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.Supplier" >
+    DELETE FROM supplier
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.Supplier" >
+    INSERT INTO supplier (id, supplier_no, opcode, 
+      short_name, full_name, sys_no, 
+      status, biz_type, bank_name, 
+      bank_account, bank_account_name, contact_name, 
+      tel, tax_registry_no, tax_level, 
+      legal_person, identity_card, code, 
+      fax, email, province_no, 
+      city_no, county_no, address, 
+      zip_code, costtaxrate, create_user, 
+      create_time, update_user, update_time, 
+      search_code, remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{supplierNo,jdbcType=CHAR}, #{opcode,jdbcType=VARCHAR}, 
+      #{shortName,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, #{sysNo,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{bizType,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
+      #{bankAccount,jdbcType=VARCHAR}, #{bankAccountName,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{taxRegistryNo,jdbcType=VARCHAR}, #{taxLevel,jdbcType=VARCHAR}, 
+      #{legalPerson,jdbcType=VARCHAR}, #{identityCard,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{fax,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{provinceNo,jdbcType=VARCHAR}, 
+      #{cityNo,jdbcType=VARCHAR}, #{countyNo,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{zipCode,jdbcType=VARCHAR}, #{costtaxrate,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{searchCode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.Supplier" >
+    INSERT INTO supplier
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="opcode != null" >
+        opcode,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="fullName != null" >
+        full_name,
+      </if>
+      <if test="sysNo != null" >
+        sys_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bizType != null" >
+        biz_type,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="bankAccountName != null" >
+        bank_account_name,
+      </if>
+      <if test="contactName != null" >
+        contact_name,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="taxRegistryNo != null" >
+        tax_registry_no,
+      </if>
+      <if test="taxLevel != null" >
+        tax_level,
+      </if>
+      <if test="legalPerson != null" >
+        legal_person,
+      </if>
+      <if test="identityCard != null" >
+        identity_card,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="fax != null" >
+        fax,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="provinceNo != null" >
+        province_no,
+      </if>
+      <if test="cityNo != null" >
+        city_no,
+      </if>
+      <if test="countyNo != null" >
+        county_no,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="zipCode != null" >
+        zip_code,
+      </if>
+      <if test="costtaxrate != null" >
+        costtaxrate,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="searchCode != null" >
+        search_code,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="opcode != null" >
+        #{opcode,jdbcType=VARCHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysNo != null" >
+        #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="bizType != null" >
+        #{bizType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountName != null" >
+        #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRegistryNo != null" >
+        #{taxRegistryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="taxLevel != null" >
+        #{taxLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="identityCard != null" >
+        #{identityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceNo != null" >
+        #{provinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="countyNo != null" >
+        #{countyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="costtaxrate != null" >
+        #{costtaxrate,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="searchCode != null" >
+        #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.Supplier" >
+    UPDATE supplier
+    <set >
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="opcode != null" >
+        opcode = #{opcode,jdbcType=VARCHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysNo != null" >
+        sys_no = #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="bizType != null" >
+        biz_type = #{bizType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountName != null" >
+        bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRegistryNo != null" >
+        tax_registry_no = #{taxRegistryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="taxLevel != null" >
+        tax_level = #{taxLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        legal_person = #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="identityCard != null" >
+        identity_card = #{identityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        fax = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceNo != null" >
+        province_no = #{provinceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        city_no = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="countyNo != null" >
+        county_no = #{countyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        zip_code = #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="costtaxrate != null" >
+        costtaxrate = #{costtaxrate,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="searchCode != null" >
+        search_code = #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.Supplier" >
+    UPDATE supplier
+    SET supplier_no = #{supplierNo,jdbcType=CHAR},
+      opcode = #{opcode,jdbcType=VARCHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      sys_no = #{sysNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      biz_type = #{bizType,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      tax_registry_no = #{taxRegistryNo,jdbcType=VARCHAR},
+      tax_level = #{taxLevel,jdbcType=VARCHAR},
+      legal_person = #{legalPerson,jdbcType=VARCHAR},
+      identity_card = #{identityCard,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      province_no = #{provinceNo,jdbcType=VARCHAR},
+      city_no = #{cityNo,jdbcType=VARCHAR},
+      county_no = #{countyNo,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      zip_code = #{zipCode,jdbcType=VARCHAR},
+      costtaxrate = #{costtaxrate,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      search_code = #{searchCode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

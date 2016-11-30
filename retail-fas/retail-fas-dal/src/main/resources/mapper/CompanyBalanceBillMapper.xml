@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CompanyBalanceBillMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CompanyBalanceBill" >
+    <id column="company_bill_code" property="companyBillCode" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_type" property="companyType" jdbcType="INTEGER" />
+    <result column="company_type_name" property="companyTypeName" jdbcType="VARCHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="INTEGER" />
+    <result column="balance_code" property="balanceCode" jdbcType="VARCHAR" />
+    <result column="balance_name" property="balanceName" jdbcType="VARCHAR" />
+    <result column="part_type" property="partType" jdbcType="TINYINT" />
+    <result column="part_type_name" property="partTypeName" jdbcType="VARCHAR" />
+    <result column="business_type" property="businessType" jdbcType="TINYINT" />
+    <result column="business_type_name" property="businessTypeName" jdbcType="VARCHAR" />
+    <result column="is_balance" property="isBalance" jdbcType="TINYINT" />
+    <result column="bill_code" property="billCode" jdbcType="VARCHAR" />
+    <result column="bill_name" property="billName" jdbcType="VARCHAR" />
+    <result column="transfer_type" property="transferType" jdbcType="TINYINT" />
+    <result column="transfer_type_name" property="transferTypeName" jdbcType="VARCHAR" />
+    <result column="send_receive_type" property="sendReceiveType" jdbcType="TINYINT" />
+    <result column="send_receive_type_name" property="sendReceiveTypeName" jdbcType="VARCHAR" />
+    <result column="is_count" property="isCount" jdbcType="TINYINT" />
+    <result column="rel_sys" property="relSys" jdbcType="VARCHAR" />
+    <result column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+	company_bill_code,
+	company_no,
+	company_name,
+	company_type,
+	company_type_name,
+	balance_no,
+	balance_code,
+	balance_name,
+	part_type,
+	part_type_name,
+	business_type,
+	business_type_name,
+	is_balance,
+	bill_code,
+	bill_name,
+	transfer_type,
+	transfer_type_name,
+	send_receive_type,
+	send_receive_type_name,
+	is_count,
+	rel_sys,
+	table_name,
+	`describe`,
+	create_user,
+	create_time,
+	update_user,
+	update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+       AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.companyNos and ''!=params.companyNos" >
+       AND company_no IN (${params.companyNos})
+      </if>
+      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+       AND balance_no = #{params.balanceNo}
+      </if>
+      <if test="null!=params.balanceNos and ''!=params.balanceNos" >
+       AND balance_no IN (${params.balanceNos})
+      </if>
+      <if test="null!=params.partType and ''!=params.partType" >
+       AND part_type = #{params.partType}
+      </if>
+      <if test="null!=params.businessType and ''!=params.businessType" >
+       AND business_type = #{params.businessType}
+      </if>
+      <if test="null!=params.isBalance and ''!=params.isBalance" >
+       AND is_balance = #{params.isBalance}
+      </if>
+      <if test="null!=params.billCode and ''!=params.billCode" >
+       AND bill_code = #{params.billCode}
+      </if>
+      <if test="null!=params.billCodes and ''!=params.billCodes" >
+       AND bill_code IN (${params.billCodes})
+      </if>
+      <if test="null!=params.relSys and ''!=params.relSys" >
+       AND rel_sys = #{params.relSys}
+      </if>
+      <if test="null!=params.tableName and ''!=params.tableName" >
+       AND table_name = #{params.tableName}
+      </if>
+      <if test="null!=params.transferType and ''!=params.transferType" >
+       AND transfer_type = #{params.transferType}
+      </if>
+      <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (
+			UPPER(company_bill_code) LIKE UPPER(CONCAT('%',#{params.q},'%')) 
+			OR company_name LIKE UPPER(CONCAT('%',#{params.q},'%'))
+			OR balance_name LIKE UPPER(CONCAT('%',#{params.q},'%'))
+			OR send_receive_type_name LIKE UPPER(CONCAT('%',#{params.q},'%'))
+			OR bill_name LIKE UPPER(CONCAT('%',#{params.q},'%'))
+		) 
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from company_balance_bill
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from company_balance_bill where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM company_balance_bill WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField" >
+      ORDER BY company_no,balance_no,send_receive_type,bill_code
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from company_balance_bill where 1=1 
+    <include refid="condition" />
+  </select>
+</mapper>

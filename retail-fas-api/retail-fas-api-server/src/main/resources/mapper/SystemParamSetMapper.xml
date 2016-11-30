@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.SystemParamSetMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.vo.SystemParamSet" > 
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="business_organ_type" property="businessOrganType" jdbcType="TINYINT" />
+    <result column="business_organ_no" property="businessOrganNo" jdbcType="CHAR" />
+    <result column="business_organ_name" property="businessOrganName" jdbcType="VARCHAR" />
+    <result column="param_code" property="paramCode" jdbcType="CHAR" />
+    <result column="param_name" property="paramName" jdbcType="VARCHAR" />
+    <result column="dtl_value" property="dtlValue" jdbcType="VARCHAR" />
+    <result column="dtl_name" property="dtlName" jdbcType="VARCHAR" />
+    <result column="param_obj_no" property="paramObjNo" jdbcType="CHAR" />
+    <result column="param_description" property="paramDescription" jdbcType="VARCHAR" />
+    <result column="control_type" property="controlType" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_organ_type, business_organ_no, business_organ_name, param_code, param_name, 
+    dtl_value, dtl_name, param_obj_no, param_description, control_type, status, create_user, 
+    create_time, update_user, update_time, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND business_organ_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.paramCode and ''!=params.paramCode" >
+        AND param_code = #{params.paramCode}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM system_param_set
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM system_param_set WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM system_param_set WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM system_param_set WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM system_param_set
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.api.vo.SystemParamSet" >
+    DELETE FROM system_param_set
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.api.vo.SystemParamSet" >
+    INSERT INTO system_param_set (id, business_organ_type, business_organ_no, 
+      business_organ_name, param_code, param_name, 
+      dtl_value, dtl_name, param_obj_no, 
+      param_description, control_type, status, 
+      create_user, create_time, update_user, 
+      update_time, remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{businessOrganType,jdbcType=TINYINT}, #{businessOrganNo,jdbcType=CHAR}, 
+      #{businessOrganName,jdbcType=VARCHAR}, #{paramCode,jdbcType=CHAR}, #{paramName,jdbcType=VARCHAR}, 
+      #{dtlValue,jdbcType=VARCHAR}, #{dtlName,jdbcType=VARCHAR}, #{paramObjNo,jdbcType=CHAR}, 
+      #{paramDescription,jdbcType=VARCHAR}, #{controlType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.api.vo.SystemParamSet" >
+    INSERT INTO system_param_set
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="businessOrganType != null" >
+        business_organ_type,
+      </if>
+      <if test="businessOrganNo != null" >
+        business_organ_no,
+      </if>
+      <if test="businessOrganName != null" >
+        business_organ_name,
+      </if>
+      <if test="paramCode != null" >
+        param_code,
+      </if>
+      <if test="paramName != null" >
+        param_name,
+      </if>
+      <if test="dtlValue != null" >
+        dtl_value,
+      </if>
+      <if test="dtlName != null" >
+        dtl_name,
+      </if>
+      <if test="paramObjNo != null" >
+        param_obj_no,
+      </if>
+      <if test="paramDescription != null" >
+        param_description,
+      </if>
+      <if test="controlType != null" >
+        control_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="businessOrganType != null" >
+        #{businessOrganType,jdbcType=TINYINT},
+      </if>
+      <if test="businessOrganNo != null" >
+        #{businessOrganNo,jdbcType=CHAR},
+      </if>
+      <if test="businessOrganName != null" >
+        #{businessOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramCode != null" >
+        #{paramCode,jdbcType=CHAR},
+      </if>
+      <if test="paramName != null" >
+        #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="dtlValue != null" >
+        #{dtlValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dtlName != null" >
+        #{dtlName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramObjNo != null" >
+        #{paramObjNo,jdbcType=CHAR},
+      </if>
+      <if test="paramDescription != null" >
+        #{paramDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="controlType != null" >
+        #{controlType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.api.vo.SystemParamSet" >
+    UPDATE system_param_set
+    <set >
+      <if test="businessOrganType != null" >
+        business_organ_type = #{businessOrganType,jdbcType=TINYINT},
+      </if>
+      <if test="businessOrganNo != null" >
+        business_organ_no = #{businessOrganNo,jdbcType=CHAR},
+      </if>
+      <if test="businessOrganName != null" >
+        business_organ_name = #{businessOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramCode != null" >
+        param_code = #{paramCode,jdbcType=CHAR},
+      </if>
+      <if test="paramName != null" >
+        param_name = #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="dtlValue != null" >
+        dtl_value = #{dtlValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dtlName != null" >
+        dtl_name = #{dtlName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramObjNo != null" >
+        param_obj_no = #{paramObjNo,jdbcType=CHAR},
+      </if>
+      <if test="paramDescription != null" >
+        param_description = #{paramDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="controlType != null" >
+        control_type = #{controlType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.api.vo.SystemParamSet" >
+    UPDATE system_param_set
+    SET business_organ_type = #{businessOrganType,jdbcType=TINYINT},
+      business_organ_no = #{businessOrganNo,jdbcType=CHAR},
+      business_organ_name = #{businessOrganName,jdbcType=VARCHAR},
+      param_code = #{paramCode,jdbcType=CHAR},
+      param_name = #{paramName,jdbcType=VARCHAR},
+      dtl_value = #{dtlValue,jdbcType=VARCHAR},
+      dtl_name = #{dtlName,jdbcType=VARCHAR},
+      param_obj_no = #{paramObjNo,jdbcType=CHAR},
+      param_description = #{paramDescription,jdbcType=VARCHAR},
+      control_type = #{controlType,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

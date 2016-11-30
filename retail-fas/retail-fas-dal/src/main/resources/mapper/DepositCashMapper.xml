@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.DepositCashMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.DepositCash" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" />    
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="name" property="companyName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="VARCHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="assistant_id" property="assistantId" jdbcType="VARCHAR" />
+    <result column="assistant_no" property="assistantNo" jdbcType="VARCHAR" />
+    <result column="assistant_name" property="assistantName" jdbcType="VARCHAR" />
+    <result column="start_out_date" property="startOutDate" jdbcType="DATE" />
+    <result column="end_out_date" property="endOutDate" jdbcType="DATE" />
+    <result column="currency_type" property="currencyType" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="confirm_flag" property="confirmFlag" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_no" property="createUserNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="auditor_no" property="auditorNo" jdbcType="VARCHAR" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="deposit_date" property="depositDate" jdbcType="DATE"  />
+    <result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+    <result column="deposit_diff" property="depositDiff" jdbcType="DECIMAL" />
+    <result column="cash_diff" property="cashDiff" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+    
+    <result column="currency_type_str" property="currencyTypeStr" jdbcType="VARCHAR" />
+    <result column="confirm_flag_str" property="confirmFlagStr" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="DepositCheckResultMap" type="cn.wonhigh.retail.fas.common.model.DepositCheck" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="check_date" property="checkDate" jdbcType="TIMESTAMP" />
+    <result column="beyond_last_deposit_date" property="beyondLastDepositDate" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+    <result column="deposit_diff" property="depositDiff" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, shop_no, shop_name, assistant_id, assistant_no, assistant_name, start_out_date, end_out_date, currency_type, 
+    account, amount, remark, status, confirm_flag, create_time, create_user_no, create_user, 
+    audit_time, auditor_no, auditor, deposit_date, sale_amount, update_time, update_user
+  </sql>
+  <sql id="findDetail">
+  	<if test="null!=params" >
+    	<if test="params.billNo != null and params.billNo!=''">  
+     		AND dc.bill_no = #{params.billNo}
+    	</if>
+    	<if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+          	and dc.shop_no in ${params.shopNoLists} 
+      	</if>
+      	<if test="params.shopNoList!=null and params.shopNoList!=''" >
+		   <foreach collection="params.shopNoList" item="shopNo" open="AND dc.shop_no in(" separator="," close=")">
+		      '${shopNo}'
+		   </foreach>
+	  	</if>
+    	<if test="params.mallNo != null and params.mallNo!=''">  
+     		AND m.mall_no = #{params.mallNo}
+    	</if>
+    	<if test="params.account != null and params.account!=''">  
+     		AND dc.account = #{params.account}
+    	</if>
+    	<if test="params.status != null and params.status!=''">  
+     		AND bs.status = #{params.status}
+    	</if>
+    	<if test="null!=params.startDepositDate and ''!=params.startDepositDate">
+			AND dc.deposit_date &gt;= '${params.startDepositDate} 00:00:00'
+		</if>
+		<if test="null!=params.endDepositDate and ''!=params.endDepositDate">
+			AND dc.deposit_date &lt;= '${params.endDepositDate} 23:59:59'
+		</if>
+    	<if test="null!=params.startOutDate and ''!=params.startOutDate">
+			AND dc.start_out_date &gt;= '${params.startOutDate} 00:00:00'
+		</if>
+		<if test="null!=params.endOutDate and ''!=params.endOutDate">
+			AND dc.end_out_date &lt;= '${params.endOutDate} 23:59:59'
+		</if>
+    </if>
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+        <if test="params.shopNo != null and params.shopNo!=''">  
+     		AND shop_no = #{params.shopNo}
+    	</if>
+    	<if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+          and shop_no in ${params.shopNoLists} 
+        </if>
+    	<if test="params.assistantName!=null and params.assistantName!=''">
+			AND assistant_name LIKE '%${params.assistantName}%'
+		</if>
+		<if test="params.amount!=null and params.amount!=''">
+			AND amount LIKE '%${params.amount}%'
+		</if>
+      	<if test="null != params.startDepositDate and params.startDepositDate != ''">
+        	AND date_format(deposit_date,'%Y-%m-%d') &gt;= #{params.startDepositDate}
+      	</if>
+      	<if test="null != params.endDepositDate and params.endDepositDate != ''">
+        	AND date_format(deposit_date,'%Y-%m-%d') &lt;= #{params.endDepositDate}
+      	</if>
+      	<if test="null != params.startOutDate and params.startOutDate != ''">
+        	AND date_format(start_out_date,'%Y-%m-%d') &gt;= #{params.startOutDate}
+      	</if>
+      	<if test="null != params.endOutDate and params.endOutDate != ''">
+        	AND date_format(end_out_date,'%Y-%m-%d') &lt;= #{params.endOutDate}
+      	</if>
+      	<if test="null != params.cardNumber and params.cardNumber != ''">
+      		AND account = #{params.cardNumber}
+      	</if>
+		<if test="params.confirmFlag!=null and params.confirmFlag!=''">
+			AND confirm_flag = #{params.confirmFlag}
+		</if>
+		<if test="params.remark!=null and params.remark!=''">
+			AND remark LIKE '%${params.remark}%'
+		</if>
+  		<if test="params.startDate!=null and params.startDate!=''">
+            AND deposit_date &gt;= #{params.startDate}
+        </if>
+        <if test="params.endDate!=null and params.endDate!=''">
+            AND deposit_date &lt;= #{params.endDate}
+        </if>		
+         <if test="params.status!=null and params.status!=''">
+            AND status  = #{params.status}
+        </if>
+        <if test="null!=params.shopNoList and ''!=params.shopNoList" >
+		  <foreach collection="params.shopNoList" item="shopNo" open="AND shop_no in(" separator="," close=")">
+		         '${shopNo}'
+		  </foreach>
+	   </if>
+		<if test="null!=params.shopNoList and ''!=params.shopNoList" >
+		  <foreach collection="params.shopNoList" item="shopNo" open="AND shop_no in(" separator="," close=")">
+		         '${shopNo}'
+		  </foreach>
+	   </if>	
+	   <if test="null!=params.depositAccounts and ''!=params.depositAccounts" >
+		  <foreach collection="params.depositAccounts" item="depositAccount" open="AND account in(" separator="," close=")">
+		         '${depositAccount}'
+		  </foreach>
+	   </if>	
+	  <if test="params.statusList!=null and params.statusList!=''">
+        	<foreach collection="params.statusList" item="status" open="AND status in(" separator="," close=")">
+            	'${status}'
+       		</foreach>
+      </if> 
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM deposit_cash
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM deposit_cash dc WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <if test="params.currencyTypeLookupCode!=null and params.currencyTypeLookupCode!=''">
+        (SELECT ssd.item_name FROM sys_standard_dtl ssd WHERE dc.currency_type = ssd.item_value AND ssd.lookup_code = #{params.currencyTypeLookupCode}) currency_type_str,   
+    </if>
+    <if test="params.confirmFlagLookupCode!=null and params.confirmFlagLookupCode!=''">
+    	(SELECT ssd.item_name FROM sys_standard_dtl ssd WHERE dc.confirm_flag = ssd.item_value AND ssd.lookup_code = #{params.confirmFlagLookupCode}) confirm_flag_str,      	
+    </if>
+    <include refid="Base_Column_List" />
+     FROM deposit_cash dc WHERE 1=1  
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+      <if test="orderByField == null or  ''==orderByField " >
+      ORDER BY deposit_date DESC 
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM deposit_cash WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM deposit_cash
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.DepositCash" >
+    DELETE FROM deposit_cash
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.DepositCash" >
+    INSERT INTO deposit_cash (id, bill_no, shop_no, shop_name, 
+      assistant_id, assistant_no, assistant_name, 
+      start_out_date, end_out_date, currency_type, account, 
+      amount, remark, status, 
+      confirm_flag, create_time, create_user_no, 
+      create_user, audit_time, auditor_no, 
+      auditor, deposit_date, sale_amount,
+      update_time, update_user)
+    VALUES (#{id,jdbcType=VARCHAR}, #{billNo,jdbcType=VARCHAR}, #{shopNo,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{assistantId,jdbcType=VARCHAR}, #{assistantNo,jdbcType=VARCHAR}, #{assistantName,jdbcType=VARCHAR}, 
+      #{startOutDate,jdbcType=DATE}, #{endOutDate,jdbcType=DATE}, #{currencyType,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{confirmFlag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserNo,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, #{auditorNo,jdbcType=VARCHAR}, 
+      #{auditor,jdbcType=VARCHAR}),#{depositDate,jdbcType=DATE},#{saleAmount,jdbcType=DECIMAL},
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.DepositCash" >
+    INSERT INTO deposit_cash
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="assistantId != null" >
+        assistant_id,
+      </if>
+      <if test="assistantNo != null" >
+        assistant_no,
+      </if>
+      <if test="assistantName != null" >
+        assistant_name,
+      </if>
+      <if test="startOutDate != null" >
+        start_out_date,
+      </if>
+      <if test="endOutDate != null" >
+        end_out_date,
+      </if>
+      <if test="currencyType != null" >
+        currency_type,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="confirmFlag != null" >
+        confirm_flag,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="auditorNo != null" >
+        auditor_no,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="depositDate != null" >
+        deposit_date,
+      </if>
+      <if test="saleAmount != null" >
+        sale_amount,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantId != null" >
+        #{assistantId,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantNo != null" >
+        #{assistantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantName != null" >
+        #{assistantName,jdbcType=VARCHAR},
+      </if>
+      <if test="startOutDate != null" >
+        #{startOutDate,jdbcType=DATE},
+      </if>
+      <if test="endOutDate != null" >
+        #{endOutDate,jdbcType=DATE},
+      </if>
+      <if test="currencyType != null" >
+        #{currencyType,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="confirmFlag != null" >
+        #{confirmFlag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserNo != null" >
+        #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditorNo != null" >
+        #{auditorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="depositDate != null" >
+        #{depositDate,jdbcType=DATE},
+      </if>
+      <if test="saleAmount != null" >
+        #{saleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.DepositCash" >
+    UPDATE deposit_cash
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantId != null" >
+        assistant_id = #{assistantId,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantNo != null" >
+        assistant_no = #{assistantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantName != null" >
+        assistant_name = #{assistantName,jdbcType=VARCHAR},
+      </if>
+      <if test="startOutDate != null" >
+        start_out_date = #{startOutDate,jdbcType=DATE},
+      </if>
+      <if test="endOutDate != null" >
+        end_out_date = #{endOutDate,jdbcType=DATE},
+      </if>
+      <if test="currencyType != null" >
+        currency_type = #{currencyType,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="confirmFlag != null" >
+        confirm_flag = #{confirmFlag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditorNo != null" >
+        auditor_no = #{auditorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="depositDate != null" >
+        deposit_date = #{depositDate,jdbcType=DATE},
+      </if>
+      <if test="saleAmount != null" >
+        sale_amount =#{saleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="cashDiff != null" >
+        cash_diff =#{cashDiff,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.DepositCash" >
+    UPDATE deposit_cash
+    SET bill_no = #{billNo,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=VARCHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      assistant_id = #{assistantId,jdbcType=VARCHAR},
+      assistant_no = #{assistantNo,jdbcType=VARCHAR},
+      assistant_name = #{assistantName,jdbcType=VARCHAR},
+      start_out_date = #{startOutDate,jdbcType=DATE},
+      end_out_date = #{endOutDate,jdbcType=DATE},      
+      currency_type = #{currencyType,jdbcType=INTEGER},
+      account = #{account,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      confirm_flag = #{confirmFlag,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      auditor_no = #{auditorNo,jdbcType=VARCHAR},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      deposit_date = #{depositDate,jdbcType=DATE},
+      sale_amount =#{saleAmount,jdbcType=DECIMAL},
+      cash_diff =#{cashDiff,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 根据查询条件，查询pos 存现核对明细存入金额总数和期间销售金额总数 wangsm -->
+  <select id="findDetailCount" parameterType="map" resultMap="BaseResultMap">
+	SELECT COUNT(1) total,SUM(D.amount) amount FROM (
+  	SELECT DISTINCT
+  		dc.id,
+  		dc.bill_no,
+		dc.account,
+		dc.deposit_date,
+		IFNULL((SELECT sc.company_no FROM shop_company sc WHERE 1=1 AND sc.status=1 AND sc.shop_no = dc.shop_no AND sc.effective_date &lt;= dc.start_out_date ORDER BY sc.effective_date DESC LIMIT 0,1),c.company_no) company_no,
+		m.`name` mall_name,
+		m.mall_no,
+		dc.shop_name,
+		dc.shop_no,
+		dc.amount,
+		dc.sale_amount,
+		dc.amount - dc.sale_amount deposit_diff,
+		dc.cash_diff,
+		dc.start_out_date,
+		dc.end_out_date,
+		dc.remark,
+		bs.update_user auditor,
+		bs.update_time audit_time,
+		bs.`status`,
+		dc.assistant_name,
+		dc.currency_type,
+		dc.create_user,
+		dc.create_time,
+		dc.transaction_no
+	FROM
+		deposit_cash dc
+	LEFT JOIN shop s ON dc.shop_no = s.shop_no
+	LEFT JOIN company c ON s.company_no = c.company_no
+	LEFT JOIN mall m ON s.mall_no = m.mall_no
+	LEFT JOIN bill_status bs ON dc.bill_no = bs.bill_no
+	WHERE 1=1 
+	 	<![CDATA[
+	AND dc.`status` <> 1
+	AND dc.`status` <> 2
+	AND dc.confirm_flag = 1
+	]]>
+    <include refid="findDetail"></include>
+    ORDER BY dc.account DESC,dc.deposit_date,dc.start_out_date,dc.end_out_date,dc.sale_amount
+    ) D LEFT JOIN company c ON D.company_no = c.company_no
+    WHERE 1=1 
+    -- AND @D.company_no
+    <if test="params.companyNo != null and params.companyNo!=''">  
+    	AND D.company_no = #{params.companyNo}
+   	</if>
+  </select>
+  <select id="findDetail" parameterType="map" resultMap="BaseResultMap">
+  	SELECT D.*,c.name FROM (
+  	SELECT DISTINCT
+  		dc.id,
+  		dc.bill_no,
+		dc.account,
+		dc.deposit_date,
+		IFNULL((SELECT sc.company_no FROM shop_company sc WHERE 1=1 AND sc.status=1 AND sc.shop_no = dc.shop_no AND sc.effective_date &lt;= dc.start_out_date ORDER BY sc.effective_date DESC LIMIT 0,1),c.company_no) company_no,
+		m.`name` mall_name,
+		m.mall_no,
+		dc.shop_name,
+		dc.shop_no,
+		dc.amount,
+		dc.sale_amount,
+		dc.amount - dc.sale_amount deposit_diff,
+		dc.cash_diff,
+		dc.start_out_date,
+		dc.end_out_date,
+		dc.remark,
+		bs.update_user auditor,
+		bs.update_time audit_time,
+		bs.`status`,
+		dc.assistant_name,
+		dc.currency_type,
+		dc.create_user,
+		dc.create_time,
+		dc.transaction_no
+	FROM
+		deposit_cash dc
+	LEFT JOIN shop s ON dc.shop_no = s.shop_no
+	LEFT JOIN company c ON s.company_no = c.company_no
+	LEFT JOIN mall m ON s.mall_no = m.mall_no
+	LEFT JOIN bill_status bs ON dc.bill_no = bs.bill_no
+	WHERE 1=1 
+	 	<![CDATA[
+	AND dc.`status` <> 1
+	AND dc.`status` <> 2
+	AND dc.confirm_flag = 1
+	]]>
+    <include refid="findDetail"></include>
+    ) D LEFT JOIN company c ON D.company_no = c.company_no
+    WHERE 1=1
+    -- AND @D.company_no
+    <if test="params.companyNo != null and params.companyNo!=''">  
+    	AND D.company_no = #{params.companyNo}
+   	</if>
+   	ORDER BY D.account DESC,D.deposit_date DESC,D.start_out_date,D.end_out_date,D.create_time
+	<if test="orderByField != null and ''!=orderByField">
+		,${orderByField}
+		<if test="orderByField">
+			${orderBy}
+		</if>
+	</if>
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  
+  <!-- 日报表按照销售日期获取实收金额 -->
+  <select id="getPaidinAmount" parameterType="map" resultMap="BaseResultMap">
+  	SELECT
+  		d.id,
+  		d.shop_no,
+  		d.start_out_date,
+  		d.end_out_date,
+		SUM(d.amount) amount
+	FROM
+		deposit_cash d
+	LEFT JOIN bill_status bs ON bs.bill_no = d.bill_no
+	WHERE
+		1=1
+	AND	bs.`status` = 1
+	AND d.`status` = 0
+	AND d.confirm_flag = 1
+	<if test="null!=params" >
+    	<if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+          	and d.shop_no in ${params.shopNoLists} 
+      	</if>
+      	<if test="null!=params.startOutDate and ''!=params.startOutDate" >
+          	and d.start_out_date &gt;= #{params.startOutDate}
+      	</if>
+      	<if test="null!=params.endOutDate and ''!=params.endOutDate" >
+          	and d.end_out_date &lt;= #{params.endOutDate}
+      	</if>
+     </if>
+	GROUP BY d.shop_no,d.start_out_date
+  </select>
+  <select id="getPaidinAmountCount" parameterType="map" resultType="java.math.BigDecimal">
+  	SELECT
+		SUM(d.amount) amount
+	FROM
+		deposit_cash d
+	LEFT JOIN bill_status bs ON bs.bill_no = d.bill_no
+	WHERE
+		1=1
+	AND	bs.`status` = 1
+	AND d.`status` = 0
+	AND d.confirm_flag = 1
+	<if test="null!=params" >
+    	<if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+          	and d.shop_no in ${params.shopNoLists} 
+      	</if>
+      	<if test="null!=params.startOutDate and ''!=params.startOutDate" >
+          	and d.start_out_date &gt;= #{params.startOutDate}
+      	</if>
+      	<if test="null!=params.endOutDate and ''!=params.endOutDate" >
+          	and d.end_out_date &lt;= #{params.endOutDate}
+      	</if>
+     </if>
+  </select>
+  
+  <!-- 获取店铺某销售期间已存金额 -->
+  <select id="getExistAmount" parameterType="map" resultType="java.math.BigDecimal" >
+  	SELECT
+		IF(ISNULL(SUM(dc.amount))=1,0,SUM(dc.amount))
+	FROM
+		deposit_cash dc
+	WHERE
+		1 = 1
+		<![CDATA[
+	AND dc.`status` <> 1
+	AND dc.`status` <> 2
+	AND dc.confirm_flag = 1
+	]]>
+	AND dc.shop_no = #{params.shopNo}
+	AND dc.account = #{params.account}
+	AND dc.start_out_date = #{params.startOutDate}
+	AND dc.end_out_date = #{params.endOutDate}
+	AND dc.create_time &lt; #{params.createTime}
+  </select>
+   
+   <select id="findLastDepositDate" parameterType="map" resultMap="BaseResultMap">
+   	SELECT
+		dc.*
+	FROM
+		(
+			SELECT
+				dc.id, dc.shop_no, dc.shop_name, dc.deposit_date,dc.sharding_flag
+			FROM
+				deposit_cash dc
+			WHERE 1 = 1
+			AND dc.`status` &lt;&gt; 1
+			AND dc.`status` &lt;&gt; 2
+			AND dc.confirm_flag = 1
+			<if test="null!=params" >
+		        <if test="params.shopNoList!=null and params.shopNoList!=''" >
+				   	<foreach collection="params.shopNoList" item="shopNo" open="AND dc.shop_no in(" separator="," close=")">
+				      '${shopNo}'
+				   	</foreach>
+		  	  </if>
+		    </if>
+			ORDER BY dc.shop_no, dc.deposit_date DESC
+		) dc
+	GROUP BY dc.shop_no
+   </select>
+   
+   <select id="findBeyondDates" parameterType="map" resultMap="DepositCheckResultMap">
+   	SELECT A.shop_no,COUNT(1) beyond_last_deposit_date, SUM(A.sale_amount) sale_amount FROM (
+		SELECT #{params.shopNo} shop_no,#{params.date} out_date,IFNULL((
+			SELECT SUM(main.amount) amount FROM (
+				SELECT shop_no,out_date,order_no,amount FROM order_main WHERE shop_no = #{params.shopNo} AND out_date = #{params.date} AND sharding_flag = #{params.shardingFlag}
+				UNION ALL 
+				SELECT shop_no,out_date,business_no,amount FROM return_exchange_main WHERE shop_no = #{params.shopNo} AND out_date = #{params.date} AND sharding_flag = #{params.shardingFlag}
+				) main LEFT JOIN order_payway op ON main.order_no = op.order_no 
+			WHERE 1=1
+			AND pay_code = '01'
+			GROUP BY main.shop_no
+		),0) sale_amount
+		<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        	${params.queryCondition}
+        </if>
+	) A WHERE 1=1
+	AND A.sale_amount != 0
+	GROUP BY A.shop_no
+   </select>
+</mapper>

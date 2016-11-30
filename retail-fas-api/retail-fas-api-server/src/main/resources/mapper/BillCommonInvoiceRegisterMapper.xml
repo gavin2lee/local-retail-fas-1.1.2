@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.BillCommonInvoiceRegisterMapper" >
+  
+  <resultMap type="cn.wonhigh.retail.fas.api.model.RegisterInvoiceModel" id="BaseRegisterInvoice">
+  	<id column="id" property="id" jdbcType="INTEGER" />
+	<result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+	<result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="invoice_apply_date" property="billDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <sql id="defaultCondition">
+  	 <if test="null!=salerNo and ''!=salerNo">
+  	 	and reg.saler_no=#{salerNo}
+  	 </if>
+ 	<if test="null!=buyerNo and ''!=buyerNo">
+ 		and reg.buyer_no=#{buyerNo}
+ 	</if>
+ 	<if test="null!=startApplyDate">
+ 		and reg.invoice_apply_date &gt;= #{startApplyDate}
+ 	</if>
+ 	<if test="null!=endApplyDate">
+ 		and reg.invoice_apply_date &lt;= #{endApplyDate}
+ 	</if>
+ 	<if test="null!=preInvoice and ''!=preInvoice">
+ 		and reg.pre_invoice = #{preInvoice}
+ 	</if>
+ 	<if test="null!=status and ''!=status">
+ 		and reg.status != #{status}
+ 	</if>
+ 	<if test="null!=useFlag and ''!=useFlag">
+ 		and reg.use_flag = #{useFlag}
+ 	</if>
+ 	<if test="null!=balanceType and ''!=balanceType">
+ 		and reg.bill_no in (select bill_no from bill_balance_invoice_source where balance_type = #{balanceType})
+ 	</if>
+  </sql>
+  
+  <sql id="Base_Column_List">
+  	reg.saler_no,reg.saler_name,reg.buyer_no,reg.buyer_name,reg.bill_no,reg.amount,reg.invoice_apply_date
+  </sql>
+  
+  <select id="queryBillCommonInvoiceTotal" resultType="java.lang.Integer" parameterType="map">
+    SELECT  
+  		COUNT(1)
+  	 FROM bill_balance_invoice_apply reg WHERE 1=1 
+ 	<include refid="defaultCondition" />
+  </select>
+  
+  <select id="queryCommonInvoiceRegisterList" resultMap="BaseRegisterInvoice" parameterType="map">
+  	SELECT 
+  		<include refid="Base_Column_List"/>
+		FROM bill_balance_invoice_apply reg WHERE 1=1 
+		<include refid="defaultCondition" />	
+  </select>
+  
+  <update id="updateBillStatus" parameterType="map">
+  	update bill_balance_invoice_apply set use_flag = #{useFlag} where bill_no = #{billNo}
+  </update>
+  
+  
+</mapper>

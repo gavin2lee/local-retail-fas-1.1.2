@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.OweTheGuestMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.OweTheGuestInventoryDto" >
+   	<result column="order_no" property="orderNo" jdbcType="CHAR" />
+   	<result column="refund_no" property="refundNo" jdbcType="CHAR" />
+   	<result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+   	<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+	<result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+	<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+	<result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+	<result column="organ_name" property="organName" jdbcType="VARCHAR" />
+	<result column="busi_city_no" property="busiCityNo" jdbcType="VARCHAR" />
+	<result column="busi_city_name" property="busiCityName" jdbcType="VARCHAR" />
+	<result column="item_no" property="itemNo" jdbcType="CHAR" />
+	<result column="sku_no" property="skuNo" jdbcType="CHAR" />
+	<result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+	<result column="item_code" property="itemCode" jdbcType="CHAR" />
+	<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+	<result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+	<result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+	<result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+	<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	<result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+	<result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+	<result column="unit_cost_sum" property="unitCostSum" jdbcType="DECIMAL" />
+    <result column="sale_qty" property="saleQty" jdbcType="INTEGER" /> 
+	<result column="sale_date" property="saleDate"  jdbcType="TIMESTAMP" />
+	<result column="send_qty" property="sendQty" jdbcType="INTEGER" /> 
+	<result column="send_date" property="sendDate"  jdbcType="TIMESTAMP" />
+	<result column="currPeriodOwe_qty" property="currPeriodOweQty" jdbcType="VARCHAR" /> 
+	<result column="earlyOweCurrSend_Qty" property="earlyOweCurrSendQty"  jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="order_condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+     	 AND  OM.SHOP_NO IN ${params.shopNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+     	 AND  OD.BRAND_NO IN ${params.brandNo}
+      </if>
+      <if test="null!=params.itemCode and ''!=params.itemCode" >
+     	 AND  OD.ITEM_CODE = #{params.itemCode}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+     	 AND  CG.CATEGORY_NO = #{params.categoryNo}
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+     	 AND  OD.ORDER_NO = #{params.orderNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+     	 AND  OM.COMPANY_NO = #{params.companyNo}
+      </if>
+    </if>
+  </sql>
+  
+   <sql id="return_condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+     	 AND  OM.SHOP_NO IN ${params.shopNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+     	 AND  OD.BRAND_NO IN ${params.brandNo}
+      </if>
+      <if test="null!=params.itemCode and ''!=params.itemCode" >
+     	 AND  OD.ITEM_CODE = #{params.itemCode}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+     	 AND  CG.CATEGORY_NO = #{params.categoryNo}
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+     	 AND  OM.old_order_no = #{params.orderNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+     	 AND  OM.COMPANY_NO = #{params.companyNo}
+      </if>
+    </if>
+  </sql>
+  
+ <!-- 日期区间 -->
+ <sql id = "date_section">
+	<if test="null!=params" >
+		<if test="null!=params.dateStart and ''!=params.dateStart and  
+		null!=params.dateEnd and ''!=params.dateEnd"> 
+			 BETWEEN  &apos;${params.dateStart}&apos; AND &apos;${params.dateEnd}&apos;
+		 </if>
+	 </if>
+  </sql>
+  
+<sql id="Base_Column_List">
+  select 
+	A_ORDER_NO ORDER_NO,
+	NULL AS  refund_no,
+	A_COMPNAY_NO COMPANY_NO,
+	A_COMPNAY_NAME COMPANY_NAME,
+	A_SHOP_NO SHOP_NO,
+	A_SHOP_NAME SHOP_NAME,
+	B_ORGAN_NO ORGAN_NO,
+	B_ORGAN_NAME ORGAN_NAME,
+	A_ORGAN_NO BUSI_CITY_NO,
+	A_ORGAN_NAME BUSI_CITY_NAME,
+	A_ITEM_NO ITEM_NO,
+	A_SKU_NO SKU_NO,
+	A_SIZE_NO SIZE_NO,
+	A_ITEM_CODE ITEM_CODE,
+	A_ITEM_NAME ITEM_NAME,
+	A_UNIT_COST UNIT_COST,
+	A_CATEGORY_NO CATEGORY_NO,
+	A_CATEGORY_NAME CATEGORY_NAME,
+	A_BRAND_NO BRAND_NO,
+	A_BRAND_NAME BRAND_NAME,
+	(SELECT 
+   		 BRAND_UNIT.`NAME` 
+    FROM
+   		 BRAND_UNIT
+    WHERE BRAND_UNIT.`CODE` = LEFT(A_BRAND_NO, 2)) BRAND_UNIT_NAME,
+	B_SEND_QTY SEND_QTY,
+	B_SEND_DATE SEND_DATE,
+	A_SALE_QTY SALE_QTY,
+	A_SALE_QTY * A_UNIT_COST UNIT_COST_SUM,
+	A_SALE_DATE SALE_DATE,
+	<!-- 本期欠客数量 -->
+	<if test="null!=params.resultFlag and ''!=params.resultFlag and 'current'==params.resultFlag">
+	   A_SALE_QTY - IFNULL(B_SEND_QTY, 0) currPeriodOwe_qty
+ 	</if>
+ 	 
+ 	<!-- 前期欠客本期发出数量 -->
+	<if test="null!=params.resultFlag and ''!=params.resultFlag and 'earlier'==params.resultFlag">
+	   IFNULL(B_SEND_QTY, 0) earlyOweCurrSend_Qty
+	</if>
+ from  
+ (SELECT 
+    OD.ORDER_NO A_ORDER_NO,
+    OM.SHOP_NO A_SHOP_NO,
+    OM.SHOP_NAME A_SHOP_NAME,
+    OM.OUT_DATE A_SALE_DATE,
+    OD.ITEM_NO A_ITEM_NO,
+    OD.SKU_NO A_SKU_NO,
+    OD.SIZE_NO A_SIZE_NO,
+    OD.ITEM_CODE A_ITEM_CODE,
+    OD.ITEM_NAME A_ITEM_NAME,
+    OD.UNIT_COST A_UNIT_COST,
+    SUM(OD.QTY) A_SALE_QTY,
+    OD.BRAND_NAME A_BRAND_NAME,
+    OD.BRAND_NO A_BRAND_NO,
+    OM.STATUS ST1,
+    OM.COMPANY_NO A_COMPNAY_NO,
+    OM.COMPANY_NAME A_COMPNAY_NAME,
+    B_ORGAN.ORGAN_NO B_ORGAN_NO,
+    B_ORGAN.NAME B_ORGAN_NAME,
+    A_ORGAN.ORGAN_NO A_ORGAN_NO,
+    A_ORGAN.NAME A_ORGAN_NAME,
+    CG.CATEGORY_NO A_CATEGORY_NO,
+    CG.NAME A_CATEGORY_NAME 
+  FROM
+    ORDER_MAIN OM 
+    INNER JOIN ORDER_DTL OD 
+      ON OM.ORDER_NO = OD.ORDER_NO
+    INNER JOIN SHOP 
+      ON SHOP.SHOP_NO = OM.SHOP_NO 
+    LEFT JOIN ORGAN A_ORGAN 
+      ON SHOP.BIZ_CITY_NO = A_ORGAN.ORGAN_NO 
+    LEFT JOIN ORGAN B_ORGAN 
+      ON A_ORGAN.PARENT_NO = B_ORGAN.ORGAN_NO 
+    LEFT JOIN CATEGORY CG 
+      ON LEFT(OD.CATEGORY_NO, 2) = CG.CATEGORY_NO 
+  WHERE OM.`STATUS` NOT IN (10, 11) 
+  		AND OM.TAKE_OFF_TYPE=1
+		<include refid="order_condition" />
+  <!-- 本期欠客 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'current'==params.resultFlag">
+  	AND (
+      OM.`OUT_DATE` <include refid="date_section"/>
+    ) 
+  </if>
+  <!-- 前期欠客本期发出 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'earlier'==params.resultFlag">
+    <if test="null!=params.dateStart and ''!=params.dateStart">
+ 	    AND om.`out_date` &lt; '${params.dateStart} 00:00:00'
+ 	</if>
+        AND om.order_no IN 
+	    (SELECT 
+	      ref_bill_no 
+	    FROM
+	      bill_sale_out bh 
+	    WHERE bh.`biz_type` >= 50 
+	      AND (
+	        bh.sale_date  <include refid="date_section"/>
+	      ) 
+	    GROUP BY bh.`ref_bill_no`) 
+  </if>
+    GROUP BY OM.`order_no`,
+    OM.OUT_DATE,
+    OD.SKU_NO) POS_SALE 
+  <!-- 本期欠客 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'current'==params.resultFlag">
+    LEFT JOIN 
+  </if>
+  <!-- 前期欠客本期发出 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'earlier'==params.resultFlag">
+   INNER JOIN 
+  </if>
+    (SELECT 
+      BH.REF_BILL_NO B_ORDER_NO,
+      BD.`SKU_NO` B_SKU_NO,
+      MAX(BH.SALE_DATE) B_SEND_DATE,
+      SUM(
+        IF(
+          BH.BILL_TYPE = 1374,
+          - 1 * BD.SEND_OUT_QTY,
+          BD.SEND_OUT_QTY
+        )
+      ) B_SEND_QTY 
+    FROM
+      ORDER_MAIN OM1
+      INNER JOIN BILL_SALE_OUT BH  
+        ON OM1.ORDER_NO=BH.REF_BILL_NO AND OM1.TAKE_OFF_TYPE=1
+      INNER JOIN BILL_SALE_OUT_DTL BD 
+        ON BH.BILL_NO = BD.BILL_NO 
+    WHERE BH.`biz_type` >= 50 
+      AND (
+        BH.SALE_DATE <include refid="date_section"/>
+      ) 
+    GROUP BY BH.`REF_BILL_NO`,
+      BD.`SKU_NO`) POS_SHIP 
+    ON POS_SALE.A_ORDER_NO = POS_SHIP.B_ORDER_NO 
+    AND POS_SALE.A_SKU_NO = POS_SHIP.B_SKU_NO 
+   WHERE  1=1 
+  <!-- 本期欠客 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'current'==params.resultFlag">
+    AND  (
+     	POS_SALE.A_SALE_QTY -  IFNULL(POS_SHIP.B_SEND_QTY,0)
+    ) <![CDATA[ != ]]> 0 
+  </if>
+</sql>
+  
+<sql id="rtn_Column_List">
+  select 
+	A_ORDER_NO ORDER_NO,
+	C_ORDER_NO refund_no,
+	A_COMPNAY_NO COMPANY_NO,
+	A_COMPNAY_NAME COMPANY_NAME,
+	A_SHOP_NO SHOP_NO,
+	A_SHOP_NAME SHOP_NAME,
+	B_ORGAN_NO ORGAN_NO,
+	B_ORGAN_NAME ORGAN_NAME,
+	A_ORGAN_NO BUSI_CITY_NO,
+	A_ORGAN_NAME BUSI_CITY_NAME,
+	A_ITEM_NO ITEM_NO,
+	A_SKU_NO SKU_NO,
+	A_SIZE_NO SIZE_NO,
+	A_ITEM_CODE ITEM_CODE,
+	A_ITEM_NAME ITEM_NAME,
+	A_UNIT_COST UNIT_COST,
+	A_CATEGORY_NO CATEGORY_NO,
+	A_CATEGORY_NAME CATEGORY_NAME,
+	A_BRAND_NO BRAND_NO,
+	A_BRAND_NAME BRAND_NAME,
+	(SELECT 
+   		 BRAND_UNIT.`NAME` 
+    FROM
+   		 BRAND_UNIT
+    WHERE BRAND_UNIT.`CODE` = LEFT(A_BRAND_NO, 2)) BRAND_UNIT_NAME,
+	B_SEND_QTY SEND_QTY,
+	B_SEND_DATE SEND_DATE,
+	A_SALE_QTY SALE_QTY,
+	A_SALE_QTY * A_UNIT_COST UNIT_COST_SUM,
+	A_SALE_DATE SALE_DATE,
+	<!-- 本期欠客数量 -->
+	<if test="null!=params.resultFlag and ''!=params.resultFlag and 'current'==params.resultFlag">
+	   A_SALE_QTY - IFNULL(B_SEND_QTY, 0) currPeriodOwe_qty
+ 	</if>
+ 	 
+ 	<!-- 前期欠客本期发出数量 -->
+	<if test="null!=params.resultFlag and ''!=params.resultFlag and 'earlier'==params.resultFlag">
+	   IFNULL(B_SEND_QTY, 0) earlyOweCurrSend_Qty
+	</if>
+ from  
+ (SELECT 
+    OM.old_order_no A_ORDER_NO,
+    OD.business_no C_ORDER_NO,
+    OM.SHOP_NO A_SHOP_NO,
+    OM.SHOP_NAME A_SHOP_NAME,
+    OM.OUT_DATE A_SALE_DATE,
+    OD.ITEM_NO A_ITEM_NO,
+    OD.SKU_NO A_SKU_NO,
+    OD.SIZE_NO A_SIZE_NO,
+    OD.ITEM_CODE A_ITEM_CODE,
+    OD.ITEM_NAME A_ITEM_NAME,
+    OD.UNIT_COST A_UNIT_COST,
+    SUM(OD.QTY) A_SALE_QTY,
+    OD.BRAND_NAME A_BRAND_NAME,
+    OD.BRAND_NO A_BRAND_NO,
+    OM.STATUS ST1,
+    OM.COMPANY_NO A_COMPNAY_NO,
+    OM.COMPANY_NAME A_COMPNAY_NAME,
+    B_ORGAN.ORGAN_NO B_ORGAN_NO,
+    B_ORGAN.NAME B_ORGAN_NAME,
+    A_ORGAN.ORGAN_NO A_ORGAN_NO,
+    A_ORGAN.NAME A_ORGAN_NAME,
+    CG.CATEGORY_NO A_CATEGORY_NO,
+    CG.NAME A_CATEGORY_NAME 
+  FROM
+    return_exchange_MAIN OM 
+    INNER JOIN return_exchange_DTL OD 
+      ON OM.business_no = OD.business_no
+    INNER JOIN SHOP 
+      ON SHOP.SHOP_NO = OM.SHOP_NO 
+    LEFT JOIN ORGAN A_ORGAN 
+      ON SHOP.BIZ_CITY_NO = A_ORGAN.ORGAN_NO 
+    LEFT JOIN ORGAN B_ORGAN 
+      ON A_ORGAN.PARENT_NO = B_ORGAN.ORGAN_NO 
+    LEFT JOIN CATEGORY CG 
+      ON LEFT(OD.CATEGORY_NO, 2) = CG.CATEGORY_NO 
+  WHERE OM.`STATUS` NOT IN (10, 11) 
+  		AND OM.refund_type=1
+		<include refid="return_condition" />
+  <!-- 本期欠客 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'current'==params.resultFlag">
+  	AND (
+      OM.`OUT_DATE` <include refid="date_section"/>
+    ) 
+  </if>
+  <!-- 前期欠客本期发出 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'earlier'==params.resultFlag">
+    <if test="null!=params.dateStart and ''!=params.dateStart">
+ 	    AND om.`out_date` &lt; '${params.dateStart} 00:00:00'
+ 	</if>
+        AND om.business_no IN 
+	    (SELECT 
+	      ref_bill_no 
+	    FROM
+	      bill_sale_out bh 
+	    WHERE bh.`biz_type` >= 50 
+	      AND (
+	        bh.sale_date  <include refid="date_section"/>
+	      ) 
+	    GROUP BY bh.`ref_bill_no`) 
+  </if>
+    GROUP BY OM.`business_no`,
+    OM.OUT_DATE,
+    OD.SKU_NO) POS_SALE 
+  <!-- 本期欠客 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'current'==params.resultFlag">
+    LEFT JOIN 
+  </if>
+  <!-- 前期欠客本期发出 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'earlier'==params.resultFlag">
+   INNER JOIN 
+  </if>
+    (SELECT 
+      BH.REF_BILL_NO B_ORDER_NO,
+      BD.`SKU_NO` B_SKU_NO,
+      MAX(BH.SALE_DATE) B_SEND_DATE,
+      SUM(
+        IF(
+          BH.BILL_TYPE = 1374,
+          - 1 * BD.SEND_OUT_QTY,
+          BD.SEND_OUT_QTY
+        )
+      ) B_SEND_QTY 
+    FROM
+      RETURN_EXCHANGE_MAIN RM1
+      INNER JOIN BILL_SALE_OUT BH 
+        ON RM1.BUSINESS_NO=BH.REF_BILL_NO AND RM1.REFUND_TYPE=1
+      INNER JOIN BILL_SALE_OUT_DTL BD 
+        ON BH.BILL_NO = BD.BILL_NO 
+    WHERE BH.`biz_type` >= 50 
+      AND (
+        BH.SALE_DATE <include refid="date_section"/>
+      ) 
+    GROUP BY BH.`REF_BILL_NO`,
+      BD.`SKU_NO`) POS_SHIP 
+    ON POS_SALE.C_ORDER_NO = POS_SHIP.B_ORDER_NO 
+    AND POS_SALE.A_SKU_NO = POS_SHIP.B_SKU_NO 
+   WHERE  1=1 
+  <!-- 本期欠客 -->
+  <if test="null!=params.resultFlag and ''!=params.resultFlag and 'current'==params.resultFlag">
+    AND  (
+     	POS_SALE.A_SALE_QTY -  IFNULL(POS_SHIP.B_SEND_QTY,0)
+    ) <![CDATA[ != ]]> 0 
+  </if>
+</sql>
+
+<!-- 明细查询 -->
+<select id="selectCount" resultType="java.lang.Integer">
+    /*balance*/
+	SELECT 
+		COUNT(1) as s
+	FROM  (
+		<include refid="Base_Column_List"/>
+		UNION ALL
+		<include refid="rtn_Column_List"/>
+	) d 
+</select>
+  
+<select id="selectByPage" resultMap="BaseResultMap" parameterType="map">
+    /*balance*/
+	<include refid="Base_Column_List"/>
+	UNION ALL
+	<include refid="rtn_Column_List"/>
+	<if test="orderByField != null and ''!=orderByField">
+		ORDER BY ${orderByField}
+		<if test="orderByField">
+			${orderBy}
+		</if>
+	</if>
+	<if test="orderByField == null || ''==orderByField">
+    </if>
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+</select>
+	
+<select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+    /*balance*/
+	<include refid="Base_Column_List"/>
+	UNION ALL
+	<include refid="rtn_Column_List"/>
+</select>
+ 
+ <!-- 明细合计行 -->
+ <select id="selectTotalRow" resultMap="BaseResultMap" parameterType="map">
+ 	/*balance*/
+ 	SELECT
+		   '合计' SHOP_NO,
+		  SUM(TEMP.SALE_QTY * TEMP.UNIT_COST) UNIT_COST_SUM,
+ 		  SUM(TEMP.SALE_QTY) SALE_QTY,
+		  IFNULL(SUM(TEMP.SEND_QTY), 0) SEND_QTY,
+		  SUM(TEMP.SALE_QTY - IFNULL(TEMP.SEND_QTY, 0)) CURRPERIODOWE_QTY,
+		  SUM(IFNULL(TEMP.SEND_QTY, 0)) EARLYOWECURRSEND_QTY 
+	FROM (
+		<include refid="Base_Column_List"/>
+		UNION ALL
+		<include refid="rtn_Column_List"/>
+     ) temp 
+      <if test="null!=params.resultFlag and ''!=params.resultFlag and 'earlier'==params.resultFlag">
+      	WHERE temp.send_qty!=0
+      </if>
+ </select>
+
+</mapper>

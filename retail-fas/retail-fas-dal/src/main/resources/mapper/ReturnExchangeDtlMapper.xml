@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ReturnExchangeDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ReturnExchangeDtl" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="item_flag" property="itemFlag" jdbcType="BIT" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="disc_price" property="discPrice" jdbcType="DECIMAL" />
+    <result column="settle_price" property="settlePrice" jdbcType="DECIMAL" />
+    <result column="reduce_price" property="reducePrice" jdbcType="DECIMAL" />
+    <result column="rebate_amount" property="rebateAmount" jdbcType="DECIMAL" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="pref_price" property="prefPrice" jdbcType="DECIMAL" />
+    <result column="pro_no" property="proNo" jdbcType="VARCHAR" />
+    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="discount_code" property="discountCode" jdbcType="VARCHAR" />
+    <result column="discount_name" property="discountName" jdbcType="VARCHAR" />
+    <result column="discount_type" property="discountType" jdbcType="BIT" />
+    <result column="discount_type_name" property="discountTypeName" jdbcType="VARCHAR" />
+    <result column="discount_source_id" property="discountSourceId" jdbcType="VARCHAR" />
+    <result column="billing_code" property="billingCode" jdbcType="VARCHAR" />
+    <result column="vip_discount" property="vipDiscount" jdbcType="DECIMAL" />
+    <result column="base_score" property="baseScore" jdbcType="INTEGER" />
+    <result column="pro_score" property="proScore" jdbcType="INTEGER" />
+    <result column="cost_score" property="costScore" jdbcType="INTEGER" />
+    <result column="available_flag" property="availableFlag" jdbcType="BIT" />
+    <result column="item_discount" property="itemDiscount" jdbcType="DECIMAL" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="order_dtl_id" property="orderDtlId" jdbcType="VARCHAR" />
+    <result column="color_no" property="colorNo" jdbcType="VARCHAR" />
+    <result column="color_name" property="colorName" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="size_kind" property="sizeKind" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="return_flag" property="returnFlag" jdbcType="BIT" />
+    <result column="bill_transfer_no" property="billTransferNo" jdbcType="VARCHAR" />
+    <result column="price_change_bill_no" property="priceChangeBillNo" jdbcType="VARCHAR" />
+    <result column="return_exchange_num" property="returnExchangeNum" jdbcType="SMALLINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="out_date" property="outDate" jdbcType="DATE" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dtl.id, dtl.business_no, dtl.sku_no, dtl.item_no, dtl.size_no, dtl.item_code, dtl.item_name, dtl.barcode, dtl.brand_no, 
+    dtl.item_flag, dtl.tag_price, dtl.sale_price, dtl.disc_price, dtl.settle_price, dtl.reduce_price, dtl.rebate_amount, 
+    dtl.qty, dtl.amount, dtl.headquarter_cost, dtl.region_cost, dtl.unit_cost, 
+    dtl.pref_price, dtl.pro_no, dtl.pro_name, dtl.discount, dtl.discount_code, dtl.discount_name, 
+    dtl.discount_type, dtl.discount_type_name, dtl.discount_source_id, dtl.billing_code, dtl.vip_discount, 
+    dtl.base_score, dtl.pro_score, dtl.cost_score, dtl.available_flag, dtl.item_discount, dtl.reason, dtl.order_dtl_id, 
+    dtl.color_no, dtl.color_name, dtl.brand_name, dtl.size_kind, dtl.category_no, dtl.return_flag, dtl.bill_transfer_no, 
+    dtl.price_change_bill_no, dtl.return_exchange_num, dtl.create_user, dtl.create_time, dtl.update_user, 
+    dtl.update_time,
+    main.shop_no, main.shop_name, main.out_date, s.company_no
+    
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.startDate and ''!=params.startDate" >
+        and main.out_date &gt;= #{params.startDate}
+      </if>
+       <if test="null!=params.endDate and ''!=params.endDate" >
+        and main.out_date &lt;= #{params.endDate}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        and s.company_no = #{params.companyNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM return_exchange_dtl dtl JOIN return_exchange_main main ON dtl.business_no = main.business_no
+    JOIN shop s ON main.shop_no = s.shop_no
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s 
+    FROM return_exchange_dtl dtl JOIN return_exchange_main main ON dtl.business_no = main.business_no
+    JOIN shop s ON main.shop_no = s.shop_no
+    WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM return_exchange_dtl dtl JOIN return_exchange_main main ON dtl.business_no = main.business_no
+     JOIN shop s ON main.shop_no = s.shop_no
+     WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM return_exchange_dtl dtl JOIN return_exchange_main main ON dtl.business_no = main.business_no
+     JOIN shop s ON main.shop_no = s.shop_no
+     WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM return_exchange_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeDtl" >
+    DELETE FROM return_exchange_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeDtl" >
+    INSERT INTO return_exchange_dtl (id, business_no, sku_no, 
+      item_no, size_no, item_code, 
+      item_name, barcode, brand_no, 
+      item_flag, tag_price, sale_price, 
+      disc_price, settle_price, reduce_price, 
+      rebate_amount, qty, amount, 
+      headquarter_cost, region_cost, unit_cost, 
+      pref_price, pro_no, pro_name, 
+      discount, discount_code, discount_name, 
+      discount_type, discount_type_name, discount_source_id, 
+      billing_code, vip_discount, base_score, 
+      pro_score, cost_score, available_flag, 
+      item_discount, reason, order_dtl_id, 
+      color_no, color_name, brand_name, 
+      size_kind, category_no, return_flag, 
+      bill_transfer_no, price_change_bill_no, return_exchange_num, 
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{id,jdbcType=CHAR}, #{businessNo,jdbcType=VARCHAR}, #{skuNo,jdbcType=CHAR}, 
+      #{itemNo,jdbcType=VARCHAR}, #{sizeNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=CHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{barcode,jdbcType=VARCHAR}, #{brandNo,jdbcType=CHAR}, 
+      #{itemFlag,jdbcType=BIT}, #{tagPrice,jdbcType=DECIMAL}, #{salePrice,jdbcType=DECIMAL}, 
+      #{discPrice,jdbcType=DECIMAL}, #{settlePrice,jdbcType=DECIMAL}, #{reducePrice,jdbcType=DECIMAL}, 
+      #{rebateAmount,jdbcType=DECIMAL}, #{qty,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, 
+      #{headquarterCost,jdbcType=DECIMAL}, #{regionCost,jdbcType=DECIMAL}, #{unitCost,jdbcType=DECIMAL}, 
+      #{prefPrice,jdbcType=DECIMAL}, #{proNo,jdbcType=VARCHAR}, #{proName,jdbcType=VARCHAR}, 
+      #{discount,jdbcType=DECIMAL}, #{discountCode,jdbcType=VARCHAR}, #{discountName,jdbcType=VARCHAR}, 
+      #{discountType,jdbcType=BIT}, #{discountTypeName,jdbcType=VARCHAR}, #{discountSourceId,jdbcType=VARCHAR}, 
+      #{billingCode,jdbcType=VARCHAR}, #{vipDiscount,jdbcType=DECIMAL}, #{baseScore,jdbcType=INTEGER}, 
+      #{proScore,jdbcType=INTEGER}, #{costScore,jdbcType=INTEGER}, #{availableFlag,jdbcType=BIT}, 
+      #{itemDiscount,jdbcType=DECIMAL}, #{reason,jdbcType=VARCHAR}, #{orderDtlId,jdbcType=VARCHAR}, 
+      #{colorNo,jdbcType=VARCHAR}, #{colorName,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{sizeKind,jdbcType=CHAR}, #{categoryNo,jdbcType=CHAR}, #{returnFlag,jdbcType=BIT}, 
+      #{billTransferNo,jdbcType=VARCHAR}, #{priceChangeBillNo,jdbcType=VARCHAR}, #{returnExchangeNum,jdbcType=SMALLINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeDtl" >
+    INSERT INTO return_exchange_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="businessNo != null" >
+        business_no,
+      </if>
+      <if test="skuNo != null" >
+        sku_no,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="sizeNo != null" >
+        size_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="barcode != null" >
+        barcode,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="itemFlag != null" >
+        item_flag,
+      </if>
+      <if test="tagPrice != null" >
+        tag_price,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="discPrice != null" >
+        disc_price,
+      </if>
+      <if test="settlePrice != null" >
+        settle_price,
+      </if>
+      <if test="reducePrice != null" >
+        reduce_price,
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="headquarterCost != null" >
+        headquarter_cost,
+      </if>
+      <if test="regionCost != null" >
+        region_cost,
+      </if>
+      <if test="unitCost != null" >
+        unit_cost,
+      </if>
+      <if test="prefPrice != null" >
+        pref_price,
+      </if>
+      <if test="proNo != null" >
+        pro_no,
+      </if>
+      <if test="proName != null" >
+        pro_name,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="discountCode != null" >
+        discount_code,
+      </if>
+      <if test="discountName != null" >
+        discount_name,
+      </if>
+      <if test="discountType != null" >
+        discount_type,
+      </if>
+      <if test="discountTypeName != null" >
+        discount_type_name,
+      </if>
+      <if test="discountSourceId != null" >
+        discount_source_id,
+      </if>
+      <if test="billingCode != null" >
+        billing_code,
+      </if>
+      <if test="vipDiscount != null" >
+        vip_discount,
+      </if>
+      <if test="baseScore != null" >
+        base_score,
+      </if>
+      <if test="proScore != null" >
+        pro_score,
+      </if>
+      <if test="costScore != null" >
+        cost_score,
+      </if>
+      <if test="availableFlag != null" >
+        available_flag,
+      </if>
+      <if test="itemDiscount != null" >
+        item_discount,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="orderDtlId != null" >
+        order_dtl_id,
+      </if>
+      <if test="colorNo != null" >
+        color_no,
+      </if>
+      <if test="colorName != null" >
+        color_name,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="sizeKind != null" >
+        size_kind,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="returnFlag != null" >
+        return_flag,
+      </if>
+      <if test="billTransferNo != null" >
+        bill_transfer_no,
+      </if>
+      <if test="priceChangeBillNo != null" >
+        price_change_bill_no,
+      </if>
+      <if test="returnExchangeNum != null" >
+        return_exchange_num,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="businessNo != null" >
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null" >
+        #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeNo != null" >
+        #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="barcode != null" >
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="itemFlag != null" >
+        #{itemFlag,jdbcType=BIT},
+      </if>
+      <if test="tagPrice != null" >
+        #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discPrice != null" >
+        #{discPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="settlePrice != null" >
+        #{settlePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="reducePrice != null" >
+        #{reducePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateAmount != null" >
+        #{rebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="headquarterCost != null" >
+        #{headquarterCost,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCost != null" >
+        #{regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        #{unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="prefPrice != null" >
+        #{prefPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="proNo != null" >
+        #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="proName != null" >
+        #{proName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountCode != null" >
+        #{discountCode,jdbcType=VARCHAR},
+      </if>
+      <if test="discountName != null" >
+        #{discountName,jdbcType=VARCHAR},
+      </if>
+      <if test="discountType != null" >
+        #{discountType,jdbcType=BIT},
+      </if>
+      <if test="discountTypeName != null" >
+        #{discountTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="discountSourceId != null" >
+        #{discountSourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="billingCode != null" >
+        #{billingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vipDiscount != null" >
+        #{vipDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="baseScore != null" >
+        #{baseScore,jdbcType=INTEGER},
+      </if>
+      <if test="proScore != null" >
+        #{proScore,jdbcType=INTEGER},
+      </if>
+      <if test="costScore != null" >
+        #{costScore,jdbcType=INTEGER},
+      </if>
+      <if test="availableFlag != null" >
+        #{availableFlag,jdbcType=BIT},
+      </if>
+      <if test="itemDiscount != null" >
+        #{itemDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDtlId != null" >
+        #{orderDtlId,jdbcType=VARCHAR},
+      </if>
+      <if test="colorNo != null" >
+        #{colorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="colorName != null" >
+        #{colorName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeKind != null" >
+        #{sizeKind,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="returnFlag != null" >
+        #{returnFlag,jdbcType=BIT},
+      </if>
+      <if test="billTransferNo != null" >
+        #{billTransferNo,jdbcType=VARCHAR},
+      </if>
+      <if test="priceChangeBillNo != null" >
+        #{priceChangeBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="returnExchangeNum != null" >
+        #{returnExchangeNum,jdbcType=SMALLINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeDtl" >
+    UPDATE return_exchange_dtl
+    <set >
+      <if test="businessNo != null" >
+        business_no = #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null" >
+        sku_no = #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeNo != null" >
+        size_no = #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="barcode != null" >
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="itemFlag != null" >
+        item_flag = #{itemFlag,jdbcType=BIT},
+      </if>
+      <if test="tagPrice != null" >
+        tag_price = #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discPrice != null" >
+        disc_price = #{discPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="settlePrice != null" >
+        settle_price = #{settlePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="reducePrice != null" >
+        reduce_price = #{reducePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="headquarterCost != null" >
+        headquarter_cost = #{headquarterCost,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCost != null" >
+        region_cost = #{regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        unit_cost = #{unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="prefPrice != null" >
+        pref_price = #{prefPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="proNo != null" >
+        pro_no = #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="proName != null" >
+        pro_name = #{proName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountCode != null" >
+        discount_code = #{discountCode,jdbcType=VARCHAR},
+      </if>
+      <if test="discountName != null" >
+        discount_name = #{discountName,jdbcType=VARCHAR},
+      </if>
+      <if test="discountType != null" >
+        discount_type = #{discountType,jdbcType=BIT},
+      </if>
+      <if test="discountTypeName != null" >
+        discount_type_name = #{discountTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="discountSourceId != null" >
+        discount_source_id = #{discountSourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="billingCode != null" >
+        billing_code = #{billingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vipDiscount != null" >
+        vip_discount = #{vipDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="baseScore != null" >
+        base_score = #{baseScore,jdbcType=INTEGER},
+      </if>
+      <if test="proScore != null" >
+        pro_score = #{proScore,jdbcType=INTEGER},
+      </if>
+      <if test="costScore != null" >
+        cost_score = #{costScore,jdbcType=INTEGER},
+      </if>
+      <if test="availableFlag != null" >
+        available_flag = #{availableFlag,jdbcType=BIT},
+      </if>
+      <if test="itemDiscount != null" >
+        item_discount = #{itemDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDtlId != null" >
+        order_dtl_id = #{orderDtlId,jdbcType=VARCHAR},
+      </if>
+      <if test="colorNo != null" >
+        color_no = #{colorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="colorName != null" >
+        color_name = #{colorName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeKind != null" >
+        size_kind = #{sizeKind,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="returnFlag != null" >
+        return_flag = #{returnFlag,jdbcType=BIT},
+      </if>
+      <if test="billTransferNo != null" >
+        bill_transfer_no = #{billTransferNo,jdbcType=VARCHAR},
+      </if>
+      <if test="priceChangeBillNo != null" >
+        price_change_bill_no = #{priceChangeBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="returnExchangeNum != null" >
+        return_exchange_num = #{returnExchangeNum,jdbcType=SMALLINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeDtl" >
+    UPDATE return_exchange_dtl
+    SET business_no = #{businessNo,jdbcType=VARCHAR},
+      sku_no = #{skuNo,jdbcType=CHAR},
+      item_no = #{itemNo,jdbcType=VARCHAR},
+      size_no = #{sizeNo,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      barcode = #{barcode,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      item_flag = #{itemFlag,jdbcType=BIT},
+      tag_price = #{tagPrice,jdbcType=DECIMAL},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
+      disc_price = #{discPrice,jdbcType=DECIMAL},
+      settle_price = #{settlePrice,jdbcType=DECIMAL},
+      reduce_price = #{reducePrice,jdbcType=DECIMAL},
+      rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+      qty = #{qty,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      headquarter_cost = #{headquarterCost,jdbcType=DECIMAL},
+      region_cost = #{regionCost,jdbcType=DECIMAL},
+      unit_cost = #{unitCost,jdbcType=DECIMAL},
+      pref_price = #{prefPrice,jdbcType=DECIMAL},
+      pro_no = #{proNo,jdbcType=VARCHAR},
+      pro_name = #{proName,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=DECIMAL},
+      discount_code = #{discountCode,jdbcType=VARCHAR},
+      discount_name = #{discountName,jdbcType=VARCHAR},
+      discount_type = #{discountType,jdbcType=BIT},
+      discount_type_name = #{discountTypeName,jdbcType=VARCHAR},
+      discount_source_id = #{discountSourceId,jdbcType=VARCHAR},
+      billing_code = #{billingCode,jdbcType=VARCHAR},
+      vip_discount = #{vipDiscount,jdbcType=DECIMAL},
+      base_score = #{baseScore,jdbcType=INTEGER},
+      pro_score = #{proScore,jdbcType=INTEGER},
+      cost_score = #{costScore,jdbcType=INTEGER},
+      available_flag = #{availableFlag,jdbcType=BIT},
+      item_discount = #{itemDiscount,jdbcType=DECIMAL},
+      reason = #{reason,jdbcType=VARCHAR},
+      order_dtl_id = #{orderDtlId,jdbcType=VARCHAR},
+      color_no = #{colorNo,jdbcType=VARCHAR},
+      color_name = #{colorName,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      size_kind = #{sizeKind,jdbcType=CHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      return_flag = #{returnFlag,jdbcType=BIT},
+      bill_transfer_no = #{billTransferNo,jdbcType=VARCHAR},
+      price_change_bill_no = #{priceChangeBillNo,jdbcType=VARCHAR},
+      return_exchange_num = #{returnExchangeNum,jdbcType=SMALLINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

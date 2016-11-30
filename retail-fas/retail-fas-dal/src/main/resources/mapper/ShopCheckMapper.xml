@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ShopCheckMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ShopCheck" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="month" property="month" jdbcType="VARCHAR" />
+    <result column="check_no" property="checkNo" jdbcType="CHAR" />
+    <result column="check_result" property="checkResult" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <resultMap id="ShopCheckSetResultMap" type="cn.wonhigh.retail.fas.common.model.ShopCheckSet" >
+    <id column="id" property="rowId" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="check_no" property="checkNo" jdbcType="CHAR" />
+    <result column="check_name" property="checkName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_no, shop_name, year, month, check_no, check_result, remark ,create_user, create_time, 
+    update_user, update_time
+  </sql>
+  <sql id="condition" >
+  	-- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from shop_check
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from shop_check where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+     from shop_check where 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      order by ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    LIMIT #{page.startRowNum}, #{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from shop_check where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="findShopCheckByPageCount" resultType="java.lang.Integer">
+  	SELECT
+  		count(DISTINCT sc.shop_no) as total
+	FROM
+		shop_check sc
+	LEFT JOIN shop_check_set scs ON sc.check_no = scs.check_no
+	LEFT JOIN shop s ON sc.shop_no = s.shop_no
+	LEFT JOIN shop_brand sb ON sc.shop_no = sb.shop_no
+	LEFT JOIN organ o ON o.organ_code = s.biz_city_no
+	WHERE 1=1
+	-- AND @scs.company_no
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo">
+		and scs.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.shopNo and ''!=params.shopNo">
+		and sc.shop_no = #{params.shopNo,jdbcType=CHAR}
+	  </if>
+	  <if test="params.shopNoList!=null and params.shopNoList!=''" >
+		<foreach collection="params.shopNoList" item="shopNo" open="AND sc.shop_no in(" separator="," close=")">
+		   '${shopNo}'
+		</foreach>
+	  </if>
+      <if test="params.organNoLists != null and params.organNoLists!=''">  
+     	and o.organ_no in ${params.organNoLists}
+      </if>
+      <if test="null!=params.year and ''!=params.year">
+		and sc.year = #{params.year,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.month and ''!=params.month">
+		and sc.month = #{params.month,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.checkNo and ''!=params.checkNo">
+		and sc.check_no = #{params.checkNo,jdbcType=CHAR}
+	  </if>
+    </if>
+  </select>
+  <!-- 查询店铺在指定检查编码、年月上检查项不通过的数量 -->
+  <select id="findShopCheckByPage" resultMap="BaseResultMap" parameterType="map">
+  	SELECT
+  		sc.id,
+		sc.shop_no,
+		sc.shop_name,
+		sc.`year`,
+		sc.`month`,
+		sc.check_no,
+		sc.check_result
+	FROM
+		shop_check sc
+	LEFT JOIN shop_check_set scs ON sc.check_no = scs.check_no
+	LEFT JOIN shop s ON sc.shop_no = s.shop_no
+	LEFT JOIN shop_brand sb ON sc.shop_no = sb.shop_no
+	LEFT JOIN organ o ON o.organ_code = s.biz_city_no
+	WHERE 1=1
+	-- AND @scs.company_no
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo">
+		and scs.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.shopNo and ''!=params.shopNo">
+		and sc.shop_no = #{params.shopNo,jdbcType=CHAR}
+	  </if>
+	  <if test="params.shopNoList!=null and params.shopNoList!=''" >
+		<foreach collection="params.shopNoList" item="shopNo" open="AND sc.shop_no in(" separator="," close=")">
+		   '${shopNo}'
+		</foreach>
+	  </if>
+      <if test="params.organNoLists != null and params.organNoLists!=''">  
+     	and o.organ_no in ${params.organNoLists}
+      </if>
+      <if test="null!=params.year and ''!=params.year">
+		and sc.year = #{params.year,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.month and ''!=params.month">
+		and sc.month = #{params.month,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.checkNo and ''!=params.checkNo">
+		and sc.check_no = #{params.checkNo,jdbcType=CHAR}
+	  </if>
+    </if>
+	GROUP BY sc.shop_no
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  
+  <select id="findShopCheck" resultMap="BaseResultMap" parameterType="map">
+  	SELECT
+  		sc.id,
+		sc.shop_no,
+		sc.shop_name,
+		sc.`year`,
+		sc.`month`,
+		sc.check_no,
+		sc.check_result,
+		sc.create_user,
+		sc.create_time,
+		sc.update_user,
+		sc.update_time
+	FROM
+		shop_check sc
+	LEFT JOIN shop_check_set scs ON sc.check_no = scs.check_no
+	LEFT JOIN shop s ON sc.shop_no = s.shop_no
+	LEFT JOIN shop_brand sb ON sc.shop_no = sb.shop_no
+	LEFT JOIN organ o ON o.organ_code = s.biz_city_no
+	WHERE 1=1
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.shopNo and ''!=params.shopNo">
+		and sc.shop_no = #{params.shopNo,jdbcType=CHAR}
+	  </if>
+      <if test="null!=params.year and ''!=params.year">
+		and sc.year = #{params.year,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.month and ''!=params.month">
+		and sc.month = #{params.month,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.checkNo and ''!=params.checkNo">
+		and sc.check_no = #{params.checkNo,jdbcType=CHAR}
+	  </if>
+    </if>
+	GROUP BY sc.shop_no
+  </select>
+  
+  <select id="findShopCheckNos" resultMap="ShopCheckSetResultMap" parameterType="map">
+	SELECT
+		*
+	FROM
+		shop_check_set scs
+	LEFT JOIN shop s ON scs.company_no = s.company_no
+	WHERE
+		1 = 1
+	-- AND @scs.company_no
+	AND scs.`status` = 0
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo">
+		and scs.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+	    and s.shop_no in ${params.shopNoLists} 
+	  </if>
+    </if>
+	GROUP BY scs.id
+	ORDER BY scs.id
+  </select>
+  
+  <!-- 获取店铺 -->
+  <select id="findShops" resultType="java.lang.String" parameterType="map">
+  	SELECT
+		s.shop_no
+	FROM
+		shop s
+	LEFT JOIN shop_brand sb ON s.shop_no = sb.shop_no
+	LEFT JOIN organ o ON o.organ_code = s.biz_city_no
+	WHERE
+		1 = 1
+	-- AND @s.company_no
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo">
+		and s.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+	    and s.shop_no in ${params.shopNoLists} 
+	  </if>
+      <if test="params.organNoLists != null and params.organNoLists!=''">  
+     	and o.organ_no in ${params.organNoLists}
+      </if>
+    </if>
+	GROUP BY
+		s.shop_no
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from shop_check
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.String" >
+    delete from shop_check
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ShopCheck" >
+    insert into shop_check (id, shop_no, shop_name, 
+      year, month, check_no, check_result, 
+      remark,create_user,create_time,update_user,update_time)
+    values (#{id,jdbcType=CHAR}, #{shopNo,jdbcType=CHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{year,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, #{checkNo,jdbcType=CHAR}, #{checkResult,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{create_user,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, #{update_user,jdbcType=VARCHAR}, #{update_time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ShopCheck" >
+    insert into shop_check
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="checkNo != null" >
+        check_no,
+      </if>
+      <if test="checkResult != null" >
+        check_result,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="checkNo != null" >
+        #{checkNo,jdbcType=CHAR},
+      </if>
+      <if test="checkResult != null" >
+        #{checkResult,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ShopCheck" >
+    update shop_check
+    <set >
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="checkNo != null" >
+        check_no = #{checkNo,jdbcType=CHAR},
+      </if>
+      <if test="checkResult != null" >
+        check_result = #{checkResult,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ShopCheck" >
+    update shop_check
+    set shop_no = #{shopNo,jdbcType=CHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      year = #{year,jdbcType=VARCHAR},
+      month = #{month,jdbcType=VARCHAR},
+      check_no = #{checkNo,jdbcType=CHAR},
+      check_result = #{checkResult,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <update id="updateData" parameterType="cn.wonhigh.retail.fas.common.model.ShopCheck">
+  	update shop_check
+    <set >
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=INTEGER},
+      </if>
+      <if test="checkNo != null" >
+        check_no = #{checkNo,jdbcType=CHAR},
+      </if>
+       check_result = #{checkResult,jdbcType=INTEGER},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where 1=1
+    <if test="shopNo != null" >
+       AND shop_no = #{shopNo,jdbcType=CHAR}
+    </if>
+    <if test="year != null" >
+       AND year = #{year,jdbcType=VARCHAR}
+    </if>
+    <if test="month != null" >
+       AND month = #{month,jdbcType=INTEGER}
+    </if>
+    <if test="checkNo != null" >
+       AND check_no = #{checkNo,jdbcType=CHAR}
+    </if>
+  </update>
+</mapper>

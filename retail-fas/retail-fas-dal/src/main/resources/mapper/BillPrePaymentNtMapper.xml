@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillPrePaymentNtMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillPrePaymentNt" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="customer_no" property="customerNo" jdbcType="CHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+    <result column="paid_date" property="paidDate" jdbcType="DATE" />
+    <result column="sale_order_no" property="saleOrderNo" jdbcType="CHAR" />
+    <result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="receivable_amount" property="receivableAmount" jdbcType="DECIMAL" />
+    <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+    <result column="paid_type" property="paidType" jdbcType="INTEGER" />
+    <result column="pre_payment_over" property="prePaymentOver" jdbcType="DECIMAL" />
+    <result column="reversal_amount" property="reversalAmount" jdbcType="DECIMAL" />
+    <result column="reversal_amount_flag" property="reversalAmountFlag" jdbcType="TINYINT" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="TINYINT" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="invoice_no" property="invoiceNo" jdbcType="CHAR" />
+    <result column="invoice_type" property="invoiceType" jdbcType="CHAR" />
+    <result column="invoice_date" property="invoiceDate" jdbcType="DATE" />
+    <result column="order_qty" property="orderQty" jdbcType="INTEGER" />
+    <result column="term_no" property="termNo" jdbcType="VARCHAR" />
+    <result column="term_name" property="termName" jdbcType="VARCHAR" />
+    <result column="rebate_amount" property="rebateAmount" jdbcType="DECIMAL" />
+    <result column="pre_order_amount" property="preOrderAmount" jdbcType="DECIMAL" />
+    <result column="pre_send_amount" property="preSendAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, balance_type, status, company_no, company_name, customer_no, customer_name, 
+    bill_date, paid_date, sale_order_no, order_amount, receivable_amount, paid_amount, pre_payment_over, 
+    reversal_amount, reversal_amount_flag, auditor, audit_status, audit_time, create_user, 
+    create_time, update_user, update_time, remark, invoice_no, invoice_type, invoice_date,
+    order_qty, term_name,term_no, rebate_amount, pre_order_amount, pre_send_amount,paid_type
+  </sql>
+  <sql id="condition" >
+  		-- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceType and ''!=params.balanceType" >
+        AND balance_type = #{params.balanceType}
+      </if>
+      <if test="null!=params.termNo and ''!=params.termNo" >
+        AND term_no = #{params.termNo}
+      </if>
+      <if test="null!=params.invoiceNo and ''!=params.invoiceNo" >
+        AND invoice_no = #{params.invoiceNo}
+      </if>
+      <if test="null!=params.startDate and ''!=params.startDate" >
+        AND bill_date &gt;= #{params.startDate}
+      </if>
+      <if test="null!=params.auditDateStart and ''!=params.auditDateStart" >
+        AND audit_time &gt;= #{params.auditDateStart}
+      </if>
+      <if test="null!=params.auditDateEnd and ''!=params.auditDateEnd" >
+        AND audit_time &lt;= DATE_ADD(#{params.auditDateEnd}, INTERVAL 1 DAY)
+      </if>
+      <if test="null!=params.paidDateStart and ''!=params.paidDateStart" >
+        AND paid_date &gt;= #{params.paidDateStart}
+      </if>
+      <if test="null!=params.paidDateEnd and ''!=params.paidDateEnd" >
+        AND paid_date &lt;= #{params.paidDateEnd}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if>
+      <if test="null!=params.saleOrderNo and ''!=params.saleOrderNo" >
+        AND sale_order_no = #{params.saleOrderNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.companyName and ''!=params.companyName" >
+        AND company_name LIKE '%${params.companyName}%'
+      </if>
+      <if test="null!=params.customerNo and ''!=params.customerNo" >
+        AND customer_no = #{params.customerNo}
+      </if>
+      <if test="null!=params.customerName and ''!=params.customerName" >
+        AND customer_name LIKE '%${params.customerName}%'
+      </if>
+      <if test="null!=params.customerNoArray and ''!=params.customerNoArray" >
+      	AND customer_no in 
+      	<foreach collection="params.customerNoArray" item="tempCustomerNo" open="(" separator="," close=")">
+      		#{tempCustomerNo}
+      	</foreach>
+      </if>
+      <if test="null!=params.paidType and ''!=params.paidType" >
+        AND paid_type = #{params.paidType}
+      </if>
+      <if test="null!=params.auditStatus and ''!=params.auditStatus" >
+        AND audit_status = #{params.auditStatus}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="calcPrePaymentTotal" resultMap="BaseResultMap" parameterType="map">
+  	SELECT company_no, company_name, customer_no, customer_name, IFNULL(SUM(paid_amount),0) paid_amount
+  			FROM bill_pre_payment_nt 
+  		WHERE 1=1 -- AND @company_no 
+  			AND company_no = #{params.companyNo} 
+  			AND customer_no = #{params.customerNo} 
+  			AND audit_time BETWEEN #{params.startTime} AND #{params.endTime} 
+  			<if test="null!=params.paidType and ''!=params.paidType" >
+		        AND paid_type = #{params.paidType} 
+		    </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_pre_payment_nt
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_pre_payment_nt WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_pre_payment_nt WHERE 1=1 
+    <include refid="condition" />
+     ORDER BY create_time desc
+    <if test="orderByField != null and ''!=orderByField" >
+      ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_pre_payment_nt WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_pre_payment_nt
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillPrePaymentNt" >
+    DELETE FROM bill_pre_payment_nt
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillPrePaymentNt" >
+    INSERT INTO bill_pre_payment_nt (id, bill_no, balance_type, 
+      status, company_no, company_name, 
+      customer_no, customer_name, bill_date, paid_date, 
+      sale_order_no, order_amount, receivable_amount, 
+      paid_amount, pre_payment_over, reversal_amount, 
+      reversal_amount_flag, auditor, audit_status, 
+      audit_time, create_user, create_time, 
+      update_user, update_time, remark, invoice_no, invoice_type, invoice_date
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{billNo,jdbcType=CHAR}, #{balanceType,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{customerNo,jdbcType=CHAR}, #{customerName,jdbcType=VARCHAR}, #{billDate,jdbcType=DATE}, #{paidDate,jdbcType=DATE}, 
+      #{saleOrderNo,jdbcType=CHAR}, #{orderAmount,jdbcType=DECIMAL}, #{receivableAmount,jdbcType=DECIMAL}, 
+      #{paidAmount,jdbcType=DECIMAL}, #{prePaymentOver,jdbcType=DECIMAL}, #{reversalAmount,jdbcType=DECIMAL}, 
+      #{reversalAmountFlag,jdbcType=TINYINT}, #{auditor,jdbcType=VARCHAR}, #{auditStatus,jdbcType=TINYINT}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{invoiceNo,jdbcType=CHAR}, #{invoiceType,jdbcType=CHAR}, #{invoiceDate,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillPrePaymentNt" >
+    INSERT INTO bill_pre_payment_nt
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="customerNo != null" >
+        customer_no,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="billDate != null" >
+        bill_date,
+      </if>
+      <if test="paidDate != null" >
+        paid_date,
+      </if>
+      <if test="saleOrderNo != null" >
+        sale_order_no,
+      </if>
+      <if test="orderAmount != null" >
+        order_amount,
+      </if>
+      <if test="receivableAmount != null" >
+        receivable_amount,
+      </if>
+      <if test="paidAmount != null" >
+        paid_amount,
+      </if>
+      <if test="prePaymentOver != null" >
+        pre_payment_over,
+      </if>
+      <if test="reversalAmount != null" >
+        reversal_amount,
+      </if>
+      <if test="reversalAmountFlag != null" >
+        reversal_amount_flag,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no,
+      </if>
+      <if test="invoiceType != null" >
+        invoice_type,
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date,
+      </if>
+      <if test="orderQty != null" >
+        order_qty,
+      </if>
+      <if test="termNo != null" >
+        term_no,
+      </if>
+      <if test="termName != null" >
+        term_name,
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount,
+      </if>
+      <if test="preOrderAmount != null" >
+        pre_order_amount,
+      </if>
+      <if test="preSendAmount != null" >
+        pre_send_amount,
+      </if>
+      <if test="paidType != null" >
+        paid_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="billDate != null" >
+        #{billDate,jdbcType=DATE},
+      </if>
+      <if test="paidDate != null" >
+        #{paidDate,jdbcType=DATE},
+      </if>
+      <if test="saleOrderNo != null" >
+        #{saleOrderNo,jdbcType=CHAR},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receivableAmount != null" >
+        #{receivableAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paidAmount != null" >
+        #{paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prePaymentOver != null" >
+        #{prePaymentOver,jdbcType=DECIMAL},
+      </if>
+      <if test="reversalAmount != null" >
+        #{reversalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reversalAmountFlag != null" >
+        #{reversalAmountFlag,jdbcType=TINYINT},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=TINYINT},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        #{invoiceNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceType != null" >
+        #{invoiceType,jdbcType=CHAR},
+      </if>
+      <if test="invoiceDate != null" >
+      	#{invoiceDate,jdbcType=DATE},
+      </if>
+      <if test="orderQty != null" >
+       	#{orderQty},
+      </if>
+      <if test="termNo != null" >
+        #{termNo},
+      </if>
+      <if test="termName != null" >
+        #{termName},
+      </if>
+      <if test="rebateAmount != null" >
+        #{rebateAmount},
+      </if>
+      <if test="preOrderAmount != null" >
+        #{preOrderAmount},
+      </if>
+      <if test="preSendAmount != null" >
+        #{preSendAmount},
+      </if>
+      <if test="paidType != null" >
+        #{paidType},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillPrePaymentNt" >
+    UPDATE bill_pre_payment_nt
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="billDate != null" >
+        bill_date = #{billDate,jdbcType=DATE},
+      </if>
+      <if test="paidDate != null" >
+        paid_date = #{paidDate,jdbcType=DATE},
+      </if>
+      <if test="saleOrderNo != null" >
+        sale_order_no = #{saleOrderNo,jdbcType=CHAR},
+      </if>
+      <if test="orderAmount != null" >
+        order_amount = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receivableAmount != null" >
+        receivable_amount = #{receivableAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paidAmount != null" >
+        paid_amount = #{paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prePaymentOver != null" >
+        pre_payment_over = #{prePaymentOver,jdbcType=DECIMAL},
+      </if>
+      <if test="reversalAmount != null" >
+        reversal_amount = #{reversalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reversalAmountFlag != null" >
+        reversal_amount_flag = #{reversalAmountFlag,jdbcType=TINYINT},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=TINYINT},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no = #{invoiceNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceType != null" >
+        invoice_type = #{invoiceType,jdbcType=CHAR},
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date = #{invoiceDate,jdbcType=DATE},
+      </if>
+      <if test="orderQty != null" >
+       	order_qty = #{orderQty},
+      </if>
+      <if test="termNo != null" >
+        term_no = #{termNo},
+      </if>
+      <if test="termName != null" >
+        term_name = #{termName},
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount = #{rebateAmount},
+      </if>
+      <if test="preOrderAmount != null" >
+        pre_order_amount = #{preOrderAmount},
+      </if>
+      <if test="preSendAmount != null" >
+        pre_send_amount = #{preSendAmount},
+      </if>
+      <if test="paidType != null" >
+        paid_type = #{paidType},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillPrePaymentNt" >
+    UPDATE bill_pre_payment_nt
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      balance_type = #{balanceType,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=CHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      bill_date = #{billDate,jdbcType=DATE},
+      paid_date = #{paidDate,jdbcType=DATE},
+      sale_order_no = #{saleOrderNo,jdbcType=CHAR},
+      order_amount = #{orderAmount,jdbcType=DECIMAL},
+      receivable_amount = #{receivableAmount,jdbcType=DECIMAL},
+      paid_amount = #{paidAmount,jdbcType=DECIMAL},
+      pre_payment_over = #{prePaymentOver,jdbcType=DECIMAL},
+      reversal_amount = #{reversalAmount,jdbcType=DECIMAL},
+      reversal_amount_flag = #{reversalAmountFlag,jdbcType=TINYINT},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=TINYINT},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      invoice_no = #{invoiceNo,jdbcType=CHAR},
+      invoice_type = #{invoiceType,jdbcType=CHAR},
+      invoice_date = #{invoiceDate,jdbcType=DATE}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

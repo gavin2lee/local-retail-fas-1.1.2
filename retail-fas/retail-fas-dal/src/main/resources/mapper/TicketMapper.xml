@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.TicketMapper">
+	<resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Ticket">
+		<id column="id" property="id" jdbcType="CHAR" />
+		<result column="ticket_no" property="ticketNo" jdbcType="VARCHAR" />
+		<result column="ticket_code" property="ticketCode" jdbcType="VARCHAR" />
+		<result column="ticket_define_no" property="ticketDefineNo"
+			jdbcType="VARCHAR" />
+		<result column="ticket_name" property="ticketName" jdbcType="VARCHAR" />
+		<result column="apply_type" property="applyType" jdbcType="TINYINT" />
+		<result column="ticket_type" property="ticketType" jdbcType="TINYINT" />
+		<result column="disc_type" property="discType" jdbcType="TINYINT" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="max_amount" property="maxAmount" jdbcType="DECIMAL" />
+		<result column="deduction_type" property="deductionType"
+			jdbcType="TINYINT" />
+		<result column="buy_flag" property="buyFlag" jdbcType="TINYINT" />
+		<result column="buy_amount" property="buyAmount" jdbcType="INTEGER" />
+		<result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="return_flag" property="returnFlag" jdbcType="TINYINT" />
+		<result column="change_flag" property="changeFlag" jdbcType="TINYINT" />
+		<result column="ticket_share_flag" property="ticketShareFlag"
+			jdbcType="TINYINT" />
+		<result column="score_flag" property="scoreFlag" jdbcType="TINYINT" />
+		<result column="sold_flag" property="soldFlag" jdbcType="TINYINT" />
+		<result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+		<result column="organ_name" property="organName" jdbcType="VARCHAR" />
+		<result column="publish_organ_no" property="publishOrganNo"
+			jdbcType="VARCHAR" />
+		<result column="publish_organ_name" property="publishOrganName"
+			jdbcType="VARCHAR" />
+		<result column="give_organ_no" property="giveOrganNo" jdbcType="VARCHAR" />
+		<result column="give_organ_name" property="giveOrganName"
+			jdbcType="VARCHAR" />
+		<result column="give_time" property="giveTime" jdbcType="TIMESTAMP" />
+		<result column="give_bill_no" property="giveBillNo" jdbcType="VARCHAR" />
+		<result column="give_bill_type" property="giveBillType"
+			jdbcType="VARCHAR" />
+		<result column="use_organ_no" property="useOrganNo" jdbcType="VARCHAR" />
+		<result column="use_organ_name" property="useOrganName"
+			jdbcType="VARCHAR" />
+		<result column="use_time" property="useTime" jdbcType="TIMESTAMP" />
+		<result column="use_bill_no" property="useBillNo" jdbcType="VARCHAR" />
+		<result column="use_bill_type" property="useBillType" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="instructions" property="instructions" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_user_no" property="createUserNo"
+			jdbcType="VARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_user_no" property="updateUserNo"
+			jdbcType="VARCHAR" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="audit_no" property="auditNo" jdbcType="VARCHAR" />
+		<result column="auditor" property="auditor" jdbcType="VARCHAR" />
+		<result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+		<result column="company_no" property="companyNo" jdbcType="CHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, ticket_no, ticket_code, ticket_define_no, ticket_name,
+		apply_type,
+		ticket_type,
+		disc_type, amount, max_amount, deduction_type,
+		buy_flag, buy_amount, start_time,
+		end_time, return_flag, change_flag,
+		ticket_share_flag, score_flag,
+		sold_flag, organ_no,
+		organ_name,
+		publish_organ_no, publish_organ_name, give_organ_no, give_organ_name,
+		give_time, give_bill_no, give_bill_type, use_organ_no, use_organ_name,
+		use_time,
+		use_bill_no, use_bill_type, status, instructions, remark,
+		create_user_no,
+		create_user,
+		create_time, update_user_no, update_user,
+		update_time, audit_no, auditor,
+		audit_time, company_no
+	</sql>
+	<sql id="condition">
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.useBillNo and ''!=params.useBillNo">
+				and use_bill_no = #{params.useBillNo}
+			</if>
+			<if test="null!=params.ticketType and ''!=params.ticketType">
+				and ticket_type = #{params.ticketType}
+			</if>
+			<if test="null!=params.ticketNo and ''!=params.ticketNo">
+				and ticket_no = #{params.ticketNo}
+			</if>
+			<if test="null!=params.companyNo and ''!=params.companyNo">
+				and company_no = #{params.companyNo}
+			</if>
+			<if test="null!=params.status and ''!=params.status">
+				and status = #{params.status}
+			</if>
+			<if test="null!=params.startDate and ''!=params.startDate">
+				and use_time &gt;= #{params.startDate}
+			</if>
+			<if test="null!=params.endDate and ''!=params.endDate">
+				and use_time &lt;= #{params.endDate}
+			</if>
+		</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ticket
+		WHERE id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) as s FROM ticket WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<select id="selectByPage" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ticket WHERE 1=1
+		<include refid="condition" />
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	<select id="selectByParams" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ticket WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		DELETE FROM ticket
+		WHERE id = #{id,jdbcType=CHAR}
+	</delete>
+	<delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.Ticket">
+		DELETE
+		FROM ticket
+		WHERE id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.Ticket">
+		INSERT INTO ticket (id,
+		ticket_no, ticket_code,
+		ticket_define_no, ticket_name, apply_type,
+		ticket_type, disc_type, amount,
+		max_amount, deduction_type, buy_flag,
+		buy_amount, start_time, end_time,
+		return_flag, change_flag,
+		ticket_share_flag,
+		score_flag, sold_flag, organ_no,
+		organ_name,
+		publish_organ_no, publish_organ_name,
+		give_organ_no, give_organ_name,
+		give_time,
+		give_bill_no, give_bill_type, use_organ_no,
+		use_organ_name,
+		use_time, use_bill_no,
+		use_bill_type, status, instructions,
+		remark,
+		create_user_no, create_user,
+		create_time, update_user_no, update_user,
+		update_time, audit_no, auditor,
+		audit_time, company_no)
+		VALUES
+		(#{id,jdbcType=CHAR},
+		#{ticketNo,jdbcType=VARCHAR},
+		#{ticketCode,jdbcType=VARCHAR},
+		#{ticketDefineNo,jdbcType=VARCHAR},
+		#{ticketName,jdbcType=VARCHAR},
+		#{applyType,jdbcType=TINYINT},
+		#{ticketType,jdbcType=TINYINT},
+		#{discType,jdbcType=TINYINT},
+		#{amount,jdbcType=DECIMAL},
+		#{maxAmount,jdbcType=DECIMAL},
+		#{deductionType,jdbcType=TINYINT},
+		#{buyFlag,jdbcType=TINYINT},
+		#{buyAmount,jdbcType=INTEGER},
+		#{startTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{returnFlag,jdbcType=TINYINT},
+		#{changeFlag,jdbcType=TINYINT},
+		#{ticketShareFlag,jdbcType=TINYINT},
+		#{scoreFlag,jdbcType=TINYINT},
+		#{soldFlag,jdbcType=TINYINT},
+		#{organNo,jdbcType=VARCHAR},
+		#{organName,jdbcType=VARCHAR},
+		#{publishOrganNo,jdbcType=VARCHAR},
+		#{publishOrganName,jdbcType=VARCHAR},
+		#{giveOrganNo,jdbcType=VARCHAR},
+		#{giveOrganName,jdbcType=VARCHAR}, #{giveTime,jdbcType=TIMESTAMP},
+		#{giveBillNo,jdbcType=VARCHAR}, #{giveBillType,jdbcType=VARCHAR},
+		#{useOrganNo,jdbcType=VARCHAR},
+		#{useOrganName,jdbcType=VARCHAR},
+		#{useTime,jdbcType=TIMESTAMP}, #{useBillNo,jdbcType=VARCHAR},
+		#{useBillType,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT},
+		#{instructions,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{createUserNo,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateUserNo,jdbcType=VARCHAR},
+		#{updateUser,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{auditNo,jdbcType=VARCHAR}, #{auditor,jdbcType=VARCHAR},
+		#{auditTime,jdbcType=TIMESTAMP}, #{companyNo,jdbcType=CHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.Ticket">
+		INSERT INTO ticket
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="ticketNo != null">
+				ticket_no,
+			</if>
+			<if test="ticketCode != null">
+				ticket_code,
+			</if>
+			<if test="ticketDefineNo != null">
+				ticket_define_no,
+			</if>
+			<if test="ticketName != null">
+				ticket_name,
+			</if>
+			<if test="applyType != null">
+				apply_type,
+			</if>
+			<if test="ticketType != null">
+				ticket_type,
+			</if>
+			<if test="discType != null">
+				disc_type,
+			</if>
+			<if test="amount != null">
+				amount,
+			</if>
+			<if test="maxAmount != null">
+				max_amount,
+			</if>
+			<if test="deductionType != null">
+				deduction_type,
+			</if>
+			<if test="buyFlag != null">
+				buy_flag,
+			</if>
+			<if test="buyAmount != null">
+				buy_amount,
+			</if>
+			<if test="startTime != null">
+				start_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="returnFlag != null">
+				return_flag,
+			</if>
+			<if test="changeFlag != null">
+				change_flag,
+			</if>
+			<if test="ticketShareFlag != null">
+				ticket_share_flag,
+			</if>
+			<if test="scoreFlag != null">
+				score_flag,
+			</if>
+			<if test="soldFlag != null">
+				sold_flag,
+			</if>
+			<if test="organNo != null">
+				organ_no,
+			</if>
+			<if test="organName != null">
+				organ_name,
+			</if>
+			<if test="publishOrganNo != null">
+				publish_organ_no,
+			</if>
+			<if test="publishOrganName != null">
+				publish_organ_name,
+			</if>
+			<if test="giveOrganNo != null">
+				give_organ_no,
+			</if>
+			<if test="giveOrganName != null">
+				give_organ_name,
+			</if>
+			<if test="giveTime != null">
+				give_time,
+			</if>
+			<if test="giveBillNo != null">
+				give_bill_no,
+			</if>
+			<if test="giveBillType != null">
+				give_bill_type,
+			</if>
+			<if test="useOrganNo != null">
+				use_organ_no,
+			</if>
+			<if test="useOrganName != null">
+				use_organ_name,
+			</if>
+			<if test="useTime != null">
+				use_time,
+			</if>
+			<if test="useBillNo != null">
+				use_bill_no,
+			</if>
+			<if test="useBillType != null">
+				use_bill_type,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="instructions != null">
+				instructions,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="createUserNo != null">
+				create_user_no,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateUserNo != null">
+				update_user_no,
+			</if>
+			<if test="updateUser != null">
+				update_user,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="auditNo != null">
+				audit_no,
+			</if>
+			<if test="auditor != null">
+				auditor,
+			</if>
+			<if test="auditTime != null">
+				audit_time,
+			</if>
+			<if test="companyNo != null">
+				company_no,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=CHAR},
+			</if>
+			<if test="ticketNo != null">
+				#{ticketNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ticketCode != null">
+				#{ticketCode,jdbcType=VARCHAR},
+			</if>
+			<if test="ticketDefineNo != null">
+				#{ticketDefineNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ticketName != null">
+				#{ticketName,jdbcType=VARCHAR},
+			</if>
+			<if test="applyType != null">
+				#{applyType,jdbcType=TINYINT},
+			</if>
+			<if test="ticketType != null">
+				#{ticketType,jdbcType=TINYINT},
+			</if>
+			<if test="discType != null">
+				#{discType,jdbcType=TINYINT},
+			</if>
+			<if test="amount != null">
+				#{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="maxAmount != null">
+				#{maxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="deductionType != null">
+				#{deductionType,jdbcType=TINYINT},
+			</if>
+			<if test="buyFlag != null">
+				#{buyFlag,jdbcType=TINYINT},
+			</if>
+			<if test="buyAmount != null">
+				#{buyAmount,jdbcType=INTEGER},
+			</if>
+			<if test="startTime != null">
+				#{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="returnFlag != null">
+				#{returnFlag,jdbcType=TINYINT},
+			</if>
+			<if test="changeFlag != null">
+				#{changeFlag,jdbcType=TINYINT},
+			</if>
+			<if test="ticketShareFlag != null">
+				#{ticketShareFlag,jdbcType=TINYINT},
+			</if>
+			<if test="scoreFlag != null">
+				#{scoreFlag,jdbcType=TINYINT},
+			</if>
+			<if test="soldFlag != null">
+				#{soldFlag,jdbcType=TINYINT},
+			</if>
+			<if test="organNo != null">
+				#{organNo,jdbcType=VARCHAR},
+			</if>
+			<if test="organName != null">
+				#{organName,jdbcType=VARCHAR},
+			</if>
+			<if test="publishOrganNo != null">
+				#{publishOrganNo,jdbcType=VARCHAR},
+			</if>
+			<if test="publishOrganName != null">
+				#{publishOrganName,jdbcType=VARCHAR},
+			</if>
+			<if test="giveOrganNo != null">
+				#{giveOrganNo,jdbcType=VARCHAR},
+			</if>
+			<if test="giveOrganName != null">
+				#{giveOrganName,jdbcType=VARCHAR},
+			</if>
+			<if test="giveTime != null">
+				#{giveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="giveBillNo != null">
+				#{giveBillNo,jdbcType=VARCHAR},
+			</if>
+			<if test="giveBillType != null">
+				#{giveBillType,jdbcType=VARCHAR},
+			</if>
+			<if test="useOrganNo != null">
+				#{useOrganNo,jdbcType=VARCHAR},
+			</if>
+			<if test="useOrganName != null">
+				#{useOrganName,jdbcType=VARCHAR},
+			</if>
+			<if test="useTime != null">
+				#{useTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="useBillNo != null">
+				#{useBillNo,jdbcType=VARCHAR},
+			</if>
+			<if test="useBillType != null">
+				#{useBillType,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="instructions != null">
+				#{instructions,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserNo != null">
+				#{createUserNo,jdbcType=VARCHAR},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUserNo != null">
+				#{updateUserNo,jdbcType=VARCHAR},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="auditNo != null">
+				#{auditNo,jdbcType=VARCHAR},
+			</if>
+			<if test="auditor != null">
+				#{auditor,jdbcType=VARCHAR},
+			</if>
+			<if test="auditTime != null">
+				#{auditTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="companyNo != null">
+				#{companyNo,jdbcType=CHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.Ticket">
+		UPDATE ticket
+		<set>
+			<if test="ticketNo != null">
+				ticket_no = #{ticketNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ticketCode != null">
+				ticket_code = #{ticketCode,jdbcType=VARCHAR},
+			</if>
+			<if test="ticketDefineNo != null">
+				ticket_define_no = #{ticketDefineNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ticketName != null">
+				ticket_name = #{ticketName,jdbcType=VARCHAR},
+			</if>
+			<if test="applyType != null">
+				apply_type = #{applyType,jdbcType=TINYINT},
+			</if>
+			<if test="ticketType != null">
+				ticket_type = #{ticketType,jdbcType=TINYINT},
+			</if>
+			<if test="discType != null">
+				disc_type = #{discType,jdbcType=TINYINT},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="maxAmount != null">
+				max_amount = #{maxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="deductionType != null">
+				deduction_type = #{deductionType,jdbcType=TINYINT},
+			</if>
+			<if test="buyFlag != null">
+				buy_flag = #{buyFlag,jdbcType=TINYINT},
+			</if>
+			<if test="buyAmount != null">
+				buy_amount = #{buyAmount,jdbcType=INTEGER},
+			</if>
+			<if test="startTime != null">
+				start_time = #{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="returnFlag != null">
+				return_flag = #{returnFlag,jdbcType=TINYINT},
+			</if>
+			<if test="changeFlag != null">
+				change_flag = #{changeFlag,jdbcType=TINYINT},
+			</if>
+			<if test="ticketShareFlag != null">
+				ticket_share_flag = #{ticketShareFlag,jdbcType=TINYINT},
+			</if>
+			<if test="scoreFlag != null">
+				score_flag = #{scoreFlag,jdbcType=TINYINT},
+			</if>
+			<if test="soldFlag != null">
+				sold_flag = #{soldFlag,jdbcType=TINYINT},
+			</if>
+			<if test="organNo != null">
+				organ_no = #{organNo,jdbcType=VARCHAR},
+			</if>
+			<if test="organName != null">
+				organ_name = #{organName,jdbcType=VARCHAR},
+			</if>
+			<if test="publishOrganNo != null">
+				publish_organ_no = #{publishOrganNo,jdbcType=VARCHAR},
+			</if>
+			<if test="publishOrganName != null">
+				publish_organ_name =
+				#{publishOrganName,jdbcType=VARCHAR},
+			</if>
+			<if test="giveOrganNo != null">
+				give_organ_no = #{giveOrganNo,jdbcType=VARCHAR},
+			</if>
+			<if test="giveOrganName != null">
+				give_organ_name = #{giveOrganName,jdbcType=VARCHAR},
+			</if>
+			<if test="giveTime != null">
+				give_time = #{giveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="giveBillNo != null">
+				give_bill_no = #{giveBillNo,jdbcType=VARCHAR},
+			</if>
+			<if test="giveBillType != null">
+				give_bill_type = #{giveBillType,jdbcType=VARCHAR},
+			</if>
+			<if test="useOrganNo != null">
+				use_organ_no = #{useOrganNo,jdbcType=VARCHAR},
+			</if>
+			<if test="useOrganName != null">
+				use_organ_name = #{useOrganName,jdbcType=VARCHAR},
+			</if>
+			<if test="useTime != null">
+				use_time = #{useTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="useBillNo != null">
+				use_bill_no = #{useBillNo,jdbcType=VARCHAR},
+			</if>
+			<if test="useBillType != null">
+				use_bill_type = #{useBillType,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="instructions != null">
+				instructions = #{instructions,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserNo != null">
+				create_user_no = #{createUserNo,jdbcType=VARCHAR},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUserNo != null">
+				update_user_no = #{updateUserNo,jdbcType=VARCHAR},
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="auditNo != null">
+				audit_no = #{auditNo,jdbcType=VARCHAR},
+			</if>
+			<if test="auditor != null">
+				auditor = #{auditor,jdbcType=VARCHAR},
+			</if>
+			<if test="auditTime != null">
+				audit_time = #{auditTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="companyNo != null">
+				company_no = #{companyNo,jdbcType=CHAR},
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=CHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.Ticket">
+		UPDATE ticket
+		SET
+		ticket_no = #{ticketNo,jdbcType=VARCHAR},
+		ticket_code =
+		#{ticketCode,jdbcType=VARCHAR},
+		ticket_define_no =
+		#{ticketDefineNo,jdbcType=VARCHAR},
+		ticket_name =
+		#{ticketName,jdbcType=VARCHAR},
+		apply_type =
+		#{applyType,jdbcType=TINYINT},
+		ticket_type =
+		#{ticketType,jdbcType=TINYINT},
+		disc_type =
+		#{discType,jdbcType=TINYINT},
+		amount = #{amount,jdbcType=DECIMAL},
+		max_amount = #{maxAmount,jdbcType=DECIMAL},
+		deduction_type =
+		#{deductionType,jdbcType=TINYINT},
+		buy_flag =
+		#{buyFlag,jdbcType=TINYINT},
+		buy_amount =
+		#{buyAmount,jdbcType=INTEGER},
+		start_time =
+		#{startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{endTime,jdbcType=TIMESTAMP},
+		return_flag =
+		#{returnFlag,jdbcType=TINYINT},
+		change_flag =
+		#{changeFlag,jdbcType=TINYINT},
+		ticket_share_flag =
+		#{ticketShareFlag,jdbcType=TINYINT},
+		score_flag =
+		#{scoreFlag,jdbcType=TINYINT},
+		sold_flag =
+		#{soldFlag,jdbcType=TINYINT},
+		organ_no = #{organNo,jdbcType=VARCHAR},
+		organ_name = #{organName,jdbcType=VARCHAR},
+		publish_organ_no =
+		#{publishOrganNo,jdbcType=VARCHAR},
+		publish_organ_name =
+		#{publishOrganName,jdbcType=VARCHAR},
+		give_organ_no =
+		#{giveOrganNo,jdbcType=VARCHAR},
+		give_organ_name =
+		#{giveOrganName,jdbcType=VARCHAR},
+		give_time =
+		#{giveTime,jdbcType=TIMESTAMP},
+		give_bill_no =
+		#{giveBillNo,jdbcType=VARCHAR},
+		give_bill_type =
+		#{giveBillType,jdbcType=VARCHAR},
+		use_organ_no =
+		#{useOrganNo,jdbcType=VARCHAR},
+		use_organ_name =
+		#{useOrganName,jdbcType=VARCHAR},
+		use_time =
+		#{useTime,jdbcType=TIMESTAMP},
+		use_bill_no =
+		#{useBillNo,jdbcType=VARCHAR},
+		use_bill_type =
+		#{useBillType,jdbcType=VARCHAR},
+		status = #{status,jdbcType=TINYINT},
+		instructions = #{instructions,jdbcType=VARCHAR},
+		remark =
+		#{remark,jdbcType=VARCHAR},
+		create_user_no =
+		#{createUserNo,jdbcType=VARCHAR},
+		create_user =
+		#{createUser,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_user_no =
+		#{updateUserNo,jdbcType=VARCHAR},
+		update_user =
+		#{updateUser,jdbcType=VARCHAR},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		audit_no =
+		#{auditNo,jdbcType=VARCHAR},
+		auditor = #{auditor,jdbcType=VARCHAR},
+		audit_time = #{auditTime,jdbcType=TIMESTAMP},
+		company_no = #{companyNo,jdbcType=CHAR}
+		WHERE id =
+		#{id,jdbcType=CHAR}
+	</update>
+</mapper>

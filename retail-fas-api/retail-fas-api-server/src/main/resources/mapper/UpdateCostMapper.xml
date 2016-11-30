@@ -1,0 +1,872 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.UpdateCostMapper" >
+
+	<select id="selectOrderDtlCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT COUNT(1)
+		FROM `order_dtl` a
+		JOIN `order_main` b ON a.order_no = b.order_no
+		JOIN shop s ON b.shop_no = s.shop_no
+		JOIN `company` c ON s.company_no = c.company_no
+		WHERE 1=1 
+		<if test="null!=params" >
+			<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+				${params.queryCondition}
+			</if>
+			<if test="null != params.companyNo and ''!=params.companyNo">
+				AND s.company_no = #{params.companyNo} 
+			</if>
+			<if test="null!=params.startDate and ''!=params.startDate" >
+				AND b.out_date &gt;= #{params.startDate, jdbcType=DATE}
+			</if>
+			<if test="null!=params.endDate and ''!=params.endDate" >    
+				AND b.out_date &lt;= #{params.endDate, jdbcType=DATE}
+			</if>
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND a.brand_no IN
+				<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+					#{brandNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+			<if test="null!=params.itemNos and ''!=params.itemNos" >
+				AND a.item_no IN
+				<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+					#{itemNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+		</if>
+	</select>
+	
+	<update id="updateOrderDtl" parameterType="map">
+		UPDATE 
+			order_dtl AS main 
+		JOIN (
+			SELECT * FROM (
+				SELECT a1.*,IFNULL(hcm.headquarter_cost,0) AS headquarter_cost FROM (
+					SELECT a1.* FROM (
+						SELECT a.*,IFNULL(ic.unit_cost,0) AS unit_cost,IFNULL(rcm.region_cost,0) AS region_cost
+						FROM (
+							SELECT a.id,a.item_no,b.out_date,s.company_no,c.zone_no
+							FROM `order_dtl` a
+							JOIN `order_main` b ON a.order_no = b.order_no
+							JOIN shop s ON b.shop_no = s.shop_no
+							JOIN `company` c ON s.company_no = c.company_no
+							WHERE 1=1 
+							<if test="null!=params" >
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null != params.companyNo and ''!=params.companyNo">
+									AND s.company_no = #{params.companyNo} 
+								</if>
+								<if test="null!=params.startDate and ''!=params.startDate" >
+									AND b.out_date &gt;= #{params.startDate, jdbcType=DATE}
+								</if>
+								<if test="null!=params.endDate and ''!=params.endDate" >    
+									AND b.out_date &lt;= #{params.endDate, jdbcType=DATE}
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND a.brand_no IN
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemNos and ''!=params.itemNos" >
+									AND a.item_no IN
+									<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+										#{itemNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							</if>
+							<if test="null != params">
+								<if test="null != params.startRowNum and null != params.selectCount">
+									LIMIT #{params.startRowNum} ,#{params.selectCount}
+								</if>
+							</if>
+						) AS a
+						LEFT JOIN item_cost ic ON a.company_no = ic.company_no 
+							AND a.item_no = ic.item_no 
+							AND ic.year = DATE_FORMAT(a.out_date, '%Y') 
+							AND ic.month = DATE_FORMAT(a.out_date, '%c')
+						LEFT JOIN `region_cost_maintain` rcm ON a.zone_no = rcm.zone_no AND a.item_no = rcm.item_no AND a.out_date > rcm.effective_time
+						ORDER BY rcm.effective_time DESC) AS a1
+					GROUP BY a1.id ) AS a1
+				LEFT JOIN `headquarter_cost_maintain` hcm ON a1.item_no = hcm.item_no AND a1.out_date > hcm.effective_time
+				ORDER BY hcm.effective_time DESC ) AS a2
+			GROUP BY a2.id ) AS temp ON main.id = temp.id
+		SET 
+			main.unit_cost = temp.unit_cost,
+			main.region_cost = temp.region_cost,
+			main.headquarter_cost = temp.headquarter_cost
+	</update>
+	
+	<select id="selectReturnExchangeDtlCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT COUNT(1)
+		FROM `return_exchange_dtl` a
+		JOIN `return_exchange_main` b ON a.business_no = b.business_no
+		JOIN shop s ON b.shop_no = s.shop_no
+		JOIN `company` c ON s.company_no = c.company_no
+		WHERE 1=1 
+		<if test="null!=params" >
+			<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+				${params.queryCondition}
+			</if>
+			<if test="null != params.companyNo and ''!=params.companyNo">
+				AND s.company_no = #{params.companyNo} 
+			</if>
+			<if test="null!=params.startDate and ''!=params.startDate" >
+				AND b.out_date &gt;= #{params.startDate, jdbcType=DATE}
+			</if>
+			<if test="null!=params.endDate and ''!=params.endDate" >    
+				AND b.out_date &lt;= #{params.endDate, jdbcType=DATE}
+			</if>
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND a.brand_no IN
+				<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+					#{brandNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+			<if test="null!=params.itemNos and ''!=params.itemNos" >
+				AND a.item_no IN
+				<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+					#{itemNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+		</if>
+	</select>
+	
+	<update id="updateReturnExchangeDtl" parameterType="map">
+		UPDATE 
+			return_exchange_dtl AS main 
+		JOIN (
+			SELECT * FROM (
+				SELECT a1.*,IFNULL(hcm.headquarter_cost,0) AS headquarter_cost FROM (
+					SELECT a1.* FROM (
+						SELECT a.*,IFNULL(ic.unit_cost,0) AS unit_cost,IFNULL(rcm.region_cost,0) AS region_cost
+						FROM (
+							SELECT a.id,a.item_no,b.out_date,s.company_no,c.zone_no
+							FROM `return_exchange_dtl` a
+							JOIN `return_exchange_main` b ON a.business_no = b.business_no
+							JOIN shop s ON b.shop_no = s.shop_no
+							JOIN `company` c ON s.company_no = c.company_no
+							WHERE 1=1 
+							<if test="null!=params" >
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null != params.companyNo and ''!=params.companyNo">
+									AND s.company_no = #{params.companyNo} 
+								</if>
+								<if test="null!=params.startDate and ''!=params.startDate" >
+									AND b.out_date &gt;= #{params.startDate, jdbcType=DATE}
+								</if>
+								<if test="null!=params.endDate and ''!=params.endDate" >    
+									AND b.out_date &lt;= #{params.endDate, jdbcType=DATE}
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND a.brand_no IN
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemNos and ''!=params.itemNos" >
+									AND a.item_no IN
+									<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+										#{itemNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							</if>
+							<if test="null != params">
+								<if test="null != params.startRowNum and null != params.selectCount">
+									LIMIT #{params.startRowNum} ,#{params.selectCount}
+								</if>
+							</if>
+						) AS a
+						LEFT JOIN item_cost ic ON a.company_no = ic.company_no 
+							AND a.item_no = ic.item_no 
+							AND ic.year = DATE_FORMAT(a.out_date, '%Y') 
+							AND ic.month = DATE_FORMAT(a.out_date, '%c')
+						LEFT JOIN `region_cost_maintain` rcm ON a.zone_no = rcm.zone_no AND a.item_no = rcm.item_no AND a.out_date > rcm.effective_time
+						ORDER BY rcm.effective_time DESC) AS a1
+					GROUP BY a1.id ) AS a1
+				LEFT JOIN `headquarter_cost_maintain` hcm ON a1.item_no = hcm.item_no AND a1.out_date > hcm.effective_time
+				ORDER BY hcm.effective_time DESC ) AS a2
+			GROUP BY a2.id ) AS temp ON main.id = temp.id
+		SET 
+			main.unit_cost = temp.unit_cost,
+			main.region_cost = temp.region_cost,
+			main.headquarter_cost = temp.headquarter_cost
+	</update>
+	
+	<select id="selectBillBuyBalanceCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT COUNT(1)
+		FROM `bill_buy_balance` a
+		JOIN `company` c ON a.buyer_no = c.company_no
+		WHERE 1=1 
+		<if test="null!=params" >
+			<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+				${params.queryCondition}
+			</if>
+			<if test="null != params.companyNo and ''!=params.companyNo">
+				AND a.buyer_no = #{params.companyNo} 
+			</if>
+			<if test="null!=params.startDate and ''!=params.startDate" >
+				AND IFNULL(a.send_date,a.receive_date) &gt;= #{params.startDate, jdbcType=DATE}
+			</if>
+			<if test="null!=params.endDate and ''!=params.endDate" >    
+				AND IFNULL(a.send_date,a.receive_date) &lt;= #{params.endDate, jdbcType=DATE}
+			</if>
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND a.brand_no IN
+				<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+					#{brandNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+			<if test="null!=params.itemNos and ''!=params.itemNos" >
+				AND a.item_no IN
+				<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+					#{itemNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+		</if>
+	</select>
+	
+	<update id="updateBillBuyBalance" parameterType="map">
+		UPDATE 
+			bill_buy_balance AS main 
+		JOIN (
+			SELECT * FROM (
+				SELECT a1.*,IFNULL(hcm.headquarter_cost,0) AS headquarter_cost FROM (
+					SELECT a1.* FROM (
+						SELECT a.*,IFNULL(ic.unit_cost,0) AS unit_cost,IFNULL(rcm.region_cost,0) AS region_cost
+						FROM (
+							SELECT a.id,a.item_no,IFNULL(a.send_date,a.receive_date) AS out_date,a.buyer_no AS company_no,c.zone_no
+							FROM `bill_buy_balance` a
+							JOIN `company` c ON a.buyer_no = c.company_no
+							WHERE 1=1 
+							<if test="null!=params" >
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null != params.companyNo and ''!=params.companyNo">
+									AND a.buyer_no = #{params.companyNo} 
+								</if>
+								<if test="null!=params.startDate and ''!=params.startDate" >
+									AND IFNULL(a.send_date,a.receive_date) &gt;= #{params.startDate, jdbcType=DATE}
+								</if>
+								<if test="null!=params.endDate and ''!=params.endDate" >    
+									AND IFNULL(a.send_date,a.receive_date) &lt;= #{params.endDate, jdbcType=DATE}
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND a.brand_no IN
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemNos and ''!=params.itemNos" >
+									AND a.item_no IN
+									<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+										#{itemNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							</if>
+							<if test="null != params">
+								<if test="null != params.startRowNum and null != params.selectCount">
+									LIMIT #{params.startRowNum} ,#{params.selectCount}
+								</if>
+							</if>
+						) AS a
+						LEFT JOIN item_cost ic ON a.company_no = ic.company_no 
+							AND a.item_no = ic.item_no 
+							AND ic.year = DATE_FORMAT(a.out_date, '%Y') 
+							AND ic.month = DATE_FORMAT(a.out_date, '%c')
+						LEFT JOIN `region_cost_maintain` rcm ON a.zone_no = rcm.zone_no AND a.item_no = rcm.item_no AND a.out_date > rcm.effective_time
+						ORDER BY rcm.effective_time DESC) AS a1
+					GROUP BY a1.id ) AS a1
+				LEFT JOIN `headquarter_cost_maintain` hcm ON a1.item_no = hcm.item_no AND a1.out_date > hcm.effective_time
+				ORDER BY hcm.effective_time DESC ) AS a2
+			GROUP BY a2.id ) AS temp ON main.id = temp.id
+		SET 
+			main.unit_cost = temp.unit_cost,
+			main.region_cost = temp.region_cost,
+			main.headquarter_cost = temp.headquarter_cost
+	</update>
+	
+	<select id="selectBillSaleBalanceCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT COUNT(1)
+		FROM `bill_sale_balance` a
+		JOIN `company` c ON a.saler_no = c.company_no
+		WHERE 1=1 
+		<if test="null!=params" >
+			<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+				${params.queryCondition}
+			</if>
+			<if test="null != params.companyNo and ''!=params.companyNo">
+				AND a.saler_no = #{params.companyNo} 
+			</if>
+			<if test="null!=params.startDate and ''!=params.startDate" >
+				AND IFNULL(a.send_date,a.receive_date) &gt;= #{params.startDate, jdbcType=DATE}
+			</if>
+			<if test="null!=params.endDate and ''!=params.endDate" >    
+				AND IFNULL(a.send_date,a.receive_date) &lt;= #{params.endDate, jdbcType=DATE}
+			</if>
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND a.brand_no IN
+				<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+					#{brandNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+			<if test="null!=params.itemNos and ''!=params.itemNos" >
+				AND a.item_no IN
+				<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+					#{itemNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+		</if>
+	</select>
+	
+	<update id="updateBillSaleBalance" parameterType="map">
+		UPDATE 
+			bill_sale_balance AS main 
+		JOIN (
+			SELECT * FROM (
+				SELECT a1.*,IFNULL(hcm.headquarter_cost,0) AS headquarter_cost FROM (
+					SELECT a1.* FROM (
+						SELECT a.*,IFNULL(ic.unit_cost,0) AS unit_cost,IFNULL(rcm.region_cost,0) AS region_cost
+						FROM (
+							SELECT a.id,a.item_no,IFNULL(a.send_date,a.receive_date) AS out_date,a.saler_no AS company_no,c.zone_no
+							FROM `bill_sale_balance` a
+							JOIN `company` c ON a.saler_no = c.company_no
+							WHERE 1=1 
+							<if test="null!=params" >
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null != params.companyNo and ''!=params.companyNo">
+									AND a.saler_no = #{params.companyNo} 
+								</if>
+								<if test="null!=params.startDate and ''!=params.startDate" >
+									AND IFNULL(a.send_date,a.receive_date) &gt;= #{params.startDate, jdbcType=DATE}
+								</if>
+								<if test="null!=params.endDate and ''!=params.endDate" >    
+									AND IFNULL(a.send_date,a.receive_date) &lt;= #{params.endDate, jdbcType=DATE}
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND a.brand_no IN
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemNos and ''!=params.itemNos" >
+									AND a.item_no IN
+									<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+										#{itemNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							</if>
+							<if test="null != params">
+								<if test="null != params.startRowNum and null != params.selectCount">
+									LIMIT #{params.startRowNum} ,#{params.selectCount}
+								</if>
+							</if>
+						) AS a
+						LEFT JOIN item_cost ic ON a.company_no = ic.company_no 
+							AND a.item_no = ic.item_no 
+							AND ic.year = DATE_FORMAT(a.out_date, '%Y') 
+							AND ic.month = DATE_FORMAT(a.out_date, '%c')
+						LEFT JOIN `region_cost_maintain` rcm ON a.zone_no = rcm.zone_no AND a.item_no = rcm.item_no AND a.out_date > rcm.effective_time
+						ORDER BY rcm.effective_time DESC) AS a1
+					GROUP BY a1.id ) AS a1
+				LEFT JOIN `headquarter_cost_maintain` hcm ON a1.item_no = hcm.item_no AND a1.out_date > hcm.effective_time
+				ORDER BY hcm.effective_time DESC ) AS a2
+			GROUP BY a2.id ) AS temp ON main.id = temp.id
+		SET 
+			main.unit_cost = temp.unit_cost,
+			main.region_cost = temp.region_cost,
+			main.headquarter_cost = temp.headquarter_cost
+	</update>
+	
+	<select id="selectPeriodBalanceCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT COUNT(1)
+		FROM `period_balance` a
+		JOIN `company` c ON a.company_no = c.company_no
+		WHERE 1=1 
+		<if test="null!=params" >
+			<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+				${params.queryCondition}
+			</if>
+			<if test="null != params.companyNo and ''!=params.companyNo">
+				AND a.company_no = #{params.companyNo} 
+			</if>
+			<if test="null!=params.startDate and ''!=params.startDate" >
+				AND a.year = DATE_FORMAT(#{params.startDate, jdbcType=DATE}, '%Y') 
+				AND a.month = DATE_FORMAT(#{params.startDate, jdbcType=DATE}, '%c')
+			</if>
+			<if test="null!=params.brandNos and ''!=params.brandNos" >
+				AND a.brand_no IN
+				<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+					#{brandNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+			<if test="null!=params.itemNos and ''!=params.itemNos" >
+				AND a.item_no IN
+				<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+					#{itemNos, jdbcType=CHAR}
+				</foreach>
+			</if>
+		</if>
+	</select>
+	
+	<update id="updatePeriodBalance" parameterType="map">
+		UPDATE 
+			period_balance AS main 
+		JOIN (
+			SELECT * FROM (
+				SELECT a1.*,IFNULL(hcm.headquarter_cost,0) AS headquarter_cost FROM (
+					SELECT a1.* FROM (
+						SELECT a.*,IFNULL(ic.unit_cost,0) AS unit_cost,IFNULL(rcm.region_cost,0) AS region_cost
+						FROM (
+							SELECT a.id,a.item_no,LAST_DAY(CONCAT(a.year,'-',a.month,'-','01')) AS out_date,a.company_no,c.zone_no
+							FROM `period_balance` a
+							JOIN `company` c ON a.company_no = c.company_no
+							WHERE 1=1 
+							<if test="null!=params" >
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null != params.companyNo and ''!=params.companyNo">
+									AND a.company_no = #{params.companyNo} 
+								</if>
+								<if test="null!=params.startDate and ''!=params.startDate" >
+									AND a.year = DATE_FORMAT(#{params.startDate, jdbcType=DATE}, '%Y') 
+									AND a.month = DATE_FORMAT(#{params.startDate, jdbcType=DATE}, '%c')
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND a.brand_no IN
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemNos and ''!=params.itemNos" >
+									AND a.item_no IN
+									<foreach collection="params.itemNos" index="index" item="itemNos" open="(" separator="," close=")">
+										#{itemNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							</if>
+							<if test="null != params">
+								<if test="null != params.startRowNum and null != params.selectCount">
+									LIMIT #{params.startRowNum} ,#{params.selectCount}
+								</if>
+							</if>
+						) AS a
+						LEFT JOIN item_cost ic ON a.company_no = ic.company_no 
+							AND a.item_no = ic.item_no 
+							AND ic.year = DATE_FORMAT(a.out_date, '%Y') 
+							AND ic.month = DATE_FORMAT(a.out_date, '%c')
+						LEFT JOIN `region_cost_maintain` rcm ON a.zone_no = rcm.zone_no AND a.item_no = rcm.item_no AND a.out_date > rcm.effective_time
+						ORDER BY rcm.effective_time DESC) AS a1
+					GROUP BY a1.id ) AS a1
+				LEFT JOIN `headquarter_cost_maintain` hcm ON a1.item_no = hcm.item_no AND a1.out_date > hcm.effective_time
+				ORDER BY hcm.effective_time DESC ) AS a2
+			GROUP BY a2.id ) AS temp ON main.id = temp.id
+		SET 
+			main.unit_cost = temp.unit_cost,
+			main.region_cost = temp.region_cost,
+			main.headquarter_cost = temp.headquarter_cost
+	</update>
+  
+  <update id="updatePosOrderRegionCost" parameterType="map">
+  	UPDATE order_main om , order_dtl od , SHOP , COMPANY co1
+	   SET od.`region_cost`=
+	  (SELECT c.`region_cost` 
+	  	FROM region_cost_maintain c 
+	  		WHERE om.out_date &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE co1.`company_no` = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE co1.`company_no` = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE co1.`company_no` = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND OD.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)   
+	WHERE om.`order_no` = od.`order_no` 
+	  AND om.SHOP_NO = shop.`shop_no` 
+	  AND SHOP.COMPANY_NO = co1.COMPANY_NO
+	  AND od.`region_cost` &lt;&gt; (SELECT 
+	    c.`region_cost` 
+	  FROM region_cost_maintain c 
+	  	WHERE om.out_date &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE co1.`company_no` = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE co1.`company_no` = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE co1.`company_no` = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND OD.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)
+	AND SHOP.COMPANY_NO = #{params.companyNo}
+	AND om.out_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updatePosReturnExchangeRegionCost" parameterType="map">
+  	UPDATE return_exchange_main om , return_exchange_dtl od , SHOP , COMPANY co1
+	   SET od.`region_cost`=
+	  (SELECT c.`region_cost` FROM region_cost_maintain c 
+	  	WHERE om.out_date &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE co1.`company_no` = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE co1.`company_no` = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE co1.`company_no` = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND OD.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)   
+	WHERE om.`business_no` = od.`business_no` 
+	  AND om.SHOP_NO = shop.`shop_no` 
+	  AND SHOP.COMPANY_NO = co1.COMPANY_NO
+	  AND od.`region_cost` &lt;&gt; (SELECT 
+	    c.`region_cost` 
+	  FROM region_cost_maintain c 
+	  WHERE om.out_date &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE co1.`company_no` = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE co1.`company_no` = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE co1.`company_no` = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND OD.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1) 
+	AND SHOP.COMPANY_NO = #{params.companyNo}
+	AND om.out_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updateBuyBalanceRegionCost" parameterType="map">
+  	UPDATE bill_buy_balance A
+	   SET A.region_cost=
+	  (SELECT c.`region_cost` FROM region_cost_maintain c 
+	  	WHERE IFNULL(A.RECEIVE_DATE,A.SEND_DATE) &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE A.BUYER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE A.BUYER_NO = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE A.BUYER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)  
+	WHERE  A.REGION_COST &lt;&gt; 
+	  (SELECT c.`region_cost` FROM region_cost_maintain c 
+	  	WHERE IFNULL(A.RECEIVE_DATE,A.SEND_DATE) &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE A.BUYER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE A.BUYER_NO = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE A.BUYER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)
+	  AND NOT ISNULL((SELECT c.`region_cost` FROM
+	    region_cost_maintain c 
+	  WHERE IFNULL(A.RECEIVE_DATE,A.SEND_DATE) &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE A.BUYER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE A.BUYER_NO = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE A.BUYER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1))
+	AND A.BUYER_NO = #{params.companyNo}
+	AND IFNULL(A.RECEIVE_DATE,A.SEND_DATE) BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updateSaleBalanceRegionCost" parameterType="map">
+  	UPDATE bill_sale_balance A
+	   SET A.REGION_cost=
+	  (SELECT c.`region_cost` FROM
+	    region_cost_maintain c 
+	  	WHERE A.SEND_DATE &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE A.SALER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE A.SALER_NO = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE A.SALER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)  
+	WHERE  A.REGION_COST &lt;&gt; 
+	  (SELECT c.`region_cost` FROM
+	    region_cost_maintain c 
+	  	WHERE A.SEND_DATE &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE A.SALER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE A.SALER_NO = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE A.SALER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)
+	  AND NOT ISNULL((SELECT c.`region_cost` 
+	  FROM region_cost_maintain c 
+	  WHERE A.SEND_DATE &gt;= c.`effective_time` 
+	    AND IF(
+	      ISNULL(
+	        (SELECT PRICE_ZONE FROM `financial_account` F 
+	        	WHERE A.SALER_NO = F.COMPANY_NO)
+	      ),
+	      (SELECT ZONE_NO FROM COMPANY CO 
+	      	WHERE A.SALER_NO = CO.COMPANY_NO),
+	      (SELECT PRICE_ZONE FROM `financial_account` F 
+	      	WHERE A.SALER_NO = F.COMPANY_NO)
+	    ) = C.ZONE_NO 
+	    AND A.ITEM_NO = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1))
+	AND A.SALER_NO = #{params.companyNo}
+	AND A.SEND_DATE BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updatePosOrderHeadquaterCost" parameterType="map">
+  	UPDATE order_dtl od,order_main om,shop,company co
+	   SET od.headquarter_cost=
+	  (SELECT 
+	    c.`headquarter_cost` 
+	  FROM
+	    `headquarter_cost_maintain` c 
+	  WHERE om.out_date &gt;= c.`effective_time` 
+	    AND od.item_no = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)  
+	WHERE om.`order_no`=od.`order_no` 
+	  AND om.SHOP_NO = shop.`shop_no` 
+	  AND SHOP.COMPANY_NO = co.COMPANY_NO
+	  AND od.`headquarter_cost` &lt;&gt; 
+	  (SELECT 
+	    c.`headquarter_cost` 
+	  FROM
+	    `headquarter_cost_maintain` c 
+	  WHERE om.out_date &gt;= c.`effective_time` 
+	    AND od.item_no = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)
+	  AND SHOP.COMPANY_NO = #{params.companyNo}
+	AND om.`out_date` BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updatePosReturnExchangeHeadquaterCost" parameterType="map">
+  	UPDATE return_exchange_dtl od,return_exchange_main om,shop,company co
+	   SET od.headquarter_cost=
+	  (SELECT 
+	    c.`headquarter_cost` 
+	  FROM
+	    `headquarter_cost_maintain` c 
+	  WHERE om.out_date &gt;= c.`effective_time` 
+	    AND od.item_no = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)  
+	WHERE om.`business_no`=od.`business_no` 
+	  AND om.SHOP_NO = shop.`shop_no` 
+	  AND SHOP.COMPANY_NO = co.COMPANY_NO
+	  AND od.`headquarter_cost` &lt;&gt; 
+	  (SELECT 
+	    c.`headquarter_cost` 
+	  FROM
+	    `headquarter_cost_maintain` c 
+	  WHERE om.out_date &gt;= c.`effective_time` 
+	    AND od.item_no = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)
+	  AND SHOP.COMPANY_NO = #{params.companyNo}
+	AND om.`out_date` BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updateBuyBalanceHeadquaterCost" parameterType="map">
+  	UPDATE bill_buy_balance bbb
+	   SET bbb.headquarter_cost=
+	  (SELECT 
+	    c.`headquarter_cost` 
+	  FROM
+	    `headquarter_cost_maintain` c 
+	  WHERE IFNULL(bbb.receive_date,bbb.`send_date`) &gt;= c.`effective_time` 
+	    AND bbb.item_no = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)  
+	WHERE bbb.`headquarter_cost` &lt;&gt; 
+	  (SELECT 
+	    c.`headquarter_cost` 
+	  FROM
+	    `headquarter_cost_maintain` c 
+	  WHERE IFNULL(bbb.receive_date,bbb.`send_date`) &gt;= c.`effective_time` 
+	    AND bbb.item_no = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)
+	AND bbb.buyer_no = #{params.companyNo}
+	AND IFNULL(bbb.receive_date,bbb.`send_date`) BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updateSaleBalanceHeadquaterCost" parameterType="map">
+  	UPDATE bill_sale_balance bsb
+	   SET bsb.headquarter_cost=
+	  (SELECT 
+	    c.`headquarter_cost` 
+	  FROM
+	    `headquarter_cost_maintain` c 
+	  WHERE bsb.send_date &gt;= c.`effective_time` 
+	    AND bsb.item_no = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)  
+	WHERE bsb.`headquarter_cost` &lt;&gt; 
+	  (SELECT 
+	    c.`headquarter_cost` 
+	  FROM
+	    `headquarter_cost_maintain` c 
+	  WHERE bsb.send_date &gt;= c.`effective_time` 
+	    AND bsb.item_no = C.ITEM_NO 
+	  ORDER BY c.`effective_time` DESC 
+	  LIMIT 0, 1)
+	AND bsb.saler_no = #{params.companyNo}
+	AND bsb.send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updatePosOrderItemCost" parameterType="map">
+  	UPDATE  order_main om , order_dtl od,shop,company co,item_cost
+		SET od.`unit_cost`=item_cost.`unit_cost`
+		WHERE 
+		 om.`order_no` = od.`order_no` 
+		  AND om.SHOP_NO = shop.`shop_no` 
+		  AND SHOP.COMPANY_NO = co.COMPANY_NO
+		  AND SHOP.COMPANY_NO = ITEM_COST.COMPANY_NO 
+		  AND od.ITEM_NO = ITEM_COST.ITEM_NO 
+		  AND YEAR(
+		      DATE_FORMAT(
+		        om.out_DATE,
+		        '%Y-%m-%d'
+		      )
+		    ) = ITEM_COST.YEAR 
+		  AND MONTH(
+		      DATE_FORMAT(
+		        om.`out_date`,
+		        '%Y-%m-%d'
+		     )
+		   ) = ITEM_COST.MONTH   
+		AND od.`unit_cost` &lt;&gt; item_cost.`unit_cost` 
+		AND SHOP.COMPANY_NO = #{params.companyNo}
+		AND om.`out_date` BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updatePosReturnExchangeItemCost" parameterType="map">
+  	UPDATE  return_exchange_main om , return_exchange_dtl od,shop,company co,item_cost
+		SET od.`unit_cost`=item_cost.`unit_cost`
+		WHERE 
+		 om.`business_no` = od.`business_no` 
+		  AND om.SHOP_NO = shop.`shop_no` 
+		  AND SHOP.COMPANY_NO = co.COMPANY_NO
+		  AND SHOP.COMPANY_NO = ITEM_COST.COMPANY_NO 
+		  AND od.ITEM_NO = ITEM_COST.ITEM_NO 
+		  AND YEAR(
+		      DATE_FORMAT(
+		        om.out_DATE,
+		        '%Y-%m-%d'
+		      )
+		    ) = ITEM_COST.YEAR 
+		  AND MONTH(
+		      DATE_FORMAT(
+		        om.`out_date`,
+		        '%Y-%m-%d'
+		     )
+		   ) = ITEM_COST.MONTH   
+		AND od.`unit_cost` &lt;&gt; item_cost.`unit_cost`
+		AND SHOP.COMPANY_NO = #{params.companyNo}
+		AND om.`out_date` BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+  <update id="updateBuyBalanceItemCost" parameterType="map">
+	UPDATE bill_buy_balance bsb,item_cost
+	   SET  bsb.`unit_cost`= item_cost.`unit_cost`
+		WHERE bsb.buyer_no = ITEM_COST.COMPANY_NO 
+		  AND bsb.ITEM_NO = ITEM_COST.ITEM_NO 
+		  AND YEAR(
+		      DATE_FORMAT(
+		        IFNULL(bsb.receive_date,bsb.`send_date`),
+		        '%Y-%m-%d'
+		      )
+		    ) = ITEM_COST.YEAR 
+		  AND MONTH(
+		      DATE_FORMAT(
+		        IFNULL(bsb.receive_date,bsb.`send_date`),
+		        '%Y-%m-%d'
+		     )
+		   ) = ITEM_COST.MONTH   
+		 AND bsb.unit_cost &lt;&gt; item_cost.unit_cost	
+		 AND bsb.buyer_no = #{params.companyNo}
+		 AND IFNULL(bsb.receive_date,bsb.`send_date`) BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')																			
+  </update>
+  
+  <update id="updateSaleBalanceItemCost" parameterType="map">
+  	UPDATE bill_sale_balance bsb,item_cost
+	   SET  bsb.`unit_cost`= item_cost.`unit_cost`
+		WHERE bsb.saler_no = ITEM_COST.COMPANY_NO 
+		  AND bsb.ITEM_NO = ITEM_COST.ITEM_NO 
+		  AND YEAR(
+		      DATE_FORMAT(
+		        bsb.send_date,
+		        '%Y-%m-%d'
+		      )
+		    ) = ITEM_COST.YEAR 
+		  AND MONTH(
+		      DATE_FORMAT(
+		        bsb.send_date,
+		        '%Y-%m-%d'
+		     )
+		   ) = ITEM_COST.MONTH   
+		AND bsb.`unit_cost` &lt;&gt; item_cost.`unit_cost` 
+		AND bsb.saler_no = #{params.companyNo}
+		AND bsb.send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+  </update>
+  
+</mapper>

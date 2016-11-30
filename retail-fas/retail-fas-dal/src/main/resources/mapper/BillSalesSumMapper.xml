@@ -1,0 +1,2659 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillSalesSumMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSalesSum" >
+    <id column="id" property="id" jdbcType="CHAR" />    
+    <result column="region_no" property="regionNo" jdbcType="CHAR" />
+    <result column="region_name" property="regionName" jdbcType="VARCHAR" />
+    <result column="province_no" property="provinceNo" jdbcType="VARCHAR" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="biz_no" property="organNo2" jdbcType="CHAR" />
+    <result column="biz_name" property="organName2" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="multi" property="multi" jdbcType="VARCHAR" />
+    <result column="sale_type" property="saleType" jdbcType="VARCHAR" />
+    <result column="biz_type" property="bizType" jdbcType="VARCHAR" />
+    <result column="category_code" property="categoryCode" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="belonger" property="belonger" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="brand_flag" property="brandFlag" jdbcType="TINYINT" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="sale_month" property="saleMonth" jdbcType="CHAR" />
+    <result column="bill_month" property="billMonth" jdbcType="CHAR" />
+    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+    <result column="billing_date" property="billingDate" jdbcType="DATE" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+    <result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+    <result column="bsgroups_name" property="bsgroupsName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="sale_mode" property="saleMode" jdbcType="VARCHAR" />
+    <result column="retail_type" property="retailType" jdbcType="VARCHAR" />
+    <result column="shop_classify" property="shopClassify" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="open_date" property="openDate" jdbcType="DATE" />
+    <result column="employe_amount" property="employeAmount" jdbcType="INTEGER" />
+    <result column="area" property="area" jdbcType="DECIMAL" />
+    <result column="area_left" property="areaLeft" jdbcType="DECIMAL" />
+    <result column="area_total" property="areaTotal" jdbcType="DECIMAL" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="shop_level" property="shopLevel" jdbcType="VARCHAR" />
+    <result column="lma_period_salesnum" property="lmaPeriodSalesnum" jdbcType="INTEGER" />
+    <result column="lma_period_realamount" property="lmaPeriodRealamount" jdbcType="DECIMAL" />
+    <result column="lma_period_salesamount" property="lmaPeriodSalesamount" jdbcType="DECIMAL" />
+    <result column="lma_period_tagamount" property="lmaPeriodTagamount" jdbcType="DECIMAL" />
+    <result column="lma_period_salescost" property="lmaPeriodSalescost" jdbcType="DECIMAL" />
+    <result column="lma_period_salesdeductions" property="lmaPeriodSalesdeductions" jdbcType="DECIMAL" />
+    <result column="lma_period_contractdeductions" property="lmaPeriodContractdeductions" jdbcType="DECIMAL" />
+    <result column="lma_period_cutratedeductions" property="lmaPeriodCutratedeductions" jdbcType="DECIMAL" />
+    <result column="lma_period_promotiondeductions" property="lmaPeriodPromotiondeductions" jdbcType="DECIMAL" />
+    <result column="lma_period_balanceamount" property="lmaPeriodBalanceamount" jdbcType="DECIMAL" />
+    <result column="tmi_period_salesnum" property="tmiPeriodSalesnum" jdbcType="INTEGER" />
+    <result column="tmi_period_realamount" property="tmiPeriodRealamount" jdbcType="DECIMAL" />
+    <result column="tmi_period_salesamount" property="tmiPeriodSalesamount" jdbcType="DECIMAL" />
+    <result column="tmi_period_tagamount" property="tmiPeriodTagamount" jdbcType="DECIMAL" />
+    <result column="tmi_period_salescost" property="tmiPeriodSalescost" jdbcType="DECIMAL" />
+    <result column="tmi_period_salesdeductions" property="tmiPeriodSalesdeductions" jdbcType="DECIMAL" />
+    <result column="tmi_period_contractdeductions" property="tmiPeriodContractdeductions" jdbcType="DECIMAL" />
+    <result column="tmi_period_cutratedeductions" property="tmiPeriodCutratedeductions" jdbcType="DECIMAL" />
+    <result column="tmi_period_promotiondeductions" property="tmiPeriodPromotiondeductions" jdbcType="DECIMAL" />
+    <result column="tmi_period_balanceamount" property="tmiPeriodBalanceamount" jdbcType="DECIMAL" />
+    <result column="bi_period_salesnum" property="biPeriodSalesnum" jdbcType="INTEGER" />
+    <result column="bi_period_realamount" property="biPeriodRealamount" jdbcType="DECIMAL" />
+    <result column="bi_period_salesamount" property="biPeriodSalesamount" jdbcType="DECIMAL" />
+    <result column="bi_period_tagamount" property="biPeriodTagamount" jdbcType="DECIMAL" />
+    <result column="bi_period_salescost" property="biPeriodSalescost" jdbcType="DECIMAL" />
+    <result column="bi_period_salesdeductions" property="biPeriodSalesdeductions" jdbcType="DECIMAL" />
+    <result column="bi_period_contractdeductions" property="biPeriodContractdeductions" jdbcType="DECIMAL" />
+    <result column="bi_period_cutratedeductions" property="biPeriodCutratedeductions" jdbcType="DECIMAL" />
+    <result column="bi_period_promotiondeductions" property="biPeriodPromotiondeductions" jdbcType="DECIMAL" />
+    <result column="bi_period_otherdeductions" property="biPeriodOtherdeductions" jdbcType="DECIMAL" />
+    <result column="bi_period_balanceamount" property="biPeriodBalanceamount" jdbcType="DECIMAL" />
+    <result column="bi_period_non_tax_balanceamount" property="biPeriodNonTaxBalanceamount" jdbcType="DECIMAL" />
+    <result column="bill_qty" property="billQty" jdbcType="INTEGER" />
+    <result column="bill_amount" property="billAmount" jdbcType="DECIMAL" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="DATE" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="is_search_prediction" property="isSearchPrediction" jdbcType="TINYINT" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="tma_period_salesnum" property="tmaPeriodSalesnum" jdbcType="INTEGER" />
+    <result column="tma_period_realamount" property="tmaPeriodRealamount" jdbcType="DECIMAL" />
+    <result column="tma_period_salesamount" property="tmaPeriodSalesamount" jdbcType="DECIMAL" />
+    <result column="tma_period_tagamount" property="tmaPeriodTagamount" jdbcType="DECIMAL" />
+    <result column="tma_period_salescost" property="tmaPeriodSalescost" jdbcType="DECIMAL" />
+    <result column="tma_period_salesdeductions" property="tmaPeriodSalesdeductions" jdbcType="DECIMAL" />
+    <result column="tma_period_contractdeductions" property="tmaPeriodContractdeductions" jdbcType="DECIMAL" />
+    <result column="tma_period_cutratedeductions" property="tmaPeriodCutratedeductions" jdbcType="DECIMAL" />
+    <result column="tma_period_promotiondeductions" property="tmaPeriodPromotiondeductions" jdbcType="DECIMAL" />
+    <result column="tma_period_balanceamount" property="tmaPeriodBalanceamount" jdbcType="DECIMAL" />
+    <result column="tma_period_non_tax_balanceamount" property="tmaPeriodNonTaxBalanceamount" jdbcType="DECIMAL" />
+    <result column="tm_salesnum" property="tmSalesnum" jdbcType="INTEGER" />
+    <result column="tm_realamount" property="tmRealamount" jdbcType="DECIMAL" />
+    <result column="tm_salesamount" property="tmSalesamount" jdbcType="DECIMAL" />
+    <result column="tm_tagamount" property="tmTagamount" jdbcType="DECIMAL" />
+    <result column="tm_salescost" property="tmSalescost" jdbcType="DECIMAL" />
+    <result column="tm_salesdeductions" property="tmSalesdeductions" jdbcType="DECIMAL" />
+    <result column="tm_contractdeductions" property="tmContractdeductions" jdbcType="DECIMAL" />
+    <result column="tm_cutratedeductions" property="tmCutratedeductions" jdbcType="DECIMAL" />
+    <result column="tm_promotiondeductions" property="tmPromotiondeductions" jdbcType="DECIMAL" />
+    <result column="tm_otherdeductions" property="tmOtherdeductions" jdbcType="DECIMAL" />
+    <result column="tm_balanceamount" property="tmBalanceamount" jdbcType="DECIMAL" />
+    <result column="sum_changebalanceamount" property="sumChangebalanceamount" jdbcType="DECIMAL" />
+    <result column="sum_salesdeductions" property="sumSalesdeductions" jdbcType="DECIMAL" />
+    <result column="contract_rate" property="contractRate" jdbcType="DECIMAL" />
+    <result column="actual_rate" property="actualRate" jdbcType="DECIMAL" />
+    <result column="tm_mall_deductions" property="tmMallDeductions" jdbcType="DECIMAL" />
+    <result column="tm_salesamount_discount" property="tmSalesamountDiscount" jdbcType="DECIMAL" />
+    <result column="tm_salesamount_prodiscount" property="tmSalesamountProdiscount" jdbcType="DECIMAL" />
+    <result column="tm_billbef_deducamount" property="tmBillbefDeducamount" jdbcType="DECIMAL" />
+    <result column="balance_diff_amount" property="balanceDiffAmount" jdbcType="DECIMAL" />
+    <result column="balance_salesamount" property="balanceSalesamount" jdbcType="DECIMAL" />
+    <result column="non_tax_salesamount" property="nonTaxSalesamount" jdbcType="DECIMAL" />
+    <result column="tax_cost" property="taxCost" jdbcType="DECIMAL" />
+    <result column="no_tax_costs" property="noTaxCosts" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="tm_nobilling_sumamount" property="tmNobillingSumamount" jdbcType="DECIMAL" />
+    <result column="tag_price_amount" property="tagPriceAmount" jdbcType="DECIMAL" />
+    <result column="no_billing_amount" property="noBillingAmount" jdbcType="DECIMAL" />
+    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+    <result column="balance_qty_amount" property="balanceQtyAmount" jdbcType="DECIMAL" />
+    <result column="balance_qty_region_amount" property="balanceQtyRegionAmount" jdbcType="DECIMAL" />
+    <result column="balance_qty_headquarter_amount" property="balanceQtyHeadquarterAmount" jdbcType="DECIMAL" />
+    <result column="channel_no" property="channelNo" jdbcType="CHAR" />
+    <result column="channel_name" property="channelName" jdbcType="CHAR" />
+    <result column="organ_level" property="organLevel" jdbcType="INTEGER" />
+    <result column="mall_deduct_amount" property="mallDeductAmount" jdbcType="DECIMAL" />
+    <result column="billing_amount" property="billingAmount" jdbcType="DECIMAL" />
+    <result column="str_desc" property="strDesc" jdbcType="VARCHAR" />
+    <result column="str_remark" property="strRemark" jdbcType="VARCHAR" />
+    <result column="num_desc" property="numDesc" jdbcType="DECIMAL" />
+    <result column="num_remark" property="numRemark" jdbcType="DECIMAL" />
+    <result column="balance_deduct_amount" property="balanceDeductAmount" jdbcType="DECIMAL" />
+    <result column="system_deduct_amount" property="systemDeductAmount" jdbcType="DECIMAL" />
+    <result column="conprice_deduct_amount" property="conpriceDeductAmount" jdbcType="DECIMAL" />
+    <result column="prom_deduct_amount" property="promDeductAmount" jdbcType="DECIMAL" />
+    <result column="brand_category" property="brandCategory" jdbcType="VARCHAR" />
+    <result column="brand_affiliation" property="brandAffiliation" jdbcType="VARCHAR" />
+    <result column="level_name" property="levelName" jdbcType="VARCHAR" />
+    <result column="sale_mode1" property="saleMode1" jdbcType="VARCHAR" />
+    <result column="retail_type1" property="retailType1" jdbcType="VARCHAR" />
+    <result column="multi1" property="multi1" jdbcType="VARCHAR" />
+    <result column="level_name1" property="levelName1" jdbcType="VARCHAR" />
+    
+    <result column="bi_mall_number_amount" property="biMallNumberAmount" jdbcType="VARCHAR" />
+    <result column="bi_sales_diffamount" property="biSalesDiffamount" jdbcType="VARCHAR" />
+    <result column="bi_expense_operate_amount" property="biExpenseOperateAmount" jdbcType="VARCHAR" />
+    <result column="bi_billing_amount" property="biBillingAmount" jdbcType="VARCHAR" />
+    <result column="tma_prom_deduct_amount" property="tmaPromDeductAmount" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, region_no, region_name, province_no, province_name, organ_no, organ_name, company_no, 
+    company_name, zone_no, zone_name, major, multi, sale_type, biz_type, category_code, 
+    brand_no, brand_name, category, belonger, brand_flag, year, month, sale_month, bill_month, 
+    balance_start_date, balance_end_date, billing_date, bill_date, bsgroups_no, bsgroups_name, 
+    shop_no, short_name, full_name, sale_mode, retail_type, shop_classify, status, open_date, 
+    employe_amount, area, area_left, area_total, category_no, category_name, shop_level, 
+    lma_period_salesnum, lma_period_salesamount, lma_period_tagamount, lma_period_salescost, 
+    lma_period_salesdeductions, lma_period_balanceamount, tmi_period_salesnum, tmi_period_salesamount, 
+    tmi_period_tagamount, tmi_period_salescost, tmi_period_salesdeductions, tmi_period_balanceamount, 
+    bi_period_salesnum, bi_period_salesamount, bi_period_tagamount, bi_period_salescost, 
+    bi_period_salesdeductions, bi_period_balanceamount, bill_qty, bill_amount, qty, send_amount, 
+    invoice_apply_date, saler_name, buyer_no, buyer_name, tma_period_salesnum, tma_period_salesamount, 
+    tma_period_tagamount, tma_period_salescost, tma_period_salesdeductions, tma_period_balanceamount, 
+    tm_salesnum, tm_salesamount, tm_tagamount, tm_salescost, tm_salesdeductions, tm_balanceamount, 
+    sum_changebalanceamount, sum_salesdeductions, contract_rate, actual_rate, tm_mall_deductions, 
+    tm_salesamount_discount, tm_salesamount_prodiscount, tm_billbef_deducamount, balance_diff_amount, 
+    balance_salesamount, non_tax_salesamount, tax_cost, no_tax_costs, headquarter_cost, purchase_price,
+    tm_nobilling_sumamount, tag_price_amount, no_billing_amount, balance_qty, balance_qty_amount, 
+    channel_no, channel_name, organ_level, mall_deduct_amount, billing_amount, str_desc, 
+    str_remark, num_desc
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+          and a.shop_no = #{params.shopNo} 
+      </if>
+       <if test="null!=params.shopNos and ''!=params.shopNos" >
+        and a.shop_no =  
+         	<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+   				#{shopNos, jdbcType=CHAR}
+  			</foreach>
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+          and a.brand_no = #{params.brandNo} 
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+          and a.category_no = #{params.categoryNo} 
+      </if>
+      <if test="null!=params.startDate and ''!=params.startDate" >
+        AND a.out_date  &gt;= '${params.startDate} 00:00:00'
+      </if>  
+      <if test="null!=params.endDate and ''!=params.endDate" >
+        AND a.out_date  &lt;= '${params.endDate} 23:59:59' 
+      </if> 
+    </if>
+  </sql>
+  <sql id="sharding">
+  	<if test="null!=params.shardingFlag">
+  		/*#mycat:balance=select 1 from order_main where sharding_flag='${params.shardingFlag}' */
+  	</if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_sales_sum
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+        SELECT COUNT(1)  FROM  bill_sales_sum
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_sales_sum WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_sales_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+   <select id="findSalesSum" resultMap="BaseResultMap" parameterType="map" >   
+          SELECT *  FROM  bill_sales_sum  
+  </select>
+  
+	<sql id="posBaseSql">
+		SELECT 
+			a2.zone_no,
+			a2.province_no,
+			a2.company_no,
+			a2.company_name,
+			a2.organ_no,
+			a2.biz_city_no,
+			a2.shop_no,
+			a2.short_name,
+			a2.biz_type,
+			a2.balcance_date_id,
+			a2.month,
+			a2.balance_start_date,
+			a2.balance_end_date,
+			a2.brand_unit_no,
+			category.category_nos category_no,
+			category.financial_category_name category_name,
+			a2.balance_no,
+			a2.billing_date,
+			IFNULL(a2.contract_rate, 0) / 100 AS contract_rate,
+			IFNULL(a2.actual_rate, 0) / 100 AS actual_rate,
+			IFNULL(a2.system_sales_amount, 0) AS system_sales_amount,
+			IFNULL(a2.mall_billing_amount, 0) AS mall_billing_amount,
+			IFNULL(a2.mall_deduct_amount, 0) AS mall_deduct_amount,
+			IFNULL(a2.billing_amount, 0) AS billing_amount,
+			IFNULL(a2.conprice_deduct_amount, 0) AS conprice_deduct_amount,
+			IFNULL(a2.prom_deduct_amount, 0) AS prom_deduct_amount,
+			IFNULL(a2.adjust_deduct_amount, 0) AS adjust_deduct_amount,
+			IFNULL(a2.adjust_diff_amount, 0) AS adjust_diff_amount,
+			a2.billMonth,
+			a2.invoice_apply_date,
+			a2.saler_name,
+			a2.is_search_prediction,
+			a2.mall_no,
+			a2.full_name,
+			a2.startup_time,
+			a2.shop_level,
+			a2.category_code,
+			a2.shop_classify,
+			a2.open_date,
+			a2.employe_amount,
+			a2.area,
+			a2.area_left,
+			a2.area_total,
+			a2.region_no,
+			a2.sale_mode,
+			a2.retail_type,
+			a2.multi,
+			a2.`status`,
+			a2.channel_no,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesnum,NULL)),0) AS lma_period_salesnum,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_realamount,NULL)),0) AS lma_period_realamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesamount,NULL)),0) AS lma_period_salesamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_tagamount,NULL)),0) AS lma_period_tagamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salescost,NULL)),0) AS lma_period_salescost,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesdeductions,NULL)),0) AS lma_period_salesdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_contractdeductions,NULL)),0) AS lma_period_contractdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_cutratedeductions,NULL)),0) AS lma_period_cutratedeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_promotiondeductions,NULL)),0) AS lma_period_promotiondeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_balanceamount,NULL)),0) AS lma_period_balanceamount,
+			
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesnum,NULL)),0) AS bi_period_salesnum,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_realamount,NULL)),0) AS bi_period_realamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesamount,NULL)),0) AS bi_period_salesamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_tagamount,NULL)),0) AS bi_period_tagamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salescost,NULL)),0) AS bi_period_salescost,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesdeductions,NULL)),0) AS bi_period_salesdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_contractdeductions,NULL)),0) AS bi_period_contractdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_cutratedeductions,NULL)),0) AS bi_period_cutratedeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_promotiondeductions,NULL)),0) AS bi_period_promotiondeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),
+				IFNULL(a2.bi_period_salesdeductions,0) - IFNULL(a2.bi_period_contractdeductions,0) - IFNULL(a2.bi_period_cutratedeductions,0) - IFNULL(a2.bi_period_promotiondeductions,0)
+			,NULL)),0) AS bi_period_otherdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_balanceamount,NULL)),0) AS bi_period_balanceamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_balanceamount/1.17,NULL)),0) AS bi_period_non_tax_balanceamount,
+			
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.qty,NULL)),0) AS qty,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.send_amount,NULL)),0) AS send_amount,
+			
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_mall_number_amount,NULL)),0) AS bi_mall_number_amount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_sales_diffamount,NULL)),0) AS bi_sales_diffamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_expense_operate_amount,NULL)),0) AS bi_expense_operate_amount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_billing_amount,NULL)),0) AS bi_billing_amount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_prom_deduct_amount,NULL)),0) AS tma_prom_deduct_amount,
+			
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesnum,NULL)),0) AS tma_period_salesnum,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_realamount,NULL)),0) AS tma_period_realamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesamount,NULL)),0) AS tma_period_salesamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_tagamount,NULL)),0) AS tma_period_tagamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salescost,NULL)),0) AS tma_period_salescost,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesdeductions,NULL)),0) AS tma_period_salesdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_contractdeductions,NULL)),0) AS tma_period_contractdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_cutratedeductions,NULL)),0) AS tma_period_cutratedeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_promotiondeductions,NULL)),0) AS tma_period_promotiondeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_balanceamount,NULL)),0) AS tma_period_balanceamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_balanceamount/1.17,NULL)),0) AS tma_period_non_tax_balanceamount,
+			
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesnum,0) - IFNULL(a2.lma_period_salesnum,0),NULL)),0) AS tmi_period_salesnum,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_realamount,0) - IFNULL(a2.lma_period_realamount,0),NULL)),0) AS tmi_period_realamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesamount,0) - IFNULL(a2.lma_period_salesamount,0),NULL)),0) AS tmi_period_salesamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_tagamount,0) - IFNULL(a2.lma_period_tagamount,0),NULL)),0) AS tmi_period_tagamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0),NULL)),0) AS tmi_period_salescost,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesdeductions,0) - IFNULL(a2.lma_period_salesdeductions,0),NULL)),0) AS tmi_period_salesdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_contractdeductions,0) - IFNULL(a2.lma_period_contractdeductions,0),NULL)),0) AS tmi_period_contractdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_cutratedeductions,0) - IFNULL(a2.lma_period_cutratedeductions,0),NULL)),0) AS tmi_period_cutratedeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_promotiondeductions,0) - IFNULL(a2.lma_period_promotiondeductions,0),NULL)),0) AS tmi_period_promotiondeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0),NULL)),0) AS tmi_period_balanceamount,
+			
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesnum,0) - IFNULL(a2.lma_period_salesnum,0) + IFNULL(a2.tma_period_salesnum,0),NULL)),0) AS tm_salesnum,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_realamount,0) - IFNULL(a2.lma_period_realamount,0) + IFNULL(a2.tma_period_realamount,0),NULL)),0) AS tm_realamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesamount,0) - IFNULL(a2.lma_period_salesamount,0) + IFNULL(a2.tma_period_salesamount,0),NULL)),0) AS tm_salesamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_tagamount,0) - IFNULL(a2.lma_period_tagamount,0) + IFNULL(a2.tma_period_tagamount,0),NULL)),0) AS tm_tagamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0),NULL)),0) AS tm_salescost,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesdeductions,0) - IFNULL(a2.lma_period_salesdeductions,0) + IFNULL(a2.tma_period_salesdeductions,0),NULL)),0) AS tm_salesdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_contractdeductions,0) - IFNULL(a2.lma_period_contractdeductions,0) + IFNULL(a2.tma_period_contractdeductions,0),NULL)),0) AS tm_contractdeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_cutratedeductions,0) - IFNULL(a2.lma_period_cutratedeductions,0) + IFNULL(a2.tma_period_cutratedeductions,0),NULL)),0) AS tm_cutratedeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_promotiondeductions,0) - IFNULL(a2.lma_period_promotiondeductions,0) + IFNULL(a2.tma_period_promotiondeductions,0),NULL)),0) AS tm_promotiondeductions,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0) + IFNULL(a2.tma_period_balanceamount,0),NULL)),0) AS tm_balanceamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),
+				(IFNULL(a2.bi_period_salesdeductions,0) - IFNULL(a2.lma_period_salesdeductions,0) + IFNULL(a2.tma_period_salesdeductions,0))
+				-(IFNULL(a2.bi_period_contractdeductions,0) - IFNULL(a2.lma_period_contractdeductions,0) + IFNULL(a2.tma_period_contractdeductions,0))
+				-(IFNULL(a2.bi_period_cutratedeductions,0) - IFNULL(a2.lma_period_cutratedeductions,0) + IFNULL(a2.tma_period_cutratedeductions,0))
+				-(IFNULL(a2.bi_period_promotiondeductions,0) - IFNULL(a2.lma_period_promotiondeductions,0) + IFNULL(a2.tma_period_promotiondeductions,0))
+			,NULL)),0) AS tm_otherdeductions,
+			
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.system_deduct_amount,NULL)),0) AS system_deduct_amount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesamount / a2.system_sales_amount * a2.balance_deduct_amount,NULL)),0) AS balance_deduct_amount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesamount / a2.system_sales_amount * a2.balance_diff_amount,NULL)),0) AS balance_diff_amount,
+			
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),(IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0) + IFNULL(a2.tma_period_balanceamount,0))/1.17,NULL)),0) AS non_tax_salesamount,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0),NULL)),0) AS tax_cost,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),(IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0))/1.17,NULL)),0) AS no_tax_costs,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.region_cost,0),NULL)),0) AS region_cost,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.headquarter_cost,0),NULL)),0) AS headquarter_cost,
+			IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.purchase_price,0),NULL)),0) AS purchase_price
+		FROM (
+			SELECT 
+				a11.*,
+				IF(a11.balance_no IS NOT NULL,a11.bi_period_salesamount - cs.`billing_amount`,a11.bi_period_salesdeductions_temp) AS bi_period_salesdeductions,
+				IF(a11.balance_no IS NOT NULL,cs.`billing_amount`,a11.bi_period_balanceamount_temp) AS bi_period_balanceamount,
+				cs.`sale_qty` AS qty,
+				cs.`billing_amount` AS send_amount,cs.mall_number_amount  AS bi_mall_number_amount,cs.sales_diffamount AS bi_sales_diffamount,
+				cs.expense_operate_amount AS bi_expense_operate_amount,cs.sale_amount - cs.deduct_amount AS bi_billing_amount,
+				cs.expense_operate_amount AS tma_prom_deduct_amount  
+			FROM (
+				SELECT 
+					a1.zone_no,
+					a1.province_no,
+					a1.company_no,
+					a1.company_name,
+					a1.organ_no,
+					a1.biz_city_no,
+					a1.shop_no,
+					a1.short_name,
+					'1' AS biz_type,
+					a1.balcance_date_id,
+					a1.month,
+					a1.balance_start_date,
+					a1.balance_end_date,
+					a1.brand_unit_no,
+					a1.category_no,
+					a1.balance_no,
+					a1.billing_date,
+					a1.contract_rate,
+					a1.actual_rate,
+					a1.system_sales_amount,
+					a1.mall_billing_amount,
+					a1.mall_deduct_amount,
+					a1.billing_amount,
+					a1.balance_deduct_amount,
+					a1.balance_diff_amount,
+					a1.conprice_deduct_amount,
+					a1.prom_deduct_amount,
+					a1.adjust_deduct_amount,
+					a1.adjust_diff_amount,
+					a1.billMonth,
+					a1.invoice_apply_date,
+					a1.saler_name,
+					a1.is_search_prediction,
+					a1.mall_no,
+					a1.full_name,
+					a1.startup_time,
+					a1.shop_level,
+					a1.category_code,
+					a1.shop_classify,
+					a1.open_date,
+					a1.employe_amount,
+					a1.area,
+					a1.area_left,
+					a1.area_total,
+					a1.region_no,
+					a1.sale_mode,
+					a1.retail_type,
+					a1.multi,
+					a1.`status`,
+					a1.channel_no,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.qty ELSE NULL END) AS lma_period_salesnum,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.real_amount ELSE NULL END) AS lma_period_realamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.amount ELSE NULL END) AS lma_period_salesamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.sum_tag_price ELSE NULL END) AS lma_period_tagamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.sum_unit_cost ELSE NULL END) AS lma_period_salescost,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.deductions ELSE NULL END) AS lma_period_salesdeductions,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.contract_deductions ELSE NULL END) AS lma_period_contractdeductions,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.cut_rate_deductions ELSE NULL END) AS lma_period_cutratedeductions,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.promotion_deductions ELSE NULL END) AS lma_period_promotiondeductions,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.amount - a1.deductions ELSE NULL END) AS lma_period_balanceamount,
+					
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.qty ELSE NULL END) AS bi_period_salesnum,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.real_amount ELSE NULL END) AS bi_period_realamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.amount ELSE NULL END) AS bi_period_salesamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.sum_tag_price ELSE NULL END) AS bi_period_tagamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.sum_unit_cost ELSE NULL END) AS bi_period_salescost,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.deductions ELSE NULL END) AS bi_period_salesdeductions_temp,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.contract_deductions ELSE NULL END) AS bi_period_contractdeductions,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.cut_rate_deductions ELSE NULL END) AS bi_period_cutratedeductions,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.promotion_deductions ELSE NULL END) AS bi_period_promotiondeductions,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.amount - a1.deductions ELSE NULL END) AS bi_period_balanceamount_temp,
+					
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.qty ELSE NULL END) AS tma_period_salesnum,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.real_amount ELSE NULL END) AS tma_period_realamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.amount ELSE NULL END) AS tma_period_salesamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_tag_price ELSE NULL END) AS tma_period_tagamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_unit_cost ELSE NULL END) AS tma_period_salescost,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.deductions ELSE NULL END) AS tma_period_salesdeductions,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.contract_deductions ELSE NULL END) AS tma_period_contractdeductions,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.cut_rate_deductions ELSE NULL END) AS tma_period_cutratedeductions,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.promotion_deductions ELSE NULL END) AS tma_period_promotiondeductions,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.amount - a1.deductions ELSE NULL END) AS tma_period_balanceamount,
+					
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.deductions ELSE NULL END) AS system_deduct_amount,
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_region_cost ELSE NULL END) AS region_cost,
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_headquarter_cost ELSE NULL END) AS headquarter_cost,
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_purchase_price ELSE NULL END) AS purchase_price
+				FROM (
+					SELECT 
+						sbd.*,
+						main.`order_no` AS rel_no,
+						main.`out_date` AS sale_date,
+						dtl.item_no,
+						dtl.`brand_no`,
+						dtl.`brand_name`,
+						dtl.brand_unit_no,
+						LEFT(dtl.category_no, 2) AS category_no,
+						dtl.qty,
+						dtl.amount AS real_amount,
+						IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount) AS amount,
+						dtl.tag_price,
+						dtl.discount,
+						dtl.tag_price * dtl.qty AS sum_tag_price,
+						dtl.unit_cost * dtl.qty AS sum_unit_cost,
+						dtl.region_cost * dtl.qty AS sum_region_cost,
+						dtl.headquarter_cost * dtl.qty AS sum_headquarter_cost,
+						dtl.purchase_price * dtl.qty AS sum_purchase_price,
+						ROUND(IFNULL(dtl.discount, 0) / 100 * IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount), 2) AS deductions,
+						ROUND(IFNULL(sbd.contract_rate, 0) / 100 * IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount), 2) AS contract_deductions,
+						IF(dtl.discount_type = 2, 
+							ROUND((IFNULL(dtl.discount, 0) - IFNULL(sbd.contract_rate, 0)) / 100
+							* IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount), 2), 0) AS cut_rate_deductions,
+						IF(dtl.discount_type = 3, 
+							ROUND((IFNULL(dtl.discount, 0) - IFNULL(sbd.contract_rate, 0)) / 100
+							* IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount), 2) ,0) AS promotion_deductions
+					FROM(
+						SELECT *
+						FROM(
+							SELECT 
+								c.zone_no,
+								c.company_no,
+								c.name AS company_name,
+								s.province_no,
+								o.parent_no AS organ_no,
+								s.biz_city_no,
+								s.shop_no,
+								s.short_name,
+								s.major,
+								s.startup_time,
+								s.shop_level,
+								s.category_code,
+								s.mall_no,
+								s.full_name,
+								s.shop_classify,
+								s.open_date,
+								s.employe_amount,
+								s.area,
+								s.area_left,
+								s.area_total,
+								s.region_no,
+								s.sale_mode,
+								s.retail_type,
+								s.multi,
+								s.channel_no,
+								s.status,
+								sbd.`id` AS balcance_date_id,
+								sbd.month,
+								sbd.`balance_start_date`,
+								sbd.`balance_end_date`,
+								IF(sbd_last.shop_no IS NULL, 0, 1) AS is_last_balcance_date,
+								sb.balance_no,
+								sb.billing_date,
+								IFNULL(sb.contract_rate, rb.rate) AS contract_rate,
+								sb.actual_rate,
+								(sb.system_sales_amount - (sb.prepayment_amount + sb.used_prepayment_amount)) system_sales_amount,
+								sb.mall_deduct_amount,
+								sb.billing_amount,
+								sb.balance_deduct_amount,
+								sb.balance_diff_amount,
+								sb.conprice_deduct_amount,
+								sb.prom_deduct_amount,
+								sb.adjust_deduct_amount,
+								sb.adjust_diff_amount,
+								sb.mall_billing_amount,
+								EXTRACT(YEAR_MONTH FROM sb.invoice_apply_date) AS billMonth,
+								sb.invoice_apply_date,
+								sb.company_name AS saler_name,
+								sb.is_search_prediction
+								
+							FROM shop_balance_date AS sbd 
+							JOIN company AS c 
+								ON sbd.company_no = c.company_no 
+							JOIN shop AS s 
+								ON sbd.shop_no = s.shop_no 
+							JOIN organ AS o 
+								ON s.biz_city_no = o.organ_no 
+							LEFT JOIN (
+								SELECT sbd.shop_no, sbd.month, MAX(sbd.balance_start_date) AS balance_start_date
+								FROM shop_balance_date AS sbd
+								JOIN company AS c 
+									ON sbd.company_no = c.company_no 
+								JOIN shop AS s 
+									ON sbd.shop_no = s.shop_no 
+								JOIN organ AS o 
+									ON s.biz_city_no = o.organ_no 
+								WHERE 1=1
+									<if test="null==params.flag" >
+										-- AND @sbd.company_no
+								    </if>
+									<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+										AND c.zone_no = #{params.zoneNo} 
+									</if>
+									<if test="null!=params.provinceNos and ''!=params.provinceNos" >
+										AND s.province_no IN
+										<foreach collection="params.provinceNos" index="index" item="provinceNos" open="(" separator="," close=")">
+											#{provinceNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.organNos and ''!=params.organNos" >
+										AND o.parent_no IN
+										<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+											#{organNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.companyNos and ''!=params.companyNos" >
+										AND sbd.company_no IN
+										<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+											#{companyNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.shopNos and ''!=params.shopNos" >
+										AND sbd.shop_no IN  
+										<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+											#{shopNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+										AND sbd.`month` &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+									</if>
+									<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+										AND sbd.`month` &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})
+									</if>
+								GROUP BY sbd.shop_no, sbd.month
+							) AS sbd_last
+							ON sbd.shop_no = sbd_last.shop_no AND sbd.month = sbd_last.month AND sbd.balance_start_date = sbd_last.balance_start_date
+							LEFT JOIN (
+								SELECT 
+									b.*,
+									a.is_search_prediction
+								FROM (
+									SELECT 
+										bsb.shop_no,
+										bsb.balance_start_date,
+										bsb.balance_end_date,
+										MIN(bsb.balance_type) balance_type,
+										MAX(bsb.create_time) create_time,
+										IF(SUM(IF(bsb.balance_type = 2, 1, 0)) > 0, 0, 1) AS is_search_prediction
+									FROM `bill_shop_balance` AS bsb
+									JOIN company AS c 
+										ON bsb.company_no = c.company_no 
+									JOIN shop AS s 
+										ON bsb.shop_no = s.shop_no 
+									JOIN organ AS o 
+										ON s.biz_city_no = o.organ_no 
+									WHERE 1=1
+										-- AND @bsb.company_no
+										<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+											AND c.zone_no = #{params.zoneNo} 
+										</if>
+										<if test="null!=params.provinceNos and ''!=params.provinceNos" >
+											AND s.province_no IN
+											<foreach collection="params.provinceNos" index="index" item="provinceNos" open="(" separator="," close=")">
+												#{provinceNos, jdbcType=CHAR}
+											</foreach>
+										</if>
+										<if test="null!=params.organNos and ''!=params.organNos" >
+											AND o.parent_no IN
+											<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+												#{organNos, jdbcType=CHAR}
+											</foreach>
+										</if>
+										<if test="null!=params.companyNos and ''!=params.companyNos" >
+											AND bsb.company_no IN
+											<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+												#{companyNos, jdbcType=CHAR}
+											</foreach>
+										</if>
+										<if test="null!=params.shopNos and ''!=params.shopNos" >
+											AND bsb.shop_no IN  
+											<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+												#{shopNos, jdbcType=CHAR}
+											</foreach>
+										</if>
+										<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+											AND bsb.`month` &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+										</if>
+										<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+											AND bsb.`month` &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})
+										</if>
+									GROUP BY shop_no, balance_start_date, balance_end_date
+								) a 
+								JOIN `bill_shop_balance` b
+									ON a.`shop_no` = b.shop_no 
+									AND a.`balance_start_date` = b.balance_start_date 
+									AND a.`balance_end_date` = b.balance_end_date 
+									AND a.`balance_type` = b.balance_type 
+									AND a.`create_time` = b.create_time
+							) AS sb 
+								ON sbd.`shop_no` = sb.shop_no 
+								AND sbd.`balance_start_date` = sb.balance_start_date 
+								AND sbd.`balance_end_date` = sb.balance_end_date
+							LEFT JOIN rate_basic rb
+							ON rb.shop_no = sbd.shop_no 
+								AND (rate_type = 1 OR (rate_type = 2 AND end_disc = 100)) 
+								AND ((sbd.`balance_start_date` BETWEEN rb.start_date AND rb.end_date) 
+									OR (sbd.`balance_end_date` BETWEEN rb.start_date AND rb.end_date) 
+									OR (rb.start_date &gt; sbd.`balance_start_date` AND rb.end_date &lt; sbd.`balance_end_date`))
+							WHERE
+								(
+									<foreach collection="params.businessTypes" index="index" item="businessTypes" separator=" OR " >
+										<choose>
+											<when test="businessTypes==11">
+											1=1
+											</when>
+											<otherwise>
+											1=2
+											</otherwise>
+										</choose>
+									</foreach>
+								)
+								<if test="null!=params" >
+									-- AND @c.zone_no
+									<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+										${params.queryCondition}
+									</if>
+									<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+										AND c.zone_no = #{params.zoneNo} 
+									</if>
+									<if test="null!=params.provinceNos and ''!=params.provinceNos" >
+										AND s.province_no IN
+										<foreach collection="params.provinceNos" index="index" item="provinceNos" open="(" separator="," close=")">
+											#{provinceNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.organNos and ''!=params.organNos" >
+										AND o.parent_no IN
+										<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+											#{organNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.companyNos and ''!=params.companyNos" >
+										AND sbd.company_no IN
+										<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+											#{companyNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.shopNos and ''!=params.shopNos" >
+										AND sbd.shop_no IN  
+										<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+											#{shopNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+										AND sbd.`month` &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+									</if>
+									<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+										AND sbd.`month` &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})
+									</if>
+									<if test="null!=params.saleModes and ''!=params.saleModes" >
+										AND s.sale_mode IN
+										<foreach collection="params.saleModes" index="index" item="saleModes" open="(" separator="," close=")">
+											#{saleModes, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.retailTypes and ''!=params.retailTypes" >
+										AND s.retail_type IN
+										<foreach collection="params.retailTypes" index="index" item="retailTypes" open="(" separator="," close=")">
+											#{retailTypes, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.shopMultis and ''!=params.shopMultis" >
+										AND s.multi IN
+										<foreach collection="params.shopMultis" index="index" item="shopMultis" open="(" separator="," close=")">
+											#{shopMultis, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.shopLevels and ''!=params.shopLevels" >
+										AND s.shop_level IN
+										<foreach collection="params.shopLevels" index="index" item="shopLevels" open="(" separator="," close=")">
+											#{shopLevels, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.balanceState and ''!=params.balanceState" >
+										<choose>
+											<when test="params.balanceState == 1">
+												AND sb.balance_no IS NOT NULL
+											</when>
+											<otherwise>
+												AND sb.balance_no IS NULL
+											</otherwise>
+										</choose>
+									</if>
+									<if test="null!=params.invoiceState and ''!=params.invoiceState" >
+										<choose>
+											<when test="params.invoiceState == 1">
+												AND 
+												(sb.invoice_apply_date IS NOT NULL
+												<if test="null!=params.invoiceStartDate and ''!=params.invoiceStartDate" >
+													AND sb.invoice_apply_date &gt;= #{params.invoiceStartDate}
+												</if>
+												<if test="null!=params.invoiceEndDate and ''!=params.invoiceEndDate" >    
+													AND sb.invoice_apply_date &lt;= #{params.invoiceEndDate}
+												</if>
+												)
+											</when>
+											<otherwise>
+												AND 
+												(sb.invoice_apply_date IS NULL
+												<if test="null!=params.invoiceStartDate and ''!=params.invoiceStartDate" >
+													OR sb.invoice_apply_date &lt; #{params.invoiceStartDate}
+												</if>
+												<if test="null!=params.invoiceEndDate and ''!=params.invoiceEndDate" >    
+													OR sb.invoice_apply_date &gt; #{params.invoiceEndDate}
+												</if>
+												)
+											</otherwise>
+										</choose> 
+									</if>
+								</if>
+							ORDER BY rb.rate_type
+						) AS sbd_temp
+						GROUP BY sbd_temp.shop_no, sbd_temp.balance_start_date, sbd_temp.balance_end_date
+					) AS sbd
+					JOIN order_main main 
+					ON main.shop_no = sbd.shop_no 
+						AND main.out_date BETWEEN sbd.`balance_start_date` 
+						AND IF(sbd.is_last_balcance_date = 0, sbd.`balance_end_date`, LAST_DAY(CONCAT(LEFT(sbd.month, 4),'-',RIGHT(sbd.month, 2),'-01'))) 
+					JOIN order_dtl dtl 
+						ON main.order_no = dtl.order_no 
+					WHERE 1=1
+						AND main.status IN ('30', '41') 
+						AND main.business_type IN ('0', '1', '2', '6')
+						<if test="null!=params.brandNos and ''!=params.brandNos" >
+							AND dtl.brand_no IN 
+							<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+								#{brandNos, jdbcType=CHAR}
+							</foreach>
+						</if>
+						<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+							AND LEFT(dtl.category_no, 2) IN
+							<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+								#{categoryNos, jdbcType=CHAR}
+							</foreach>
+						</if>
+						<if test="null!=params.itemSql and ''!=params.itemSql" >
+							AND dtl.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+						</if>
+					UNION ALL
+					SELECT 
+						sbd.*,
+						main.`business_no` AS rel_no,
+						main.`out_date` AS sale_date,
+						dtl.item_no,
+						dtl.`brand_no`,
+						dtl.`brand_name`,
+						dtl.brand_unit_no,
+						LEFT(dtl.category_no, 2) AS category_no,
+						dtl.qty,
+						dtl.amount AS real_amount,
+						IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount) AS amount,
+						dtl.tag_price,
+						dtl.discount,
+						dtl.tag_price * dtl.qty AS sum_tag_price,
+						dtl.unit_cost * dtl.qty AS sum_unit_cost,
+						dtl.region_cost * dtl.qty AS sum_region_cost,
+						dtl.headquarter_cost * dtl.qty AS sum_headquarter_cost,
+						dtl.purchase_price * dtl.qty AS sum_purchase_price,
+						ROUND(IFNULL(dtl.discount, 0) / 100 * IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount), 2) AS deductions,
+						ROUND(IFNULL(sbd.contract_rate, 0) / 100 * IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount), 2) AS contract_deductions,
+						IF(dtl.discount_type = 2, 
+							ROUND((IFNULL(dtl.discount, 0) - IFNULL(sbd.contract_rate, 0)) / 100
+							* IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount), 2) ,0) AS cut_rate_deductions,
+						IF(dtl.discount_type = 3, 
+							ROUND((IFNULL(dtl.discount, 0) - IFNULL(sbd.contract_rate, 0)) / 100
+							* IF(dtl.balance_base = 1, dtl.tag_price * dtl.qty, dtl.amount), 2) ,0) AS promotion_deductions
+					FROM(
+						SELECT *
+						FROM(
+							SELECT 
+								c.zone_no,
+								c.company_no,
+								c.name AS company_name,
+								s.province_no,
+								o.parent_no AS organ_no,
+								s.biz_city_no,
+								s.shop_no,
+								s.short_name,
+								s.major,
+								s.startup_time,
+								s.shop_level,
+								s.category_code,
+								s.mall_no,
+								s.full_name,
+								s.shop_classify,
+								s.open_date,
+								s.employe_amount,
+								s.area,
+								s.area_left,
+								s.area_total,
+								s.region_no,
+								s.sale_mode,
+								s.retail_type,
+								s.multi,
+								s.channel_no,
+								s.status,
+								sbd.`id` AS balcance_date_id,
+								sbd.month,
+								sbd.`balance_start_date`,
+								sbd.`balance_end_date`,
+								IF(sbd_last.shop_no IS NULL, 0, 1) AS is_last_balcance_date,
+								sb.balance_no,
+								sb.billing_date,
+								IFNULL(sb.contract_rate, rb.rate) AS contract_rate,
+								sb.actual_rate,
+								(sb.system_sales_amount - (sb.prepayment_amount + sb.used_prepayment_amount)) system_sales_amount,
+								sb.mall_deduct_amount,
+								sb.billing_amount,
+								sb.balance_deduct_amount,
+								sb.balance_diff_amount,
+								sb.conprice_deduct_amount,
+								sb.prom_deduct_amount,
+								sb.adjust_deduct_amount,
+								sb.adjust_diff_amount,
+								sb.mall_billing_amount,
+								EXTRACT(YEAR_MONTH FROM sb.invoice_apply_date) AS billMonth,
+								sb.invoice_apply_date,
+								sb.company_name AS saler_name,
+								sb.is_search_prediction
+								
+							FROM shop_balance_date AS sbd 
+							JOIN company AS c 
+								ON sbd.company_no = c.company_no 
+							JOIN shop AS s 
+								ON sbd.shop_no = s.shop_no 
+							JOIN organ AS o 
+								ON s.biz_city_no = o.organ_no 
+							LEFT JOIN (
+								SELECT sbd.shop_no, sbd.month, MAX(sbd.balance_start_date) AS balance_start_date
+								FROM shop_balance_date AS sbd
+								JOIN company AS c 
+									ON sbd.company_no = c.company_no 
+								JOIN shop AS s 
+									ON sbd.shop_no = s.shop_no 
+								JOIN organ AS o 
+									ON s.biz_city_no = o.organ_no 
+								WHERE 1=1
+									-- AND @sbd.company_no
+									<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+										AND c.zone_no = #{params.zoneNo} 
+									</if>
+									<if test="null!=params.provinceNos and ''!=params.provinceNos" >
+										AND s.province_no IN
+										<foreach collection="params.provinceNos" index="index" item="provinceNos" open="(" separator="," close=")">
+											#{provinceNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.organNos and ''!=params.organNos" >
+										AND o.parent_no IN
+										<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+											#{organNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.companyNos and ''!=params.companyNos" >
+										AND sbd.company_no IN
+										<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+											#{companyNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.shopNos and ''!=params.shopNos" >
+										AND sbd.shop_no IN  
+										<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+											#{shopNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+										AND sbd.`month` &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+									</if>
+									<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+										AND sbd.`month` &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})
+									</if>
+								GROUP BY sbd.shop_no, sbd.month
+							) AS sbd_last
+							ON sbd.shop_no = sbd_last.shop_no AND sbd.month = sbd_last.month AND sbd.balance_start_date = sbd_last.balance_start_date
+							LEFT JOIN (
+								SELECT 
+									b.*,
+									a.is_search_prediction
+								FROM (
+									SELECT 
+										bsb.shop_no,
+										bsb.balance_start_date,
+										bsb.balance_end_date,
+										MIN(bsb.balance_type) balance_type,
+										MAX(bsb.create_time) create_time,
+										IF(SUM(IF(bsb.balance_type = 2, 1, 0)) > 0, 0, 1) AS is_search_prediction
+									FROM `bill_shop_balance` AS bsb
+									JOIN company AS c 
+										ON bsb.company_no = c.company_no 
+									JOIN shop AS s 
+										ON bsb.shop_no = s.shop_no 
+									JOIN organ AS o 
+										ON s.biz_city_no = o.organ_no 
+									WHERE 1=1
+										-- AND @bsb.company_no
+										<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+											AND c.zone_no = #{params.zoneNo} 
+										</if>
+										<if test="null!=params.provinceNos and ''!=params.provinceNos" >
+											AND s.province_no IN
+											<foreach collection="params.provinceNos" index="index" item="provinceNos" open="(" separator="," close=")">
+												#{provinceNos, jdbcType=CHAR}
+											</foreach>
+										</if>
+										<if test="null!=params.organNos and ''!=params.organNos" >
+											AND o.parent_no IN
+											<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+												#{organNos, jdbcType=CHAR}
+											</foreach>
+										</if>
+										<if test="null!=params.companyNos and ''!=params.companyNos" >
+											AND bsb.company_no IN
+											<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+												#{companyNos, jdbcType=CHAR}
+											</foreach>
+										</if>
+										<if test="null!=params.shopNos and ''!=params.shopNos" >
+											AND bsb.shop_no IN  
+											<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+												#{shopNos, jdbcType=CHAR}
+											</foreach>
+										</if>
+										<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+											AND bsb.`month` &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+										</if>
+										<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+											AND bsb.`month` &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})
+										</if>
+									GROUP BY shop_no, balance_start_date, balance_end_date
+								) a 
+								JOIN `bill_shop_balance` b
+									ON a.`shop_no` = b.shop_no 
+									AND a.`balance_start_date` = b.balance_start_date 
+									AND a.`balance_end_date` = b.balance_end_date 
+									AND a.`balance_type` = b.balance_type 
+									AND a.`create_time` = b.create_time
+							) AS sb 
+								ON sbd.`shop_no` = sb.shop_no 
+								AND sbd.`balance_start_date` = sb.balance_start_date 
+								AND sbd.`balance_end_date` = sb.balance_end_date
+							LEFT JOIN rate_basic rb
+							ON rb.shop_no = sbd.shop_no 
+								AND (rate_type = 1 OR (rate_type = 2 AND end_disc = 100)) 
+								AND ((sbd.`balance_start_date` BETWEEN rb.start_date AND rb.end_date) 
+									OR (sbd.`balance_end_date` BETWEEN rb.start_date AND rb.end_date) 
+									OR (rb.start_date &gt; sbd.`balance_start_date` AND rb.end_date &lt; sbd.`balance_end_date`))
+							WHERE
+								(
+									<foreach collection="params.businessTypes" index="index" item="businessTypes" separator=" OR " >
+										<choose>
+											<when test="businessTypes==12">
+											1=1
+											</when>
+											<otherwise>
+											1=2
+											</otherwise>
+										</choose>
+									</foreach>
+								)
+								<if test="null!=params" >
+									-- AND @c.zone_no
+									<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+										${params.queryCondition}
+									</if>
+									<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+										AND c.zone_no = #{params.zoneNo} 
+									</if>
+									<if test="null!=params.provinceNos and ''!=params.provinceNos" >
+										AND s.province_no IN
+										<foreach collection="params.provinceNos" index="index" item="provinceNos" open="(" separator="," close=")">
+											#{provinceNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.organNos and ''!=params.organNos" >
+										AND o.parent_no IN
+										<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+											#{organNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.companyNos and ''!=params.companyNos" >
+										AND sbd.company_no IN
+										<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+											#{companyNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.shopNos and ''!=params.shopNos" >
+										AND sbd.shop_no IN  
+										<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+											#{shopNos, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+										AND sbd.`month` &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+									</if>
+									<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+										AND sbd.`month` &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})
+									</if>
+									<if test="null!=params.saleModes and ''!=params.saleModes" >
+										AND s.sale_mode IN
+										<foreach collection="params.saleModes" index="index" item="saleModes" open="(" separator="," close=")">
+											#{saleModes, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.retailTypes and ''!=params.retailTypes" >
+										AND s.retail_type IN
+										<foreach collection="params.retailTypes" index="index" item="retailTypes" open="(" separator="," close=")">
+											#{retailTypes, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.shopMultis and ''!=params.shopMultis" >
+										AND s.multi IN
+										<foreach collection="params.shopMultis" index="index" item="shopMultis" open="(" separator="," close=")">
+											#{shopMultis, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.shopLevels and ''!=params.shopLevels" >
+										AND s.shop_level IN
+										<foreach collection="params.shopLevels" index="index" item="shopLevels" open="(" separator="," close=")">
+											#{shopLevels, jdbcType=CHAR}
+										</foreach>
+									</if>
+									<if test="null!=params.balanceState and ''!=params.balanceState" >
+										<choose>
+											<when test="params.balanceState == 1">
+												AND sb.balance_no IS NOT NULL
+											</when>
+											<otherwise>
+												AND sb.balance_no IS NULL
+											</otherwise>
+										</choose>
+									</if>
+									<if test="null!=params.invoiceState and ''!=params.invoiceState" >
+										<choose>
+											<when test="params.invoiceState == 1">
+												AND 
+												(sb.invoice_apply_date IS NOT NULL
+												<if test="null!=params.invoiceStartDate and ''!=params.invoiceStartDate" >
+													AND sb.invoice_apply_date &gt;= #{params.invoiceStartDate}
+												</if>
+												<if test="null!=params.invoiceEndDate and ''!=params.invoiceEndDate" >    
+													AND sb.invoice_apply_date &lt;= #{params.invoiceEndDate}
+												</if>
+												)
+											</when>
+											<otherwise>
+												AND 
+												(sb.invoice_apply_date IS NULL
+												<if test="null!=params.invoiceStartDate and ''!=params.invoiceStartDate" >
+													OR sb.invoice_apply_date &lt; #{params.invoiceStartDate}
+												</if>
+												<if test="null!=params.invoiceEndDate and ''!=params.invoiceEndDate" >    
+													OR sb.invoice_apply_date &gt; #{params.invoiceEndDate}
+												</if>
+												)
+											</otherwise>
+										</choose> 
+									</if>
+								</if>
+							ORDER BY rb.rate_type
+						) AS sbd_temp
+						GROUP BY sbd_temp.shop_no, sbd_temp.balance_start_date, sbd_temp.balance_end_date
+					) AS sbd
+					JOIN return_exchange_main main 
+					ON main.shop_no = sbd.shop_no 
+						AND main.out_date BETWEEN sbd.`balance_start_date` 
+						AND IF(sbd.is_last_balcance_date = 0, sbd.`balance_end_date`, LAST_DAY(CONCAT(LEFT(sbd.month, 4),'-',RIGHT(sbd.month, 2),'-01'))) 
+					JOIN return_exchange_dtl dtl 
+						ON main.business_no = dtl.business_no 
+					WHERE 1=1
+						AND main.status IN ('30', '41') 
+						AND main.business_type IN ('0', '1', '2', '6')
+						<if test="null!=params.brandNos and ''!=params.brandNos" >
+							AND dtl.brand_no IN 
+							<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+								#{brandNos, jdbcType=CHAR}
+							</foreach>
+						</if>
+						<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+							AND LEFT(dtl.category_no, 2) IN
+							<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+								#{categoryNos, jdbcType=CHAR}
+							</foreach>
+						</if>
+						<if test="null!=params.itemSql and ''!=params.itemSql" >
+							AND dtl.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+						</if>
+				) AS a1 
+				GROUP BY a1.company_no,
+					a1.organ_no,
+					a1.shop_no,
+					a1.balcance_date_id,
+					a1.brand_unit_no,
+					a1.category_no
+			) AS a11 
+			LEFT JOIN bill_shop_balance_cate_sum cs 
+			ON a11.balance_no = cs.`balance_no` 
+				AND a11.shop_no = cs.`shop_no` 
+				AND a11.brand_unit_no = cs.`brand_no` 
+				AND a11.category_no = cs.`category_no`
+		) AS a2 
+		JOIN (
+			<if test="null!=params.frsStaticData and ''!=params.frsStaticData" >
+				SELECT category_no as category_nos, `name` as financial_category_name
+			</if>
+			<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+				SELECT GROUP_CONCAT(category_no SEPARATOR ",") category_nos, financial_category_name
+			</if>
+			FROM category
+			WHERE levelid = 1
+			/*sys_no*/
+			<if test="null!=params" >
+				<if test="null!=params.staticSysNo and ''!=params.staticSysNo" >
+					AND sys_no = #{params.staticSysNo} 
+				</if>
+				<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+					AND category_no IN
+					<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+						#{categoryNos, jdbcType=CHAR}
+					</foreach>
+				</if>
+			</if> 
+			<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+				group by financial_category_name
+			</if>
+		) AS category 
+		GROUP BY a2.company_no,
+			a2.organ_no,
+			a2.shop_no,
+			a2.balcance_date_id,
+			a2.brand_unit_no
+			<if test="null!=params.frsStaticData and ''!=params.frsStaticData" >
+				,category.category_nos
+			</if>
+			<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+				,category.financial_category_name 
+			</if>
+			
+		<if test="null != params">
+			<if test="null != params.startRowNum and null != params.selectCount">
+				LIMIT #{params.startRowNum} ,#{params.selectCount}
+			</if>
+		</if>
+	</sql>
+	
+	<select id="selectSalesSumPosCount" resultMap="BaseResultMap" parameterType="map">
+	 <include refid="sharding" />
+	/*balance*/
+		SELECT 
+			COUNT(1) AS count,
+			IFNULL(SUM(lma_period_salesnum), 0) AS lma_period_salesnum,
+			IFNULL(SUM(lma_period_realamount), 0) AS lma_period_realamount,
+			IFNULL(SUM(lma_period_salesamount), 0) AS lma_period_salesamount,
+			IFNULL(SUM(lma_period_tagamount), 0) AS lma_period_tagamount,
+			IFNULL(SUM(lma_period_salescost), 0) AS lma_period_salescost,
+			IFNULL(SUM(lma_period_salesdeductions), 0) AS lma_period_salesdeductions,
+			IFNULL(SUM(lma_period_contractdeductions), 0) AS lma_period_contractdeductions,
+			IFNULL(SUM(lma_period_cutratedeductions), 0) AS lma_period_cutratedeductions,
+			IFNULL(SUM(lma_period_promotiondeductions), 0) AS lma_period_promotiondeductions,
+			IFNULL(SUM(lma_period_balanceamount), 0) AS lma_period_balanceamount,
+			
+			IFNULL(SUM(bi_period_salesnum), 0) AS bi_period_salesnum,
+			IFNULL(SUM(bi_period_realamount), 0) AS bi_period_realamount,
+			IFNULL(SUM(bi_period_salesamount), 0) AS bi_period_salesamount,
+			IFNULL(SUM(bi_period_tagamount), 0) AS bi_period_tagamount,
+			IFNULL(SUM(bi_period_salescost), 0) AS bi_period_salescost,
+			IFNULL(SUM(bi_period_salesdeductions), 0) AS bi_period_salesdeductions,
+			IFNULL(SUM(bi_period_contractdeductions), 0) AS bi_period_contractdeductions,
+			IFNULL(SUM(bi_period_cutratedeductions), 0) AS bi_period_cutratedeductions,
+			IFNULL(SUM(bi_period_promotiondeductions), 0) AS bi_period_promotiondeductions,
+			IFNULL(SUM(bi_period_balanceamount), 0) bi_period_balanceamount,
+			IFNULL(SUM(bi_period_non_tax_balanceamount), 0) bi_period_non_tax_balanceamount,
+			IFNULL(SUM(qty), 0) AS qty,
+			IFNULL(SUM(send_amount), 0) AS send_amount,
+			
+			IFNULL(SUM(tma_period_salesnum), 0) AS tma_period_salesnum,
+			IFNULL(SUM(tma_period_realamount), 0) AS tma_period_realamount,
+			IFNULL(SUM(tma_period_salesamount), 0) AS tma_period_salesamount,
+			IFNULL(SUM(tma_period_tagamount), 0) AS tma_period_tagamount,
+			IFNULL(SUM(tma_period_salescost), 0) AS tma_period_salescost,
+			IFNULL(SUM(tma_period_salesdeductions), 0) AS tma_period_salesdeductions,
+			IFNULL(SUM(tma_period_contractdeductions), 0) AS tma_period_contractdeductions,
+			IFNULL(SUM(tma_period_cutratedeductions), 0) AS tma_period_cutratedeductions,
+			IFNULL(SUM(tma_period_promotiondeductions), 0) AS tma_period_promotiondeductions,
+			IFNULL(SUM(tma_period_balanceamount), 0) AS tma_period_balanceamount,
+			IFNULL(SUM(tma_period_non_tax_balanceamount), 0) tma_period_non_tax_balanceamount,
+			
+			IFNULL(SUM(tmi_period_salesnum), 0) AS tmi_period_salesnum,
+			IFNULL(SUM(tmi_period_realamount), 0) AS tmi_period_realamount,
+			IFNULL(SUM(tmi_period_salesamount), 0) AS tmi_period_salesamount,
+			IFNULL(SUM(tmi_period_tagamount), 0) AS tmi_period_tagamount,
+			IFNULL(SUM(tmi_period_salescost), 0) AS tmi_period_salescost,
+			IFNULL(SUM(tmi_period_salesdeductions), 0) AS tmi_period_salesdeductions,
+			IFNULL(SUM(tmi_period_contractdeductions), 0) AS tmi_period_contractdeductions,
+			IFNULL(SUM(tmi_period_cutratedeductions), 0) AS tmi_period_cutratedeductions,
+			IFNULL(SUM(tmi_period_promotiondeductions), 0) AS tmi_period_promotiondeductions,
+			IFNULL(SUM(tmi_period_balanceamount), 0) AS tmi_period_balanceamount,
+			
+			IFNULL(SUM(tm_salesnum), 0) AS tm_salesnum,
+			IFNULL(SUM(tm_realamount), 0) AS tm_realamount,
+			IFNULL(SUM(tm_salesamount), 0) AS tm_salesamount,
+			IFNULL(SUM(tm_tagamount), 0) AS tm_tagamount,
+			IFNULL(SUM(tm_salescost), 0) AS tm_salescost,
+			IFNULL(SUM(tm_salesdeductions), 0) AS tm_salesdeductions,
+			IFNULL(SUM(tm_contractdeductions), 0) AS tm_contractdeductions,
+			IFNULL(SUM(tm_cutratedeductions), 0) AS tm_cutratedeductions,
+			IFNULL(SUM(tm_promotiondeductions), 0) AS tm_promotiondeductions,
+			IFNULL(SUM(tm_balanceamount), 0) AS tm_balanceamount,
+			
+			IFNULL(SUM(system_deduct_amount), 0) AS system_deduct_amount,
+			IFNULL(SUM(balance_deduct_amount), 0) AS balance_deduct_amount ,
+			IFNULL(SUM(balance_diff_amount), 0) AS balance_diff_amount,
+			
+			IFNULL(SUM(non_tax_salesamount), 0) AS non_tax_salesamount,
+			IFNULL(SUM(tax_cost), 0) AS tax_cost,
+			IFNULL(SUM(no_tax_costs), 0) AS no_tax_costs,
+			IFNULL(SUM(region_cost), 0) AS region_cost,
+			IFNULL(SUM(headquarter_cost), 0) AS headquarter_cost,
+			IFNULL(SUM(purchase_price), 0) AS purchase_price,
+			
+			IFNULL(SUM(bi_period_otherdeductions),0) AS bi_period_otherdeductions,
+			IFNULL(SUM(bi_mall_number_amount), 0) AS bi_mall_number_amount,
+			IFNULL(SUM(bi_sales_diffamount), 0) AS bi_sales_diffamount,
+			IFNULL(SUM(bi_expense_operate_amount), 0) AS bi_expense_operate_amount,
+			IFNULL(SUM(bi_billing_amount), 0) AS bi_billing_amount,
+			IFNULL(SUM(tma_prom_deduct_amount), 0) AS tma_prom_deduct_amount,
+			IFNULL(SUM(tm_otherdeductions),0) AS tm_otherdeductions
+		FROM(
+			<include refid="posBaseSql" />
+	    ) temp
+	</select>
+	
+	<select id="selectSalesSumPos" resultMap="BaseResultMap" parameterType="map" >
+	<include refid="sharding" />
+	/*balance*/
+		SELECT 
+			temp.*,
+			CONCAT(DATE_FORMAT(temp.balance_start_date,'%m/%d'),'-',DATE_FORMAT(temp.balance_end_date,'%m/%d')) AS sale_month,
+			z.name AS zone_name,g.organ_no,g.name AS organ_name,bg.organ_no biz_no,bg.`name` biz_name,
+			m.bsgroups_no,b.name AS bsgroups_name,r.region_no,r.name AS region_name,le5.name AS province_name,
+			le.`name` AS sale_mode1,le1.`name` AS retail_type1,le2.`name` AS multi1,le3.`name` AS statusName,le4.`name` AS level_name1,
+			le7.`name` AS channelName,
+			bu.name AS brand_unit_name
+		FROM (
+			<include refid="posBaseSql" />
+		) AS temp 
+		LEFT JOIN organ g ON temp.organ_no=g.organ_no
+		LEFT JOIN organ bg ON temp.biz_city_no = bg.organ_no
+		LEFT JOIN zone_info z ON temp.zone_no = z.zone_no
+		LEFT JOIN mall m ON temp.mall_no = m.mall_no
+		LEFT JOIN bsgroups b ON m.bsgroups_no = b.bsgroups_no
+		LEFT JOIN region r ON temp.region_no = r.region_no
+		LEFT JOIN lookup_entry le ON temp.sale_mode = le.`code` AND le.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_A')
+		LEFT JOIN lookup_entry le1 ON temp.retail_type = le1.`code` AND le1.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_B')
+		LEFT JOIN lookup_entry le2 ON temp.multi = le2.`code` AND le2.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_C')
+		LEFT JOIN lookup_entry le3 ON temp.`status` = le3.`code` AND le3.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_STATUS')
+		LEFT JOIN lookup_entry le4 ON temp.shop_level = le4.`code` AND le4.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_LEVEL')
+		LEFT JOIN lookup_entry le5 ON temp.province_no = le5.`code` AND le5.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'PROVINCE')
+		LEFT JOIN brand_unit bu ON temp.brand_unit_no = bu.`brand_unit_no`
+		LEFT JOIN sales_channel le7 ON temp.channel_no = le7.channel_no 
+	</select>
+  
+	<sql id="gmsBaseSql">
+		SELECT 
+			a3.*,
+			a3.customer_no AS shop_no,a3.customer_name AS short_name
+		FROM (	
+			SELECT
+				a2.biz_type,a2.zone_no,a2.zone_name,a2.company_no,a2.company_name,a2.organ_no,a2.organ_name,
+				a2.customer_no,a2.customer_name,
+				
+				a2.month,a2.balance_start_date,a2.balance_end_date,
+				
+				a2.brand_unit_no,a2.brand_unit_name,
+				category.category_nos category_no, category.financial_category_name as category_name,
+				
+				a2.billMonth,a2.invoice_apply_date,a2.saler_name,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesnum,NULL)),0) AS lma_period_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_realamount,NULL)),0) AS lma_period_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesamount,NULL)),0) AS lma_period_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_tagamount,NULL)),0) AS lma_period_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salescost,NULL)),0) AS lma_period_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesdeductions,NULL)),0) AS lma_period_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_balanceamount,NULL)),0) AS lma_period_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesnum,NULL)),0) AS bi_period_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_realamount,NULL)),0) AS bi_period_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesamount,NULL)),0) AS bi_period_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_tagamount,NULL)),0) AS bi_period_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salescost,NULL)),0) AS bi_period_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesdeductions,NULL)),0) AS bi_period_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_balanceamount,NULL)),0) AS bi_period_balanceamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_balanceamount/1.17,NULL)),0) AS bi_period_non_tax_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesnum,NULL)),0) AS qty,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_balanceamount,NULL)),0) AS send_amount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesnum,NULL)),0) AS tma_period_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_realamount,NULL)),0) AS tma_period_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesamount,NULL)),0) AS tma_period_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_tagamount,NULL)),0) AS tma_period_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salescost,NULL)),0) AS tma_period_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesdeductions,NULL)),0) AS tma_period_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_balanceamount,NULL)),0) AS tma_period_balanceamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_balanceamount/1.17,NULL)),0) AS tma_period_non_tax_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesnum,0) - IFNULL(a2.lma_period_salesnum,0),NULL)),0) AS tmi_period_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_realamount,0) - IFNULL(a2.lma_period_realamount,0),NULL)),0) AS tmi_period_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesamount,0) - IFNULL(a2.lma_period_salesamount,0),NULL)),0) AS tmi_period_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_tagamount,0) - IFNULL(a2.lma_period_tagamount,0),NULL)),0) AS tmi_period_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0),NULL)),0) AS tmi_period_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesdeductions,0) - IFNULL(a2.lma_period_salesdeductions,0),NULL)),0) AS tmi_period_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0),NULL)),0) AS tmi_period_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesnum,0) - IFNULL(a2.lma_period_salesnum,0) + IFNULL(a2.tma_period_salesnum,0),NULL)),0) AS tm_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_realamount,0) - IFNULL(a2.lma_period_realamount,0) + IFNULL(a2.tma_period_realamount,0),NULL)),0) AS tm_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesamount,0) - IFNULL(a2.lma_period_salesamount,0) + IFNULL(a2.tma_period_salesamount,0),NULL)),0) AS tm_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_tagamount,0) - IFNULL(a2.lma_period_tagamount,0) + IFNULL(a2.tma_period_tagamount,0),NULL)),0) AS tm_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0),NULL)),0) AS tm_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesdeductions,0) - IFNULL(a2.lma_period_salesdeductions,0) + IFNULL(a2.tma_period_salesdeductions,0),NULL)),0) AS tm_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0) + IFNULL(a2.tma_period_balanceamount,0),NULL)),0) AS tm_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),(IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0) + IFNULL(a2.tma_period_balanceamount,0))/1.17,NULL)),0) AS non_tax_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0),NULL)),0) AS tax_cost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),(IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0))/1.17,NULL)),0) AS no_tax_costs,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.region_cost,0),NULL)),0) AS region_cost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.headquarter_cost,0),NULL)),0) AS headquarter_cost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.purchase_price,0),NULL)),0) AS purchase_price
+				
+			FROM (
+				SELECT
+					a1.biz_type,a1.zone_no,a1.zone_name,a1.company_no,a1.company_name,a1.organ_no,a1.organ_name,
+					a1.customer_no,a1.customer_name,
+					
+					a1.month,a1.balance_start_date,a1.balance_end_date,
+					
+					a1.brand_unit_no,a1.brand_unit_name,a1.category_no,
+					
+					a1.billMonth,a1.invoice_apply_date,a1.saler_name,
+					
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.qty ELSE NULL END) AS lma_period_salesnum,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.amount ELSE NULL END) AS lma_period_realamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.amount ELSE NULL END) AS lma_period_salesamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.sum_tag_price ELSE NULL END) AS lma_period_tagamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.sum_unit_cost ELSE NULL END) AS lma_period_salescost,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.deductions ELSE NULL END) AS lma_period_salesdeductions,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.amount - a1.deductions ELSE NULL END) AS lma_period_balanceamount,
+					
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.qty ELSE NULL END) AS bi_period_salesnum,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.amount ELSE NULL END) AS bi_period_realamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.amount ELSE NULL END) AS bi_period_salesamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.sum_tag_price ELSE NULL END) AS bi_period_tagamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.sum_unit_cost ELSE NULL END) AS bi_period_salescost,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.deductions ELSE NULL END) AS bi_period_salesdeductions,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.amount - a1.deductions ELSE NULL END) AS bi_period_balanceamount,
+					
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.qty ELSE NULL END) AS tma_period_salesnum,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.amount ELSE NULL END) AS tma_period_realamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.amount ELSE NULL END) AS tma_period_salesamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_tag_price ELSE NULL END) AS tma_period_tagamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_unit_cost ELSE NULL END) AS tma_period_salescost,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.deductions ELSE NULL END) AS tma_period_salesdeductions,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.amount - a1.deductions ELSE NULL END) AS tma_period_balanceamount,
+					
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_region_cost ELSE NULL END) AS region_cost,
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_headquarter_cost ELSE NULL END) AS headquarter_cost,
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_purchase_price ELSE NULL END) AS purchase_price
+				FROM (
+					SELECT 
+						a.*,
+						bbis.`bill_no` AS invoice_apply_no,bb.saler_name,EXTRACT(YEAR_MONTH FROM bbia.`invoice_apply_date`) AS billMonth,bbia.`invoice_apply_date`
+					FROM (
+						SELECT 
+							CASE
+								WHEN bill_type = '1335' AND <if test="params.isPe == true">biz_type IN ('21','22','29','30','43')</if>
+								<if test="params.isPe != true or null ==params.isPe">biz_type IN ('21','22','29','30') </if>
+									AND saler_no NOT IN (${params.leadRoleCompanyNos})
+								THEN '2'
+								WHEN ((bill_type = '1361' AND biz_type IN ('7','25')) OR (bill_type = '1335' AND biz_type IN ('3')) 
+								OR (bill_type = '2005' AND biz_type IN ('35')) OR (bill_type = '1371') <if test="params.isPe == true">OR (bsb.bill_type = 1333)</if>)
+									AND saler_no NOT IN (${params.leadRoleCompanyNos})
+									AND buyer_no IN (${params.leadRoleCompanyNos})
+								THEN '5'
+								ELSE '0'
+							END AS biz_type,
+							EXTRACT(YEAR_MONTH FROM send_date) AS `month`,
+							DATE_ADD(send_date,INTERVAL -DAY(send_date)+1 DAY) AS balance_start_date,
+							LAST_DAY(send_date) AS balance_end_date,
+							zone_no_from AS zone_no,zone_name_from AS zone_name,
+							saler_no AS company_no, saler_name AS company_name,
+							organ_no_from AS organ_no,organ_name_from AS organ_name,
+							<choose>
+								<when test="params.countFieldsWholesale==1">
+									IF(bill_type = '1335' AND <if test="params.isPe == true">biz_type IN ('21','22','29','30','43')</if>
+								<if test="params.isPe != true or null ==params.isPe">biz_type IN ('21','22','29','30') </if> AND saler_no NOT IN (${params.leadRoleCompanyNos}),
+										NULL,buyer_no) AS customer_no,
+									IF(bill_type = '1335' AND <if test="params.isPe == true">biz_type IN ('21','22','29','30','43')</if>
+								<if test="params.isPe != true or null ==params.isPe">biz_type IN ('21','22','29','30') </if> AND saler_no NOT IN (${params.leadRoleCompanyNos}),
+										NULL,buyer_name) AS customer_name,
+								</when>
+								<otherwise>
+									buyer_no AS customer_no,buyer_name AS customer_name,
+								</otherwise>
+							</choose>
+							id,bill_no AS rel_no,send_date AS sale_date,balance_no,
+							item_no,brand_unit_no,brand_unit_name,brand_no,brand_name,LEFT(category_no, 2) AS category_no,
+							send_qty AS qty,send_qty * cost AS amount,tag_price AS tag_price,tag_price * send_qty AS sum_tag_price,other_deduct_cost AS deductions,
+							unit_cost * send_qty AS sum_unit_cost,region_cost * send_qty AS sum_region_cost,headquarter_cost * send_qty AS sum_headquarter_cost,purchase_price * send_qty AS sum_purchase_price
+						FROM bill_sale_balance bsb 
+						WHERE
+							(
+							<foreach collection="params.businessTypes" index="index" item="businessTypes" separator=" OR " >
+								<choose>
+									<when test="businessTypes==21">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '21'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==22">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '22'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==23">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '30'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==24">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '29'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==25">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '43'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==41">
+									(bsb.bill_type = '1361' AND bsb.biz_type = '7'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos})
+									AND bsb.buyer_no IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==42">
+									(bsb.bill_type = '1361' AND bsb.biz_type = '25'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos})
+									AND bsb.buyer_no IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==43">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '3'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos})
+									AND bsb.buyer_no IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==44">
+									(bsb.bill_type = '2005' AND bsb.biz_type = '35'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos})
+									AND bsb.buyer_no IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==45">
+									(bsb.bill_type = '1371'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos})
+									AND bsb.buyer_no IN (${params.leadRoleCompanyNos}))
+									</when>
+									<when test="businessTypes==46">
+									(bsb.bill_type = 1333
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos})
+									AND bsb.buyer_no IN (${params.leadRoleCompanyNos}))
+									</when>
+									<otherwise>
+									1=2
+									</otherwise>
+								</choose>
+							</foreach>
+							)
+							<if test="null!=params" >
+								-- AND @bsb.zone_no!zone_no_from
+								-- AND @bsb.company_no!saler_no
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+									AND bsb.zone_no_from = #{params.zoneNo} 
+								</if>
+								<if test="null!=params.companyNos and ''!=params.companyNos" >
+									AND bsb.saler_no IN
+									<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+										#{companyNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							    <if test="null!=params.organNos and ''!=params.organNos" >
+									AND bsb.organ_no_from IN
+									<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+										#{organNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+									AND bsb.send_date &gt;= #{params.saleStartDate}
+								</if>
+								<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+									AND bsb.send_date &lt;= #{params.saleEndDate}
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND bsb.brand_no IN 
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+									AND LEFT(bsb.category_no, 2) IN
+									<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+										#{categoryNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemSql and ''!=params.itemSql" >
+									AND bsb.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+								</if>
+								<if test="null!=params.customerNos and ''!=params.customerNos">
+									AND bsb.buyer_no IN
+									<foreach collection="params.customerNos" index="index" item="customerNo" open="(" separator="," close=")">
+										#{customerNo, jdbcType=CHAR}
+									</foreach>
+								</if>
+							</if>
+						UNION ALL
+						SELECT 
+							'3' AS biz_type,tbd.`balance_month` AS `month`,tbd.`balance_start_date`,tbd.`balance_end_date`,
+							bsb.zone_no_from AS zone_no,bsb.zone_name_from AS zone_name,
+							bsb.saler_no AS company_no,bsb.saler_name AS company_name,
+							bsb.organ_no_from AS organ_no,bsb.organ_name_from AS organ_name,
+							bsb.buyer_no AS customer_no,bsb.buyer_name AS customer_name,
+							bsb.id,bsb.bill_no AS rel_no,bsb.send_date AS sale_date,bsb.balance_no,
+							bsb.item_no,bsb.brand_unit_no,bsb.brand_unit_name,bsb.brand_no,bsb.brand_name,LEFT(bsb.category_no, 2) AS category_no,
+							bsb.send_qty AS qty,bsb.send_qty * bsb.cost AS amount,bsb.tag_price AS tag_price,bsb.tag_price * bsb.send_qty AS sum_tag_price,other_deduct_cost AS deductions,
+							bsb.unit_cost * bsb.send_qty AS sum_unit_cost,bsb.region_cost * bsb.send_qty AS sum_region_cost,bsb.headquarter_cost * bsb.send_qty AS sum_headquarter_cost,bsb.purchase_price * bsb.send_qty AS sum_purchase_price
+						FROM `transfer_balance_date` AS tbd 
+						JOIN bill_sale_balance AS bsb
+							ON tbd.`saler_no` = bsb.saler_no <if test="params.isPe == true">and tbd.buyer_no = bsb.buyer_no</if>
+							AND bsb.send_date BETWEEN tbd.`balance_start_date` AND LAST_DAY(tbd.balance_end_date)
+						WHERE 
+							<foreach collection="params.businessTypes" index="index" item="businessTypes" open="(" separator=" OR " close=")" >
+								<choose>
+									<when test="businessTypes==31">
+									(bsb.bill_type = '1371'
+									AND bsb.saler_no NOT IN (${params.leadRoleCompanyNos})
+									AND bsb.buyer_no NOT IN (${params.leadRoleCompanyNos}))
+									</when>
+									<otherwise>
+									1=2
+									</otherwise>
+								</choose>
+							</foreach>
+							<if test="null!=params" >
+								-- AND @bsb.zone_no!zone_no_from
+								-- AND @bsb.company_no!saler_no
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+									AND bsb.zone_no_from = #{params.zoneNo} 
+								</if>
+								<if test="null!=params.companyNos and ''!=params.companyNos" >
+									AND bsb.saler_no IN
+									<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+										#{companyNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							    <if test="null!=params.organNos and ''!=params.organNos" >
+									AND bsb.organ_no_from IN
+									<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+										#{organNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+									AND tbd.balance_month &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+								</if>
+								<if test="null!=params.saleEndDate and ''!=params.saleEndDate" > 
+									AND tbd.balance_month &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})   
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND bsb.brand_no IN 
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+									AND LEFT(bsb.category_no, 2) IN
+									<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+										#{categoryNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemSql and ''!=params.itemSql" >
+									AND bsb.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+								</if>
+								<if test="null!=params.customerNos and ''!=params.customerNos">
+									AND bsb.buyer_no IN
+									<foreach collection="params.customerNos" index="index" item="customerNo" open="(" separator="," close=")">
+										#{customerNo, jdbcType=CHAR}
+									</foreach>
+								</if>
+							</if>
+					) AS a
+					LEFT JOIN bill_balance AS bb ON a.balance_no = bb.`bill_no`
+					LEFT JOIN `bill_balance_invoice_source` bbis  ON bb.`bill_no` = bbis.balance_no
+					LEFT JOIN `bill_balance_invoice_apply` bbia ON bbis.bill_no = bbia.bill_no
+					WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.balanceState and ''!=params.balanceState" >
+							<choose>
+								<when test="params.balanceState == 1">
+									AND a.balance_no IS NOT NULL
+								</when>
+								<otherwise>
+									AND a.balance_no IS NULL
+								</otherwise>
+							</choose>
+						</if>
+						<if test="null!=params.invoiceState and ''!=params.invoiceState" >
+							<choose>
+								<when test="params.invoiceState == 1">
+									AND 
+									(bbia.invoice_apply_date IS NOT NULL
+									<if test="null!=params.invoiceStartDate and ''!=params.invoiceStartDate" >
+										AND bbia.invoice_apply_date &gt;= #{params.invoiceStartDate}
+									</if>
+									<if test="null!=params.invoiceEndDate and ''!=params.invoiceEndDate" >    
+										AND bbia.invoice_apply_date &lt;= #{params.invoiceEndDate}
+									</if>
+									)
+								</when>
+								<otherwise>
+									AND 
+									(bbia.invoice_apply_date IS NULL
+									<if test="null!=params.invoiceStartDate and ''!=params.invoiceStartDate" >
+										OR bbia.invoice_apply_date &lt; #{params.invoiceStartDate}
+									</if>
+									<if test="null!=params.invoiceEndDate and ''!=params.invoiceEndDate" >    
+										OR bbia.invoice_apply_date &gt; #{params.invoiceEndDate}
+									</if>
+									)
+								</otherwise>
+							</choose> 
+						</if>
+					</if>
+				) AS a1
+				GROUP BY 
+					a1.biz_type,a1.company_no,a1.organ_no,a1.customer_no,a1.month,a1.brand_unit_no,a1.category_no
+			) AS a2
+			JOIN (
+				<if test="null!=params.frsStaticData and ''!=params.frsStaticData" >
+					SELECT category_no as category_nos, `name` as financial_category_name
+				</if>
+				<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+					SELECT GROUP_CONCAT(category_no SEPARATOR ",") category_nos, financial_category_name
+				</if>
+				FROM category  
+				WHERE levelid = 1
+				/*sys_no*/
+				<if test="null!=params" >
+					<if test="null!=params.staticSysNo and ''!=params.staticSysNo" >
+						AND sys_no = #{params.staticSysNo} 
+					</if>
+					<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+						AND category_no IN
+						<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+							#{categoryNos, jdbcType=CHAR}
+						</foreach>
+					</if>
+				</if>
+				<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+					group by financial_category_name
+				</if>
+			) AS category
+			GROUP BY 
+			a2.biz_type,
+			a2.company_no,
+			a2.organ_no,
+			a2.customer_no,
+			a2.month,
+			a2.brand_unit_no
+			<if test="null!=params.frsStaticData and ''!=params.frsStaticData" >
+				,category.category_nos 
+			</if>
+			<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+				,category.financial_category_name
+			</if>
+			
+			<if test="null != params">
+				<if test="null != params.startRowNum and null != params.selectCount">
+					LIMIT #{params.startRowNum} ,#{params.selectCount}
+				</if>
+			</if>
+		) AS a3
+	</sql>
+  
+	<select id="selectSalesSumGmsCount" resultMap="BaseResultMap" parameterType="map" >
+	<include refid="sharding" />
+	/*balance*/
+		SELECT 
+			COUNT(1) AS count,
+			IFNULL(SUM(lma_period_salesnum), 0) AS lma_period_salesnum,
+			IFNULL(SUM(lma_period_realamount), 0) AS lma_period_realamount,
+			IFNULL(SUM(lma_period_salesamount), 0) AS lma_period_salesamount,
+			IFNULL(SUM(lma_period_tagamount), 0) AS lma_period_tagamount,
+			IFNULL(SUM(lma_period_salescost), 0) AS lma_period_salescost,
+			IFNULL(SUM(lma_period_salesdeductions), 0) AS lma_period_salesdeductions,
+			IFNULL(SUM(lma_period_balanceamount), 0) AS lma_period_balanceamount,
+			
+			IFNULL(SUM(bi_period_salesnum), 0) AS bi_period_salesnum,
+			IFNULL(SUM(bi_period_realamount), 0) AS bi_period_realamount,
+			IFNULL(SUM(bi_period_salesamount), 0) AS bi_period_salesamount,
+			IFNULL(SUM(bi_period_tagamount), 0) AS bi_period_tagamount,
+			IFNULL(SUM(bi_period_salescost), 0) AS bi_period_salescost,
+			IFNULL(SUM(bi_period_salesdeductions), 0) AS bi_period_salesdeductions,
+			IFNULL(SUM(bi_period_balanceamount), 0) bi_period_balanceamount,
+			IFNULL(SUM(bi_period_non_tax_balanceamount), 0) bi_period_non_tax_balanceamount,
+			IFNULL(SUM(qty), 0) AS qty,
+			IFNULL(SUM(send_amount), 0) AS send_amount,
+			
+			IFNULL(SUM(tma_period_salesnum), 0) AS tma_period_salesnum,
+			IFNULL(SUM(tma_period_realamount), 0) AS tma_period_realamount,
+			IFNULL(SUM(tma_period_salesamount), 0) AS tma_period_salesamount,
+			IFNULL(SUM(tma_period_tagamount), 0) AS tma_period_tagamount,
+			IFNULL(SUM(tma_period_salescost), 0) AS tma_period_salescost,
+			IFNULL(SUM(tma_period_salesdeductions), 0) AS tma_period_salesdeductions,
+			IFNULL(SUM(tma_period_balanceamount), 0) AS tma_period_balanceamount,
+			IFNULL(SUM(tma_period_non_tax_balanceamount), 0) tma_period_non_tax_balanceamount,
+			
+			IFNULL(SUM(tmi_period_salesnum), 0) AS tmi_period_salesnum,
+			IFNULL(SUM(tmi_period_realamount), 0) AS tmi_period_realamount,
+			IFNULL(SUM(tmi_period_salesamount), 0) AS tmi_period_salesamount,
+			IFNULL(SUM(tmi_period_tagamount), 0) AS tmi_period_tagamount,
+			IFNULL(SUM(tmi_period_salescost), 0) AS tmi_period_salescost,
+			IFNULL(SUM(tmi_period_salesdeductions), 0) AS tmi_period_salesdeductions,
+			IFNULL(SUM(tmi_period_balanceamount), 0) AS tmi_period_balanceamount,
+			
+			IFNULL(SUM(tm_salesnum), 0) AS tm_salesnum,
+			IFNULL(SUM(tm_realamount), 0) AS tm_realamount,
+			IFNULL(SUM(tm_salesamount), 0) AS tm_salesamount,
+			IFNULL(SUM(tm_tagamount), 0) AS tm_tagamount,
+			IFNULL(SUM(tm_salescost), 0) AS tm_salescost,
+			IFNULL(SUM(tm_salesdeductions), 0) AS tm_salesdeductions,
+			IFNULL(SUM(tm_balanceamount), 0) AS tm_balanceamount,
+			
+			IFNULL(SUM(non_tax_salesamount), 0) AS non_tax_salesamount,
+			IFNULL(SUM(tax_cost), 0) AS tax_cost,
+			IFNULL(SUM(no_tax_costs), 0) AS no_tax_costs,
+			IFNULL(SUM(region_cost), 0) AS region_cost,
+			IFNULL(SUM(headquarter_cost), 0) AS headquarter_cost,
+			IFNULL(SUM(purchase_price), 0) AS purchase_price
+		FROM (
+			<include refid="gmsBaseSql" />
+		) AS temp 
+	</select>
+  
+	<select id="selectSalesSumGms" resultMap="BaseResultMap" parameterType="map" >
+	<include refid="sharding" />
+	/*balance*/
+		SELECT 
+			temp.*,
+			CONCAT(DATE_FORMAT(temp.balance_start_date,'%m/%d'),'-',DATE_FORMAT(temp.balance_end_date,'%m/%d')) AS sale_month
+		FROM (
+			<include refid="gmsBaseSql" />
+		) AS temp 
+	</select>
+  
+	<sql id="otherBaseSql">
+		SELECT 
+			a3.*,
+			EXTRACT(YEAR_MONTH FROM a3.invoice_apply_date) AS billMonth
+		FROM (	
+			SELECT 
+				a2.zone_no,a2.province_no,a2.company_no,a2.company_name,a2.organ_no,a2.biz_city_no,a2.shop_no,a2.short_name,a2.biz_type,
+				
+				a2.balcance_date_id,a2.month,a2.balance_start_date,a2.balance_end_date,
+				
+				a2.brand_unit_no,category.category_nos category_no,category.financial_category_name as category_name,
+				
+				IF(SUM(IF(a2.bi_period_salesnum_abs &gt; 0 AND a2.invoice_apply_date IS NULL,1,0)) &gt; 0 OR SUM(IF(a2.bi_period_salesnum_abs &gt; 0 AND a2.invoice_apply_date IS NOT NULL, 1, 0)) = 0,NULL,a2.saler_name) AS saler_name,
+				IF(SUM(IF(a2.bi_period_salesnum_abs &gt; 0 AND a2.invoice_apply_date IS NULL,1,0)) &gt; 0 OR SUM(IF(a2.bi_period_salesnum_abs &gt; 0 AND a2.invoice_apply_date IS NOT NULL, 1, 0)) = 0,NULL,MAX(a2.invoice_apply_date)) AS invoice_apply_date,
+				
+				a2.mall_no,a2.full_name,a2.startup_time,a2.shop_level,a2.category_code,a2.shop_classify,a2.open_date,a2.employe_amount,
+				a2.area,a2.area_left,a2.area_total,a2.region_no,a2.sale_mode,a2.retail_type,a2.multi,a2.`status`,a2.channel_no,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesnum,NULL)),0) AS lma_period_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_realamount,NULL)),0) AS lma_period_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesamount,NULL)),0) AS lma_period_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_tagamount,NULL)),0) AS lma_period_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salescost,NULL)),0) AS lma_period_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_salesdeductions,NULL)),0) AS lma_period_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.lma_period_balanceamount,NULL)),0) AS lma_period_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesnum,NULL)),0) AS bi_period_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_realamount,NULL)),0) AS bi_period_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesamount,NULL)),0) AS bi_period_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_tagamount,NULL)),0) AS bi_period_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salescost,NULL)),0) AS bi_period_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesdeductions,NULL)),0) AS bi_period_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_balanceamount,NULL)),0) AS bi_period_balanceamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_balanceamount/1.17,NULL)),0) AS bi_period_non_tax_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_salesnum,NULL)),0) AS qty,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.bi_period_balanceamount,NULL)),0) AS send_amount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesnum,NULL)),0) AS tma_period_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_realamount,NULL)),0) AS tma_period_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesamount,NULL)),0) AS tma_period_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_tagamount,NULL)),0) AS tma_period_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salescost,NULL)),0) AS tma_period_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_salesdeductions,NULL)),0) AS tma_period_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_balanceamount,NULL)),0) AS tma_period_balanceamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),a2.tma_period_balanceamount/1.17,NULL)),0) AS tma_period_non_tax_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesnum,0) - IFNULL(a2.lma_period_salesnum,0),NULL)),0) AS tmi_period_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_realamount,0) - IFNULL(a2.lma_period_realamount,0),NULL)),0) AS tmi_period_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesamount,0) - IFNULL(a2.lma_period_salesamount,0),NULL)),0) AS tmi_period_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_tagamount,0) - IFNULL(a2.lma_period_tagamount,0),NULL)),0) AS tmi_period_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0),NULL)),0) AS tmi_period_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesdeductions,0) - IFNULL(a2.lma_period_salesdeductions,0),NULL)),0) AS tmi_period_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0),NULL)),0) AS tmi_period_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesnum,0) - IFNULL(a2.lma_period_salesnum,0) + IFNULL(a2.tma_period_salesnum,0),NULL)),0) AS tm_salesnum,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_realamount,0) - IFNULL(a2.lma_period_realamount,0) + IFNULL(a2.tma_period_realamount,0),NULL)),0) AS tm_realamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesamount,0) - IFNULL(a2.lma_period_salesamount,0) + IFNULL(a2.tma_period_salesamount,0),NULL)),0) AS tm_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_tagamount,0) - IFNULL(a2.lma_period_tagamount,0) + IFNULL(a2.tma_period_tagamount,0),NULL)),0) AS tm_tagamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0),NULL)),0) AS tm_salescost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salesdeductions,0) - IFNULL(a2.lma_period_salesdeductions,0) + IFNULL(a2.tma_period_salesdeductions,0),NULL)),0) AS tm_salesdeductions,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0) + IFNULL(a2.tma_period_balanceamount,0),NULL)),0) AS tm_balanceamount,
+				
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),(IFNULL(a2.bi_period_balanceamount,0) - IFNULL(a2.lma_period_balanceamount,0) + IFNULL(a2.tma_period_balanceamount,0))/1.17,NULL)),0) AS non_tax_salesamount,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0),NULL)),0) AS tax_cost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),(IFNULL(a2.bi_period_salescost,0) - IFNULL(a2.lma_period_salescost,0) + IFNULL(a2.tma_period_salescost,0))/1.17,NULL)),0) AS no_tax_costs,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.region_cost,0),NULL)),0) AS region_cost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.headquarter_cost,0),NULL)),0) AS headquarter_cost,
+				IFNULL(SUM(IF(FIND_IN_SET(a2.category_no,category.category_nos),IFNULL(a2.purchase_price,0),NULL)),0) AS purchase_price
+				
+			FROM (	
+				SELECT 
+					a1.zone_no,a1.province_no,a1.company_no,a1.company_name,a1.organ_no,a1.biz_city_no,a1.shop_no,a1.short_name,'4' AS biz_type,
+					
+					a1.balcance_date_id,a1.month,a1.balance_start_date,a1.balance_end_date,
+					
+					a1.brand_unit_no,a1.category_no,
+					
+					IF(SUM(IF(a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date AND a1.invoice_apply_date IS NULL,1,0)) &gt; 0,NULL,a1.company_name) AS saler_name,
+					IF(SUM(IF(a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date AND a1.invoice_apply_date IS NULL,1,0)) &gt; 0,NULL,MAX(IF(a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date,a1.invoice_apply_date,NULL))) AS invoice_apply_date,
+					
+					a1.mall_no,a1.full_name,a1.startup_time,a1.shop_level,a1.category_code,a1.shop_classify,a1.open_date,a1.employe_amount,
+					a1.area,a1.area_left,a1.area_total,a1.region_no,a1.sale_mode,a1.retail_type,a1.multi,a1.`status`,a1.channel_no,
+					
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.qty ELSE NULL END) AS lma_period_salesnum,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.real_amount ELSE NULL END) AS lma_period_realamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.amount ELSE NULL END) AS lma_period_salesamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.sum_tag_price ELSE NULL END) AS lma_period_tagamount,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.sum_unit_cost ELSE NULL END) AS lma_period_salescost,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.deductions ELSE NULL END) AS lma_period_salesdeductions,
+					SUM(CASE WHEN a1.sale_date &lt; CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') THEN a1.amount - a1.deductions ELSE NULL END) AS lma_period_balanceamount,
+					
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.qty ELSE NULL END) AS bi_period_salesnum,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.real_amount ELSE NULL END) AS bi_period_realamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.amount ELSE NULL END) AS bi_period_salesamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.sum_tag_price ELSE NULL END) AS bi_period_tagamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.sum_unit_cost ELSE NULL END) AS bi_period_salescost,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.deductions ELSE NULL END) AS bi_period_salesdeductions,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN a1.amount - a1.deductions ELSE NULL END) AS bi_period_balanceamount,
+					SUM(CASE WHEN a1.sale_date BETWEEN a1.balance_start_date AND a1.balance_end_date THEN ABS(a1.qty) ELSE NULL END) AS bi_period_salesnum_abs,
+					
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.qty ELSE NULL END) AS tma_period_salesnum,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.real_amount ELSE NULL END) AS tma_period_realamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.amount ELSE NULL END) AS tma_period_salesamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_tag_price ELSE NULL END) AS tma_period_tagamount,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_unit_cost ELSE NULL END) AS tma_period_salescost,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.deductions ELSE NULL END) AS tma_period_salesdeductions,
+					SUM(CASE WHEN a1.sale_date &gt; a1.balance_end_date AND a1.sale_date &lt;= LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.amount - a1.deductions ELSE NULL END) AS tma_period_balanceamount,
+					
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_region_cost ELSE NULL END) AS region_cost,
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_headquarter_cost ELSE NULL END) AS headquarter_cost,
+					SUM(CASE WHEN a1.sale_date BETWEEN CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01') AND LAST_DAY(CONCAT(LEFT(a1.month,4),'-',RIGHT(a1.month,2),'-01')) THEN a1.sum_purchase_price ELSE NULL END) AS purchase_price
+				FROM (
+					SELECT
+						a.*,
+						iacd.`invoice_apply_no`,iacd.`invoice_apply_date`
+					FROM (
+						SELECT 
+							c.zone_no,c.company_no,c.name AS company_name,
+							s.province_no,o.parent_no AS organ_no,s.biz_city_no,
+							<choose>
+								<when test="params.countFieldsInsidebiz==1">
+									NULL AS shop_no,NULL AS short_name,
+								</when>
+								<otherwise>
+									s.shop_no,s.short_name,
+								</otherwise>
+							</choose>
+							s.major,s.startup_time,s.shop_level,s.category_code,
+							s.mall_no,s.full_name,s.shop_classify,s.open_date,s.employe_amount,s.area,s.area_left,s.area_total,s.region_no,s.sale_mode,
+							s.retail_type,s.multi,s.channel_no,s.status,
+							ipb.id AS balcance_date_id,ipb.balance_month AS `month`,ipb.balance_start_date,ipb.balance_end_date,
+							
+							dtl.id,main.`order_no` AS rel_no,main.`out_date` AS sale_date,
+							dtl.item_no,dtl.`brand_no`,dtl.`brand_name`,LEFT(dtl.`brand_no`, 2) AS brand_unit_no,LEFT(dtl.category_no, 2) AS category_no,
+							dtl.qty,dtl.amount AS real_amount,IF(dtl.balance_base = 1,dtl.tag_price * dtl.qty,dtl.amount) AS amount,dtl.tag_price,
+							IFNULL(dtl.discount,0),dtl.tag_price * dtl.qty AS sum_tag_price,dtl.unit_cost * dtl.qty AS sum_unit_cost,
+							dtl.region_cost * dtl.qty AS sum_region_cost,
+							dtl.headquarter_cost * dtl.qty AS sum_headquarter_cost,
+							dtl.purchase_price * dtl.qty AS sum_purchase_price,
+							ROUND(IFNULL(dtl.discount,0) / 100 * IF(dtl.balance_base = 1,dtl.tag_price * dtl.qty,dtl.amount),2) AS deductions
+						FROM `inside_purchase_balance_date` AS ipb
+						JOIN company AS c
+							ON ipb.company_no = c.company_no 
+						JOIN order_main AS main 
+							ON ipb.company_no = main.company_no
+							AND main.out_date BETWEEN ipb.`balance_start_date` AND LAST_DAY(ipb.balance_end_date)
+						JOIN shop AS s 
+							ON main.shop_no = s.shop_no
+						JOIN organ AS o
+							ON s.biz_city_no = o.organ_no
+						JOIN order_dtl dtl ON main.order_no = dtl.order_no
+						WHERE
+							(
+								<foreach collection="params.businessTypes" index="index" item="businessTypes" separator=" OR " >
+									<choose>
+										<when test="businessTypes==51">
+										1=1
+										</when>
+										<otherwise>
+										1=2
+										</otherwise>
+									</choose>
+								</foreach>
+							)
+							<if test="null!=params" >
+								-- AND @c.zone_no
+								-- AND @ipb.company_no
+								AND ipb.bill_type = 1
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+									AND c.zone_no = #{params.zoneNo} 
+								</if>
+								<if test="null!=params.companyNos and ''!=params.companyNos" >
+									AND ipb.company_no IN
+									<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+										#{companyNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							    <if test="null!=params.organNos and ''!=params.organNos" >
+									AND o.parent_no IN
+									<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+										#{organNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.shopNos and ''!=params.shopNos" >
+									AND main.shop_no IN  
+									<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+										#{shopNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+									AND ipb.balance_month &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+								</if>
+								<if test="null!=params.saleEndDate and ''!=params.saleEndDate" > 
+									AND ipb.balance_month &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})   
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND dtl.brand_no IN 
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+									AND LEFT(dtl.category_no, 2) IN
+									<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+										#{categoryNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemSql and ''!=params.itemSql" >
+									AND dtl.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+								</if>
+							</if>
+							AND main.status IN ('30', '41') 
+							AND main.business_type IN ('3')
+						UNION ALL
+						SELECT 
+							c.zone_no,c.company_no,c.name AS company_name,
+							s.province_no,o.parent_no AS organ_no,s.biz_city_no,
+							<choose>
+								<when test="params.countFieldsInsidebiz==1">
+									NULL AS shop_no,NULL AS short_name,
+								</when>
+								<otherwise>
+									s.shop_no,s.short_name,
+								</otherwise>
+							</choose>
+							s.major,s.startup_time,s.shop_level,s.category_code,
+							s.mall_no,s.full_name,s.shop_classify,s.open_date,s.employe_amount,s.area,s.area_left,s.area_total,s.region_no,s.sale_mode,
+							s.retail_type,s.multi,s.channel_no,s.status,
+							ipb.id AS balcance_date_id,ipb.balance_month AS `month`,ipb.balance_start_date,ipb.balance_end_date,
+							
+							dtl.id,main.`business_no` AS rel_no,main.`out_date` AS sale_date,
+							dtl.item_no,dtl.`brand_no`,dtl.`brand_name`,LEFT(dtl.`brand_no`, 2) AS brand_unit_no,LEFT(dtl.category_no, 2) AS category_no,
+							dtl.qty,dtl.amount AS real_amount,IF(dtl.balance_base = 1,dtl.tag_price * dtl.qty,dtl.amount) AS amount,dtl.tag_price,
+							IFNULL(dtl.discount,0),dtl.tag_price * dtl.qty AS sum_tag_price,dtl.unit_cost * dtl.qty AS sum_unit_cost,
+							dtl.region_cost * dtl.qty AS sum_region_cost,
+							dtl.headquarter_cost * dtl.qty AS sum_headquarter_cost,
+							dtl.purchase_price * dtl.qty AS sum_purchase_price,
+							ROUND(IFNULL(dtl.discount,0) / 100 * IF(dtl.balance_base = 1,dtl.tag_price * dtl.qty,dtl.amount),2) AS deductions
+						FROM `inside_purchase_balance_date` AS ipb
+						JOIN company AS c
+							ON ipb.company_no = c.company_no 
+						JOIN return_exchange_main AS main 
+							ON ipb.company_no = main.company_no 
+							AND main.out_date BETWEEN ipb.`balance_start_date` AND LAST_DAY(ipb.balance_end_date)
+						JOIN shop AS s 
+							ON main.shop_no = s.shop_no
+						JOIN organ AS o
+							ON s.biz_city_no = o.organ_no
+						JOIN return_exchange_dtl dtl ON main.business_no = dtl.business_no
+						WHERE
+							(
+								<foreach collection="params.businessTypes" index="index" item="businessTypes" separator=" OR " >
+									<choose>
+										<when test="businessTypes==52">
+										1=1
+										</when>
+										<otherwise>
+										1=2
+										</otherwise>
+									</choose>
+								</foreach>
+							)
+							<if test="null!=params" >
+								-- AND @c.zone_no
+								-- AND @ipb.company_no
+								AND ipb.bill_type = 1
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+									AND c.zone_no = #{params.zoneNo} 
+								</if>
+								<if test="null!=params.companyNos and ''!=params.companyNos" >
+									AND ipb.company_no IN
+									<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+										#{companyNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							    <if test="null!=params.organNos and ''!=params.organNos" >
+									AND o.parent_no IN
+									<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+										#{organNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.shopNos and ''!=params.shopNos" >
+									AND main.shop_no IN  
+									<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+										#{shopNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+									AND ipb.balance_month &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+								</if>
+								<if test="null!=params.saleEndDate and ''!=params.saleEndDate" > 
+									AND ipb.balance_month &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})   
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND dtl.brand_no IN 
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+									AND LEFT(dtl.category_no, 2) IN
+									<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+										#{categoryNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemSql and ''!=params.itemSql" >
+									AND dtl.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+								</if>
+							</if>
+							AND main.status IN ('30', '41') 
+							AND main.business_type IN ('3')	
+						UNION ALL
+						SELECT 
+							bsb.zone_no_from AS zone_no,bsb.saler_no AS company_no,bsb.saler_name AS company_name,
+							NULL AS province_no,bsb.organ_no_from AS organ_no,NULL AS biz_city_no,
+							<choose>
+								<when test="params.countFieldsInsidebiz==1">
+									NULL AS shop_no,NULL AS short_name,
+								</when>
+								<otherwise>
+									bsb.buyer_no AS shop_no,bsb.buyer_name AS short_name,
+								</otherwise>
+							</choose>
+							NULL AS major,NULL AS startup_time,NULL AS shop_level,NULL AS category_code,
+							NULL AS mall_no,NULL AS full_name,NULL AS shop_classify,NULL AS open_date,NULL AS employe_amount,NULL AS `area`,NULL AS area_left,NULL AS area_total,NULL AS region_no,NULL AS sale_mode,
+							NULL AS retail_type,NULL AS multi,NULL AS channel_no,NULL AS `status`,
+							ipb.id AS balcance_date_id,ipb.balance_month AS `month`,ipb.balance_start_date,ipb.balance_end_date,
+							
+							bsb.id,bsb.bill_no AS rel_no,bsb.send_date AS sale_date,
+							bsb.item_no,bsb.brand_no,bsb.brand_name,bsb.brand_unit_no,LEFT(bsb.category_no, 2) AS category_no,
+							bsb.send_qty AS qty,bsb.send_qty * cost AS real_amount,bsb.send_qty * cost AS amount,bsb.tag_price AS tag_price,
+							0 AS discount,bsb.tag_price * bsb.send_qty AS sum_tag_price,bsb.unit_cost * bsb.send_qty AS sum_unit_cost,
+							bsb.region_cost * bsb.send_qty AS sum_region_cost,
+							bsb.headquarter_cost * bsb.send_qty AS sum_headquarter_cost,
+							bsb.purchase_price * bsb.send_qty AS sum_purchase_price,
+							0 AS deductions
+						FROM `inside_purchase_balance_date` AS ipb
+						JOIN bill_sale_balance AS bsb
+							ON ipb.`company_no` = bsb.saler_no 
+							AND bsb.send_date BETWEEN ipb.`balance_start_date` AND LAST_DAY(ipb.balance_end_date)
+						WHERE 
+							<foreach collection="params.businessTypes" index="index" item="businessTypes" open="(" separator=" OR " close=")" >
+								<choose>
+									<when test="businessTypes==53">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '23')
+									</when>
+									<when test="businessTypes==57">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '24')
+									</when>
+									<when test="businessTypes==54">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '2')
+									</when>
+									<when test="businessTypes==55">
+									(bsb.bill_type = '1355' AND bsb.biz_type = '8')
+									</when>
+									<when test="businessTypes==58">
+									(bsb.bill_type = '1355' AND bsb.biz_type = '10')
+									</when>
+									<when test="businessTypes==59">
+									(bsb.bill_type = '1355' AND bsb.biz_type = '26')
+									</when>
+									<when test="businessTypes==56">
+									(bsb.bill_type = 1342)
+									</when>
+									<when test="businessTypes==510">
+									(bsb.bill_type = '1335' AND bsb.biz_type = '13')
+									</when>
+									<otherwise>
+									1=2
+									</otherwise>
+								</choose>
+							</foreach>
+							<if test="null!=params" >
+								-- AND @bsb.zone_no!zone_no_from
+								-- AND @bsb.company_no!saler_no
+								AND ipb.bill_type = 1
+								<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+									${params.queryCondition}
+								</if>
+								<if test="null!=params.zoneNo and ''!=params.zoneNo" >
+									AND bsb.zone_no_from = #{params.zoneNo} 
+								</if>
+								<if test="null!=params.companyNos and ''!=params.companyNos" >
+									AND bsb.saler_no IN
+									<foreach collection="params.companyNos" index="index" item="companyNos" open="(" separator="," close=")">
+										#{companyNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+							    <if test="null!=params.organNos and ''!=params.organNos" >
+									AND bsb.organ_no_from IN
+									<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+										#{organNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.shopNos and ''!=params.shopNos" >
+									AND bsb.buyer_no IN  
+									<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+										#{shopNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+									AND ipb.balance_month &gt;= EXTRACT(YEAR_MONTH FROM #{params.saleStartDate})
+								</if>
+								<if test="null!=params.saleEndDate and ''!=params.saleEndDate" > 
+									AND ipb.balance_month &lt;= EXTRACT(YEAR_MONTH FROM #{params.saleEndDate})   
+								</if>
+								<if test="null!=params.brandNos and ''!=params.brandNos" >
+									AND bsb.brand_no IN 
+									<foreach collection="params.brandNos" index="index" item="brandNos" open="(" separator="," close=")">
+										#{brandNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+									AND LEFT(bsb.category_no, 2) IN
+									<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+										#{categoryNos, jdbcType=CHAR}
+									</foreach>
+								</if>
+								<if test="null!=params.itemSql and ''!=params.itemSql" >
+									AND bsb.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+								</if>
+								<if test="null!=params.customerNos and ''!=params.customerNos">
+									AND bsb.buyer_no IN
+									<foreach collection="params.customerNos" index="index" item="customerNo" open="(" separator="," close=")">
+										#{customerNo, jdbcType=CHAR}
+									</foreach>
+								</if>
+							</if>
+					) AS a
+					LEFT JOIN `invoice_apply_confirm_dtl` AS iacd
+						ON a.id = iacd.order_dtl_id
+						AND a.rel_no = iacd.`order_no`
+						AND a.item_no = iacd.`item_no`
+				) AS a1
+				GROUP BY 
+					a1.company_no,a1.organ_no,a1.shop_no,a1.balcance_date_id,a1.brand_unit_no,a1.category_no
+			) AS a2
+			JOIN (
+				<if test="null!=params.frsStaticData and ''!=params.frsStaticData" >
+					SELECT category_no as category_nos, `name` as financial_category_name
+				</if>
+				<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+					SELECT GROUP_CONCAT(category_no SEPARATOR ",") category_nos, financial_category_name
+				</if>
+				FROM category 
+				WHERE levelid = 1
+				/*sys_no*/
+				<if test="null!=params" >
+					<if test="null!=params.staticSysNo and ''!=params.staticSysNo" >
+						AND sys_no = #{params.staticSysNo} 
+					</if>
+					<if test="null!=params.categoryNos and ''!=params.categoryNos" >    
+						AND category_no IN
+						<foreach collection="params.categoryNos" index="index" item="categoryNos" open="(" separator="," close=")">
+							#{categoryNos, jdbcType=CHAR}
+						</foreach>
+					</if>
+				</if>
+				<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+					group by financial_category_name
+				</if>
+			) AS category
+			GROUP BY 
+			a2.company_no,
+			a2.organ_no,
+			a2.shop_no,
+			a2.balcance_date_id,
+			a2.brand_unit_no
+			<if test="null!=params.frsStaticData and ''!=params.frsStaticData" >
+				,category.category_nos 
+			</if>
+			<if test="null==params.frsStaticData or ''==params.frsStaticData" >
+				,category.financial_category_name
+			</if>
+		) AS a3
+		WHERE 1=1
+		<if test="null!=params" >
+			<if test="null!=params.invoiceState and ''!=params.invoiceState" >
+				<choose>
+					<when test="params.invoiceState == 1">
+						AND 
+						(a3.invoice_apply_date IS NOT NULL
+						<if test="null!=params.invoiceStartDate and ''!=params.invoiceStartDate" >
+							AND a3.invoice_apply_date &gt;= #{params.invoiceStartDate}
+						</if>
+						<if test="null!=params.invoiceEndDate and ''!=params.invoiceEndDate" >    
+							AND a3.invoice_apply_date &lt;= #{params.invoiceEndDate}
+						</if>
+						)
+					</when>
+					<otherwise>
+						AND 
+						(a3.invoice_apply_date IS NULL
+						<if test="null!=params.invoiceStartDate and ''!=params.invoiceStartDate" >
+							OR a3.invoice_apply_date &lt; #{params.invoiceStartDate}
+						</if>
+						<if test="null!=params.invoiceEndDate and ''!=params.invoiceEndDate" >    
+							OR a3.invoice_apply_date &gt; #{params.invoiceEndDate}
+						</if>
+						)
+					</otherwise>
+				</choose> 
+			</if>
+		</if>
+		<if test="null != params">
+			<if test="null != params.startRowNum and null != params.selectCount">
+				LIMIT #{params.startRowNum} ,#{params.selectCount}
+			</if>
+		</if>
+   </sql>
+   
+	<select id="selectSalesSumOtherCount" resultMap="BaseResultMap" parameterType="map" >
+	<include refid="sharding" />
+	/*balance*/
+		SELECT 
+			COUNT(1) AS count,
+			IFNULL(SUM(lma_period_salesnum), 0) AS lma_period_salesnum,
+			IFNULL(SUM(lma_period_realamount), 0) AS lma_period_realamount,
+			IFNULL(SUM(lma_period_salesamount), 0) AS lma_period_salesamount,
+			IFNULL(SUM(lma_period_tagamount), 0) AS lma_period_tagamount,
+			IFNULL(SUM(lma_period_salescost), 0) AS lma_period_salescost,
+			IFNULL(SUM(lma_period_salesdeductions), 0) AS lma_period_salesdeductions,
+			IFNULL(SUM(lma_period_balanceamount), 0) AS lma_period_balanceamount,
+			
+			IFNULL(SUM(bi_period_salesnum), 0) AS bi_period_salesnum,
+			IFNULL(SUM(bi_period_realamount), 0) AS bi_period_realamount,
+			IFNULL(SUM(bi_period_salesamount), 0) AS bi_period_salesamount,
+			IFNULL(SUM(bi_period_tagamount), 0) AS bi_period_tagamount,
+			IFNULL(SUM(bi_period_salescost), 0) AS bi_period_salescost,
+			IFNULL(SUM(bi_period_salesdeductions), 0) AS bi_period_salesdeductions,
+			IFNULL(SUM(bi_period_balanceamount), 0) bi_period_balanceamount,
+			IFNULL(SUM(bi_period_non_tax_balanceamount), 0) bi_period_non_tax_balanceamount,
+			IFNULL(SUM(qty), 0) AS qty,
+			IFNULL(SUM(send_amount), 0) AS send_amount,
+			
+			IFNULL(SUM(tma_period_salesnum), 0) AS tma_period_salesnum,
+			IFNULL(SUM(tma_period_realamount), 0) AS tma_period_realamount,
+			IFNULL(SUM(tma_period_salesamount), 0) AS tma_period_salesamount,
+			IFNULL(SUM(tma_period_tagamount), 0) AS tma_period_tagamount,
+			IFNULL(SUM(tma_period_salescost), 0) AS tma_period_salescost,
+			IFNULL(SUM(tma_period_salesdeductions), 0) AS tma_period_salesdeductions,
+			IFNULL(SUM(tma_period_balanceamount), 0) AS tma_period_balanceamount,
+			IFNULL(SUM(tma_period_non_tax_balanceamount), 0) tma_period_non_tax_balanceamount,
+			
+			IFNULL(SUM(tmi_period_salesnum), 0) AS tmi_period_salesnum,
+			IFNULL(SUM(tmi_period_realamount), 0) AS tmi_period_realamount,
+			IFNULL(SUM(tmi_period_salesamount), 0) AS tmi_period_salesamount,
+			IFNULL(SUM(tmi_period_tagamount), 0) AS tmi_period_tagamount,
+			IFNULL(SUM(tmi_period_salescost), 0) AS tmi_period_salescost,
+			IFNULL(SUM(tmi_period_salesdeductions), 0) AS tmi_period_salesdeductions,
+			IFNULL(SUM(tmi_period_balanceamount), 0) AS tmi_period_balanceamount,
+			
+			IFNULL(SUM(tm_salesnum), 0) AS tm_salesnum,
+			IFNULL(SUM(tm_realamount), 0) AS tm_realamount,
+			IFNULL(SUM(tm_salesamount), 0) AS tm_salesamount,
+			IFNULL(SUM(tm_tagamount), 0) AS tm_tagamount,
+			IFNULL(SUM(tm_salescost), 0) AS tm_salescost,
+			IFNULL(SUM(tm_salesdeductions), 0) AS tm_salesdeductions,
+			IFNULL(SUM(tm_balanceamount), 0) AS tm_balanceamount,
+			
+			IFNULL(SUM(non_tax_salesamount), 0) AS non_tax_salesamount,
+			IFNULL(SUM(tax_cost), 0) AS tax_cost,
+			IFNULL(SUM(no_tax_costs), 0) AS no_tax_costs,
+			IFNULL(SUM(region_cost), 0) AS region_cost,
+			IFNULL(SUM(headquarter_cost), 0) AS headquarter_cost,
+			IFNULL(SUM(purchase_price), 0) AS purchase_price
+		FROM (
+			<include refid="otherBaseSql" />
+		) AS temp 
+	</select>
+  
+	<select id="selectSalesSumOther" resultMap="BaseResultMap" parameterType="map" >
+	<include refid="sharding" />
+	/*balance*/
+		SELECT 
+			temp.*,
+			CONCAT(DATE_FORMAT(temp.balance_start_date,'%m/%d'),'-',DATE_FORMAT(temp.balance_end_date,'%m/%d')) AS sale_month,
+			z.name AS zone_name,
+			g.name AS organ_name,bg.organ_no biz_no,bg.`name` biz_name,
+			m.bsgroups_no,b.name AS bsgroups_name,r.region_no,r.name AS region_name,g.name AS province_name,
+			le.`name` AS sale_mode1,le1.`name` AS retail_type1,le2.`name` AS multi1,le3.`name` AS statusName,le4.`name` AS level_name1,
+			le7.`name` AS channelName,
+			bu.name AS brand_unit_name 
+		FROM (
+			<include refid="otherBaseSql" />
+		) AS temp 
+		LEFT JOIN organ g ON temp.organ_no=g.organ_no
+		LEFT JOIN organ bg ON temp.biz_city_no = bg.organ_no
+		LEFT JOIN zone_info z ON temp.zone_no = z.zone_no
+		LEFT JOIN mall m ON temp.mall_no = m.mall_no
+		LEFT JOIN bsgroups b ON m.bsgroups_no = b.bsgroups_no
+		LEFT JOIN region r ON temp.region_no = r.region_no
+		LEFT JOIN lookup_entry le ON temp.sale_mode = le.`code` AND le.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_A')
+		LEFT JOIN lookup_entry le1 ON temp.retail_type = le1.`code` AND le1.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_B')
+		LEFT JOIN lookup_entry le2 ON temp.multi = le2.`code` AND le2.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_CATEGORY_C')
+		LEFT JOIN lookup_entry le3 ON temp.`status` = le3.`code` AND le3.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_STATUS')
+		LEFT JOIN lookup_entry le4 ON temp.shop_level = le4.`code` AND le4.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_LEVEL')
+		LEFT JOIN brand_unit bu ON temp.brand_unit_no = bu.`brand_unit_no`
+		LEFT JOIN sales_channel le7 ON temp.channel_no = le7.channel_no
+	</select>
+	
+	<!-- 检查有销售但未设置结算期的店铺 -->
+	<select id="checkShopBalanceDate" resultMap="BaseResultMap" parameterType="map" >
+	/*balance*/
+		SELECT * FROM (
+			SELECT 
+				dtl.shop_no,dtl.shop_name AS short_name,EXTRACT(YEAR_MONTH FROM dtl.sale_date) AS `month` 
+			FROM (
+				SELECT 
+					main.`order_no` AS rel_no,main.shop_no,main.shop_name,main.`out_date` AS sale_date
+				FROM order_main AS main 
+				JOIN shop AS s ON main.shop_no = s.shop_no
+				WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+							${params.queryCondition}
+						</if>
+						<if test="null!=params.companyNo and ''!=params.companyNo" >
+							AND main.`company_no` = #{params.companyNo} 
+						</if>
+						<if test="null!=params.startDate and ''!=params.startDate" >
+							AND main.`out_date` &gt;= #{params.startDate} 
+						</if>
+						<if test="null!=params.endDate and ''!=params.endDate" >
+							AND main.`out_date` &lt;= #{params.endDate} 
+						</if>
+					</if>
+					AND main.status IN ('30', '41') 
+					AND main.business_type IN ('0', '1', '2', '6')
+				UNION ALL
+				SELECT 
+					main.`business_no` AS rel_no,main.shop_no,main.shop_name,main.`out_date` AS sale_date
+				FROM return_exchange_main AS main 
+				JOIN shop AS s ON main.shop_no = s.shop_no
+				WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+							${params.queryCondition}
+						</if>
+						<if test="null!=params.companyNo and ''!=params.companyNo" >
+							AND main.`company_no` = #{params.companyNo} 
+						</if>
+						<if test="null!=params.startDate and ''!=params.startDate" >
+							AND main.`out_date` &gt;= #{params.startDate} 
+						</if>
+						<if test="null!=params.endDate and ''!=params.endDate" >
+							AND main.`out_date` &lt;= #{params.endDate} 
+						</if>
+					</if>
+					AND main.status IN ('30', '41') 
+					AND main.business_type IN ('0', '1', '2', '6')
+			) AS dtl
+			GROUP BY dtl.shop_no,EXTRACT(YEAR_MONTH FROM dtl.sale_date)) AS temp
+		WHERE 
+			NOT EXISTS (SELECT 1 FROM shop_balance_date AS sbd WHERE sbd.`shop_no` = temp.shop_no AND sbd.`month` = temp.month )
+	</select>
+	
+	
+	<!-- 检查有内购销售但未设置内购结算期的公司 -->
+	<select id="checkInnerBuyBalanceDate" resultMap="BaseResultMap" parameterType="map" >
+	/*balance*/
+		SELECT * FROM (
+			SELECT 
+				dtl.company_no,dtl.company_name,EXTRACT(YEAR_MONTH FROM dtl.sale_date) AS `month` 
+			FROM (
+				SELECT 
+					main.`order_no` AS rel_no,main.company_no,main.company_name,main.`out_date` AS sale_date
+				FROM order_main AS main 
+				WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+							${params.queryCondition}
+						</if>
+						<if test="null!=params.companyNo and ''!=params.companyNo" >
+							AND main.`company_no` = #{params.companyNo} 
+						</if>
+						<if test="null!=params.startDate and ''!=params.startDate" >
+							AND main.`out_date` &gt;= #{params.startDate} 
+						</if>
+						<if test="null!=params.endDate and ''!=params.endDate" >
+							AND main.`out_date` &lt;= #{params.endDate} 
+						</if>
+					</if>
+					AND main.status IN ('30', '41') 
+					AND main.business_type IN ('3')
+				UNION ALL
+				SELECT 
+					main.`business_no` AS rel_no,main.company_no,main.company_name,main.`out_date` AS sale_date
+				FROM return_exchange_main AS main 
+				WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+							${params.queryCondition}
+						</if>
+						<if test="null!=params.companyNo and ''!=params.companyNo" >
+							AND main.`company_no` = #{params.companyNo} 
+						</if>
+						<if test="null!=params.startDate and ''!=params.startDate" >
+							AND main.`out_date` &gt;= #{params.startDate} 
+						</if>
+						<if test="null!=params.endDate and ''!=params.endDate" >
+							AND main.`out_date` &lt;= #{params.endDate} 
+						</if>
+					</if>
+					AND main.status IN ('30', '41') 
+					AND main.business_type IN ('3')
+					
+				UNION ALL
+				SELECT 
+					bsb.bill_no AS rel_no,bsb.saler_no company_no,bsb.saler_name company_name,bsb.send_date AS sale_date
+				FROM bill_sale_balance AS bsb 
+				WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+							${params.queryCondition}
+						</if>
+						<if test="null!=params.companyNo and ''!=params.companyNo" >
+							AND bsb.saler_no = #{params.companyNo} 
+						</if>
+						<if test="null!=params.startDate and ''!=params.startDate" >
+							AND bsb.send_date &gt;= #{params.startDate} 
+						</if>
+						<if test="null!=params.endDate and ''!=params.endDate" >
+							AND bsb.send_date &lt;= #{params.endDate} 
+						</if>
+					</if> 
+					and ((bsb.bill_type = 1335 and bsb.biz_type = 23) <!-- 团购出库 -->
+						or (bsb.bill_type = 1335 and bsb.biz_type = 24) <!-- 团购退货 -->
+						or (bsb.bill_type = 1335 and bsb.biz_type = 13) <!-- 领用出库-->
+						or bsb.bill_type = 1342 <!-- 报废单（直接） -->
+						or (bsb.bill_type = 1355 and bsb.biz_type in (8,10,26)) <!-- 8=索赔单,10=库存盘差-->
+						or (bsb.bill_type = 1335 and bsb.biz_type = 2)  <!-- 客残销售 -->
+					)
+			) AS dtl
+			GROUP BY dtl.company_no,EXTRACT(YEAR_MONTH FROM dtl.sale_date)
+			) AS temp
+		WHERE 
+			NOT EXISTS (SELECT 1 FROM inside_purchase_balance_date AS sbd WHERE sbd.company_no = temp.company_no AND sbd.balance_month = temp.month )
+	</select>
+	
+	<select id="getPredictionDeductions" resultType="java.math.BigDecimal" >
+		SELECT SUM(cs.billing_amount - cs_p.billing_amount) AS bi_period_predictiondeductions
+		FROM bill_shop_balance bsb
+		JOIN bill_shop_balance_cate_sum cs
+		ON bsb.balance_no = cs.`balance_no` 
+		JOIN bill_shop_balance bsb_p
+		ON bsb.shop_no = bsb_p.shop_no 
+			AND bsb.balance_start_date = bsb_p.balance_start_date
+			AND bsb.balance_end_date = bsb_p.balance_end_date 
+			AND bsb_p.balance_type = 2
+		JOIN bill_shop_balance_cate_sum cs_p
+		ON bsb_p.balance_no = cs_p.`balance_no` 
+			AND cs.shop_no = cs_p.`shop_no` 
+			AND cs.brand_no = cs_p.`brand_no` 
+			AND cs.category_no = cs_p.`category_no`
+		WHERE 1=1
+			AND bsb.`shop_no` = #{shopNo,jdbcType=VARCHAR}
+			AND bsb.`invoice_apply_date` BETWEEN DATE_ADD(#{invoiceApplyDate,jdbcType=DATE},INTERVAL 1-DAY(#{invoiceApplyDate,jdbcType=DATE}) DAY) AND LAST_DAY(#{invoiceApplyDate,jdbcType=DATE})
+			AND bsb.`balance_type` = 1
+			AND cs.`shop_no` = #{shopNo,jdbcType=VARCHAR}
+			AND cs.`brand_no` = #{brandUnitNo,jdbcType=VARCHAR}
+			AND cs.`category_no` = #{categoryNo,jdbcType=VARCHAR}
+	</select>
+  
+  	<select id="getCompanyPredictionDeductions" resultMap="BaseResultMap">
+			SELECT SUM(cs.billing_amount - cs_p.billing_amount) AS bill_amount,
+			 cs.`shop_no`,cs.`brand_no`,cs.category_no
+			FROM bill_shop_balance bsb
+			JOIN bill_shop_balance_cate_sum cs
+			    ON bsb.balance_no = cs.`balance_no`
+			JOIN bill_shop_balance bsb_p
+			    ON bsb.shop_no = bsb_p.shop_no
+			        AND bsb.balance_start_date = bsb_p.balance_start_date
+			        AND bsb.balance_end_date = bsb_p.balance_end_date
+			        AND bsb_p.balance_type = 2
+			JOIN bill_shop_balance_cate_sum cs_p
+			    ON bsb_p.balance_no = cs_p.`balance_no`
+			        AND cs.shop_no = cs_p.`shop_no`
+			        AND cs.brand_no = cs_p.`brand_no`
+			        AND cs.category_no = cs_p.`category_no`
+			WHERE 1=1
+			        AND bsb.`invoice_apply_date`
+						  BETWEEN #{startDate,jdbcType=DATE} and #{endDate,jdbcType=DATE}
+			        AND bsb.`balance_type` = 1 
+			        AND bsb.sharding_flag = #{shardingFlag,jdbcType=VARCHAR}
+			group by  
+			cs.`shop_no` , cs.`brand_no`,cs.category_no
+	</select>
+	
+</mapper>

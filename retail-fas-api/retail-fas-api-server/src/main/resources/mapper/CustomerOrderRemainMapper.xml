@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.CustomerOrderRemainMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.vo.CustomerOrderRemain" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="out_amount" property="outAmount" jdbcType="DECIMAL" />
+    <result column="out_rebate_amount" property="outRebateAmount" jdbcType="DECIMAL" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="remaining_amount" property="remainingAmount" jdbcType="DECIMAL" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="customer_no" property="customerNo" jdbcType="CHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="return_out_amount" property="returnOutAmount" jdbcType="DECIMAL" />
+    <result column="order_date" property="orderDate" jdbcType="DATE" />
+    <result column="frozen_order_amount" property="frozenOrderAmount" jdbcType="DECIMAL" />
+    <result column="unfreeze_order_amount" property="unfreezeOrderAmount" jdbcType="DECIMAL" />
+    <result column="wholesale_order_type" property="wholesaleOrderType" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_no, amount, out_amount, out_rebate_amount, return_amount, deduction_amount, 
+    receive_amount, remaining_amount, company_no, company_name, customer_no, customer_name, 
+    create_time, update_time, status, return_out_amount, order_date, frozen_order_amount, 
+    unfreeze_order_amount, wholesale_order_type
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+        AND order_no = #{params.orderNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.customerNo and ''!=params.customerNo" >
+        AND customer_no = #{params.customerNo}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM customer_order_remain
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM customer_order_remain WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM customer_order_remain WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM customer_order_remain WHERE 1=1 
+    <include refid="condition" />
+    order by order_date desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM customer_order_remain
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.api.vo.CustomerOrderRemain" >
+    DELETE FROM customer_order_remain
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.api.vo.CustomerOrderRemain" >
+    INSERT INTO customer_order_remain (id, order_no, amount, 
+      out_amount, out_rebate_amount, return_amount, 
+      deduction_amount, receive_amount, remaining_amount, 
+      company_no, company_name, customer_no, 
+      customer_name, create_time, update_time, 
+      status, return_out_amount, order_date, 
+      frozen_order_amount, unfreeze_order_amount, 
+      wholesale_order_type)
+    VALUES (#{id,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{outAmount,jdbcType=DECIMAL}, #{outRebateAmount,jdbcType=DECIMAL}, #{returnAmount,jdbcType=DECIMAL}, 
+      #{deductionAmount,jdbcType=DECIMAL}, #{receiveAmount,jdbcType=DECIMAL}, #{remainingAmount,jdbcType=DECIMAL}, 
+      #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{customerNo,jdbcType=CHAR}, 
+      #{customerName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{returnOutAmount,jdbcType=DECIMAL}, #{orderDate,jdbcType=DATE}, 
+      #{frozenOrderAmount,jdbcType=DECIMAL}, #{unfreezeOrderAmount,jdbcType=DECIMAL}, 
+      #{wholesaleOrderType,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.api.vo.CustomerOrderRemain" >
+    INSERT INTO customer_order_remain
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="outAmount != null" >
+        out_amount,
+      </if>
+      <if test="outRebateAmount != null" >
+        out_rebate_amount,
+      </if>
+      <if test="returnAmount != null" >
+        return_amount,
+      </if>
+      <if test="deductionAmount != null" >
+        deduction_amount,
+      </if>
+      <if test="receiveAmount != null" >
+        receive_amount,
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="customerNo != null" >
+        customer_no,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="returnOutAmount != null" >
+        return_out_amount,
+      </if>
+      <if test="orderDate != null" >
+        order_date,
+      </if>
+      <if test="frozenOrderAmount != null" >
+        frozen_order_amount,
+      </if>
+      <if test="unfreezeOrderAmount != null" >
+        unfreeze_order_amount,
+      </if>
+      <if test="wholesaleOrderType != null" >
+        wholesale_order_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="outAmount != null" >
+        #{outAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="outRebateAmount != null" >
+        #{outRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="returnAmount != null" >
+        #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductionAmount != null" >
+        #{deductionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveAmount != null" >
+        #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remainingAmount != null" >
+        #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="returnOutAmount != null" >
+        #{returnOutAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderDate != null" >
+        #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="frozenOrderAmount != null" >
+        #{frozenOrderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="unfreezeOrderAmount != null" >
+        #{unfreezeOrderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="wholesaleOrderType != null" >
+        #{wholesaleOrderType,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.api.vo.CustomerOrderRemain" >
+    UPDATE customer_order_remain
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="outAmount != null" >
+        out_amount = #{outAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="outRebateAmount != null" >
+        out_rebate_amount = #{outRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="returnAmount != null" >
+        return_amount = #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductionAmount != null" >
+        deduction_amount = #{deductionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveAmount != null" >
+        receive_amount = #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="returnOutAmount != null" >
+        return_out_amount = #{returnOutAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderDate != null" >
+        order_date = #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="frozenOrderAmount != null" >
+        frozen_order_amount = #{frozenOrderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="unfreezeOrderAmount != null" >
+        unfreeze_order_amount = #{unfreezeOrderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="wholesaleOrderType != null" >
+        wholesale_order_type = #{wholesaleOrderType,jdbcType=TINYINT},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.api.vo.CustomerOrderRemain" >
+    UPDATE customer_order_remain
+    SET order_no = #{orderNo,jdbcType=CHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      out_amount = #{outAmount,jdbcType=DECIMAL},
+      out_rebate_amount = #{outRebateAmount,jdbcType=DECIMAL},
+      return_amount = #{returnAmount,jdbcType=DECIMAL},
+      deduction_amount = #{deductionAmount,jdbcType=DECIMAL},
+      receive_amount = #{receiveAmount,jdbcType=DECIMAL},
+      remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=CHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      return_out_amount = #{returnOutAmount,jdbcType=DECIMAL},
+      order_date = #{orderDate,jdbcType=DATE},
+      frozen_order_amount = #{frozenOrderAmount,jdbcType=DECIMAL},
+      unfreeze_order_amount = #{unfreezeOrderAmount,jdbcType=DECIMAL},
+      wholesale_order_type = #{wholesaleOrderType,jdbcType=TINYINT}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

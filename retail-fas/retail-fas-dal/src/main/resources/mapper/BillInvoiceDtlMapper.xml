@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillInvoiceDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillInvoiceDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="invoice_no" property="invoiceNo" jdbcType="CHAR" />
+    <result column="invoice_code" property="invoiceCode" jdbcType="CHAR" />
+    <result column="invoice_date" property="invoiceDate" jdbcType="DATE" />
+    <result column="invoice_amount" property="invoiceAmount" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="no_tax_amount" property="noTaxAmount" jdbcType="DECIMAL" />
+    <result column="tax_amount" property="taxAmount" jdbcType="DECIMAL" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, invoice_no, invoice_code, invoice_date, invoice_amount, tax_rate, no_tax_amount, tax_amount, 
+    brand_no, brand_name, category_no, category_name, qty, price
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if>
+      <if test="null!=params.invoiceBillNo and ''!=params.invoiceBillNo" >
+        AND bill_no = #{params.invoiceBillNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_invoice_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_invoice_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_invoice_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_invoice_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_invoice_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoiceDtl" >
+    DELETE FROM bill_invoice_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoiceDtl" >
+    INSERT INTO bill_invoice_dtl (id, bill_no, invoice_no, invoice_code,
+      invoice_date, invoice_amount, tax_rate, 
+      no_tax_amount, tax_amount, brand_no, 
+      brand_name, category_no, category_name, 
+      qty, price)
+    VALUES (#{id,jdbcType=INTEGER}, #{billNo,jdbcType=CHAR}, #{invoiceNo,jdbcType=CHAR}, #{invoiceCode,jdbcType=CHAR}, 
+      #{invoiceDate,jdbcType=DATE}, #{invoiceAmount,jdbcType=DECIMAL}, #{taxRate,jdbcType=DECIMAL}, 
+      #{noTaxAmount,jdbcType=DECIMAL}, #{taxAmount,jdbcType=DECIMAL}, #{brandNo,jdbcType=CHAR}, 
+      #{brandName,jdbcType=CHAR}, #{categoryNo,jdbcType=CHAR}, #{categoryName,jdbcType=CHAR}, 
+      #{qty,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoiceDtl" >
+    INSERT INTO bill_invoice_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no,
+      </if>
+      <if test="invoiceCode != null" >
+        invoice_code,
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date,
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount,
+      </if>
+      <if test="taxRate != null" >
+        tax_rate,
+      </if>
+      <if test="noTaxAmount != null" >
+        no_tax_amount,
+      </if>
+      <if test="taxAmount != null" >
+        tax_amount,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        #{invoiceNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceCode != null" >
+        #{invoiceCode,jdbcType=CHAR},
+      </if>
+      <if test="invoiceDate != null" >
+        #{invoiceDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceAmount != null" >
+        #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="noTaxAmount != null" >
+        #{noTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxAmount != null" >
+        #{taxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoiceDtl" >
+    UPDATE bill_invoice_dtl
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no = #{invoiceNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceCode != null" >
+        invoice_code = #{invoiceCode,jdbcType=CHAR},
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date = #{invoiceDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        tax_rate = #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="noTaxAmount != null" >
+        no_tax_amount = #{noTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="taxAmount != null" >
+        tax_amount = #{taxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoiceDtl" >
+    UPDATE bill_invoice_dtl
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      invoice_no = #{invoiceNo,jdbcType=CHAR},
+      invoice_code = #{invoiceCode,jdbcType=CHAR},
+      invoice_date = #{invoiceDate,jdbcType=DATE},
+      invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      tax_rate = #{taxRate,jdbcType=DECIMAL},
+      no_tax_amount = #{noTaxAmount,jdbcType=DECIMAL},
+      tax_amount = #{taxAmount,jdbcType=DECIMAL},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=CHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      category_name = #{categoryName,jdbcType=CHAR},
+      qty = #{qty,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByBillNo" parameterType="java.lang.String" >
+    DELETE FROM bill_invoice_dtl
+    WHERE bill_no = #{billNo,jdbcType=CHAR}
+  </delete> 
+</mapper>

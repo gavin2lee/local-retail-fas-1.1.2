@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ComodityPriceInquiryMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PurchasePrice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="suggest_tag_price" property="suggestTagPrice" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="effective_date" property="effectiveDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="itemName" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+     item.id, item.item_no,CODE,item.name, item.supplier_no, IFNULL(purchase_price,0) as purchase_price,IFNULL(purp.material_price,0) as material_price,IFNULL(factory_price ,0) as factory_price,
+    effective_date, item.status, suggest_tag_price,supplier_item_name,
+    (SELECT short_name FROM supplier WHERE supplier.supplier_no = item.supplier_no) supplier_name, 
+    (SELECT headquarter_cost FROM headquarter_cost_maintain WHERE headquarter_cost_maintain.item_no=item.item_no and effective_time &lt;= #{params.effectiveDateEnd} ORDER BY effective_time DESC LIMIT 0,1) headquarter_cost,
+    IFNULL(pql.tag_price,0) as tag_price
+  </sql>
+  
+  <sql id="Base_Column_List_One" >
+     item.id, item.item_no,CODE,item.name, item.supplier_no, IFNULL(purchase_price,0) as purchase_price,IFNULL(purp.material_price,0) as material_price,IFNULL(factory_price ,0) as factory_price,
+    effective_date, item.status, suggest_tag_price,supplier_item_name,b.brand_no,
+    b.name AS brand_name,
+    (SELECT short_name FROM supplier WHERE supplier.supplier_no = item.supplier_no) supplier_name, 
+    (SELECT headquarter_cost FROM headquarter_cost_maintain WHERE headquarter_cost_maintain.item_no=item.item_no and effective_time &lt;= #{params.effectiveDateEnd} ORDER BY effective_time DESC LIMIT 0,1) headquarter_cost,
+    IFNULL(pql.tag_price,0) as tag_price
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo" >
+        AND item.item_no = #{params.itemNo}
+      </if>
+      <if test="null!=params.itemSql and ''!=params.itemSql" >
+		AND item.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+	  </if>
+      <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+        AND item.supplier_no = #{params.supplierNo}
+      </if>
+    </if>
+  </sql>
+  
+   <sql id="pageCondition" >
+   -- AND @B.brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo" >
+        AND item.item_no = #{params.itemNo}
+      </if>
+      <if test="null!=params.itemSql and ''!=params.itemSql" >
+		AND item.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+	  </if>
+      <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+        AND item.supplier_no = #{params.supplierNo}
+      </if>
+      <if test="null != params.brandNo and '' != params.brandNo">
+		   AND b.brand_no in 
+		    <foreach collection="params.brandNo" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+			</foreach>  
+	   </if>
+	  <if test="null != params.tagPrice and '' != params.tagPrice">
+		    AND (pql.tag_price = 0 OR pql.tag_price IS NULL)
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     from item 
+	left join 
+		(select pp.item_no,pp.purchase_price,pp.material_price,pp.factory_price,pp.status,pp.effective_date from purchase_price pp 
+				inner join  
+				(select item_no, MAX(effective_date) effective_date from purchase_price where status=100 group by item_no) pur 
+				on pp.item_no=pur.item_no and pp.effective_date=pur.effective_date and pp.status=100
+	  )purp on purp.item_no=item.item_no
+	LEFT JOIN brand b ON b.`brand_no`=item.`brand_no`
+	left join (select item_no,tag_price from price_quotation_list where organ_type=0 and quotation_tactics=0) pql on pql.item_no=item.item_no
+    WHERE item.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+   select COUNT(1) as s 
+	from item 
+	left join 
+		(select pp.item_no,pp.purchase_price,pp.material_price,pp.factory_price,pp.status,pp.effective_date from purchase_price pp 
+				inner join  
+				(select item_no, MAX(effective_date) effective_date from purchase_price where status=100 and effective_date &lt;= #{params.effectiveDateEnd} group by item_no) pur 
+				on pp.item_no=pur.item_no and pp.effective_date=pur.effective_date and pp.status=100
+	  )purp on purp.item_no=item.item_no
+	LEFT JOIN brand b ON b.`brand_no`=item.`brand_no`
+	left join (select item_no,tag_price from price_quotation_list where organ_type=0 and quotation_tactics=0) pql on pql.item_no=item.item_no
+   WHERE 1=1 
+    <include refid="pageCondition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List_One" />
+     from item 
+	left join 
+		(select pp.item_no,pp.purchase_price,pp.material_price,pp.factory_price,pp.status,pp.effective_date from purchase_price pp 
+				inner join  
+				(select item_no, MAX(effective_date) effective_date from purchase_price where status=100 and effective_date &lt;= #{params.effectiveDateEnd} group by item_no) pur 
+				on pp.item_no=pur.item_no and pp.effective_date=pur.effective_date and pp.status=100
+	  )purp on purp.item_no=item.item_no
+	LEFT JOIN brand b ON b.`brand_no`=item.`brand_no`
+	left join (select item_no,tag_price from price_quotation_list where organ_type=0 and quotation_tactics=0) pql on pql.item_no=item.item_no
+   	WHERE 1=1 
+    <include refid="pageCondition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     from item 
+	left join 
+		(select pp.item_no,pp.purchase_price,pp.material_price,pp.factory_price,pp.status,pp.effective_date from purchase_price pp 
+				inner join  
+				(select item_no, MAX(effective_date) effective_date from purchase_price where status=100 and effective_date &lt;= #{params.effectiveDateEnd} group by item_no) pur 
+				on pp.item_no=pur.item_no and pp.effective_date=pur.effective_date and pp.status=100
+	  )purp on purp.item_no=item.item_no
+	LEFT JOIN brand b ON b.`brand_no`=item.`brand_no`
+	left join (select item_no,tag_price from price_quotation_list where organ_type=0 and quotation_tactics=0) pql on pql.item_no=item.item_no
+	    WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+   <select id="getBalancePurchasePrice" resultMap="BaseResultMap" parameterType="map" >
+    SELECT id, item_no, item_code,supplier_no, purchase_price, material_price, factory_price, 
+    effective_date, status, create_user, create_time, update_user, update_time
+     FROM purchase_price WHERE status=100 AND item_no= #{params.itemNo} AND  supplier_no= #{params.supplierNo}
+    AND effective_date &lt;= #{params.effectiveDate}
+    ORDER BY effective_date DESC LIMIT 0,1
+  </select>
+  
+</mapper>

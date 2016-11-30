@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.InventoryBookMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.InventoryBook" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="store_no_from" property="storeNoFrom" jdbcType="CHAR" />
+    <result column="store_name_from" property="storeNameFrom" jdbcType="VARCHAR" />
+    <result column="store_no_to" property="storeNoTo" jdbcType="CHAR" />
+    <result column="store_name_to" property="storeNameTo" jdbcType="VARCHAR" />
+    <result column="company_no_from" property="companyNoFrom" jdbcType="CHAR" />
+    <result column="company_name_from" property="companyNameFrom" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="company_no_to" property="companyNoTo" jdbcType="CHAR" />
+    <result column="company_name_to" property="companyNameTo" jdbcType="VARCHAR" />
+    <result column="order_unit_no_to" property="orderUnitNoTo" jdbcType="CHAR" />
+    <result column="order_unit_name_to" property="orderUnitNameTo" jdbcType="VARCHAR" />
+    <result column="store_no" property="storeNo" jdbcType="CHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+    <result column="size_kind" property="sizeKind" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="in_out_flag" property="inOutFlag" jdbcType="TINYINT" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="VARCHAR" />
+    <result column="ref_bill_type" property="refBillType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="account_type" property="accountType" jdbcType="TINYINT" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="balance_offset" property="balanceOffset" jdbcType="INTEGER" />
+    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+    <result column="factory_in_offset" property="factoryInOffset" jdbcType="INTEGER" />
+    <result column="factory_in_qty" property="factoryInQty" jdbcType="INTEGER" />
+    <result column="factory_in_diff_offset" property="factoryInDiffOffset" jdbcType="INTEGER" />
+    <result column="factory_in_diff_qty" property="factoryInDiffQty" jdbcType="INTEGER" />
+    <result column="transit_in_offset" property="transitInOffset" jdbcType="INTEGER" />
+    <result column="transit_in_qty" property="transitInQty" jdbcType="INTEGER" />
+    <result column="transit_out_offset" property="transitOutOffset" jdbcType="INTEGER" />
+    <result column="transit_out_qty" property="transitOutQty" jdbcType="INTEGER" />
+    <result column="in_diff_offset" property="inDiffOffset" jdbcType="INTEGER" />
+    <result column="in_diff_qty" property="inDiffQty" jdbcType="INTEGER" />
+    <result column="out_diff_offset" property="outDiffOffset" jdbcType="INTEGER" />
+    <result column="out_diff_qty" property="outDiffQty" jdbcType="INTEGER" />
+    <result column="transit_in_account_offset" property="transitInAccountOffset" jdbcType="INTEGER" />
+    <result column="transit_in_account_qty" property="transitInAccountQty" jdbcType="INTEGER" />
+    <result column="transit_out_account_offset" property="transitOutAccountOffset" jdbcType="INTEGER" />
+    <result column="transit_out_account_qty" property="transitOutAccountQty" jdbcType="INTEGER" />
+    <result column="in_diff_account_offset" property="inDiffAccountOffset" jdbcType="INTEGER" />
+    <result column="in_diff_account_qty" property="inDiffAccountQty" jdbcType="INTEGER" />
+    <result column="out_diff_account_offset" property="outDiffAccountOffset" jdbcType="INTEGER" />
+    <result column="out_diff_account_qty" property="outDiffAccountQty" jdbcType="INTEGER" />
+    <result column="lock_offset" property="lockOffset" jdbcType="INTEGER" />
+    <result column="lock_qty" property="lockQty" jdbcType="INTEGER" />
+    <result column="occupied_offset" property="occupiedOffset" jdbcType="INTEGER" />
+    <result column="occupied_qty" property="occupiedQty" jdbcType="INTEGER" />
+    <result column="backup_offset" property="backupOffset" jdbcType="INTEGER" />
+    <result column="backup_qty" property="backupQty" jdbcType="INTEGER" />
+    <result column="guest_bad_offset" property="guestBadOffset" jdbcType="INTEGER" />
+    <result column="guest_bad_qty" property="guestBadQty" jdbcType="INTEGER" />
+    <result column="original_bad_offset" property="originalBadOffset" jdbcType="INTEGER" />
+    <result column="original_bad_qty" property="originalBadQty" jdbcType="INTEGER" />
+    <result column="bad_transit_offset" property="badTransitOffset" jdbcType="INTEGER" />
+    <result column="bad_transit_qty" property="badTransitQty" jdbcType="INTEGER" />
+    <result column="bad_diff_offset" property="badDiffOffset" jdbcType="INTEGER" />
+    <result column="bad_diff_qty" property="badDiffQty" jdbcType="INTEGER" />
+    <result column="return_offset" property="returnOffset" jdbcType="INTEGER" />
+    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+    <result column="borrow_offset" property="borrowOffset" jdbcType="INTEGER" />
+    <result column="borrow_qty" property="borrowQty" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_timestamp" property="createTimestamp" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, store_no_from, store_name_from, store_no_to, store_name_to, company_no_from, 
+    company_name_from, order_unit_no_from, order_unit_name_from, company_no_to, company_name_to, 
+    order_unit_no_to, order_unit_name_to, store_no, store_name, company_no, company_name, 
+    order_unit_no, order_unit_name, item_no, item_code, item_name, brand_no, brand_name, 
+    brand_unit_no, brand_unit_name, category_no, sku_no, size_no, size_kind, bill_no, 
+    status, bill_type, in_out_flag, ref_bill_no, ref_bill_type, biz_type, account_type, 
+    bill_date, cost, balance_offset, balance_qty, factory_in_offset, factory_in_qty, 
+    factory_in_diff_offset, factory_in_diff_qty, transit_in_offset, transit_in_qty, transit_out_offset, 
+    transit_out_qty, in_diff_offset, in_diff_qty, out_diff_offset, out_diff_qty, transit_in_account_offset, 
+    transit_in_account_qty, transit_out_account_offset, transit_out_account_qty, in_diff_account_offset, 
+    in_diff_account_qty, out_diff_account_offset, out_diff_account_qty, lock_offset, 
+    lock_qty, occupied_offset, occupied_qty, backup_offset, backup_qty, guest_bad_offset, 
+    guest_bad_qty, original_bad_offset, original_bad_qty, bad_transit_offset, bad_transit_qty, 
+    bad_diff_offset, bad_diff_qty, return_offset, return_qty, borrow_offset, borrow_qty, 
+    create_time, create_timestamp, update_time, sharding_flag
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM inventory_book
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM inventory_book WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM inventory_book WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM inventory_book WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM inventory_book
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.InventoryBook" >
+    DELETE FROM inventory_book
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.InventoryBook" >
+    INSERT INTO inventory_book (id, store_no_from, store_name_from, 
+      store_no_to, store_name_to, company_no_from, 
+      company_name_from, order_unit_no_from, order_unit_name_from, 
+      company_no_to, company_name_to, order_unit_no_to, 
+      order_unit_name_to, store_no, store_name, 
+      company_no, company_name, order_unit_no, 
+      order_unit_name, item_no, item_code, 
+      item_name, brand_no, brand_name, 
+      brand_unit_no, brand_unit_name, category_no, 
+      sku_no, size_no, size_kind, 
+      bill_no, status, bill_type, 
+      in_out_flag, ref_bill_no, ref_bill_type, 
+      biz_type, account_type, bill_date, 
+      cost, balance_offset, balance_qty, 
+      factory_in_offset, factory_in_qty, factory_in_diff_offset, 
+      factory_in_diff_qty, transit_in_offset, transit_in_qty, 
+      transit_out_offset, transit_out_qty, in_diff_offset, 
+      in_diff_qty, out_diff_offset, out_diff_qty, 
+      transit_in_account_offset, transit_in_account_qty, 
+      transit_out_account_offset, transit_out_account_qty, 
+      in_diff_account_offset, in_diff_account_qty, 
+      out_diff_account_offset, out_diff_account_qty, 
+      lock_offset, lock_qty, occupied_offset, 
+      occupied_qty, backup_offset, backup_qty, 
+      guest_bad_offset, guest_bad_qty, original_bad_offset, 
+      original_bad_qty, bad_transit_offset, bad_transit_qty, 
+      bad_diff_offset, bad_diff_qty, return_offset, 
+      return_qty, borrow_offset, borrow_qty, 
+      create_time, create_timestamp, update_time, 
+      sharding_flag)
+    VALUES (#{id,jdbcType=CHAR}, #{storeNoFrom,jdbcType=CHAR}, #{storeNameFrom,jdbcType=VARCHAR}, 
+      #{storeNoTo,jdbcType=CHAR}, #{storeNameTo,jdbcType=VARCHAR}, #{companyNoFrom,jdbcType=CHAR}, 
+      #{companyNameFrom,jdbcType=VARCHAR}, #{orderUnitNoFrom,jdbcType=CHAR}, #{orderUnitNameFrom,jdbcType=VARCHAR}, 
+      #{companyNoTo,jdbcType=CHAR}, #{companyNameTo,jdbcType=VARCHAR}, #{orderUnitNoTo,jdbcType=CHAR}, 
+      #{orderUnitNameTo,jdbcType=VARCHAR}, #{storeNo,jdbcType=CHAR}, #{storeName,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{orderUnitNo,jdbcType=CHAR}, 
+      #{orderUnitName,jdbcType=VARCHAR}, #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{itemName,jdbcType=CHAR}, #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{brandUnitNo,jdbcType=CHAR}, #{brandUnitName,jdbcType=VARCHAR}, #{categoryNo,jdbcType=CHAR}, 
+      #{skuNo,jdbcType=CHAR}, #{sizeNo,jdbcType=VARCHAR}, #{sizeKind,jdbcType=CHAR}, 
+      #{billNo,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, #{billType,jdbcType=INTEGER}, 
+      #{inOutFlag,jdbcType=TINYINT}, #{refBillNo,jdbcType=VARCHAR}, #{refBillType,jdbcType=INTEGER}, 
+      #{bizType,jdbcType=INTEGER}, #{accountType,jdbcType=TINYINT}, #{billDate,jdbcType=DATE}, 
+      #{cost,jdbcType=DECIMAL}, #{balanceOffset,jdbcType=INTEGER}, #{balanceQty,jdbcType=INTEGER}, 
+      #{factoryInOffset,jdbcType=INTEGER}, #{factoryInQty,jdbcType=INTEGER}, #{factoryInDiffOffset,jdbcType=INTEGER}, 
+      #{factoryInDiffQty,jdbcType=INTEGER}, #{transitInOffset,jdbcType=INTEGER}, #{transitInQty,jdbcType=INTEGER}, 
+      #{transitOutOffset,jdbcType=INTEGER}, #{transitOutQty,jdbcType=INTEGER}, #{inDiffOffset,jdbcType=INTEGER}, 
+      #{inDiffQty,jdbcType=INTEGER}, #{outDiffOffset,jdbcType=INTEGER}, #{outDiffQty,jdbcType=INTEGER}, 
+      #{transitInAccountOffset,jdbcType=INTEGER}, #{transitInAccountQty,jdbcType=INTEGER}, 
+      #{transitOutAccountOffset,jdbcType=INTEGER}, #{transitOutAccountQty,jdbcType=INTEGER}, 
+      #{inDiffAccountOffset,jdbcType=INTEGER}, #{inDiffAccountQty,jdbcType=INTEGER}, 
+      #{outDiffAccountOffset,jdbcType=INTEGER}, #{outDiffAccountQty,jdbcType=INTEGER}, 
+      #{lockOffset,jdbcType=INTEGER}, #{lockQty,jdbcType=INTEGER}, #{occupiedOffset,jdbcType=INTEGER}, 
+      #{occupiedQty,jdbcType=INTEGER}, #{backupOffset,jdbcType=INTEGER}, #{backupQty,jdbcType=INTEGER}, 
+      #{guestBadOffset,jdbcType=INTEGER}, #{guestBadQty,jdbcType=INTEGER}, #{originalBadOffset,jdbcType=INTEGER}, 
+      #{originalBadQty,jdbcType=INTEGER}, #{badTransitOffset,jdbcType=INTEGER}, #{badTransitQty,jdbcType=INTEGER}, 
+      #{badDiffOffset,jdbcType=INTEGER}, #{badDiffQty,jdbcType=INTEGER}, #{returnOffset,jdbcType=INTEGER}, 
+      #{returnQty,jdbcType=INTEGER}, #{borrowOffset,jdbcType=INTEGER}, #{borrowQty,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createTimestamp,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{shardingFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.InventoryBook" >
+    INSERT INTO inventory_book
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="storeNoFrom != null" >
+        store_no_from,
+      </if>
+      <if test="storeNameFrom != null" >
+        store_name_from,
+      </if>
+      <if test="storeNoTo != null" >
+        store_no_to,
+      </if>
+      <if test="storeNameTo != null" >
+        store_name_to,
+      </if>
+      <if test="companyNoFrom != null" >
+        company_no_from,
+      </if>
+      <if test="companyNameFrom != null" >
+        company_name_from,
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        order_unit_no_from,
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        order_unit_name_from,
+      </if>
+      <if test="companyNoTo != null" >
+        company_no_to,
+      </if>
+      <if test="companyNameTo != null" >
+        company_name_to,
+      </if>
+      <if test="orderUnitNoTo != null" >
+        order_unit_no_to,
+      </if>
+      <if test="orderUnitNameTo != null" >
+        order_unit_name_to,
+      </if>
+      <if test="storeNo != null" >
+        store_no,
+      </if>
+      <if test="storeName != null" >
+        store_name,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no,
+      </if>
+      <if test="orderUnitName != null" >
+        order_unit_name,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="skuNo != null" >
+        sku_no,
+      </if>
+      <if test="sizeNo != null" >
+        size_no,
+      </if>
+      <if test="sizeKind != null" >
+        size_kind,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="inOutFlag != null" >
+        in_out_flag,
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no,
+      </if>
+      <if test="refBillType != null" >
+        ref_bill_type,
+      </if>
+      <if test="bizType != null" >
+        biz_type,
+      </if>
+      <if test="accountType != null" >
+        account_type,
+      </if>
+      <if test="billDate != null" >
+        bill_date,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="balanceOffset != null" >
+        balance_offset,
+      </if>
+      <if test="balanceQty != null" >
+        balance_qty,
+      </if>
+      <if test="factoryInOffset != null" >
+        factory_in_offset,
+      </if>
+      <if test="factoryInQty != null" >
+        factory_in_qty,
+      </if>
+      <if test="factoryInDiffOffset != null" >
+        factory_in_diff_offset,
+      </if>
+      <if test="factoryInDiffQty != null" >
+        factory_in_diff_qty,
+      </if>
+      <if test="transitInOffset != null" >
+        transit_in_offset,
+      </if>
+      <if test="transitInQty != null" >
+        transit_in_qty,
+      </if>
+      <if test="transitOutOffset != null" >
+        transit_out_offset,
+      </if>
+      <if test="transitOutQty != null" >
+        transit_out_qty,
+      </if>
+      <if test="inDiffOffset != null" >
+        in_diff_offset,
+      </if>
+      <if test="inDiffQty != null" >
+        in_diff_qty,
+      </if>
+      <if test="outDiffOffset != null" >
+        out_diff_offset,
+      </if>
+      <if test="outDiffQty != null" >
+        out_diff_qty,
+      </if>
+      <if test="transitInAccountOffset != null" >
+        transit_in_account_offset,
+      </if>
+      <if test="transitInAccountQty != null" >
+        transit_in_account_qty,
+      </if>
+      <if test="transitOutAccountOffset != null" >
+        transit_out_account_offset,
+      </if>
+      <if test="transitOutAccountQty != null" >
+        transit_out_account_qty,
+      </if>
+      <if test="inDiffAccountOffset != null" >
+        in_diff_account_offset,
+      </if>
+      <if test="inDiffAccountQty != null" >
+        in_diff_account_qty,
+      </if>
+      <if test="outDiffAccountOffset != null" >
+        out_diff_account_offset,
+      </if>
+      <if test="outDiffAccountQty != null" >
+        out_diff_account_qty,
+      </if>
+      <if test="lockOffset != null" >
+        lock_offset,
+      </if>
+      <if test="lockQty != null" >
+        lock_qty,
+      </if>
+      <if test="occupiedOffset != null" >
+        occupied_offset,
+      </if>
+      <if test="occupiedQty != null" >
+        occupied_qty,
+      </if>
+      <if test="backupOffset != null" >
+        backup_offset,
+      </if>
+      <if test="backupQty != null" >
+        backup_qty,
+      </if>
+      <if test="guestBadOffset != null" >
+        guest_bad_offset,
+      </if>
+      <if test="guestBadQty != null" >
+        guest_bad_qty,
+      </if>
+      <if test="originalBadOffset != null" >
+        original_bad_offset,
+      </if>
+      <if test="originalBadQty != null" >
+        original_bad_qty,
+      </if>
+      <if test="badTransitOffset != null" >
+        bad_transit_offset,
+      </if>
+      <if test="badTransitQty != null" >
+        bad_transit_qty,
+      </if>
+      <if test="badDiffOffset != null" >
+        bad_diff_offset,
+      </if>
+      <if test="badDiffQty != null" >
+        bad_diff_qty,
+      </if>
+      <if test="returnOffset != null" >
+        return_offset,
+      </if>
+      <if test="returnQty != null" >
+        return_qty,
+      </if>
+      <if test="borrowOffset != null" >
+        borrow_offset,
+      </if>
+      <if test="borrowQty != null" >
+        borrow_qty,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createTimestamp != null" >
+        create_timestamp,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="storeNoFrom != null" >
+        #{storeNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="storeNameFrom != null" >
+        #{storeNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNoTo != null" >
+        #{storeNoTo,jdbcType=CHAR},
+      </if>
+      <if test="storeNameTo != null" >
+        #{storeNameTo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNoFrom != null" >
+        #{companyNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="companyNameFrom != null" >
+        #{companyNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        #{orderUnitNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        #{orderUnitNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNoTo != null" >
+        #{companyNoTo,jdbcType=CHAR},
+      </if>
+      <if test="companyNameTo != null" >
+        #{companyNameTo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNoTo != null" >
+        #{orderUnitNoTo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNameTo != null" >
+        #{orderUnitNameTo,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNo != null" >
+        #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNo != null" >
+        #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitName != null" >
+        #{orderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="skuNo != null" >
+        #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeNo != null" >
+        #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeKind != null" >
+        #{sizeKind,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="inOutFlag != null" >
+        #{inOutFlag,jdbcType=TINYINT},
+      </if>
+      <if test="refBillNo != null" >
+        #{refBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refBillType != null" >
+        #{refBillType,jdbcType=INTEGER},
+      </if>
+      <if test="bizType != null" >
+        #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="accountType != null" >
+        #{accountType,jdbcType=TINYINT},
+      </if>
+      <if test="billDate != null" >
+        #{billDate,jdbcType=DATE},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceOffset != null" >
+        #{balanceOffset,jdbcType=INTEGER},
+      </if>
+      <if test="balanceQty != null" >
+        #{balanceQty,jdbcType=INTEGER},
+      </if>
+      <if test="factoryInOffset != null" >
+        #{factoryInOffset,jdbcType=INTEGER},
+      </if>
+      <if test="factoryInQty != null" >
+        #{factoryInQty,jdbcType=INTEGER},
+      </if>
+      <if test="factoryInDiffOffset != null" >
+        #{factoryInDiffOffset,jdbcType=INTEGER},
+      </if>
+      <if test="factoryInDiffQty != null" >
+        #{factoryInDiffQty,jdbcType=INTEGER},
+      </if>
+      <if test="transitInOffset != null" >
+        #{transitInOffset,jdbcType=INTEGER},
+      </if>
+      <if test="transitInQty != null" >
+        #{transitInQty,jdbcType=INTEGER},
+      </if>
+      <if test="transitOutOffset != null" >
+        #{transitOutOffset,jdbcType=INTEGER},
+      </if>
+      <if test="transitOutQty != null" >
+        #{transitOutQty,jdbcType=INTEGER},
+      </if>
+      <if test="inDiffOffset != null" >
+        #{inDiffOffset,jdbcType=INTEGER},
+      </if>
+      <if test="inDiffQty != null" >
+        #{inDiffQty,jdbcType=INTEGER},
+      </if>
+      <if test="outDiffOffset != null" >
+        #{outDiffOffset,jdbcType=INTEGER},
+      </if>
+      <if test="outDiffQty != null" >
+        #{outDiffQty,jdbcType=INTEGER},
+      </if>
+      <if test="transitInAccountOffset != null" >
+        #{transitInAccountOffset,jdbcType=INTEGER},
+      </if>
+      <if test="transitInAccountQty != null" >
+        #{transitInAccountQty,jdbcType=INTEGER},
+      </if>
+      <if test="transitOutAccountOffset != null" >
+        #{transitOutAccountOffset,jdbcType=INTEGER},
+      </if>
+      <if test="transitOutAccountQty != null" >
+        #{transitOutAccountQty,jdbcType=INTEGER},
+      </if>
+      <if test="inDiffAccountOffset != null" >
+        #{inDiffAccountOffset,jdbcType=INTEGER},
+      </if>
+      <if test="inDiffAccountQty != null" >
+        #{inDiffAccountQty,jdbcType=INTEGER},
+      </if>
+      <if test="outDiffAccountOffset != null" >
+        #{outDiffAccountOffset,jdbcType=INTEGER},
+      </if>
+      <if test="outDiffAccountQty != null" >
+        #{outDiffAccountQty,jdbcType=INTEGER},
+      </if>
+      <if test="lockOffset != null" >
+        #{lockOffset,jdbcType=INTEGER},
+      </if>
+      <if test="lockQty != null" >
+        #{lockQty,jdbcType=INTEGER},
+      </if>
+      <if test="occupiedOffset != null" >
+        #{occupiedOffset,jdbcType=INTEGER},
+      </if>
+      <if test="occupiedQty != null" >
+        #{occupiedQty,jdbcType=INTEGER},
+      </if>
+      <if test="backupOffset != null" >
+        #{backupOffset,jdbcType=INTEGER},
+      </if>
+      <if test="backupQty != null" >
+        #{backupQty,jdbcType=INTEGER},
+      </if>
+      <if test="guestBadOffset != null" >
+        #{guestBadOffset,jdbcType=INTEGER},
+      </if>
+      <if test="guestBadQty != null" >
+        #{guestBadQty,jdbcType=INTEGER},
+      </if>
+      <if test="originalBadOffset != null" >
+        #{originalBadOffset,jdbcType=INTEGER},
+      </if>
+      <if test="originalBadQty != null" >
+        #{originalBadQty,jdbcType=INTEGER},
+      </if>
+      <if test="badTransitOffset != null" >
+        #{badTransitOffset,jdbcType=INTEGER},
+      </if>
+      <if test="badTransitQty != null" >
+        #{badTransitQty,jdbcType=INTEGER},
+      </if>
+      <if test="badDiffOffset != null" >
+        #{badDiffOffset,jdbcType=INTEGER},
+      </if>
+      <if test="badDiffQty != null" >
+        #{badDiffQty,jdbcType=INTEGER},
+      </if>
+      <if test="returnOffset != null" >
+        #{returnOffset,jdbcType=INTEGER},
+      </if>
+      <if test="returnQty != null" >
+        #{returnQty,jdbcType=INTEGER},
+      </if>
+      <if test="borrowOffset != null" >
+        #{borrowOffset,jdbcType=INTEGER},
+      </if>
+      <if test="borrowQty != null" >
+        #{borrowQty,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTimestamp != null" >
+        #{createTimestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.InventoryBook" >
+    UPDATE inventory_book
+    <set >
+      <if test="storeNoFrom != null" >
+        store_no_from = #{storeNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="storeNameFrom != null" >
+        store_name_from = #{storeNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNoTo != null" >
+        store_no_to = #{storeNoTo,jdbcType=CHAR},
+      </if>
+      <if test="storeNameTo != null" >
+        store_name_to = #{storeNameTo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNoFrom != null" >
+        company_no_from = #{companyNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="companyNameFrom != null" >
+        company_name_from = #{companyNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        order_unit_no_from = #{orderUnitNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        order_unit_name_from = #{orderUnitNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNoTo != null" >
+        company_no_to = #{companyNoTo,jdbcType=CHAR},
+      </if>
+      <if test="companyNameTo != null" >
+        company_name_to = #{companyNameTo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNoTo != null" >
+        order_unit_no_to = #{orderUnitNoTo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNameTo != null" >
+        order_unit_name_to = #{orderUnitNameTo,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNo != null" >
+        store_no = #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitName != null" >
+        order_unit_name = #{orderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="skuNo != null" >
+        sku_no = #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeNo != null" >
+        size_no = #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeKind != null" >
+        size_kind = #{sizeKind,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="inOutFlag != null" >
+        in_out_flag = #{inOutFlag,jdbcType=TINYINT},
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no = #{refBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refBillType != null" >
+        ref_bill_type = #{refBillType,jdbcType=INTEGER},
+      </if>
+      <if test="bizType != null" >
+        biz_type = #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="accountType != null" >
+        account_type = #{accountType,jdbcType=TINYINT},
+      </if>
+      <if test="billDate != null" >
+        bill_date = #{billDate,jdbcType=DATE},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceOffset != null" >
+        balance_offset = #{balanceOffset,jdbcType=INTEGER},
+      </if>
+      <if test="balanceQty != null" >
+        balance_qty = #{balanceQty,jdbcType=INTEGER},
+      </if>
+      <if test="factoryInOffset != null" >
+        factory_in_offset = #{factoryInOffset,jdbcType=INTEGER},
+      </if>
+      <if test="factoryInQty != null" >
+        factory_in_qty = #{factoryInQty,jdbcType=INTEGER},
+      </if>
+      <if test="factoryInDiffOffset != null" >
+        factory_in_diff_offset = #{factoryInDiffOffset,jdbcType=INTEGER},
+      </if>
+      <if test="factoryInDiffQty != null" >
+        factory_in_diff_qty = #{factoryInDiffQty,jdbcType=INTEGER},
+      </if>
+      <if test="transitInOffset != null" >
+        transit_in_offset = #{transitInOffset,jdbcType=INTEGER},
+      </if>
+      <if test="transitInQty != null" >
+        transit_in_qty = #{transitInQty,jdbcType=INTEGER},
+      </if>
+      <if test="transitOutOffset != null" >
+        transit_out_offset = #{transitOutOffset,jdbcType=INTEGER},
+      </if>
+      <if test="transitOutQty != null" >
+        transit_out_qty = #{transitOutQty,jdbcType=INTEGER},
+      </if>
+      <if test="inDiffOffset != null" >
+        in_diff_offset = #{inDiffOffset,jdbcType=INTEGER},
+      </if>
+      <if test="inDiffQty != null" >
+        in_diff_qty = #{inDiffQty,jdbcType=INTEGER},
+      </if>
+      <if test="outDiffOffset != null" >
+        out_diff_offset = #{outDiffOffset,jdbcType=INTEGER},
+      </if>
+      <if test="outDiffQty != null" >
+        out_diff_qty = #{outDiffQty,jdbcType=INTEGER},
+      </if>
+      <if test="transitInAccountOffset != null" >
+        transit_in_account_offset = #{transitInAccountOffset,jdbcType=INTEGER},
+      </if>
+      <if test="transitInAccountQty != null" >
+        transit_in_account_qty = #{transitInAccountQty,jdbcType=INTEGER},
+      </if>
+      <if test="transitOutAccountOffset != null" >
+        transit_out_account_offset = #{transitOutAccountOffset,jdbcType=INTEGER},
+      </if>
+      <if test="transitOutAccountQty != null" >
+        transit_out_account_qty = #{transitOutAccountQty,jdbcType=INTEGER},
+      </if>
+      <if test="inDiffAccountOffset != null" >
+        in_diff_account_offset = #{inDiffAccountOffset,jdbcType=INTEGER},
+      </if>
+      <if test="inDiffAccountQty != null" >
+        in_diff_account_qty = #{inDiffAccountQty,jdbcType=INTEGER},
+      </if>
+      <if test="outDiffAccountOffset != null" >
+        out_diff_account_offset = #{outDiffAccountOffset,jdbcType=INTEGER},
+      </if>
+      <if test="outDiffAccountQty != null" >
+        out_diff_account_qty = #{outDiffAccountQty,jdbcType=INTEGER},
+      </if>
+      <if test="lockOffset != null" >
+        lock_offset = #{lockOffset,jdbcType=INTEGER},
+      </if>
+      <if test="lockQty != null" >
+        lock_qty = #{lockQty,jdbcType=INTEGER},
+      </if>
+      <if test="occupiedOffset != null" >
+        occupied_offset = #{occupiedOffset,jdbcType=INTEGER},
+      </if>
+      <if test="occupiedQty != null" >
+        occupied_qty = #{occupiedQty,jdbcType=INTEGER},
+      </if>
+      <if test="backupOffset != null" >
+        backup_offset = #{backupOffset,jdbcType=INTEGER},
+      </if>
+      <if test="backupQty != null" >
+        backup_qty = #{backupQty,jdbcType=INTEGER},
+      </if>
+      <if test="guestBadOffset != null" >
+        guest_bad_offset = #{guestBadOffset,jdbcType=INTEGER},
+      </if>
+      <if test="guestBadQty != null" >
+        guest_bad_qty = #{guestBadQty,jdbcType=INTEGER},
+      </if>
+      <if test="originalBadOffset != null" >
+        original_bad_offset = #{originalBadOffset,jdbcType=INTEGER},
+      </if>
+      <if test="originalBadQty != null" >
+        original_bad_qty = #{originalBadQty,jdbcType=INTEGER},
+      </if>
+      <if test="badTransitOffset != null" >
+        bad_transit_offset = #{badTransitOffset,jdbcType=INTEGER},
+      </if>
+      <if test="badTransitQty != null" >
+        bad_transit_qty = #{badTransitQty,jdbcType=INTEGER},
+      </if>
+      <if test="badDiffOffset != null" >
+        bad_diff_offset = #{badDiffOffset,jdbcType=INTEGER},
+      </if>
+      <if test="badDiffQty != null" >
+        bad_diff_qty = #{badDiffQty,jdbcType=INTEGER},
+      </if>
+      <if test="returnOffset != null" >
+        return_offset = #{returnOffset,jdbcType=INTEGER},
+      </if>
+      <if test="returnQty != null" >
+        return_qty = #{returnQty,jdbcType=INTEGER},
+      </if>
+      <if test="borrowOffset != null" >
+        borrow_offset = #{borrowOffset,jdbcType=INTEGER},
+      </if>
+      <if test="borrowQty != null" >
+        borrow_qty = #{borrowQty,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTimestamp != null" >
+        create_timestamp = #{createTimestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag = #{shardingFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.InventoryBook" >
+    UPDATE inventory_book
+    SET store_no_from = #{storeNoFrom,jdbcType=CHAR},
+      store_name_from = #{storeNameFrom,jdbcType=VARCHAR},
+      store_no_to = #{storeNoTo,jdbcType=CHAR},
+      store_name_to = #{storeNameTo,jdbcType=VARCHAR},
+      company_no_from = #{companyNoFrom,jdbcType=CHAR},
+      company_name_from = #{companyNameFrom,jdbcType=VARCHAR},
+      order_unit_no_from = #{orderUnitNoFrom,jdbcType=CHAR},
+      order_unit_name_from = #{orderUnitNameFrom,jdbcType=VARCHAR},
+      company_no_to = #{companyNoTo,jdbcType=CHAR},
+      company_name_to = #{companyNameTo,jdbcType=VARCHAR},
+      order_unit_no_to = #{orderUnitNoTo,jdbcType=CHAR},
+      order_unit_name_to = #{orderUnitNameTo,jdbcType=VARCHAR},
+      store_no = #{storeNo,jdbcType=CHAR},
+      store_name = #{storeName,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      order_unit_name = #{orderUnitName,jdbcType=VARCHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      sku_no = #{skuNo,jdbcType=CHAR},
+      size_no = #{sizeNo,jdbcType=VARCHAR},
+      size_kind = #{sizeKind,jdbcType=CHAR},
+      bill_no = #{billNo,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      bill_type = #{billType,jdbcType=INTEGER},
+      in_out_flag = #{inOutFlag,jdbcType=TINYINT},
+      ref_bill_no = #{refBillNo,jdbcType=VARCHAR},
+      ref_bill_type = #{refBillType,jdbcType=INTEGER},
+      biz_type = #{bizType,jdbcType=INTEGER},
+      account_type = #{accountType,jdbcType=TINYINT},
+      bill_date = #{billDate,jdbcType=DATE},
+      cost = #{cost,jdbcType=DECIMAL},
+      balance_offset = #{balanceOffset,jdbcType=INTEGER},
+      balance_qty = #{balanceQty,jdbcType=INTEGER},
+      factory_in_offset = #{factoryInOffset,jdbcType=INTEGER},
+      factory_in_qty = #{factoryInQty,jdbcType=INTEGER},
+      factory_in_diff_offset = #{factoryInDiffOffset,jdbcType=INTEGER},
+      factory_in_diff_qty = #{factoryInDiffQty,jdbcType=INTEGER},
+      transit_in_offset = #{transitInOffset,jdbcType=INTEGER},
+      transit_in_qty = #{transitInQty,jdbcType=INTEGER},
+      transit_out_offset = #{transitOutOffset,jdbcType=INTEGER},
+      transit_out_qty = #{transitOutQty,jdbcType=INTEGER},
+      in_diff_offset = #{inDiffOffset,jdbcType=INTEGER},
+      in_diff_qty = #{inDiffQty,jdbcType=INTEGER},
+      out_diff_offset = #{outDiffOffset,jdbcType=INTEGER},
+      out_diff_qty = #{outDiffQty,jdbcType=INTEGER},
+      transit_in_account_offset = #{transitInAccountOffset,jdbcType=INTEGER},
+      transit_in_account_qty = #{transitInAccountQty,jdbcType=INTEGER},
+      transit_out_account_offset = #{transitOutAccountOffset,jdbcType=INTEGER},
+      transit_out_account_qty = #{transitOutAccountQty,jdbcType=INTEGER},
+      in_diff_account_offset = #{inDiffAccountOffset,jdbcType=INTEGER},
+      in_diff_account_qty = #{inDiffAccountQty,jdbcType=INTEGER},
+      out_diff_account_offset = #{outDiffAccountOffset,jdbcType=INTEGER},
+      out_diff_account_qty = #{outDiffAccountQty,jdbcType=INTEGER},
+      lock_offset = #{lockOffset,jdbcType=INTEGER},
+      lock_qty = #{lockQty,jdbcType=INTEGER},
+      occupied_offset = #{occupiedOffset,jdbcType=INTEGER},
+      occupied_qty = #{occupiedQty,jdbcType=INTEGER},
+      backup_offset = #{backupOffset,jdbcType=INTEGER},
+      backup_qty = #{backupQty,jdbcType=INTEGER},
+      guest_bad_offset = #{guestBadOffset,jdbcType=INTEGER},
+      guest_bad_qty = #{guestBadQty,jdbcType=INTEGER},
+      original_bad_offset = #{originalBadOffset,jdbcType=INTEGER},
+      original_bad_qty = #{originalBadQty,jdbcType=INTEGER},
+      bad_transit_offset = #{badTransitOffset,jdbcType=INTEGER},
+      bad_transit_qty = #{badTransitQty,jdbcType=INTEGER},
+      bad_diff_offset = #{badDiffOffset,jdbcType=INTEGER},
+      bad_diff_qty = #{badDiffQty,jdbcType=INTEGER},
+      return_offset = #{returnOffset,jdbcType=INTEGER},
+      return_qty = #{returnQty,jdbcType=INTEGER},
+      borrow_offset = #{borrowOffset,jdbcType=INTEGER},
+      borrow_qty = #{borrowQty,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_timestamp = #{createTimestamp,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sharding_flag = #{shardingFlag,jdbcType=CHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

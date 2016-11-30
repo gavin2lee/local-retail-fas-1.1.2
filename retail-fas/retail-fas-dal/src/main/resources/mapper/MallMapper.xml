@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.MallMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Mall" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mall_no, name, zone_no, bsgroups_no, create_user, create_time, update_user, update_time, 
+    remark
+  </sql>
+  <sql id="condition" >
+  	/*organ_type_no*/
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.mallNo and ''!=params.mallNo" >
+          and mall_no = #{params.mallNo} 
+      </if>
+       <if test="null!=params.name and ''!=params.name" >
+          and name = #{params.name} 
+      </if>
+       <if test="null!=params.zoneNo and ''!=params.zoneNo" >
+          and zone_no = #{params.zoneNo} 
+      </if>
+      <if test="null!=params.zoneNos and ''!=params.zoneNos" >
+        AND zone_no IN ${params.zoneNos}
+      </if>
+      <if test="null!=params.bsgroupsNo  and ''!=params.bsgroupsNo" >
+          and bsgroups_no = #{params.bsgroupsNo} 
+      </if>
+       <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+			AND (mall_no LIKE CONCAT(#{params.q},'%') OR name LIKE CONCAT('%',#{params.q},'%')) 
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM mall
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM mall WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM mall WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM mall WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM mall
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.Mall" >
+    DELETE FROM mall
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.Mall" >
+    INSERT INTO mall (id, mall_no, name, 
+      zone_no, bsgroups_no, create_user, 
+      create_time, update_user, update_time, 
+      remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{mallNo,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{zoneNo,jdbcType=CHAR}, #{bsgroupsNo,jdbcType=CHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.Mall" >
+    INSERT INTO mall
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.Mall" >
+    UPDATE mall
+    <set >
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.Mall" >
+    UPDATE mall
+    SET mall_no = #{mallNo,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

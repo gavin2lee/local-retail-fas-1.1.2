@@ -1,0 +1,1291 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillBalanceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillBalance" >
+    <result column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_name" property="billName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="extend_status" property="extendStatus" jdbcType="TINYINT" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="VARCHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="balance_date" property="balanceDate" jdbcType="DATE" />
+    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="out_amount" property="outAmount" jdbcType="DECIMAL" />
+    <result column="entry_amount" property="entryAmount" jdbcType="DECIMAL" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="custom_return_amount" property="customReturnAmount" jdbcType="DECIMAL" />
+    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+    <result column="invoice_amount" property="invoiceAmount" jdbcType="DECIMAL" />
+    <result column="has_balance_amount" property="hasBalanceAmount" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="out_qty" property="outQty" jdbcType="INTEGER" />
+    <result column="entry_qty" property="entryQty" jdbcType="INTEGER" />
+    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+    <result column="custom_return_qty" property="customReturnQty" jdbcType="INTEGER" />
+    <result column="deduction_qty" property="deductionQty" jdbcType="INTEGER" />
+    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+    <result column="ask_payment_no" property="askPaymentNo" jdbcType="VARCHAR" />
+    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="VARCHAR" />
+    <result column="extend_category_no" property="extendCategoryNo" jdbcType="VARCHAR" />
+    <result column="extend_category_name" property="extendCategoryName" jdbcType="VARCHAR" />
+    <result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+    <result column="is_user_defined" property="isUserDefined" jdbcType="INTEGER" />
+    <result column="invoice_rebate_amount" property="invoiceRebateAmount" jdbcType="DECIMAL" />
+    <result column="rebate_amount" property="rebateAmount" jdbcType="DECIMAL" />
+    <result column="supplier_amount" property="supplierAmount" jdbcType="DECIMAL" />
+    <result column="is_apportion_rebate" property="isApportionRebate" jdbcType="INTEGER" />
+    <result column="other_price" property="otherPrice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id, bill_no, bill_name, status,extend_status, balance_type, buyer_no,
+	buyer_name, saler_no, saler_name, organ_no, organ_name, organ_no_from, organ_name_from, 
+	brand_no, brand_name, brand_unit_no, brand_unit_name, category_no,
+	category_name, balance_date, balance_start_date, balance_end_date,currency, out_amount,
+	entry_amount, return_amount, deduction_amount, balance_amount, invoice_amount,has_balance_amount,
+	create_user, create_time, update_user, update_time, auditor, audit_time, remark,
+	out_qty, entry_qty, return_qty, deduction_qty, balance_qty,extend_category_no,extend_category_name,supplier_amount,
+	ask_payment_no, invoice_apply_no, invoice_no,is_user_defined,rebate_amount,invoice_rebate_amount,custom_return_qty,custom_return_amount,
+	is_apportion_rebate,other_price
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.balanceType and 7==params.balanceType" >
+         -- AND @company_no!saler_no
+      </if> 
+      <if test="null!=params.balanceType and (2==params.balanceType or 3==params.balanceType 
+      or 5==params.balanceType or 11==params.balanceType)" >
+         -- AND @company_no!saler_no
+      </if> 
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceType and ''!=params.balanceType" >
+       AND balance_type = #{params.balanceType}
+      </if>
+      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+       AND buyer_no = #{params.buyerNo}
+      </if>
+      <if test="null!=params.salerNo and ''!=params.salerNo" >
+       AND saler_no = #{params.salerNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+       AND brand_no = #{params.brandNo}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+       AND category_no = #{params.categoryNo}
+      </if>
+      <if test="null!=params.createUser and ''!=params.createUser" >
+        AND create_user = #{params.createUser}
+      </if>  
+       <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+        AND create_time &gt;= '${params.createTimeStart} 00:00:00'
+      </if>  
+       <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+        AND create_time &lt;= '${params.createTimeEnd} 23:59:59'
+      </if>  
+      <if test="null!=params.auditor and ''!=params.auditor" >
+        AND auditor = #{params.auditor}
+      </if>  
+       <if test="null!=params.auditTimeStart and ''!=params.auditTimeStart" >
+        AND audit_time &gt;= '${params.auditTimeStart} 00:00:00'
+      </if>  
+       <if test="null!=params.auditTimeEnd and ''!=params.auditTimeEnd" >
+        AND audit_time &lt;= '${params.auditTimeEnd}  23:59:59'
+      </if>  
+      <if test="null!=params.askPaymentNo and ''!=params.askPaymentNo ">
+        AND ask_payment_no = #{params.askPaymentNo}
+      </if> 
+      <if test="null!=params.billNo and ''!=params.billNo ">
+        AND bill_no = #{params.billNo}
+      </if> 
+      <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+      <if test="null!=params.extendStatus and ''!=params.extendStatus" >
+        AND extend_status = #{params.extendStatus}
+      </if>
+      <if test="null!=params.multiBillNo and ''!=params.multiBillNo" >
+        AND bill_no in ${params.multiBillNo}
+      </if>
+      <if test="null!=params.multiStatus and ''!=params.multiStatus" >
+        AND status in ${params.multiStatus}
+      </if>
+      <if test="null!=params.isNull and ''!=params.isNull" >
+        AND (${params.isNull} IS NULL OR ${params.isNull} = '')
+      </if>
+      <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate ">
+        AND balance_start_date &gt;= #{params.balanceStartDate}
+      </if> 
+      <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate ">
+        AND balance_end_date &lt;= #{params.balanceEndDate}
+      </if> 
+      <if test="null!=params.buyerNoArray and ''!=params.buyerNoArray" >
+      	AND buyer_no in 
+      	<foreach collection="params.buyerNoArray" item="tempBuyerNo" open="(" separator="," close=")">
+      		#{tempBuyerNo}
+      	</foreach>
+      </if>
+      <if test="null!=params.buyerNameCondition and ''!=params.buyerNameCondition" >
+       AND buyer_name LIKE CONCAT('%',#{params.buyerNameCondition},'%')
+      </if>
+      <if test="null!=params.salerNameCondition and ''!=params.salerNameCondition" >
+       AND saler_name LIKE CONCAT('%',#{params.salerNameCondition},'%')
+      </if>
+      <if test="null!=params.organNoFromCondition and ''!=params.organNoFromCondition" >
+      	<foreach collection="params.organNoFromCondition" item="organNoFromTemp" separator="OR" open="AND ( 1=2 OR " close=")" index=""> 
+       		organ_no_from LIKE CONCAT('%',#{organNoFromTemp},'%') 
+     	 </foreach>
+      </if>
+      <if test="null!=params.balanceNo and ''!=params.balanceNo">
+        AND bill_no = #{params.balanceNo}
+      </if>
+      <if test="null!=params.q and ''!=params.q">
+        AND UPPER(bill_no) LIKE UPPER(CONCAT('%',#{params.q},'%'))
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_balance
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+	SELECT COUNT(1) as s FROM bill_balance WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+   SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_balance WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_balance WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_balance
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+    DELETE FROM bill_balance
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+   INSERT INTO bill_balance (id, bill_no, bill_name, 
+      status,extend_status, balance_type, buyer_no, 
+      buyer_name, saler_no, saler_name, organ_no, organ_name, organ_no_from, organ_name_from, 
+      brand_no, brand_name,  brand_unit_no, brand_unit_name, category_no, category_name, balance_date, balance_start_date, 
+      balance_end_date, currency, out_amount, 
+      entry_amount, return_amount, deduction_amount, 
+      balance_amount, invoice_amount, rebate_amount, invoice_rebate_amount, has_balance_amount, 
+      create_user, create_time, update_user, 
+      update_time, auditor, audit_time, 
+      remark, out_qty, entry_qty, 
+      return_qty, deduction_qty, balance_qty, ask_payment_no, invoice_apply_no, 
+      invoice_no, is_user_defined,other_price)
+    VALUES (#{id,jdbcType=CHAR}, #{billNo,jdbcType=CHAR}, #{billName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{extendStatus,jdbcType=TINYINT}, #{balanceType,jdbcType=TINYINT}, #{buyerNo,jdbcType=CHAR}, 
+      #{buyerName,jdbcType=VARCHAR}, #{salerNo,jdbcType=CHAR}, #{salerName,jdbcType=VARCHAR}, 
+      #{organNo,jdbcType=VARCHAR}, #{organName,jdbcType=VARCHAR},#{organNoFrom,jdbcType=VARCHAR}, #{organNameFrom,jdbcType=VARCHAR},
+      #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, #{brandUnitNo,jdbcType=CHAR}, #{brandUnitName,jdbcType=VARCHAR}, 
+       #{categoryNo,jdbcType=CHAR}, #{categoryName,jdbcType=VARCHAR}, #{balanceDate,jdbcType=DATE}, #{balanceStartDate,jdbcType=DATE}, 
+      #{balanceEndDate,jdbcType=DATE}, #{currency,jdbcType=VARCHAR}, #{outAmount,jdbcType=DECIMAL}, 
+      #{entryAmount,jdbcType=DECIMAL}, #{returnAmount,jdbcType=DECIMAL}, #{deductionAmount,jdbcType=DECIMAL}, 
+      #{balanceAmount,jdbcType=DECIMAL}, #{invoiceAmount,jdbcType=DECIMAL},#{rebateAmount,jdbcType=DECIMAL},#{invoiceRebateAmount,jdbcType=DECIMAL}, #{hasBalanceAmount,jdbcType=DECIMAL}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{auditor,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{outQty,jdbcType=INTEGER}, #{entryQty,jdbcType=INTEGER}, 
+      #{returnQty,jdbcType=INTEGER}, #{deductionQty,jdbcType=INTEGER}, #{balanceQty,jdbcType=INTEGER}, 
+      #{askPaymentNo,jdbcType=VARCHAR}, #{invoiceApplyNo,jdbcType=VARCHAR}, 
+      #{invoiceNo,jdbcType=VARCHAR},#{isUserDefined,jdbcType=INTEGER}, #{otherPrice,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+    INSERT INTO bill_balance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="billName != null" >
+        bill_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="extendStatus != null" >
+        extend_status,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="salerName != null" >
+        saler_name,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+      <if test="organName != null" >
+        organ_name,
+      </if>
+      <if test="organNoFrom != null" >
+        organ_no_from,
+      </if>
+      <if test="organNameFrom != null" >
+        organ_name_from,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="extendCategoryNo != null" >
+        extend_category_no,
+      </if>
+      <if test="extendCategoryName != null" >
+        extend_category_name,
+      </if>
+      <if test="balanceDate != null" >
+        balance_date,
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date,
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="outAmount != null" >
+        out_amount,
+      </if>
+      <if test="entryAmount != null" >
+        entry_amount,
+      </if>
+      <if test="returnAmount != null" >
+        return_amount,
+      </if>
+      <if test="deductionAmount != null" >
+        deduction_amount,
+      </if>
+      <if test="balanceAmount != null" >
+        balance_amount,
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount,
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount,
+      </if>
+      <if test="invoiceRebateAmount != null" >
+        invoice_rebate_amount,
+      </if>      
+      <if test="hasBalanceAmount != null" >
+        has_balance_amount,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="outQty != null" >
+        out_qty,
+      </if>
+      <if test="entryQty != null" >
+        entry_qty,
+      </if>
+      <if test="returnQty != null" >
+        return_qty,
+      </if>
+      <if test="deductionQty != null" >
+        deduction_qty,
+      </if>
+      <if test="balanceQty != null" >
+        balance_qty,
+      </if>
+      <if test="askPaymentNo != null" >
+        ask_payment_no,
+      </if>
+      <if test="invoiceApplyNo != null" >
+        invoice_apply_no,
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no,
+      </if>
+      <if test="isUserDefined != null" >
+        is_user_defined,
+      </if>
+      <if test="isApportionRebate != null" >
+        is_apportion_rebate,
+      </if>
+      <if test="customReturnQty != null" >
+        custom_return_qty,
+      </if>
+      <if test="customReturnAmount != null" >
+        custom_return_amount,
+      </if>
+      <if test="supplierAmount != null" >
+        supplier_amount,
+      </if>
+      <if test="otherPrice != null" >
+        other_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billName != null" >
+        #{billName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extendStatus != null" >
+        #{extendStatus,jdbcType=TINYINT},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNoFrom != null" >
+        #{organNoFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="organNameFrom != null" >
+        #{organNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="extendCategoryNo != null" >
+        #{extendCategoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="extendCategoryName != null" >
+        #{extendCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceDate != null" >
+        #{balanceDate,jdbcType=DATE},
+      </if>
+      <if test="balanceStartDate != null" >
+        #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="outAmount != null" >
+        #{outAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="entryAmount != null" >
+        #{entryAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="returnAmount != null" >
+        #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductionAmount != null" >
+        #{deductionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceAmount != null" >
+        #{balanceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceAmount != null" >
+        #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateAmount != null" >
+        #{rebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceRebateAmount != null" >
+        #{invoiceRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="hasBalanceAmount != null" >
+        #{hasBalanceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="outQty != null" >
+        #{outQty,jdbcType=INTEGER},
+      </if>
+      <if test="entryQty != null" >
+        #{entryQty,jdbcType=INTEGER},
+      </if>
+      <if test="returnQty != null" >
+        #{returnQty,jdbcType=INTEGER},
+      </if>
+      <if test="deductionQty != null" >
+        #{deductionQty,jdbcType=INTEGER},
+      </if>
+      <if test="balanceQty != null" >
+        #{balanceQty,jdbcType=INTEGER},
+      </if>
+      <if test="askPaymentNo != null" >
+        #{askPaymentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceApplyNo != null" >
+        #{invoiceApplyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        #{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="isUserDefined != null" >
+        #{isUserDefined,jdbcType=INTEGER},
+      </if>
+       <if test="isApportionRebate != null" >
+        #{isApportionRebate,jdbcType=INTEGER},
+      </if>
+      <if test="customReturnQty != null" >
+        #{customReturnQty,jdbcType=INTEGER},
+      </if>
+      <if test="customReturnAmount != null" >
+        #{customReturnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="supplierAmount != null" >
+        #{supplierAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="otherPrice != null" >
+        #{otherPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+    UPDATE bill_balance
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billName != null" >
+        bill_name = #{billName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extendStatus != null" >
+        extend_status = #{extendStatus,jdbcType=TINYINT},
+      </if>
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+	   <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=CHAR},
+      </if>
+	   <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=CHAR},
+      </if>
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        saler_name = #{salerName,jdbcType=CHAR},
+      </if>
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        organ_name = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNoFrom != null" >
+        organ_no_from = #{organNoFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="organName != null" >
+        organ_name_from = #{organNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=CHAR},
+      </if>
+      <if test="extendCategoryNo != null" >
+        extend_category_no = #{extendCategoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="extendCategoryName != null" >
+       extend_category_name = #{extendCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceDate != null" >
+        balance_date = #{balanceDate,jdbcType=DATE},
+      </if>
+	  <if test="balanceStartDate != null" >
+        balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+     <if test="outAmount != null" >
+        out_amount = #{outAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="entryAmount != null" >
+        entry_amount = #{entryAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="returnAmount != null" >
+        return_amount = #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductionAmount != null" >
+        deduction_amount = #{deductionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceAmount != null" >
+        balance_amount = #{balanceAmount,jdbcType=DECIMAL},
+      </if>
+	  <if test="invoiceAmount != null" >
+        invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceRebateAmount != null" >
+        invoice_rebate_amount = #{invoiceRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="hasBalanceAmount != null" >
+        has_balance_amount = #{hasBalanceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if> 
+	  <if test="outQty != null" >
+        out_qty = #{outQty,jdbcType=INTEGER},
+      </if> 
+	  <if test="entryQty != null" >
+        entry_qty = #{entryQty,jdbcType=INTEGER},
+      </if>
+	  <if test="returnQty != null" >
+        return_qty = #{returnQty,jdbcType=INTEGER},
+      </if>
+      <if test="deductionQty != null" >
+        deduction_qty = #{deductionQty,jdbcType=INTEGER},
+      </if>
+      <if test="balanceQty != null" >
+        balance_qty = #{balanceQty,jdbcType=INTEGER},
+      </if>
+	  <if test="askPaymentNo != null" >
+        ask_payment_no =#{askPaymentNo,jdbcType=VARCHAR}, 
+      </if> 
+	  <if test="invoiceApplyNo != null" >
+        invoice_apply_no =#{invoiceApplyNo,jdbcType=VARCHAR}, 
+      </if> 
+	  <if test="invoiceNo != null" >
+        invoice_no =#{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customReturnQty != null" >
+        custom_return_qty = #{customReturnQty,jdbcType=INTEGER},
+      </if>
+      <if test="customReturnAmount != null" >
+        custom_return_amount = #{customReturnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="isUserDefined != null" >
+        is_user_defined =#{isUserDefined,jdbcType=INTEGER},
+      </if>
+      <if test="isApportionRebate != null" >
+        is_apportion_rebate =#{isApportionRebate,jdbcType=INTEGER},
+      </if>
+      <if test="supplierAmount != null" >
+        supplier_amount =#{supplierAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="otherPrice != null" >
+        other_price =#{otherPrice,jdbcType=DECIMAL}
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+    UPDATE bill_balance
+    SET 
+	  bill_no = #{billNo,jdbcType=CHAR},
+      bill_name = #{billName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      extend_status = #{extendStatus,jdbcType=TINYINT},
+      balance_type = #{balanceType,jdbcType=TINYINT},
+	  buyer_no = #{buyerNo,jdbcType=CHAR},
+	  buyer_name = #{buyerName,jdbcType=CHAR},
+	  saler_no = #{salerNo,jdbcType=CHAR},
+      saler_name = #{salerName,jdbcType=CHAR},
+      organ_no = #{organNo,jdbcType=VARCHAR},
+      organ_name = #{organName,jdbcType=VARCHAR},
+      organ_no_from = #{organNoFrom,jdbcType=VARCHAR},
+      organ_name_from = #{organNameFrom,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=CHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=CHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      category_name = #{categoryName,jdbcType=CHAR},
+      balance_date = #{balanceDate,jdbcType=DATE},
+	  balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      balance_end_date = #{balanceEndDate,jdbcType=DATE},
+	  currency = #{currency,jdbcType=VARCHAR},
+	  out_amount = #{outAmount,jdbcType=DECIMAL},
+      entry_amount = #{entryAmount,jdbcType=DECIMAL},
+      return_amount = #{returnAmount,jdbcType=DECIMAL},
+	  deduction_amount = #{deductionAmount,jdbcType=DECIMAL},
+	  balance_amount = #{balanceAmount,jdbcType=DECIMAL},
+	  invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+	  rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+	  other_price = #{otherPrice,jdbcType=DECIMAL},
+	  has_balance_amount = #{hasBalanceAmount,jdbcType=DECIMAL},
+	  create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+	  remark = #{remark,jdbcType=VARCHAR},
+	  out_qty= #{outQty,jdbcType=INTEGER},
+	  entry_qty=#{entryQty,jdbcType=INTEGER}, 
+      return_qty= #{returnQty,jdbcType=INTEGER}, 
+      deduction_qty= #{deductionQty,jdbcType=INTEGER}, 
+      balance_qty= #{balanceQty,jdbcType=INTEGER}, 
+	  ask_payment_no=  #{askPaymentNo,jdbcType=VARCHAR}, 
+	  invoice_apply_no= #{invoiceApplyNo,jdbcType=VARCHAR}, 
+      invoice_no= #{invoiceNo,jdbcType=VARCHAR},
+      is_user_defined =#{isUserDefined,jdbcType=INTEGER},
+      is_apportion_rebate =#{isApportionRebate,jdbcType=INTEGER}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <sql id="updateBalanceCondition" >
+    <if test="queryCondition != null and ''!=queryCondition" >
+		${queryCondition}
+	</if>
+	<if test="null!=extendCategoryCondition and ''!=extendCategoryCondition" >
+        ${extendCategoryCondition}
+    </if>
+    <if test="null!=multiCategoryNo and ''!=multiCategoryNo" >
+ 		AND	C1.category_no  in ${multiCategoryNo}
+	</if>
+   	<if test="brandUnitNo != null and ''!=brandUnitNo" >
+  		AND brand_no IN  (SELECT brand_no FROM brand WHERE brand.`sys_no` = #{brandUnitNo})
+	</if>
+	<if test="brandMultiNo != null and ''!=brandMultiNo" >
+  		AND brand_no IN  (SELECT brand_no FROM brand WHERE brand.`sys_no` IN ${brandMultiNo})
+	</if>
+	<if test="brandNo != null and ''!=brandNo" >
+		AND brand_no = #{brandNo}
+	</if>
+	<if test="categoryNo != null and ''!=categoryNo" >
+		AND C1.category_no = #{categoryNo}
+	</if>
+	<if test="billType != null and ''!=billType" >
+		AND bill_type = #{billType}
+	</if>
+	<choose>
+		<when test="bizMultiType != null and ''!=bizMultiType">
+			AND biz_type IN ${bizMultiType} 
+		</when>
+		<otherwise>
+			<if test="bizType != null and ''!=bizType" >
+				AND biz_type = #{bizType}
+			</if>
+		</otherwise>
+	</choose>
+	  <if test="multiBrandUnitNo != null and ''!=multiBrandUnitNo" >
+  		AND brand_no IN  (SELECT brand_no FROM brand WHERE brand.`sys_no` IN ${multiBrandUnitNo})
+	  </if>
+	  <if test="null!=twoLevelCategoryNo and ''!=twoLevelCategoryNo" >
+ 		AND	C2.`category_no` IN ${twoLevelCategoryNo}
+	  </if>
+	  <if test="null!=years and ''!=years" >
+ 		AND	years IN ${years}
+	  </if>
+	  <if test="null!=gender and ''!=gender" >
+ 		AND	gender IN ${gender}
+	  </if>
+	  <if test="null!=organNoFrom and ''!=organNoFrom" >
+        AND #{organNoFrom} like CONCAT('%',organ_no_from,'%') 
+      </if>
+  </sql>
+  
+  <update id="updateBuyPurchasePrice" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	    UPDATE 
+		  bill_buy_balance T 
+		SET
+		  T.purchase_price = 
+		  (SELECT 
+		    purchase_price 
+		  FROM
+		    purchase_price PP 
+		  WHERE T.item_no = PP.item_no 
+		    AND T.supplier_no = PP.supplier_no 
+		    AND PP.effective_date &lt;= #{balanceEndDate}
+		  ORDER BY PP.STATUS DESC,
+		    PP.effective_date DESC,
+		    PP.create_time DESC 
+		  LIMIT 1),
+		  T.material_price = 
+		  (SELECT 
+		    material_price 
+		  FROM
+		    purchase_price PP 
+		  WHERE T.item_no = PP.item_no 
+		    AND T.supplier_no = PP.supplier_no 
+		    AND PP.effective_date &lt;= #{balanceEndDate}
+		  ORDER BY STATUS DESC,
+		    effective_date DESC,
+		    create_time DESC 
+		  LIMIT 1),
+		  T.factory_price = 
+		  (SELECT 
+		    factory_price 
+		  FROM
+		    purchase_price PP 
+		  WHERE T.item_no = PP.item_no 
+		    AND T.supplier_no = PP.supplier_no 
+		    AND PP.effective_date &lt;=  #{balanceEndDate}
+		  ORDER BY STATUS DESC,
+		    effective_date DESC,
+		    create_time DESC 
+		  LIMIT 1) 
+		WHERE 1 = 1 
+		  AND balance_no = #{billNo}
+  </update>
+  
+  
+  <update id="updateBuyBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	    UPDATE bill_buy_balance T LEFT JOIN category C1 
+			ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+			LEFT JOIN category C2 
+			ON LEFT(T.`category_no`, 4) = C2.`category_no`
+	   	 SET balance_no = #{billNo}
+	    WHERE 1 = 1 
+    		AND (balance_no IS NULL OR balance_no = '')
+   			AND saler_no = #{salerNo}
+   			AND buyer_no = #{buyerNo}
+   			AND send_date &gt;= #{balanceStartDate}
+   			AND send_date &lt;= #{balanceEndDate}
+   			<if test="null!=supplierGroupNo and ''!=supplierGroupNo" >
+	        	AND EXISTS (SELECT 1 FROM supplier_group_rel sgr WHERE T.supplier_no = sgr.supplier_no AND sgr.group_no IN ${supplierGroupNo})
+	        </if> 
+	       <if test="null!=priceRangeCondition and ''!=priceRangeCondition">
+	      	AND  NOT EXISTS 
+			  (SELECT 
+			    1 
+			  FROM
+			    item 
+			    INNER JOIN brand 
+			      ON brand.brand_no = item.brand_no 
+			    INNER JOIN brand_unit 
+			      ON brand_unit.brand_unit_no = brand.sys_no 
+			    INNER JOIN supplier_group_rel 
+			      ON supplier_group_rel.supplier_no = item.supplier_no 
+			  WHERE 1 = 1 
+			    ${priceRangeCondition}
+			    AND item.item_no = T.item_no
+			    AND (
+			      NOT EXISTS 
+			      (SELECT 
+			        1 
+			      FROM
+			        official_item OI 
+			      WHERE OI.item_code = item.code 
+			        AND OI.supplier_no = item.supplier_no 
+			        AND OI.brand_no = item.brand_no 
+			        AND OI.year_no = item.years 
+			        AND OI.season_no = item.purchase_season) 
+			      OR EXISTS 
+			      (SELECT 
+			        1 
+			      FROM
+			        official_item OI 
+			      WHERE OI.item_code = item.code 
+			        AND OI.supplier_no = item.supplier_no 
+			        AND OI.brand_no = item.brand_no 
+			        AND OI.year_no = item.years 
+			        AND OI.season_no = item.purchase_season
+			        AND OI.excess_status = '1')
+			    ) 
+		    )
+	      </if>
+   		  <include refid="updateBalanceCondition" />
+  </update>
+  
+  <update id="updateSaleBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+		UPDATE bill_sale_balance T LEFT JOIN category C1 
+			ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+			LEFT JOIN category C2 
+			ON LEFT(T.`category_no`, 4) = C2.`category_no`	
+	   	 SET balance_no = #{billNo}
+    	WHERE 1 = 1 
+       		AND (balance_no IS NULL OR balance_no = '')
+   			AND saler_no = #{salerNo}
+   			AND buyer_no = #{buyerNo}
+   			AND send_date &gt;= #{balanceStartDate}
+   			AND send_date &lt;= #{balanceEndDate} 
+   			<if test="null!=supplierGroupNo and ''!=supplierGroupNo" >
+	        	AND EXISTS (SELECT 1 FROM supplier_group_rel sgr WHERE T.supplier_no = sgr.supplier_no AND sgr.group_no IN ${supplierGroupNo})
+	        </if> 
+   			<if test="supplierNo != null and ''!=supplierNo" >
+				AND supplier_no IN ${supplierNo}
+			</if>
+			<if test="null!=multiBrandNo and ''!=multiBrandNo" >
+      	        AND T.brand_no in ${multiBrandNo}
+            </if>
+   		    <include refid="updateBalanceCondition" />
+  </update>
+  
+  <update id="updateImperfectBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	   UPDATE 
+		  custom_imperfect T LEFT JOIN category C1 
+		ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+		LEFT JOIN category C2 
+		ON LEFT(T.`category_no`, 4) = C2.`category_no` 
+		SET
+		  balance_no = #{billNo}
+		WHERE 1 = 1 
+		  AND (balance_no IS NULL OR balance_no = '') 
+  		  AND saler_no = #{salerNo}
+  		  AND buyer_no = #{buyerNo}
+  		  AND return_date &gt;= #{balanceStartDate}
+   		  AND return_date &lt;= #{balanceEndDate}
+   		<if test="null!=supplierGroupNo and ''!=supplierGroupNo" >
+        	AND EXISTS (SELECT 1 FROM supplier_group_rel sgr WHERE T.saler_no = sgr.supplier_no AND sgr.group_no IN ${supplierGroupNo})
+        </if> 
+   		 <include refid="updateBalanceCondition" />
+  </update>
+  
+  <update id="updateDeductionBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	   UPDATE 
+		  other_deduction LEFT JOIN brand 
+		  ON other_deduction.brand_no = brand.brand_no
+		SET
+		  balance_no = #{billNo}
+		WHERE 1 = 1 
+		  AND (balance_no IS NULL OR balance_no = '') 
+  		  AND saler_no = #{salerNo}
+  		  AND buyer_no = #{buyerNo}
+  		  AND deduction_date &gt;= #{balanceStartDate}
+   		  AND deduction_date &lt;= #{balanceEndDate}
+   		<if test="balanceType != null and ''!=balanceType" >
+			AND balance_type = #{balanceType}
+		</if>
+		<if test="null!=gender and ''!=gender" >
+ 			AND	deduction_category IN ${params.gender}
+	    </if>
+		<if test="null!=multiCategoryNo and ''!=multiCategoryNo" >
+ 			AND	category_no  in ${multiCategoryNo}
+	  	</if>
+		<if test="categoryNo != null and ''!=categoryNo" >
+  			AND category_no =  #{categoryNo}
+		</if>
+		<if test="null!=multiBrandNo and ''!=multiBrandNo" >
+      	    AND other_deduction.brand_no in ${multiBrandNo}
+        </if>
+		<choose>
+			<when test="multiBrandUnitNo != null and '' != multiBrandUnitNo ">
+				AND brand.sys_no in ${multiBrandUnitNo}
+			</when>
+			<otherwise>
+				<if test="brandUnitNo != null and ''!=brandUnitNo" >
+		  			AND brand.sys_no =  #{brandUnitNo}
+				</if>
+			</otherwise>
+		</choose>
+  </update>
+  
+  <!-- 回写结算单号到其他扣项 多品牌 -->
+  <update id="updateDeductionWithMultiBrandNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	   UPDATE 
+		  other_deduction LEFT JOIN brand 
+		  ON other_deduction.brand_no = brand.brand_no
+		SET
+		  balance_no = #{billNo}
+		WHERE 1 = 1 
+		  AND (balance_no IS NULL OR balance_no = '') 
+  		  AND saler_no = #{salerNo}
+  		  AND buyer_no = #{buyerNo}
+  		  AND deduction_date &gt;= #{balanceStartDate}
+   		  AND deduction_date &lt;= #{balanceEndDate}
+   		<if test="balanceType != null and ''!=balanceType" >
+			AND balance_type = #{balanceType}
+		</if>
+		<if test="categoryNo != null and ''!=categoryNo" >
+  			AND category_no =  #{categoryNo}
+		</if>
+		<if test="brandNo != null and ''!=brandNo" >
+  			AND other_deduction.brand_no in (${brandNo})
+		</if>
+		<if test="brandUnitNo != null and ''!=brandUnitNo" >
+  			AND other_deduction.brand_no in (SELECT brand_no FROM brand WHERE sys_no IN ${brandUnitNo})
+		</if>
+  </update>
+  
+ <!--  <update id="updateApportionRebate" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+  	UPDATE bill_sale_balance SET actual_cost=IFNULL(cost-((((send_qty*cost)/${outAmount})*${rebateAmount})/send_qty),0) 
+  		WHERE balance_no = #{billNo};
+  </update>  -->
+  
+  <update id="updateApportionRebate" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+  	UPDATE bill_sale_balance SET actual_cost=cost,cost=IFNULL(cost-((((send_qty*cost)/${outAmount})*${rebateAmount})/send_qty),0) 
+  		WHERE balance_no = #{billNo};
+  </update>
+  
+  <update id="updateApportionRebateAgain" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+  	UPDATE bill_sale_balance SET cost=IFNULL(actual_cost-((((send_qty*actual_cost)/${outAmount})*${rebateAmount})/send_qty),0) 
+  		WHERE balance_no = #{billNo};
+  </update>
+  
+  <update id="clearBuyBalanceNo" parameterType="java.lang.String" >
+    UPDATE bill_buy_balance 
+    SET balance_no = NULL,  balance_status = NULL
+    WHERE 1 = 1 
+       	AND balance_no = #{balanceNo}
+  </update>
+  
+  <update id="clearBuyBalanceNoByType" parameterType="map" >
+    UPDATE bill_buy_balance 
+    SET balance_no = NULL,  balance_status = NULL
+    WHERE 1 = 1 
+       	AND balance_no = #{balanceNo}
+       	AND bill_type = #{billType}
+  </update>
+  
+  <update id="clearSaleBalanceNo" parameterType="java.lang.String" >
+    UPDATE bill_sale_balance
+    SET balance_no = NULL, balance_status = NULL
+    WHERE 1 = 1 
+       	AND balance_no = #{balanceNo}
+  </update>
+  
+  <update id="clearPayRelationShip" parameterType="java.lang.String" >
+    UPDATE pay_relationship 
+    SET balance_no = NULL 
+    WHERE 1 = 1 
+       	AND balance_no = #{balanceNo}
+  </update>
+  
+  <update id="clearImperfectBalanceNo" parameterType="java.lang.String" >
+    UPDATE custom_imperfect
+    SET balance_no = NULL, balance_status = NULL
+    WHERE 1 = 1 
+       	AND balance_no = #{balanceNo}
+  </update>
+  
+  <update id="clearDeductionBalanceNo" parameterType="java.lang.String" >
+    UPDATE other_deduction
+    SET balance_no = NULL, balance_status = NULL
+    WHERE 1 = 1 
+       	AND balance_no = #{balanceNo}
+  </update> 
+  
+  <update id="clearBuyAdjustBalanceNo" parameterType="java.lang.String" >
+    UPDATE bill_purchase_adjust_dtl 
+    SET balance_no = NULL 
+    WHERE 1 = 1 
+       	AND balance_no = #{balanceNo}
+  </update>
+  
+  
+  <update id="resetSaleBalanceActualCost" parameterType="java.lang.String" >
+    UPDATE bill_sale_balance
+    SET cost = actual_cost 
+    WHERE 1 = 1 
+       	AND balance_no = #{balanceNo}
+  </update>
+  
+  <update id="updateBuyBalanceStatus" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	UPDATE 
+	  bill_buy_balance  
+	SET
+	  balance_status = #{status} 
+	WHERE balance_no = #{billNo}
+  </update>
+  
+  <update id="updateSaleBalanceStatus" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	UPDATE 
+	  bill_sale_balance  
+	SET
+	  balance_status = #{status} 
+	WHERE balance_no = #{billNo}
+  </update>
+  
+    <update id="updateDeductionBalanceStatus" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	UPDATE 
+	  other_deduction  
+	SET
+	  balance_status = #{status} 
+	WHERE balance_no = #{billNo}
+  </update>
+  
+  <update id="updateImperfectBalanceStatus" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	UPDATE 
+	  custom_imperfect  
+	SET
+	  balance_status = #{status} 
+	WHERE balance_no = #{billNo}
+  </update>
+  
+  <update id="updateStatus" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	UPDATE 
+	  bill_balance  
+	SET
+	  status = #{status} 
+	  ,extend_status = #{status} 
+	WHERE 1 = 1
+   		AND bill_no = #{billNo}
+  </update>
+  
+  <update id="verify" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	UPDATE 
+	  bill_balance 
+	SET
+	  status = #{status} 
+	  ,extend_status = #{status} 
+	 <if test="status != 0 and status != 99" >
+   		,auditor = #{auditor}
+   	 	,audit_time = #{auditTime}
+     </if>
+     <if test="status == 0 or status == 99 " >
+   		,auditor = NULL
+   	 	,audit_time = NULL
+     </if>
+	WHERE 1 = 1
+	AND bill_no = #{billNo}  
+  </update>
+  
+   <!-- 回写结算单号到其他扣项 多品牌部 -->
+  <update id="updateBalanceNoForMultiBrand" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	   UPDATE 
+		  other_deduction LEFT JOIN brand 
+		  ON other_deduction.brand_no = brand.brand_no
+		SET
+		  balance_no = #{billNo}
+		WHERE 1 = 1 
+		  AND (balance_no IS NULL OR balance_no = '') 
+  		  AND saler_no = #{salerNo}
+  		  AND buyer_no = #{buyerNo}
+  		  AND deduction_date &gt;= #{balanceStartDate}
+   		  AND deduction_date &lt;= #{balanceEndDate}
+   		<if test="balanceType != null and ''!=balanceType" >
+			AND balance_type = #{balanceType}
+		</if>
+		<if test="categoryNo != null and ''!=categoryNo" >
+  			AND category_no =  #{categoryNo}
+		</if>
+		<if test="brandNo != null and ''!=brandNo" >
+  			AND other_deduction.brand_no in (${brandNo})
+		</if>
+  </update>
+  
+  <!--选单结算回写结算单号到其他扣项 多品牌 -->
+  <update id="updateChoiceDeductionWithMultiBrandNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	   UPDATE 
+		  other_deduction LEFT JOIN brand 
+		  ON other_deduction.brand_no = brand.brand_no
+		SET
+		  balance_no = #{billNo}
+		WHERE 1 = 1 and type=0
+		  AND (balance_no IS NULL OR balance_no = '') 
+  		  AND saler_no = #{salerNo}
+  		  AND buyer_no = #{buyerNo}
+  		  AND deduction_date &gt;= #{balanceStartDate}
+   		  AND deduction_date &lt;= #{balanceEndDate}
+   		<if test="balanceType != null and ''!=balanceType" >
+			AND balance_type = #{balanceType}
+		</if>
+		<if test="categoryNo != null and ''!=categoryNo" >
+  			AND category_no =  #{categoryNo}
+		</if>
+		<if test="brandNo != null and ''!=brandNo" >
+  			AND other_deduction.brand_no in (${brandNo})
+		</if>
+		<if test="brandUnitNo != null and ''!=brandUnitNo" >
+  			AND other_deduction.brand_no in (SELECT brand_no FROM brand WHERE sys_no IN ${brandUnitNo})
+		</if>
+  </update>
+  
+  <!-- 更新结算单号到采购入库调整单-->
+  <update id="updateSaleAdjustBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	   UPDATE 
+		  Bill_Purchase_Adjust_Dtl DTL INNER JOIN Bill_Purchase_Adjust T ON T.bill_no = DTL.bill_no
+		SET
+		  DTL.area_balance_no = #{billNo}
+		WHERE 1 = 1 
+		  AND (DTL.area_balance_no IS NULL OR DTL.area_balance_no = '') 
+		  AND T.status = 1
+  		  AND T.saler_no = #{salerNo}
+  		  AND T.buyer_no = #{buyerNo}
+  		  AND T.purchase_date &gt;= #{balanceStartDate}
+   		  AND T.purchase_date &lt;= #{balanceEndDate}
+  		<if test="supplierNo != null and ''!=supplierNo" >
+			AND T.supplier_no IN ${supplierNo}
+		</if>  
+		<if test="multiBrandUnitNo != null and ''!=multiBrandUnitNo" >
+  			AND DTL.brand_no IN  (SELECT brand_no FROM brand WHERE brand.`sys_no` IN ${multiBrandUnitNo})
+	    </if>
+	    <if test="multiBrandNo != null and ''!=multiBrandNo" >
+  			AND DTL.brand_no IN  ${multiBrandNo}
+	    </if>
+	    <if test="brandUnitNo != null and ''!=brandUnitNo" >
+	  		AND DTL.brand_no IN  (SELECT brand_no FROM brand WHERE brand.`sys_no` = #{brandUnitNo})
+		</if>
+		<if test="categoryNo != null and ''!=categoryNo" >
+  			AND LEFT(DTL.category_no,2) =  #{categoryNo}
+		</if>
+  </update>
+  
+  <update id="clearSaleAdjustBalanceNo" parameterType="java.lang.String" >
+    UPDATE bill_purchase_adjust_dtl 
+   	   SET area_balance_no = NULL 
+    WHERE 1 = 1 
+       	AND area_balance_no = #{balanceNo}
+  </update>
+  
+</mapper>

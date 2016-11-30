@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.PriceQuotationListMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PriceQuotationList" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="organ_type" property="organType" jdbcType="TINYINT" />
+    <result column="organ_id" property="organId" jdbcType="VARCHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="item_flag" property="itemFlag" jdbcType="TINYINT" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+    <result column="suggest_tag_price" property="suggestTagPrice" jdbcType="DECIMAL" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="quotation_tactics" property="quotationTactics" jdbcType="TINYINT" />
+    <result column="own_price_flag" property="ownPriceFlag" jdbcType="TINYINT" />
+    <result column="create_user_no" property="createUserNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_no" property="updateUserNo" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+   <select id="getPriceQuotationList" resultMap="BaseResultMap" parameterType="map" >
+   	SELECT id,organ_type,organ_id,organ_name,brand_no,brand_name,category_no,item_flag,
+		item_no,item_code,item_name,size_no,suggest_tag_price,tag_price,
+		quotation_tactics,own_price_flag,create_user_no,create_user,create_time,update_user_no,update_user,update_time
+	FROM `price_quotation_list` WHERE organ_id = #{params.organId} AND item_no = #{params.itemNo}
+  </select>
+  
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+			http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<dubbo:consumer check="false" />
+	<dubbo:application name="${fas.dubbo.consumer.name}" />
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+	<dubbo:protocol name="dubbo" port="${fas.dubbo.consumer.port}" />
+
+	<dubbo:reference interface="cn.wonhigh.retail.gms.api.service.CalculateWeightedCostApi" id="calculateWeightedCostApi"
+		version="${dubbo.gms.api.version}" />
+
+	<dubbo:reference interface="cn.wonhigh.retail.gms.api.service.CloseAccountApi" id="closeAccountAp"
+		version="${dubbo.gms.api.version}" />
+
+	<dubbo:reference interface="cn.wonhigh.retail.gms.api.service.InventoryBookApi" id="inventoryBookApi"
+		version="${dubbo.gms.api.version}" />
+
+	<dubbo:reference interface="cn.wonhigh.retail.pos.api.client.service.sales.OrderApi" id="orderApi"
+		version="${dubbo.pos.api.version}"></dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.pos.api.client.service.finance.ExpectCashApi" id="expectCashApi"
+		version="${dubbo.pos.api.version}"></dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.oc.common.api.service.OrderMainApi" id="orderMainApi"
+		version="${dubbo.pos.oc.api.version}"></dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.oc.common.api.service.ReturnExchangeMainApi" id="returnExchangeMainApi"
+		version="${dubbo.pos.oc.api.version}"></dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.oc.common.api.service.OrderTicketApi" id="orderTicketApi"
+		version="${dubbo.pos.oc.api.version}"></dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.mps.api.client.service.finance.BalanceRateApi" id="balanceRateApi"
+		version="${dubbo.mps.api.version}"></dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.mps.api.client.service.coupon.TicketApi" id="ticketApi"
+		version="${dubbo.mps.api.version}"></dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.mps.api.client.service.operation.SaleCommonApi" id="saleCommonApi"
+		version="${dubbo.mps.api.version}">
+	</dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.mps.api.client.service.price.SalePriceApi" id="salePriceApi"
+		version="${dubbo.mps.api.version}">
+	</dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.fas.api.service.BillBuyBalanceApi" id="billBuyBalanceApi"
+		version="${dubbo.fas.api.version}">
+	</dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.fas.api.service.BillSaleBalanceApi" id="billSaleBalanceApi"
+		version="${dubbo.fas.api.version}">
+	</dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.mps.api.client.service.promotion.PromotionApi" id="promotionApi"
+		version="${dubbo.mps.api.version}">
+	</dubbo:reference>
+
+	<dubbo:reference interface="cn.wonhigh.retail.cps.api.service.QuoteApi" id="quoteApi" version="${dubbo.cps.api.version}" />
+
+	<dubbo:reference interface="cn.wonhigh.retail.fas.api.service.CostAccountingApi" id="CostAccountingApi"
+		version="${dubbo.fas.api.version}" />
+
+	<dubbo:reference interface="cn.wonhigh.retail.gms.api.service.CustomerCreditApi" id="customerCreditApi"
+		version="${dubbo.fas.api.version}" />
+
+	<dubbo:reference interface="cn.wonhigh.retail.mdm.api.OrganTypeApi" id="organTypeApi" version="${dubbo.mdm.api.version}" />
+
+</beans>

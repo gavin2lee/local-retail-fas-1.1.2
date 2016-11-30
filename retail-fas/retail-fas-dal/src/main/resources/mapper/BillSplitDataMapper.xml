@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillSplitDataMapper">
+	<resultMap id="BaseResultMap"
+		type="cn.wonhigh.retail.fas.common.model.BillSplitData">
+		<result column="bill_no" property="billNo" jdbcType="CHAR" />
+		<result column="bill_basis" property="billBasis" jdbcType="INTEGER" />
+		<result column="bill_type" property="billType" jdbcType="INTEGER" />
+		<result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+		<result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+		<result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+		<result column="send_date" property="sendOutDate" jdbcType="TIMESTAMP" />
+		<result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+		<result column="store_no" property="storeNo" jdbcType="CHAR" />
+		<result column="order_no" property="orderNo" jdbcType="CHAR" />
+		<result column="bill_status" property="billStatus" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="condition">
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+		</if>
+	</sql>
+	
+	<select id="selectCount" resultType="java.lang.Integer" >
+	    SELECT COUNT(1) as s FROM bill_asn t 
+	    	WHERE t.send_out_date &lt;= #{params.endDate,jdbcType=VARCHAR}
+				AND t.send_out_date &gt;= #{params.startDate,jdbcType=VARCHAR}
+				<!-- 
+				AND (t.biz_type = '0' OR t.biz_type = '1')
+				 -->
+				<if test="null!=params.billNo and ''!=params.billNo">
+		           AND bill_no = #{params.billNo}
+				</if>
+				AND EXISTS(SELECT
+	                 'X'
+	               FROM bill_asn_dtl t1
+	               WHERE t.bill_no = t1.bill_no
+	                    AND t1.split_flag != 1
+	               <if test="null!=params.brandNo and ''!=params.brandNo">
+	               	    AND t1.brand_no=#{params.brandNo}
+	               </if>
+	               )
+	</select>
+	
+	<select id="selectByPage" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+			t.bill_no,
+			t.bill_type bill_basis,
+			'0' bill_type,
+			t.company_no,
+			t.supplier_no,
+			t.supplier_name,
+			t.send_out_date send_date,
+			t.tax_rate,
+			t.store_no,
+			t.order_no,
+			t.status bill_status
+		FROM
+		bill_asn t
+		WHERE t.send_out_date &lt;= #{params.endDate,jdbcType=VARCHAR}
+			AND t.send_out_date &gt;= #{params.startDate,jdbcType=VARCHAR}
+			<!-- 
+			AND (t.biz_type = '0' OR t.biz_type = '1')
+			 -->
+			<if test="null!=params.billNo and ''!=params.billNo">
+	           AND bill_no = #{params.billNo}
+			</if>
+			AND EXISTS(SELECT
+                 'X'
+               FROM bill_asn_dtl t1
+               WHERE t.bill_no = t1.bill_no
+                    AND t1.split_flag != 1
+               <if test="null!=params.brandNo and ''!=params.brandNo">
+               	    AND t1.brand_no=#{params.brandNo}
+               </if>
+               )
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</select>
+	
+	<select id="findBillReturn" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+			t.bill_no,
+			'1313' bill_basis,
+			t.bill_type,
+			t.company_no,
+			t.supplier_no,
+			t.supplier_name,
+			t.send_date,
+			0.00 tax_rate,
+			t.store_no,
+			'' order_no,
+			t.status bill_status
+		FROM
+		bill_return t
+		WHERE t.send_date &lt;= #{params.endDate,jdbcType=VARCHAR}
+			AND t.send_date &gt;= #{params.startDate,jdbcType=VARCHAR}
+			<if test="null!=params.billNo and ''!=params.billNo">
+	           AND bill_no = #{params.billNo}
+			</if>
+			AND EXISTS(SELECT
+                 'X'
+               FROM bill_return_dtl t1
+               WHERE t.bill_no = t1.bill_no
+               <if test="null!=params.brandNo and ''!=params.brandNo">
+               	    AND t1.brand_no=#{params.brandNo}
+               </if>
+               )
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</select>
+
+	<select id="selectBillReturnCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT COUNT(1)
+		FROM bill_return
+		WHERE 1 = 1
+			AND(bill_return.send_date &lt;= #{params.endDate,jdbcType=VARCHAR}
+			AND bill_return.send_date &gt;= #{params.startDate,jdbcType=VARCHAR}
+		)
+		<if test="null!=params.brandNo and ''!=params.brandNo">
+           AND EXISTS(SELECT 'X' FROM bill_return_dtl 
+           					WHERE bill_return_dtl.bill_no = bill_return.bill_no 
+           					AND bill_return_dtl.brand_no = #{params.brandNo})
+		</if>
+		<if test="null!=params.billNo and ''!=params.billNo">
+           AND bill_no = #{params.billNo}
+		</if>
+	</select>
+
+</mapper>

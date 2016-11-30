@@ -1,0 +1,859 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PaySaleCheckMapper">
+	<resultMap id="BaseResultMap"
+		type="cn.wonhigh.retail.fas.common.model.PaySaleCheck">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="shop_no" property="shopNo" jdbcType="CHAR" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+		<result column="terminal_number" property="terminalNumber"
+			jdbcType="VARCHAR" />
+		<result column="sale_time" property="saleTime" jdbcType="TIMESTAMP" />
+		<result column="pay_type" property="payType" jdbcType="VARCHAR" />
+		<result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+		<result column="credit_card_rate" property="creditCardRate" jdbcType="DECIMAL" />
+		<result column="auditor" property="auditor" jdbcType="VARCHAR" />
+		<result column="auditor_time" property="auditorTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="sales_order_no" property="salesOrderNo"
+			jdbcType="CHAR" />
+		<result column="merchants_no" property="merchantsNo" jdbcType="CHAR" />
+		<result column="card_number" property="cardNumber" jdbcType="VARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="PaySaleCheckResultMap"
+		type="cn.wonhigh.retail.fas.common.model.PaySaleCheck">
+		<id column="id" property="rowId" jdbcType="CHAR" />
+		<result column="shop_no" property="shopNo" jdbcType="CHAR" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+		<result column="company_no" property="companyNo" jdbcType="CHAR" />
+		<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+		<result column="mall_no" property="mallNo" jdbcType="CHAR" />
+		<result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+		<result column="terminal_number" property="terminalNumber"
+			jdbcType="VARCHAR" />
+		<result column="out_date" property="outDate" jdbcType="DATE" />
+		<result column="pay_name" property="payName" jdbcType="VARCHAR" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="credit_card_rate" property="creditCardRate" jdbcType="DECIMAL" />
+		<result column="poundage" property="poundage" jdbcType="DECIMAL" />
+		<result column="paidin_amount" property="paidinAmount" jdbcType="DECIMAL" />
+		<result column="auditor" property="auditor" jdbcType="VARCHAR" />
+		<result column="auditor_time" property="auditorTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="order_no" property="orderNo"
+			jdbcType="CHAR" />
+		<result column="merchants_no" property="merchantsNo" jdbcType="CHAR" />
+		<result column="credit_card_account" property="creditCardAccount" jdbcType="VARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, shop_no, shop_name, terminal_number, sale_time, pay_type,
+		sale_amount, auditor,
+		auditor_time, status, sales_order_no, merchants_no, card_number, create_user,
+		create_time
+	</sql>
+	<sql id="condition">
+	-- AND @company_no
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.cardNumber and ''!=params.cardNumber">
+				and card_number = #{params.cardNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.merchantsNo and ''!=params.merchantsNo">
+				and merchants_no = #{params.merchantsNo,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.status and ''!=params.status">
+				and status = #{params.status}
+			</if>
+			<if test="null!=params.startOutDate and ''!=params.startOutDate">
+				and sale_time &gt;= #{params.startOutDate} 00:00:00
+			</if>
+			<if test="null!=params.startDate and ''!=params.startDate">
+				and sale_time &lt;= #{params.endOutDate} 23:59:59
+			</if>
+		</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM pay_sale_check
+		WHERE id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) as s FROM pay_sale_check WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<select id="selectByPage" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM pay_sale_check WHERE 1=1
+		<include refid="condition" />
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	<select id="selectByParams" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM pay_sale_check WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<sql id="om_condition">
+		-- AND @om.company_no
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+			    and om.shop_no in ${params.shopNoLists} 
+			</if>
+			<if test="params.companyNo != null and params.companyNo!=''">  
+     			AND om.company_no = #{params.companyNo}
+	    	</if>	
+			<if test="params.mallNo != null and params.mallNo!=''">  
+     			AND m.mall_no = #{params.mallNo}
+	    	</if>
+			<if test="null!=params.payCode and ''!=params.payCode">
+				and op.pay_code = #{params.payCode,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.terminalNumber and ''!=params.terminalNumber">
+				and ssta.terminal_number = #{params.terminalNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.status and ''!=params.status">
+				and bs.status = #{params.status}
+			</if>
+			<if test="null!=params.orderNo and ''!=params.orderNo">
+				and op.order_no = #{params.orderNo}
+			</if>
+			<if test="null!=params.creditCardAccount and ''!=params.creditCardAccount">
+				and ssta.credit_card_account = #{params.creditCardAccount,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.merchantsNo and ''!=params.merchantsNo">
+				and ssta.merchants_no = #{params.merchantsNo,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.startOutDate and ''!=params.startOutDate">
+				and op.out_date &gt;= '${params.startOutDate} 00:00:00' 
+			</if>
+			<if test="null!=params.endOutDate and ''!=params.endOutDate">
+				and op.out_date &lt;= '${params.endOutDate} 23:59:59'
+			</if>
+			<if test="null!=params.businessTypeList and ''!=params.businessTypeList" >
+		   		<foreach collection="params.businessTypeList" item="businessType" open="AND om.business_type in(" separator="," close=")">
+		      		'${businessType}'
+		    	</foreach >
+		    </if>
+		    
+		    <if test="params.statusList!=null and params.statusList!=''">
+	        	<foreach collection="params.statusList" item="status" open="AND om.status in(" separator="," close=")">
+	            	'${status}'
+	       		</foreach>
+	      	</if>
+	      	<if test="null!=params.isCashRegister and 'true' == params.isCashRegister">
+				AND EXISTS
+			    (
+					SELECT 1 FROM shop_extension e WHERE e.shop_no = om.shop_no AND e.attribute_detail_no = '20160420000019'      
+			    )
+			</if>
+		</if>
+	</sql>
+	<sql id="rem_condition">
+	-- AND @rem.company_no
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+			    and rem.shop_no in ${params.shopNoLists} 
+			</if>
+			<if test="params.companyNo != null and params.companyNo!=''">  
+     			AND rem.company_no = #{params.companyNo}
+	    	</if>	
+			<if test="params.mallNo != null and params.mallNo!=''">  
+     			AND m.mall_no = #{params.mallNo}
+	    	</if>
+			<if test="null!=params.payCode and ''!=params.payCode">
+				and op.pay_code = #{params.payCode,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.terminalNumber and ''!=params.terminalNumber">
+				and ssta.terminal_number = #{params.terminalNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.status and ''!=params.status">
+				and bs.status = #{params.status}
+			</if>
+			<if test="null!=params.orderNo and ''!=params.orderNo">
+				and op.order_no = #{params.orderNo}
+			</if>
+			<if test="null!=params.creditCardAccount and ''!=params.creditCardAccount">
+				and ssta.credit_card_account = #{params.creditCardAccount,jdbcType=VARCHAR}
+			</if>
+			<if test="null!=params.merchantsNo and ''!=params.merchantsNo">
+				and ssta.merchants_no = #{params.merchantsNo,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.startOutDate and ''!=params.startOutDate">
+				and op.out_date &gt;= '${params.startOutDate} 00:00:00' 
+			</if>
+			<if test="null!=params.endOutDate and ''!=params.endOutDate">
+				and op.out_date &lt;= '${params.endOutDate} 23:59:59'
+			</if>
+			<if test="null!=params.businessTypeList and ''!=params.businessTypeList" >
+				<foreach collection="params.businessTypeList" item="businessType" open="AND rem.business_type in(" separator="," close=")">
+					'${businessType}'
+				</foreach >
+			</if>
+			<if test="params.statusList!=null and params.statusList!=''">
+	        	<foreach collection="params.statusList" item="status" open="AND rem.status in(" separator="," close=")">
+	            	'${status}'
+	       		</foreach>
+	      	</if>
+	      	<if test="null!=params.isCashRegister and 'true' ==params.isCashRegister">
+				AND EXISTS
+			    (
+					SELECT 1 FROM shop_extension e WHERE e.shop_no = rem.shop_no AND e.attribute_detail_no = '20160420000019'      
+			    )
+			</if>
+		</if>
+	</sql>
+	<!-- 根据查询条件，查询支付方式销售核对总记录数 -->
+	<select id="findPaySaleCheckCount" parameterType="map" resultMap="PaySaleCheckResultMap">
+	SELECT
+		count(1) total,
+		sum(psc.amount) amount,
+		sum(psc.poundage) poundage,
+		sum(psc.amount)-sum(psc.poundage) paidin_amount
+	FROM (
+		SELECT
+			op.id,
+			om.shop_name,
+			om.shop_no,
+			om.company_no,
+			om.company_name,
+			m.mall_no,
+			m.`name` mall_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = s.shop_no) terminal_number,
+			op.out_date,
+			op.pay_name,
+			op.amount,
+			IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+			IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+			(op.amount - IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage)))) paidin_amount,
+			IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+			IF(bs. STATUS=1,bs.update_time,NULL) auditor_time,
+			IF(bs. STATUS=1,bs.`status`,0) status,
+			op.order_no,
+			ssta.merchants_no,
+			ssta.credit_card_account,
+			om.create_user,
+			om.create_time
+		FROM
+			order_payway op
+		LEFT JOIN order_main om ON op.order_no = om.order_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+					AND credit_card_type = a.credit_card_type
+				)
+		) ssta ON om.shop_no = ssta.shop_no AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON om.shop_no = s.shop_no
+		LEFT JOIN mall m ON m.mall_no = s.mall_no
+		LEFT JOIN bill_status bs ON op.order_no = bs.bill_no AND op.pay_name = bs.pay_name
+		WHERE 1 = 1
+		AND op.pay_code &lt;&gt; '01'
+		<include refid="om_condition" />
+		GROUP BY op.id,op.amount DESC
+		UNION ALL
+		SELECT
+			op.id,
+			rem.shop_name,
+			rem.shop_no,
+			rem.company_no,
+			rem.company_name,
+			m.mall_no,
+			m.`name` mall_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = s.shop_no) terminal_number,
+			op.out_date,
+			op.pay_name,
+			op.amount,
+			IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+			IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+			(op.amount - IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage)))) paidin_amount,
+			IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+			IF(bs. STATUS=1,bs.update_time,NULL) auditor_time,
+			IF(bs. STATUS=1,bs.`status`,0) status,
+			op.order_no,
+			ssta.merchants_no,
+			ssta.credit_card_account,
+			rem.create_user,
+			rem.create_time
+		FROM
+			order_payway op
+		LEFT JOIN return_exchange_main rem ON op.order_no = rem.business_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+					AND credit_card_type = a.credit_card_type
+				)
+		) ssta ON rem.shop_no = ssta.shop_no AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON rem.shop_no = s.shop_no
+		LEFT JOIN mall m ON m.mall_no = s.mall_no
+		LEFT JOIN bill_status bs ON op.order_no = bs.bill_no AND op.pay_name = bs.pay_name
+		WHERE 1=1
+		AND op.pay_code = '04'
+		AND rem.old_out_date = rem.out_date
+		<include refid="rem_condition" />
+		GROUP BY op.id,op.amount DESC
+		UNION ALL
+		SELECT
+			op.id,
+			rem.shop_name,
+			rem.shop_no,
+			rem.company_no,
+			rem.company_name,
+			m.mall_no,
+			m.`name` mall_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = s.shop_no) terminal_number,
+			op.out_date,
+			op.pay_name,
+			op.amount,
+			IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+			IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+			(op.amount - IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage)))) paidin_amount,
+			IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+			IF(bs. STATUS=1,bs.update_time,NULL) auditor_time,
+			IF(bs. STATUS=1,bs.`status`,0) status,
+			op.order_no,
+			ssta.merchants_no,
+			ssta.credit_card_account,
+			rem.create_user,
+			rem.create_time
+		FROM
+			order_payway op
+		LEFT JOIN return_exchange_main rem ON op.order_no = rem.business_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+					AND credit_card_type = a.credit_card_type
+				)
+		) ssta ON rem.shop_no = ssta.shop_no AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON rem.shop_no = s.shop_no
+		LEFT JOIN mall m ON m.mall_no = s.mall_no
+		LEFT JOIN bill_status bs ON op.order_no = bs.bill_no AND op.pay_name = bs.pay_name
+		WHERE 1=1
+		AND op.pay_code = '04'
+		AND op.amount &gt;= 0
+		AND (rem.old_out_date IS NULL OR rem.old_out_date &lt;&gt; rem.out_date)
+		<include refid="rem_condition" />
+		GROUP BY op.id,op.amount DESC
+		UNION ALL
+		SELECT
+			op.id,
+			rem.shop_name,
+			rem.shop_no,
+			rem.company_no,
+			rem.company_name,
+			m.mall_no,
+			m.`name` mall_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = s.shop_no) terminal_number,
+			op.out_date,
+			op.pay_name,
+			op.amount,
+			IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+			IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+			(op.amount - IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) paidin_amount,
+			IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+			IF(bs. STATUS=1,bs.update_time,NULL) auditor_time,
+			IF(bs. STATUS=1,bs.`status`,0) status,
+			op.order_no,
+			ssta.merchants_no,
+			ssta.credit_card_account,
+			rem.create_user,
+			rem.create_time
+		FROM
+			order_payway op
+		LEFT JOIN return_exchange_main rem ON op.order_no = rem.business_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+					AND credit_card_type = a.credit_card_type
+				)
+		) ssta ON rem.shop_no = ssta.shop_no AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON rem.shop_no = s.shop_no
+		LEFT JOIN mall m ON m.mall_no = s.mall_no
+		LEFT JOIN bill_status bs ON op.order_no = bs.bill_no AND op.pay_name = bs.pay_name
+		WHERE 1=1
+		AND op.pay_code &lt;&gt; '01'
+		AND op.pay_code &lt;&gt; '04'
+		<include refid="rem_condition" />
+		GROUP BY op.id,op.amount DESC
+		) psc
+	</select>
+
+	<!-- 根据查询条件，查询支付方式销售核对明细 -->
+	<select id="findPaySaleCheckList" parameterType="map" resultMap="PaySaleCheckResultMap">
+	SELECT * FROM (
+		SELECT
+			op.id,
+			om.shop_name,
+			om.shop_no,
+			om.company_no,
+			om.company_name,
+			m.mall_no,
+			m.`name` mall_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = s.shop_no) terminal_number,
+			op.out_date,
+			op.pay_name,
+			op.amount,
+			IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+			IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+			(op.amount - IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage)))) paidin_amount,
+			IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+			IF(bs. STATUS=1,bs.update_time,NULL) auditor_time,
+			IF(bs. STATUS=1,bs.`status`,0) status,
+			op.order_no,
+			ssta.merchants_no,
+			ssta.credit_card_account,
+			om.create_user,
+			om.create_time
+		FROM
+			order_payway op
+		LEFT JOIN order_main om ON op.order_no = om.order_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+					AND credit_card_type = a.credit_card_type
+				)
+		) ssta ON om.shop_no = ssta.shop_no AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON om.shop_no = s.shop_no
+		LEFT JOIN mall m ON m.mall_no = s.mall_no
+		LEFT JOIN bill_status bs ON op.order_no = bs.bill_no AND op.pay_name = bs.pay_name
+		WHERE 1 = 1
+		AND op.pay_code &lt;&gt; '01'
+		<include refid="om_condition" />
+		GROUP BY op.id,op.amount DESC
+		UNION ALL
+		SELECT
+			op.id,
+			rem.shop_name,
+			rem.shop_no,
+			rem.company_no,
+			rem.company_name,
+			m.mall_no,
+			m.`name` mall_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = s.shop_no) terminal_number,
+			op.out_date,
+			op.pay_name,
+			op.amount,
+			IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+			IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+			(op.amount - IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage)))) paidin_amount,
+			IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+			IF(bs. STATUS=1,bs.update_time,NULL) auditor_time,
+			IF(bs. STATUS=1,bs.`status`,0) status,
+			op.order_no,
+			ssta.merchants_no,
+			ssta.credit_card_account,
+			rem.create_user,
+			rem.create_time
+		FROM
+			order_payway op
+		LEFT JOIN return_exchange_main rem ON op.order_no = rem.business_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+					AND credit_card_type = a.credit_card_type
+				)
+		) ssta ON rem.shop_no = ssta.shop_no AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON rem.shop_no = s.shop_no
+		LEFT JOIN mall m ON m.mall_no = s.mall_no
+		LEFT JOIN bill_status bs ON op.order_no = bs.bill_no AND op.pay_name = bs.pay_name
+		WHERE 1=1
+		AND op.pay_code = '04'
+		AND rem.old_out_date = rem.out_date
+		<include refid="rem_condition" />
+		GROUP BY op.id,op.amount DESC
+		UNION ALL
+		SELECT
+			op.id,
+			rem.shop_name,
+			rem.shop_no,
+			rem.company_no,
+			rem.company_name,
+			m.mall_no,
+			m.`name` mall_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = s.shop_no) terminal_number,
+			op.out_date,
+			op.pay_name,
+			op.amount,
+			IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+			IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+			(op.amount - IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage)))) paidin_amount,
+			IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+			IF(bs. STATUS=1,bs.update_time,NULL) auditor_time,
+			IF(bs. STATUS=1,bs.`status`,0) status,
+			op.order_no,
+			ssta.merchants_no,
+			ssta.credit_card_account,
+			rem.create_user,
+			rem.create_time
+		FROM
+			order_payway op
+		LEFT JOIN return_exchange_main rem ON op.order_no = rem.business_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+					AND credit_card_type = a.credit_card_type
+				)
+		) ssta ON rem.shop_no = ssta.shop_no AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON rem.shop_no = s.shop_no
+		LEFT JOIN mall m ON m.mall_no = s.mall_no
+		LEFT JOIN bill_status bs ON op.order_no = bs.bill_no AND op.pay_name = bs.pay_name
+		WHERE 1=1
+		AND op.pay_code = '04'
+		AND op.amount &gt;= 0
+		AND (rem.old_out_date IS NULL OR rem.old_out_date &lt;&gt; rem.out_date)
+		<include refid="rem_condition" />
+		GROUP BY op.id,op.amount DESC
+		UNION ALL
+		SELECT
+			op.id,
+			rem.shop_name,
+			rem.shop_no,
+			rem.company_no,
+			rem.company_name,
+			m.mall_no,
+			m.`name` mall_name,
+			(SELECT GROUP_CONCAT(terminal_number) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = s.shop_no) terminal_number,
+			op.out_date,
+			op.pay_name,
+			op.amount,
+			IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+			IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+			(op.amount - IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) paidin_amount,
+			IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+			IF(bs. STATUS=1,bs.update_time,NULL) auditor_time,
+			IF(bs. STATUS=1,bs.`status`,0) status,
+			op.order_no,
+			ssta.merchants_no,
+			ssta.credit_card_account,
+			rem.create_user,
+			rem.create_time
+		FROM
+			order_payway op
+		LEFT JOIN return_exchange_main rem ON op.order_no = rem.business_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+					AND credit_card_type = a.credit_card_type
+				)
+		) ssta ON rem.shop_no = ssta.shop_no AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON rem.shop_no = s.shop_no
+		LEFT JOIN mall m ON m.mall_no = s.mall_no
+		LEFT JOIN bill_status bs ON op.order_no = bs.bill_no AND op.pay_name = bs.pay_name
+		WHERE 1=1
+		AND op.pay_code &lt;&gt; '01'
+		AND op.pay_code &lt;&gt; '04'
+		<include refid="rem_condition" />
+		GROUP BY op.id,op.amount DESC
+		) psc
+		ORDER BY psc.shop_no,psc.out_date DESC
+		<if test="orderByField != null and ''!=orderByField">
+			,${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		DELETE FROM pay_sale_check
+		WHERE id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.PaySaleCheck">
+		DELETE FROM pay_sale_check
+		WHERE id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.PaySaleCheck">
+		INSERT INTO pay_sale_check (id, shop_no, shop_name,
+		terminal_number, sale_time, pay_type,
+		sale_amount, auditor, auditor_time,
+		status, sales_order_no, merchants_no,
+		card_number, create_user, create_time
+		)
+		VALUES (#{id,jdbcType=INTEGER}, #{shopNo,jdbcType=CHAR},
+		#{shopName,jdbcType=VARCHAR},
+		#{terminalNumber,jdbcType=VARCHAR}, #{saleTime,jdbcType=TIMESTAMP}, #{payType,jdbcType=VARCHAR},
+		#{saleAmount,jdbcType=DECIMAL}, #{auditor,jdbcType=VARCHAR},
+		#{auditorTime,jdbcType=TIMESTAMP},
+		#{status,jdbcType=INTEGER}, #{salesOrderNo,jdbcType=CHAR}, #{merchantsNo,jdbcType=CHAR},
+		#{cardNumber,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.PaySaleCheck">
+		INSERT INTO pay_sale_check
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="shopNo != null">
+				shop_no,
+			</if>
+			<if test="shopName != null">
+				shop_name,
+			</if>
+			<if test="terminalNumber != null">
+				terminal_number,
+			</if>
+			<if test="saleTime != null">
+				sale_time,
+			</if>
+			<if test="payType != null">
+				pay_type,
+			</if>
+			<if test="saleAmount != null">
+				sale_amount,
+			</if>
+			<if test="auditor != null">
+				auditor,
+			</if>
+			<if test="auditorTime != null">
+				auditor_time,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="salesOrderNo != null">
+				sales_order_no,
+			</if>
+			<if test="merchantsNo != null">
+				merchants_no,
+			</if>
+			<if test="cardNumber != null">
+				card_number,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="shopNo != null">
+				#{shopNo,jdbcType=CHAR},
+			</if>
+			<if test="shopName != null">
+				#{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="terminalNumber != null">
+				#{terminalNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="saleTime != null">
+				#{saleTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payType != null">
+				#{payType,jdbcType=VARCHAR},
+			</if>
+			<if test="saleAmount != null">
+				#{saleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="auditor != null">
+				#{auditor,jdbcType=VARCHAR},
+			</if>
+			<if test="auditorTime != null">
+				#{auditorTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="salesOrderNo != null">
+				#{salesOrderNo,jdbcType=CHAR},
+			</if>
+			<if test="merchantsNo != null">
+				#{merchantsNo,jdbcType=CHAR},
+			</if>
+			<if test="cardNumber != null">
+				#{cardNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.PaySaleCheck">
+		UPDATE pay_sale_check
+		<set>
+			<if test="shopNo != null">
+				shop_no = #{shopNo,jdbcType=CHAR},
+			</if>
+			<if test="shopName != null">
+				shop_name = #{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="terminalNumber != null">
+				terminal_number = #{terminalNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="saleTime != null">
+				sale_time = #{saleTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=VARCHAR},
+			</if>
+			<if test="saleAmount != null">
+				sale_amount = #{saleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="auditor != null">
+				auditor = #{auditor,jdbcType=VARCHAR},
+			</if>
+			<if test="auditorTime != null">
+				auditor_time = #{auditorTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="salesOrderNo != null">
+				sales_order_no = #{salesOrderNo,jdbcType=CHAR},
+			</if>
+			<if test="merchantsNo != null">
+				merchants_no = #{merchantsNo,jdbcType=CHAR},
+			</if>
+			<if test="cardNumber != null">
+				card_number = #{cardNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.PaySaleCheck">
+		UPDATE pay_sale_check
+		SET shop_no = #{shopNo,jdbcType=CHAR},
+		shop_name = #{shopName,jdbcType=VARCHAR},
+		terminal_number = #{terminalNumber,jdbcType=VARCHAR},
+		sale_time = #{saleTime,jdbcType=TIMESTAMP},
+		pay_type = #{payType,jdbcType=VARCHAR},
+		sale_amount = #{saleAmount,jdbcType=DECIMAL},
+		auditor = #{auditor,jdbcType=VARCHAR},
+		auditor_time = #{auditorTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=INTEGER},
+		sales_order_no = #{salesOrderNo,jdbcType=CHAR},
+		merchants_no = #{merchantsNo,jdbcType=CHAR},
+		card_number = #{cardNumber,jdbcType=VARCHAR},
+		create_user = #{createUser,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateData" parameterType="cn.wonhigh.retail.fas.common.model.PaySaleCheck">
+		/*sharding_flag*/
+		UPDATE order_payway op
+		<set>
+	  		op.poundage=#{poundage,jdbcType=DECIMAL},
+	  		op.rate = #{rate,jdbcType=DECIMAL}
+  		</set>
+		WHERE
+			op.id=#{id,jdbcType=CHAR}
+  </update>
+	
+</mapper>

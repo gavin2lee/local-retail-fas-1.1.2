@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PreWarnMessageMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PreWarnMessage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="template_code" property="templateCode" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+    
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="node_name" property="nodeName" jdbcType="VARCHAR" />
+    <result column="tab_title" property="tabTitle" jdbcType="VARCHAR" />
+    <result column="module_name" property="moduleName" jdbcType="VARCHAR" />
+    <result column="pre_title" property="preTitle" jdbcType="VARCHAR" />
+    <result column="suf_title" property="sufTitle" jdbcType="VARCHAR" />
+    <result column="datagrid_id" property="datagridId" jdbcType="VARCHAR" />
+    <result column="post_url" property="postUrl" jdbcType="VARCHAR" />
+    <result column="show_url" property="showUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, template_code, type, company_no, bill_no
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectWarnInfoByType" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  	SELECT
+	  temp.node_name,
+	  temp.type,
+	  temp.tab_title,
+	  temp.module_name,
+	  temp.pre_title,
+	  temp.suf_title,
+	  temp.post_url,
+	  temp.show_url,
+	  message.num
+	FROM (SELECT
+	        template_code,
+	        COUNT(template_code) num
+	      FROM pre_warn_message
+	      WHERE 1=1 
+	      	AND (-- @company_no OR company_no is null)  
+	      	AND (-- @brand_no OR brand_no is null) 
+	      	AND (brand_unit_no in (SELECT sys_no FROM brand WHERE 1=1 -- AND @brand_no) OR brand_unit_no is null)
+	      	<if test="null!=type and ''!=type">
+	      		AND TYPE = #{type}
+	      	</if>
+	      GROUP BY template_code) message
+	  LEFT JOIN pre_warn_template temp
+	    ON message.template_code = temp.code
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from pre_warn_message
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from pre_warn_message where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from pre_warn_message where 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      order by ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+   LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from pre_warn_message where 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pre_warn_message
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.Integer" >
+    delete from pre_warn_message
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.PreWarnMessage" >
+    insert into pre_warn_message (id, template_code, type, company_no, brand_no, brand_unit_no, bill_no)
+    values (#{id,jdbcType=INTEGER}, #{templateCode,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, 
+    #{companyNo,jdbcType=CHAR}, #{brandNo,jdbcType=CHAR}, #{brandUnitNo,jdbcType=CHAR}, #{billNo,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.PreWarnMessage" >
+    insert into pre_warn_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="templateCode != null" >
+        template_code,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="templateCode != null" >
+        #{templateCode,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.PreWarnMessage" >
+    update pre_warn_message
+    <set >
+      <if test="templateCode != null" >
+        template_code = #{templateCode,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.PreWarnMessage" >
+    update pre_warn_message
+    set template_code = #{templateCode,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT},
+      company_no = #{companyNo,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      bill_no = #{billNo,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,1203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PrintMapper" >
+	 <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.PrintBalanceDto" >
+        <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+	    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+	    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+	    <result column="brand_unit_no" property="brandUnitNo" jdbcType="VARCHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+	    <result column="order_unit_no" property="orderUnitNo" jdbcType="VARCHAR" />
+	    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+	    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+	    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+	    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+	    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+	    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+	    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+	    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+	    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+	    <result column="custom_return_qty" property="customReturnQty" jdbcType="INTEGER" />
+	    <result column="custom_return_amount" property="customReturnAmount" jdbcType="DECIMAL" />
+	    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+	    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+	    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+	    <result column="cost" property="cost" jdbcType="DECIMAL" />
+	    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+	    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+	    <result column="group_no" property="groupNo" jdbcType="VARCHAR" />
+	    <result column="group_name" property="groupName" jdbcType="VARCHAR" />
+	    <result column="gender" property="gender" jdbcType="VARCHAR" />
+	    <result column="gender_name" property="genderName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BalanceDiffMap" type="cn.wonhigh.retail.fas.common.dto.PrintBalanceDiffDto" >
+  		<result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+	    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+	    <result column="brand_unit_no" property="brandUnitNo" jdbcType="VARCHAR" />
+	    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+	    <result column="year" property="year" jdbcType="VARCHAR" />
+	    <result column="month" property="month" jdbcType="VARCHAR" />
+	    <result column="all_in_qty" property="allInQty" jdbcType="INTEGER" />
+	    <result column="all_in_amount" property="allInAmount" jdbcType="DECIMAL" />
+	    <result column="purchase_in_qty" property="purchaseInQty" jdbcType="INTEGER" />
+	    <result column="purchase_in_amount" property="purchaseInAmount" jdbcType="DECIMAL" />
+	   	<result column="purchase_return_qty" property="purchaseReturnQty" jdbcType="INTEGER" />
+	    <result column="purchase_return_amount" property="purchaseReturnAmount" jdbcType="DECIMAL" /> 
+	    
+	    <result column="outer_transfer_in_qty" property="outerTransferInQty" jdbcType="INTEGER" />
+	    <result column="outer_transfer_in_amount" property="outerTransferInAmount" jdbcType="DECIMAL" />
+	    <result column="hq_purchase_in_qty" property="hqPurchaseInQty" jdbcType="INTEGER" />
+	    <result column="hq_purchase_in_amount" property="hqPurchaseInAmount" jdbcType="DECIMAL" />
+	    
+	    <result column="area_purchase_in_qty" property="areaPurchaseInQty" jdbcType="INTEGER" />
+	    <result column="area_purchase_in_amount" property="areaPurchaseInAmount" jdbcType="DECIMAL" />
+	    <result column="area_buy_in_qty" property="areaBuyInQty" jdbcType="INTEGER" />
+	    <result column="area_buy_in_amount" property="areaBuyInAmount" jdbcType="DECIMAL" />
+	    
+	    <result column="all_out_qty" property="allOutQty" jdbcType="INTEGER" />
+	    <result column="all_out_amount" property="allOutAmount" jdbcType="DECIMAL" />
+	    <result column="all_out_cost" property="allOutCost" jdbcType="DECIMAL" />
+	    
+	    <result column="sales_out_qty" property="salesOutQty" jdbcType="INTEGER" />
+	    <result column="sales_out_amount" property="salesOutAmount" jdbcType="DECIMAL" />
+	    <result column="sales_out_cost" property="salesOutCost" jdbcType="DECIMAL" />
+	    
+	    <result column="outer_transfer_out_qty" property="outerTransferOutQty" jdbcType="INTEGER" />
+	    <result column="outer_transfer_out_amount" property="outerTransferOutAmount" jdbcType="DECIMAL" />
+	    <result column="outer_transfer_out_cost" property="outerTransferOutCost" jdbcType="DECIMAL" />
+	    
+	    <result column="outer_wholesale_out_qty" property="outerWholesaleOutQty" jdbcType="INTEGER" />
+	    <result column="outer_wholesale_out_amount" property="outerWholesaleOutAmount" jdbcType="DECIMAL" />
+	    <result column="outer_wholesale_out_cost" property="outerWholesaleOutCost" jdbcType="DECIMAL" />
+	 
+	 	<result column="outer_other_out_qty" property="outerOtherOutQty" jdbcType="INTEGER" />
+	    <result column="outer_other_out_amount" property="outerOtherOutAmount" jdbcType="DECIMAL" />
+	    <result column="outer_other_out_cost" property="outerOtherOutCost" jdbcType="DECIMAL" />
+	    
+	    <result column="outer_within_out_qty" property="outerWithinOutQty" jdbcType="INTEGER" />
+	    <result column="outer_within_out_amount" property="outerWithinOutAmount" jdbcType="DECIMAL" />
+	    <result column="outer_within_out_cost" property="outerWithinOutCost" jdbcType="DECIMAL" />
+	      
+	    <result column="outer_pos_out_qty" property="outerPosOutQty" jdbcType="INTEGER" />
+	    <result column="outer_pos_out_amount" property="outerPosOutAmount" jdbcType="DECIMAL" />
+	    <result column="outer_pos_out_cost" property="outerPosOutCost" jdbcType="DECIMAL" />
+	    
+		<result column="this_owe_off_qty" property="thisOweOffQty" jdbcType="INTEGER" />
+	    <result column="this_owe_off_cost" property="thisOweOffCost" jdbcType="DECIMAL" />
+		<result column="pre_owe_off_out_qty" property="preOweOffOutQty" jdbcType="INTEGER" />
+	    <result column="pre_owe_off_out_cost" property="preOweOffOutCost" jdbcType="DECIMAL" /> 
+	 	<result column="beginning_owe_off_qty" property="beginningOweOffQty" jdbcType="INTEGER" />
+	    <result column="beginning_owe_off_cost" property="beginningOweOffCost" jdbcType="DECIMAL" />    
+  </resultMap>
+  <select id="selectSendColumnByBalanceNo" resultMap="BaseResultMap"  parameterType="java.lang.String">
+	SELECT 
+	  order_unit_no,
+	  order_unit_name,
+	  SUM(send_qty) send_qty 
+	FROM
+	  bill_buy_balance 
+	WHERE 1 = 1 
+	  AND balance_no IN ${balanceNo}  
+	  AND bill_type = 1301 
+	GROUP BY 
+	  order_unit_no 
+  </select>
+  <select id="selectSendRowByBalanceNo" resultMap="BaseResultMap"  parameterType="java.lang.String">
+    SELECT 
+      item_no,
+	  item_code,
+	  item_name,
+	  SUM(send_qty) send_qty
+	FROM
+	  bill_buy_balance 
+	WHERE 1 = 1 
+	  AND balance_no IN ${balanceNo}  
+	  AND bill_type = 1301 
+	GROUP BY item_no  
+  </select>
+  <select id="selectSendQtyByBalanceNo" resultMap="BaseResultMap"  parameterType="java.lang.String">
+	SELECT 
+	    item_no,
+	    item_code,
+	    item_name,
+	    supplier_no,
+	    supplier_name,
+	    order_unit_no,
+	    order_unit_name,
+	    purchase_price,
+	    material_price,
+	    factory_price,
+	    SUM(send_qty) * purchase_price send_amount,
+	    SUM(send_qty) send_qty 
+	  FROM
+	    bill_buy_balance 
+	  WHERE 1 = 1 
+	    AND balance_no IN ${balanceNo}  
+	    AND bill_type = 1301 
+	  GROUP BY item_no,
+	    order_unit_no
+  </select>
+  <select id="selectReturnQtyByBalanceNo" resultMap="BaseResultMap"  parameterType="java.lang.String">
+	 SELECT 
+	    item_no,
+	    item_code item_code,
+	    item_name,
+	    supplier_no,
+	    supplier_name,
+	    purchase_price,
+	    material_price,
+	    organ_name,
+	    purchase_price*send_qty send_amount,
+	    send_qty
+	  FROM
+	    bill_buy_balance 
+	  WHERE 1 = 1 
+	    AND balance_no IN ${balanceNo}  
+	    AND bill_type = 1333
+  </select>
+  <select id="selectCustomReturnQtyByBalanceNo" resultMap="BaseResultMap"  parameterType="java.lang.String">
+	SELECT 
+	  item_no,
+	  item_code item_code,
+	  item_name,
+	  qty send_qty,
+	  purchase_price purchase_price,
+	  qty*purchase_price send_amount
+	FROM
+	  custom_imperfect 
+	WHERE 1 = 1 
+	  AND balance_no IN ${balanceNo}  
+  </select>
+  <select id="selectDeductionAmountByBalanceNo" resultType="java.math.BigDecimal" parameterType="java.lang.String">
+	SELECT 
+	  IFNULL(SUM(deduction_amount),0) deduction_amount
+	FROM
+	  other_deduction 
+	WHERE 1 = 1 
+	  AND balance_no IN ${balanceNo}  
+  </select>
+  
+  <select id="selectBalanceGatherList" resultMap="BaseResultMap"  parameterType="java.lang.String">
+	SELECT 
+	  group_no,
+	  group_name,
+	  brand_unit_no,
+	  saler_no,
+	  saler_name,
+	  gender,
+	  gender_name,
+	  category_no,
+	  category_name,
+	  SUM(send_amount) send_amount,
+	  SUM(send_qty) send_qty,
+	  SUM(return_amount) return_amount,
+	  SUM(return_qty) return_qty,
+	  SUM(custom_return_amount) custom_return_amount,
+	  SUM(custom_return_qty) custom_return_qty,
+	  SUM(deduction_amount) deduction_amount, 
+	  ROUND(SUM(send_amount) / SUM(send_qty),2) cost,
+	  SUM(send_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+	  SUM(send_amount) + SUM(return_amount) - SUM(custom_return_amount) - SUM(deduction_amount) balance_amount
+	FROM
+	  (SELECT 
+	  	B.bill_type,
+	    sg.group_no,
+	    sg.group_name,
+	    B.brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+	    IF(C1.category_no IN ('01','06'),B.gender,'20141017000030') gender,
+	    lookup3.name gender_name,
+	    C1.category_no,
+	    C1.name category_name,
+	    SUM(send_qty * purchase_price) send_amount,
+	    SUM(send_qty) send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    0 custom_return_amount,
+	    0 custom_return_qty,
+	    0 deduction_amount 
+	  FROM
+	    bill_buy_balance B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    INNER JOIN category C1 
+	      ON LEFT(B.category_no, 2) = C1.category_no 
+	    LEFT JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.gender 
+	      AND lookup3.lookup_id = '7' 
+	  WHERE balance_no IN ${balanceNo}  
+	  GROUP BY sg.group_no,
+	    B.bill_type,
+	    B.saler_no,
+	    B.gender,
+	    C1.category_no,
+	    B.brand_unit_no 
+	  UNION
+	  ALL 
+	  SELECT 
+	    1301 bill_type,
+	    sg.group_no,
+	    sg.group_name,
+	    B1.sys_no brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+	    IF(C1.category_no = '01',B.gender,'20141017000030') gender,
+	    lookup3.name gender_name,
+	    C1.category_no,
+	    C1.name category_name,
+	    0 send_amount,
+	    0 send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    SUM(qty * purchase_price) custom_return_amount,
+	    SUM(qty) custom_return_qty,
+	    0 deduction_amount 
+	  FROM
+	    custom_imperfect B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    INNER JOIN category C1 
+	      ON LEFT(B.category_no, 2) = C1.category_no 
+	    LEFT JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.gender 
+	      AND lookup3.lookup_id = '7'
+	    INNER JOIN brand B1 ON B1.brand_no = B.brand_no   
+	  WHERE balance_no IN ${balanceNo}  
+	  GROUP BY sg.group_no,
+	    B.saler_no,
+	    B.gender,
+	    C1.category_no,
+	    B1.sys_no 
+	  UNION
+	  ALL 
+	  SELECT 
+	    1301 bill_type,
+	    sg.group_no,
+	    sg.group_name,
+	    B1.sys_no brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+	    IF(B.category_no = '01',IF(B.deduction_category IS NULL OR B.deduction_category ='','20141017000030',B.deduction_category),'20141017000030') gender,
+	    IFNULL(lookup3.name,'女') gender_name,
+	    B.category_no,
+	    B.category_name,
+	    0 send_amount,
+	    0 send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    0 custom_return_amount,
+	    0 custom_return_qty,
+	    SUM(deduction_amount) deduction_amount 
+	  FROM
+	    other_deduction B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    LEFT JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.deduction_category 
+	      AND lookup3.lookup_id = '7' 
+	    INNER JOIN brand B1 ON B1.brand_no = B.brand_no    
+	  WHERE balance_no IN ${balanceNo}  
+	  GROUP BY sg.group_no,
+	    B.saler_no,
+	    IF(B.deduction_category IS NULL OR B.deduction_category ='','20141017000030',B.deduction_category),
+	    B.category_no,
+	    B1.sys_no) T 
+	GROUP BY group_no,
+	  saler_no,
+	  bill_type,
+	  gender,
+	  category_no,
+	  brand_unit_no
+	ORDER BY category_no ASC,gender DESC,saler_no,bill_type 
+  </select>
+  <select id="selectBalanceGatherFooter" resultMap="BaseResultMap"  parameterType="java.lang.String">
+    SELECT 
+	  group_no,
+	  group_name,
+	  '' saler_no,
+	  '小计' saler_name,
+	  brand_unit_no,
+	  gender,
+	  gender_name,
+	  category_no,
+	  category_name,
+	  SUM(send_amount) send_amount,
+	  SUM(send_qty) send_qty,
+	  SUM(return_amount) return_amount,
+	  SUM(return_qty) return_qty,
+	  SUM(custom_return_amount) custom_return_amount,
+	  SUM(custom_return_qty) custom_return_qty,
+	  SUM(deduction_amount) deduction_amount,
+	  ROUND(SUM(send_amount) / SUM(send_qty), 2) cost,
+	  SUM(send_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+	  SUM(send_amount) + SUM(return_amount) - SUM(custom_return_amount) - SUM(deduction_amount) balance_amount 
+	FROM
+	  (SELECT 
+	    sg.group_no,
+	    sg.group_name,
+	    B.brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+	    B.gender,
+	    lookup3.name gender_name,
+	    C1.category_no,
+	    C1.name category_name,
+	    SUM(send_qty * purchase_price) send_amount,
+	    SUM(send_qty) send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    0 custom_return_amount,
+	    0 custom_return_qty,
+	    0 deduction_amount 
+	  FROM
+	    bill_buy_balance B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    INNER JOIN category C1 
+	      ON LEFT(B.category_no, 2) = C1.category_no 
+	    INNER JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.gender 
+	      AND lookup3.lookup_id = '7' 
+	  WHERE balance_no IN ${balanceNo} 
+	  GROUP BY sg.group_no,
+	    B.saler_no,
+	    B.gender,
+	    C1.category_no,
+	    B.brand_unit_no 
+	  UNION
+	  ALL 
+	  SELECT 
+	    sg.group_no,
+	    sg.group_name,
+	    B1.sys_no brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+	    B.gender,
+	    lookup3.name gender_name,
+	    C1.category_no,
+	    C1.name category_name,
+	    0 send_amount,
+	    0 send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    SUM(qty * purchase_price) custom_return_amount,
+	    SUM(qty) custom_return_qty,
+	    0 deduction_amount 
+	  FROM
+	    custom_imperfect B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    INNER JOIN category C1 
+	      ON LEFT(B.category_no, 2) = C1.category_no 
+	    INNER JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.gender 
+	      AND lookup3.lookup_id = '7' 
+	    INNER JOIN brand B1 
+	      ON B1.brand_no = B.brand_no 
+	  WHERE balance_no IN ${balanceNo} 
+	  GROUP BY sg.group_no,
+	    B.saler_no,
+	    B.gender,
+	    C1.category_no,
+	    B1.sys_no 
+	  UNION
+	  ALL 
+	  SELECT 
+	    sg.group_no,
+	    sg.group_name,
+	    B1.sys_no brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+	    IF(B.deduction_category IS NULL OR B.deduction_category ='','20141017000030',B.deduction_category) gender,
+	    IFNULL(lookup3.name,'女') gender_name,
+	    B.category_no,
+	    B.category_name,
+	    0 send_amount,
+	    0 send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    0 custom_return_amount,
+	    0 custom_return_qty,
+	    deduction_amount 
+	  FROM
+	    other_deduction B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    INNER JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.deduction_category 
+	      AND lookup3.lookup_id = '7' 
+	    INNER JOIN brand B1 
+	      ON B1.brand_no = B.brand_no 
+	  WHERE balance_no IN ${balanceNo} 
+	  GROUP BY sg.group_no,
+	    B.saler_no,
+	    IF(B.deduction_category IS NULL OR B.deduction_category ='','20141017000030',B.deduction_category), 
+	    B.category_no,
+	    B1.sys_no) T 
+	GROUP BY brand_unit_no,
+	  group_no,
+	  gender,
+	  category_no 
+	UNION 
+	ALL  
+	SELECT 
+	  group_no,
+	  group_name,
+	  '' saler_no,
+	  '合计' saler_name,
+	  brand_unit_no,
+	  '' gender,
+	  '' gender_name,
+	  category_no,
+	  category_name,
+	  SUM(send_amount) send_amount,
+	  SUM(send_qty) send_qty,
+	  SUM(return_amount) return_amount,
+	  SUM(return_qty) return_qty,
+	  SUM(custom_return_amount) custom_return_amount,
+	  SUM(custom_return_qty) custom_return_qty,
+	  SUM(deduction_amount) deduction_amount,
+	  ROUND(SUM(send_amount) / SUM(send_qty), 2) cost,
+	  SUM(send_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty ,
+	  SUM(send_amount) + SUM(return_amount) - SUM(custom_return_amount) - SUM(deduction_amount) balance_amount 
+	FROM
+	  (SELECT 
+	    sg.group_no,
+	    sg.group_name,
+	    B.brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+	    B.gender,
+	    lookup3.name gender_name,
+	    C1.category_no,
+	    C1.name category_name,
+	    SUM(send_qty * purchase_price) send_amount,
+	    SUM(send_qty) send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    0 custom_return_amount,
+	    0 custom_return_qty,
+	    0 deduction_amount 
+	  FROM
+	    bill_buy_balance B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    INNER JOIN category C1 
+	      ON LEFT(B.category_no, 2) = C1.category_no 
+	    INNER JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.gender 
+	      AND lookup3.lookup_id = '7' 
+	  WHERE balance_no IN ${balanceNo} 
+	  GROUP BY sg.group_no,
+	    B.saler_no,
+	    B.gender,
+	    C1.category_no,
+	    B.brand_unit_no 
+	  UNION
+	  ALL 
+	  SELECT 
+	    sg.group_no,
+	    sg.group_name,
+	    B1.sys_no brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+	    B.gender,
+	    lookup3.name gender_name,
+	    C1.category_no,
+	    C1.name category_name,
+	    0 send_amount,
+	    0 send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    SUM(qty * purchase_price) custom_return_amount,
+	    SUM(qty) custom_return_qty,
+	    0 deduction_amount 
+	  FROM
+	    custom_imperfect B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    INNER JOIN category C1 
+	      ON LEFT(B.category_no, 2) = C1.category_no 
+	    INNER JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.gender 
+	      AND lookup3.lookup_id = '7' 
+	    INNER JOIN brand B1 
+	      ON B1.brand_no = B.brand_no 
+	  WHERE balance_no IN ${balanceNo} 
+	  GROUP BY sg.group_no,
+	    B.saler_no,
+	    B.gender,
+	    C1.category_no,
+	    B1.sys_no 
+	  UNION
+	  ALL 
+	  SELECT 
+	    sg.group_no,
+	    sg.group_name,
+	    B1.sys_no brand_unit_no,
+	    B.saler_no,
+	    B.saler_name,
+		IF(B.deduction_category IS NULL OR B.deduction_category ='','20141017000030',B.deduction_category) gender,
+	    IFNULL(lookup3.name,'女') gender_name,
+	    B.category_no,
+	    B.category_name,
+	    0 send_amount,
+	    0 send_qty,
+	    0 return_amount,
+	    0 return_qty,
+	    0 custom_return_amount,
+	    0 custom_return_qty,
+	    deduction_amount 
+	  FROM
+	    other_deduction B 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON B.saler_no = sgr.supplier_no 
+	    INNER JOIN supplier_group sg 
+	      ON sgr.group_no = sg.group_no 
+	    INNER JOIN lookup_entry lookup3 
+	      ON lookup3.`code` = B.deduction_category 
+	      AND lookup3.lookup_id = '7' 
+	    INNER JOIN brand B1 
+	      ON B1.brand_no = B.brand_no 
+	  WHERE balance_no IN ${balanceNo} 
+	  GROUP BY sg.group_no,
+	    B.saler_no,
+	    IF(B.deduction_category IS NULL OR B.deduction_category ='','20141017000030',B.deduction_category),
+	    B.category_no,
+	    B1.sys_no) T 
+	GROUP BY brand_unit_no,
+	  group_no,
+	  category_no  
+	ORDER BY category_no , group_no
+    </select>
+    <select id="selectYearBalanceGatherFooter" resultMap="BaseResultMap"  parameterType="map">
+      SELECT 
+		  group_no,
+		  group_name,
+		  gender,
+		  gender_name,
+		  category_no,
+		  category_name,
+		  SUM(send_amount) send_amount,
+		  SUM(send_qty) send_qty,
+		  SUM(return_amount) return_amount,
+		  SUM(return_qty) return_qty,
+		  SUM(custom_return_amount) custom_return_amount,
+		  SUM(custom_return_qty) custom_return_qty,
+		  SUM(send_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+		  SUM(send_amount) + SUM(return_amount) - SUM(custom_return_amount) balance_amount,
+		  ROUND(SUM(send_amount)/SUM(send_qty),2) cost
+		FROM
+		  (SELECT 
+		    sg.group_no,
+		    sg.group_name,
+		    B.gender,
+		    lookup3.name gender_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    SUM(send_qty * purchase_price) send_amount,
+		    SUM(send_qty) send_qty,
+		    0 return_amount,
+		    0 return_qty,
+		    0 custom_return_amount,
+		    0 custom_return_qty 
+		  FROM
+		    bill_buy_balance B 
+		    INNER JOIN supplier_group_rel sgr 
+		      ON B.saler_no = sgr.supplier_no 
+		    INNER JOIN supplier_group sg 
+		      ON sgr.group_no = sg.group_no 
+		    INNER JOIN lookup_entry lookup3 
+		      ON lookup3.`code` = B.gender 
+		      AND lookup3.lookup_id = '7' 
+		    INNER JOIN category C1 
+		      ON LEFT(B.category_no, 2) = C1.category_no 
+		  WHERE 1 = 1 
+		  <choose>  
+            <when test="null != params.balanceNo and ''!= params.balanceNo">  
+                 AND balance_no IN ${params.balanceNo}
+            </when >  
+            <otherwise> 
+             	AND balance_no IN 
+				    (SELECT 
+				      bill_no 
+				    FROM
+				      bill_balance B 
+				    WHERE 1 = 1 
+				 	  AND category_no != '06'
+				      AND B.brand_unit_no = #{params.brandUnitNo}
+				      AND balance_type = 1 
+				      AND DATE_FORMAT(balance_end_date, '%Y-%m') &gt;= #{params.yearMonthStart} 
+				      AND DATE_FORMAT(balance_end_date, '%Y-%m') &lt;= #{params.yearMonthEnd} )
+            </otherwise>  
+          </choose> 
+		  GROUP BY sg.group_no,
+		    B.gender,
+		    C1.category_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    sg.group_no,
+		    sg.group_name,
+		    B.gender,
+		    lookup3.name gender_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    0 send_amount,
+		    0 send_qty,
+		    0 return_amount,
+		    0 return_qty,
+		    SUM(qty * purchase_price) custom_return_amount,
+		    SUM(qty) custom_return_qty 
+		  FROM
+		    custom_imperfect B 
+		    INNER JOIN supplier_group_rel sgr 
+		      ON B.saler_no = sgr.supplier_no 
+		    INNER JOIN supplier_group sg 
+		      ON sgr.group_no = sg.group_no 
+		    INNER JOIN lookup_entry lookup3 
+		      ON lookup3.`code` = B.gender 
+		      AND lookup3.lookup_id = '7' 
+		    INNER JOIN category C1 
+		      ON LEFT(B.category_no, 2) = C1.category_no 
+		  WHERE 1 = 1 
+		  <choose>  
+            <when test="null != params.balanceNo and ''!= params.balanceNo">  
+                 AND balance_no IN ${params.balanceNo}
+            </when >  
+            <otherwise> 
+             	AND balance_no IN 
+				    (SELECT 
+				      bill_no 
+				    FROM
+				      bill_balance B 
+				    WHERE 1 = 1 
+				 	  AND category_no != '06'
+				      AND B.brand_unit_no = #{params.brandUnitNo}
+				      AND balance_type = 1 
+				      AND DATE_FORMAT(balance_end_date, '%Y-%m') &gt;= #{params.yearMonthStart} 
+				      AND DATE_FORMAT(balance_end_date, '%Y-%m') &lt;= #{params.yearMonthEnd} )
+            </otherwise>  
+          </choose> 
+		  GROUP BY sg.group_no,
+		    B.gender,
+		    C1.category_no) G 
+		GROUP BY group_no,
+		  gender,
+		  category_no 
+        ORDER BY category_no,group_no,gender
+      
+    </select>
+    <select id="selectWorkShoesBalanceNo" resultType="java.lang.String"  parameterType="map">
+       	SELECT CONCAT("('",GROUP_CONCAT(balance_no SEPARATOR "','"),"')") FROM (
+	       SELECT 
+			  balance_no 
+			FROM
+			  bill_buy_balance B 
+			  INNER JOIN bill_balance 
+			    ON B.balance_no = bill_balance.bill_no 
+			WHERE 1 = 1 
+			  AND B.category_no = '060404' 
+			  AND bill_balance.balance_type IN (1, 13) 
+			  <if test="null!=params.yearMonthStart and ''!=params.yearMonthStart" >
+	          	AND DATE_FORMAT(balance_end_date, '%Y-%m') &gt;= #{params.yearMonthStart} 
+	      	  </if>
+	      	  <if test="null!=params.yearMonthEnd and ''!=params.yearMonthEnd" >
+	          	AND DATE_FORMAT(balance_end_date, '%Y-%m') &lt;= #{params.yearMonthEnd}
+	      	  </if>
+			    AND bill_balance.brand_unit_no = #{params.brandUnitNo}  
+			GROUP BY balance_no 
+			) G
+    </select>
+    
+    
+    <select id="selectPeriodInList" resultMap="BalanceDiffMap"  parameterType="map">
+		SELECT 
+		  buyer_no company_no,
+		  buyer_name company_name,
+		  brand_unit_no,
+		  brand_unit_name,
+		  SUM(IF(bill_type = 1372 AND saler_no NOT IN ${params.hqCompanyNo},receive_qty,0)) outer_transfer_in_qty,
+		  SUM(IF(bill_type = 1372 AND saler_no NOT IN ${params.hqCompanyNo},receive_qty*cost,0)) outer_transfer_in_amount,
+		  SUM(IF( ( (bill_type = 1304 AND biz_type = 60) OR ( ((bill_type = 1304 AND biz_type IN (0,1)) OR bill_type = 1333) AND is_split IS NULL) ),IF(bill_type = 1333,send_qty,receive_qty),0)) hq_purchase_in_qty,
+		  SUM(IF( ( (bill_type = 1304 AND biz_type = 60) OR ( ((bill_type = 1304 AND biz_type IN (0,1)) OR bill_type = 1333) AND is_split IS NULL) ),IF(bill_type = 1333,send_qty,receive_qty)*cost,0)) hq_purchase_in_amount,
+		  SUM(IF(   ((bill_type = 1304 AND biz_type != 60) AND is_split = 1) OR (bill_type = 1333 OR (bill_type = 1372 AND saler_no IN ${params.hqCompanyNo})),IF(bill_type = 1333,send_qty,receive_qty),0)) area_purchase_in_qty,
+		  SUM(IF(   ((bill_type = 1304 AND biz_type != 60) AND is_split = 1) OR (bill_type = 1333 OR (bill_type = 1372 AND saler_no IN ${params.hqCompanyNo})),IF(bill_type = 1333,send_qty,receive_qty)*cost,0)) area_purchase_in_amount,
+		  SUM(IF(bill_type = 1304 AND biz_type NOT IN (0,1,60) AND is_split IS NULL,receive_qty,0)) area_buy_in_qty,
+		  SUM(IF(bill_type = 1304 AND biz_type NOT IN (0,1,60) AND is_split IS NULL,receive_qty*cost,0)) area_buy_in_amount,
+		  SUM(IF(bill_type = 1304,receive_qty,0)) purchase_in_qty,
+		  SUM(IF(bill_type = 1304,receive_qty*cost,0)) purchase_in_amount,
+		  SUM(receive_qty) all_in_qty,
+		  SUM(receive_qty*cost) all_in_amount
+		FROM
+		  bill_buy_balance 
+		WHERE 1 = 1 
+		  AND receive_date &gt;= #{params.startDate}
+		  AND receive_date &lt;= #{params.endDate}
+		  AND buyer_no IN ${params.companyNo}
+		  AND brand_unit_no IN ${params.brandUnitNo}
+		  AND bill_type IN (1304, 1333, 1372)
+		  GROUP BY buyer_no,brand_unit_no
+    </select>
+    
+    <select id="selectPeriodOutList" resultMap="BalanceDiffMap"  parameterType="map">
+		SELECT 
+		  company_no,
+		  company_name,
+		  brand_unit_no,
+		  brand_unit_name,
+		  SUM(out_qty) sales_out_qty,
+		  SUM(out_cost) sales_out_cost,
+		  SUM(out_amount) sales_out_amount,
+		  SUM(outer_transfer_out_qty) outer_transfer_out_qty,
+		  SUM(outer_transfer_out_cost) outer_transfer_out_cost,
+		  SUM(outer_transfer_out_amount) outer_transfer_out_amount,
+		  SUM(outer_wholesale_out_qty) outer_wholesale_out_qty,
+		  SUM(outer_wholesale_out_cost) outer_wholesale_out_cost,
+		  SUM(outer_wholesale_out_amount) outer_wholesale_out_amount,
+		  SUM(outer_other_out_qty) outer_other_out_qty,
+		  SUM(outer_other_out_cost) outer_other_out_cost,
+		  SUM(outer_other_out_amount) outer_other_out_amount,
+		  SUM(outer_within_out_qty) outer_within_out_qty,
+		  SUM(outer_within_out_cost) outer_within_out_cost,
+		  SUM(outer_within_out_amount) outer_within_out_amount,
+		  SUM(outer_pos_out_qty) outer_pos_out_qty,
+		  SUM(outer_pos_out_cost) outer_pos_out_cost,
+		  SUM(outer_pos_out_amount) outer_pos_out_amount,
+		  SUM(out_qty + outer_transfer_out_qty) all_out_qty,
+		  SUM(out_cost + outer_transfer_out_cost) all_out_cost,
+		  SUM(out_amount + outer_transfer_out_amount) all_out_amount 
+		FROM
+		  (SELECT 
+		    bsb.saler_no company_no,
+		    bsb.saler_name company_name,
+		    bsb.brand_unit_no,
+		    bsb.brand_unit_name,
+		    SUM(IF(bill_type != 1371, send_qty, 0)) out_qty,
+		    SUM(IF(bill_type != 1371,send_qty * IFNULL(ic.unit_cost,0),0)) out_cost,
+		    SUM(IF(bill_type != 1371,send_qty * bsb.cost,0)) out_amount,
+		    SUM(IF(bill_type = 1371 AND buyer_no NOT IN ${params.hqCompanyNo},send_qty, 0)) outer_transfer_out_qty,
+		    SUM(IF(bill_type = 1371 AND buyer_no NOT IN ${params.hqCompanyNo},send_qty * IFNULL(ic.unit_cost,0),0)) outer_transfer_out_cost,
+		    SUM(IF(bill_type = 1371 AND buyer_no NOT IN ${params.hqCompanyNo},send_qty * bsb.cost,0)) outer_transfer_out_amount,
+		    SUM(IF(bsb.bill_type = 1335 AND bsb.biz_type IN (21, 22, 30, 29, 43),send_qty,0)) outer_wholesale_out_qty,
+		    SUM(IF(bsb.bill_type = 1335 AND bsb.biz_type IN (21, 22, 30, 29, 43),send_qty* IFNULL(ic.unit_cost,0),0)) outer_wholesale_out_cost,
+		    SUM(IF(bsb.bill_type = 1335 AND bsb.biz_type IN (21, 22, 30, 29, 43),send_qty* bsb.cost,0)) outer_wholesale_out_amount,
+		    SUM(IF(
+		    (
+		      (bsb.bill_type = 1335 AND bsb.biz_type = 3) 
+		      OR (bsb.bill_type = 1361 AND bsb.biz_type IN (7, 25)) 
+		      OR (bsb.bill_type = 2005 AND bsb.biz_type = 35) 
+		      OR (bsb.bill_type = 1371 AND buyer_no IN ${params.hqCompanyNo}) 
+		      OR (bsb.bill_type = 1333)
+		    ),send_qty,0)) outer_other_out_qty,
+		    SUM(IF(
+		    (
+		      (bsb.bill_type = 1335 AND bsb.biz_type = 3) 
+		      OR (bsb.bill_type = 1361 AND bsb.biz_type IN (7, 25)) 
+		      OR (bsb.bill_type = 2005 AND bsb.biz_type = 35) 
+		      OR (bsb.bill_type = 1371 AND buyer_no IN ${params.hqCompanyNo}) 
+		      OR (bsb.bill_type = 1333)
+		    ),send_qty* IFNULL(ic.unit_cost,0),0)) outer_other_out_cost,
+		    SUM(IF(
+		    (
+		      (bsb.bill_type = 1335 AND bsb.biz_type = 3) 
+		      OR (bsb.bill_type = 1361 AND bsb.biz_type IN (7, 25)) 
+		      OR (bsb.bill_type = 2005 AND bsb.biz_type = 35) 
+		      OR (bsb.bill_type = 1371 AND buyer_no IN ${params.hqCompanyNo}) 
+		      OR (bsb.bill_type = 1333)
+		    ),send_qty* bsb.cost,0)) outer_other_out_amount,
+		    SUM(IF(
+		    (
+			(bsb.bill_type = 1335  AND bsb.biz_type IN (2, 23, 24, 13)) 
+		        OR bsb.bill_type = 1342 
+		        OR (bsb.bill_type = 1355 AND bsb.biz_type IN (8, 10, 26))
+		    ) ,send_qty,0)) outer_within_out_qty,
+		    SUM(IF(
+		    (
+			(bsb.bill_type = 1335  AND bsb.biz_type IN (2, 23, 24, 13)) 
+		        OR bsb.bill_type = 1342 
+		        OR (bsb.bill_type = 1355 AND bsb.biz_type IN (8, 10, 26))
+		    ) ,send_qty*IFNULL(ic.unit_cost,0),0)) outer_within_out_cost,
+		    SUM(IF(
+		    (
+			(bsb.bill_type = 1335  AND bsb.biz_type IN (2, 23, 24, 13)) 
+		        OR bsb.bill_type = 1342 
+		        OR (bsb.bill_type = 1355 AND bsb.biz_type IN (8, 10, 26))
+		    ) ,send_qty*cost,0)) outer_within_out_amount,
+		    0 outer_pos_out_qty,
+		    0 outer_pos_out_cost,
+		    0 outer_pos_out_amount
+		  FROM
+		    bill_sale_balance bsb 
+		    LEFT JOIN 
+		      (SELECT 
+		        company_no,
+		        item_no,
+		        unit_cost 
+		      FROM
+		        item_cost 
+		        INNER JOIN brand ON brand.brand_no = item_cost.brand_no
+		      WHERE 1 = 1
+		        AND company_no IN ${params.companyNo}
+		        AND brand.sys_no IN ${params.brandUnitNo}
+		        AND YEAR = #{params.year}  
+		        AND MONTH = #{params.month} ) ic 
+		      ON bsb.item_no = ic.item_no AND bsb.saler_no = ic.company_no
+		  WHERE 1 = 1 
+		    AND bsb.saler_no IN ${params.companyNo} 
+		    AND bsb.brand_unit_no IN ${params.brandUnitNo}
+		    AND bsb.send_date &gt;= #{params.startDate} 
+		    AND bsb.send_date &lt;= #{params.endDate}
+		    AND (
+		      (
+		        bsb.bill_type = 1335 
+		        AND bsb.biz_type IN (21, 22, 30, 29, 43)
+		      ) 
+		      OR (
+		        bsb.bill_type = 1335 
+		        AND bsb.biz_type IN (2, 23, 24, 13)
+		      ) 
+		      OR (bsb.bill_type = 1342) 
+		      OR (
+		        bsb.bill_type = 1355 
+		        AND bsb.biz_type IN (8, 10, 26)
+		      ) 
+		      OR (
+		        bsb.bill_type = 1335 
+		        AND bsb.biz_type = 3
+		      ) 
+		      OR (
+		        bsb.bill_type = 1361 
+		        AND bsb.biz_type IN (7, 25)
+		      ) 
+		      OR (
+		        bsb.bill_type = 2005 
+		        AND bsb.biz_type = 35
+		      ) 
+		      OR (bsb.bill_type = 1371) 
+		      OR (bsb.bill_type = 1333)
+		    ) 
+		  GROUP BY bsb.saler_no,
+		    bsb.brand_unit_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    company_no,
+		    company_name,
+		    brand_unit_no,
+		    brand_unit_name,
+		    SUM(qty) out_qty,
+		    SUM(qty * unit_cost) out_cost,
+		    SUM(amount) out_amount,
+		    0 outer_transfer_out_qty,
+		    0 outer_transfer_out_cost,
+		    0 outer_transfer_out_amount,
+		    0 outer_wholesale_out_qty,
+		    0 outer_wholesale_out_cost,
+		    0 outer_wholesale_out_amount, 
+		    0 outer_other_out_qty,
+		    0 outer_other_out_cost,
+		    0 outer_other_out_amount,
+		    SUM(within_qty) outer_within_out_qty,
+		    SUM(within_cost) outer_within_out_cost,
+		    SUM(within_amount) outer_within_out_amount,
+		    SUM(pos_qty) outer_pos_out_qty,
+		    SUM(pos_cost) outer_pos_out_cost,
+		    SUM(pos_amount) outer_pos_out_amount
+		  FROM
+		    (SELECT 
+		      om.company_no,
+		      om.company_name,
+		      od.brand_unit_no,
+		      od.brand_unit_name,
+		      od.qty,
+		      od.amount,
+		      IFNULL(ic.unit_cost,0) unit_cost,
+		      IF(om.business_type = 3,od.qty,0) within_qty,
+		      IF(om.business_type = 3,od.amount,0) within_amount, 
+		      IF(om.business_type = 3,od.qty*IFNULL(ic.unit_cost,0),0) within_cost, 
+		      IF(om.business_type != 3,od.qty,0) pos_qty,
+		      IF(om.business_type != 3,od.amount,0) pos_amount, 
+		      IF(om.business_type != 3,od.qty*IFNULL(ic.unit_cost,0),0) pos_cost
+		    FROM
+		      order_main om 
+		      INNER JOIN order_dtl od 
+		        ON om.order_no = od.order_no 
+		      LEFT JOIN 
+		        (SELECT 
+		        company_no,
+		        item_no,
+		        unit_cost 
+		      FROM
+		        item_cost 
+		        INNER JOIN brand ON brand.brand_no = item_cost.brand_no
+		      WHERE 1 = 1
+		        AND company_no IN ${params.companyNo}
+		        AND brand.sys_no IN ${params.brandUnitNo}
+		        AND YEAR = #{params.year}  
+		        AND MONTH = #{params.month} ) ic 
+		      ON od.item_no = ic.item_no AND om.company_no = ic.company_no
+		    WHERE 1 = 1 
+		      AND om.company_no IN ${params.companyNo} 
+		      AND od.brand_unit_no IN ${params.brandUnitNo}
+		      AND om.out_date &gt;= #{params.startDate} 
+		      AND om.out_date &lt;= #{params.endDate}
+		      AND om.status IN ('30', '41') 
+		      AND om.business_type IN (0, 1, 2, 3, 6) 
+		      UNION
+		      ALL 
+		      SELECT 
+		        om.company_no,
+		        om.company_name,
+		        od.brand_unit_no,
+		        od.brand_unit_name,
+		        od.qty,
+		        od.amount,
+		        IFNULL(ic.unit_cost,0) unit_cost,
+		        IF(om.business_type = 3,od.qty,0) within_qty,
+		        IF(om.business_type = 3,od.amount,0) within_amount, 
+		        IF(om.business_type = 3,od.qty*IFNULL(ic.unit_cost,0),0) within_cost, 
+		        IF(om.business_type != 3,od.qty,0) pos_qty,
+		        IF(om.business_type != 3,od.amount,0) pos_amount, 
+		        IF(om.business_type != 3,od.qty*IFNULL(ic.unit_cost,0),0) pos_cost 
+		      FROM
+		        return_exchange_main om 
+		        INNER JOIN return_exchange_dtl od 
+		          ON om.business_no = od.business_no 
+		        LEFT JOIN 
+		        (SELECT 
+		        company_no,
+		        item_no,
+		        unit_cost 
+		      FROM
+		        item_cost 
+		        INNER JOIN brand ON brand.brand_no = item_cost.brand_no
+		      WHERE 1 = 1
+		        AND company_no IN ${params.companyNo}
+		        AND brand.sys_no IN ${params.brandUnitNo}
+		        AND YEAR = #{params.year} 
+		        AND MONTH = #{params.month}) ic 
+		      ON od.item_no = ic.item_no AND om.company_no = ic.company_no
+		      WHERE 1 = 1 
+		        AND om.company_no IN ${params.companyNo} 
+		        AND od.brand_unit_no IN ${params.brandUnitNo}
+		        AND om.out_date &gt;= #{params.startDate} 
+		        AND om.out_date &lt;= #{params.endDate}
+		        AND om.status IN ('30', '41') 
+		        AND om.business_type IN (0, 1, 2, 3, 6)) G 
+		    GROUP BY company_no,
+		      brand_unit_no) T 
+		  GROUP BY company_no,
+		    brand_unit_no 
+    </select>
+    
+    <select id="selectPeriodBalanceList" resultMap="BalanceDiffMap"  parameterType="map">
+		SELECT 
+		  C.company_no,
+		  C.name company_name,
+		  BU.brand_unit_no,
+		  BU.name brand_unit_name,
+		  SUM(outer_transfer_in_qty) outer_transfer_in_qty,
+		  SUM(purchase_in_qty) purchase_in_qty,
+		  SUM(purchase_return_qty) purchase_return_qty,
+		  SUM(outer_transfer_in_amount) outer_transfer_in_amount,
+		  SUM(purchase_in_amount) purchase_in_amount,
+		  SUM(purchase_return_amount) purchase_return_amount,
+		  SUM(outer_transfer_in_qty+purchase_in_qty + purchase_return_qty) all_in_qty,
+		  SUM(outer_transfer_in_amount+purchase_in_amount + purchase_in_amount) all_in_amount,
+		  -1*SUM(outer_transfer_out_qty) outer_transfer_out_qty,
+		  -1*SUM(outer_transfer_out_amount) outer_transfer_out_amount,
+		  -1*SUM(outer_transfer_out_amount) outer_transfer_out_cost,
+		  
+		  <choose>
+		  	<when test="null!=params.isPE and 'true'.toString()==params.isPE" >
+			  -1*SUM(sales_out_qty + others_out_qty) sales_out_qty,
+			  -1*SUM(sales_out_amount + others_out_amount) sales_out_amount,
+			  -1*SUM(sales_out_amount + others_out_amount) sales_out_cost,
+			  0 outer_other_out_qty,
+			  0 outer_other_out_amount,
+			  0 outer_other_out_cost,
+			 </when> 
+			<otherwise>
+			  -1*SUM(sales_out_qty) sales_out_qty,
+		  	  -1*SUM(sales_out_amount) sales_out_amount,
+		      -1*SUM(sales_out_amount) sales_out_cost,
+		      -1*SUM(others_out_qty) outer_other_out_qty,
+		      -1*SUM(others_out_amount) outer_other_out_amount,
+		      -1*SUM(others_out_amount) outer_other_out_cost,
+			</otherwise> 
+		  </choose>	
+		  
+		  -1*SUM(outer_transfer_out_qty+sales_out_qty + others_out_qty) all_out_qty,
+		  -1*SUM(outer_transfer_out_amount+sales_out_amount + others_out_amount) all_out_amount
+		FROM
+		  company_period_balance cpb 
+		  INNER JOIN company C 
+		    ON cpb.company_no = C.company_no 
+		  INNER JOIN brand B 
+		    ON cpb.brand_no = B.brand_no 
+		  INNER JOIN brand_unit BU 
+		    ON B.sys_no = BU.brand_unit_no 
+		WHERE 1 = 1 
+		  AND C.company_no IN ${params.companyNo} 
+		  AND BU.brand_unit_no IN ${params.brandUnitNo}
+		  AND YEAR = #{params.year} 
+		  AND MONTH = #{params.month}
+		GROUP BY C.company_no,
+		  BU.brand_unit_no 
+    </select>
+    
+    <select id="selectOweOffListByBill" resultMap="BalanceDiffMap"  parameterType="map">
+	    SELECT 
+			company_no,
+			company_name,
+			brand_unit_no,
+			brand_unit_name,
+			SUM(diff_qty1) this_owe_off_qty,
+			SUM(diff_qty2) pre_owe_off_out_qty,
+			SUM(diff_amount1) this_owe_off_cost,
+			SUM(diff_amount2) pre_owe_off_out_cost 
+			FROM (
+			  SELECT bill_no,sku_no,item_code,brand_unit_no,brand_unit_name,company_no,company_name,
+			IF(ABS(SUM(order_qty)) > ABS(SUM(out_qty)), SUM(order_qty) - SUM(out_qty), 0) diff_qty1,
+			IF(ABS(SUM(order_qty)) &lt; ABS(SUM(out_qty)), SUM(out_qty) - SUM(order_qty), 0) diff_qty2,
+			IF(ABS(SUM(order_qty)) > ABS(SUM(out_qty)), SUM(order_cost) - SUM(out_cost), 0) diff_amount1,
+			IF(ABS(SUM(order_qty)) &lt; ABS(SUM(out_qty)), SUM(out_cost) - SUM(order_cost), 0) diff_amount2,
+			SUM(out_qty) out_qty,SUM(order_qty) order_qty,SUM(out_cost) out_cost,SUM(order_cost) order_cost FROM (
+			
+			 SELECT bill_no,sku_no,item_code,brand_unit_no,brand_unit_name,company_no,company_name,qty order_qty,order_cost,0 out_qty, 0 out_cost FROM (
+			SELECT 
+			  od.order_no bill_no,od.sku_no,od.item_code,od.brand_unit_no,od.brand_unit_name,om.company_no,om.company_name,SUM(od.qty) qty,SUM(od.qty*IFNULL(ic.unit_cost,0)) order_cost
+			FROM
+			  order_main om 
+			  INNER JOIN order_dtl od 
+			    ON om.order_no = od.order_no 
+			  LEFT JOIN 
+			      (SELECT 
+			        company_no,
+			        item_no,
+			        unit_cost 
+			      FROM
+			        item_cost 
+			        INNER JOIN brand ON brand.brand_no = item_cost.brand_no
+			      WHERE 1 = 1
+			        AND company_no IN ${params.companyNo}
+			        AND brand.sys_no IN ${params.brandUnitNo}
+			        AND YEAR = #{params.year}  
+			        AND MONTH = #{params.month} ) ic 
+			      ON od.item_no = ic.item_no AND om.company_no = ic.company_no  
+			WHERE 1 = 1 
+			
+			  AND om.company_no IN ${params.companyNo} 
+			  AND od.brand_unit_no IN ${params.brandUnitNo}
+			  AND om.out_date &gt;= #{params.startDate} 
+			  AND om.out_date &lt;= #{params.endDate} 
+			  AND om.status IN ('30', '41') 
+			  AND om.business_type IN (0, 1, 2, 3, 6)
+			  GROUP BY od.order_no,od.sku_no
+			UNION ALL 
+			SELECT 
+			  od.business_no bill_no, od.sku_no, od.item_code, od.brand_unit_no,od.brand_unit_name,om.company_no,om.company_name,SUM(od.qty) qty,SUM(od.qty*IFNULL(ic.unit_cost,0)) order_cost
+			FROM
+			  return_exchange_main om 
+			  INNER JOIN return_exchange_dtl od 
+			    ON om.business_no = od.business_no 
+			  LEFT JOIN 
+			      (SELECT 
+			        company_no,
+			        item_no,
+			        unit_cost 
+			      FROM
+			        item_cost 
+			        INNER JOIN brand ON brand.brand_no = item_cost.brand_no
+			      WHERE 1 = 1
+			        AND company_no IN ${params.companyNo}
+			        AND brand.sys_no IN ${params.brandUnitNo}
+			        AND YEAR = #{params.year}   
+			        AND MONTH = #{params.month}  ) ic 
+			      ON od.item_no = ic.item_no AND om.company_no = ic.company_no    
+			WHERE 1 = 1 
+			
+			  AND om.company_no IN ${params.companyNo} 
+			  AND od.brand_unit_no IN ${params.brandUnitNo}
+			  AND om.out_date &gt;= #{params.startDate} 
+			  AND om.out_date &lt;= #{params.endDate} 
+			  AND om.status IN ('30', '41') 
+			  AND om.business_type IN (0, 1, 2, 3, 6)
+			  GROUP BY od.business_no,od.sku_no) T
+			  UNION ALL
+			  SELECT bill.ref_bill_no bill_no,dtl.sku_no, dtl.item_code,brand_unit.brand_unit_no,brand_unit.name brand_unit_name,C.company_no,C.name company_name, 0 order_qty,0 order_cost,
+			  SUM(IF(bill.bill_type = 1374,-1*dtl.send_out_qty,dtl.send_out_qty)) out_qty,
+			  SUM(IF(bill.bill_type = 1374,-1*dtl.send_out_qty*IFNULL(ic.unit_cost,0),dtl.send_out_qty*IFNULL(ic.unit_cost,0))) out_cost FROM bill_sale_out bill
+			  INNER JOIN bill_sale_out_dtl dtl ON bill.bill_no = dtl.bill_no
+			  INNER JOIN brand ON brand.brand_no = dtl.brand_no
+			  INNER JOIN brand_unit ON brand_unit.brand_unit_no = brand.sys_no
+			  INNER JOIN order_unit ON order_unit.order_unit_no = dtl.order_unit_no
+			  INNER JOIN company C ON C.company_no = order_unit.company_no
+			  LEFT JOIN 
+			      (SELECT 
+			        company_no,
+			        item_no,
+			        unit_cost 
+			      FROM
+			        item_cost 
+			        INNER JOIN brand ON brand.brand_no = item_cost.brand_no
+			      WHERE 1 = 1
+			        AND company_no IN ${params.companyNo}
+			        AND brand.sys_no IN ${params.brandUnitNo}
+			        AND YEAR = #{params.year}   
+			        AND MONTH = #{params.month}  ) ic 
+			      ON dtl.item_no = ic.item_no AND order_unit.company_no = ic.company_no   
+			  WHERE 1 = 1
+			  
+			  AND C.company_no IN ${params.companyNo} 
+			  AND brand_unit.brand_unit_no IN ${params.brandUnitNo}
+			  AND bill.sale_date &gt;= #{params.startDate} 
+			  AND bill.sale_date &lt;= #{params.endDate} 
+			  AND (bill_type = '1374' OR (bill_type = 1335 AND biz_type &gt;= 50))
+			  GROUP BY bill.ref_bill_no,dtl.sku_no) G
+			  GROUP BY bill_no,sku_no HAVING SUM(order_qty) != SUM(out_qty)  )T
+			 GROUP BY company_no,brand_unit_no
+    </select>
+    
+    <select id="selectOweOffList" resultMap="BalanceDiffMap"  parameterType="map">
+	    SELECT 
+		  C.company_no,
+		  C.name company_name,
+		  BU.brand_unit_no,
+		  BU.name brand_unit_name,
+		  SUM(bos.sum_owe_qty) this_owe_off_qty,
+		  SUM(bos.sum_owe_cost) this_owe_off_cost
+		FROM 
+		`back_order_sales` bos 
+		INNER JOIN company C ON C.company_no = bos.company_no
+		INNER JOIN brand ON brand.brand_no = bos.brand_no
+		INNER JOIN brand_unit BU ON BU.brand_unit_no = brand.sys_no
+		WHERE 1 = 1 
+		AND C.company_no IN ${params.companyNo}
+		AND BU.brand_unit_no IN ${params.brandUnitNo}
+		AND YEAR = #{params.year} 
+		AND MONTH = #{params.month} 
+		GROUP BY C.company_no,BU.brand_unit_no
+    </select>  
+</mapper>

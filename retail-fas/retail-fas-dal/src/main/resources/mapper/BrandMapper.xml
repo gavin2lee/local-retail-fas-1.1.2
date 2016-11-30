@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BrandMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Brand" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="en_name" property="enName" jdbcType="VARCHAR" />
+    <result column="en_short_name" property="enShortName" jdbcType="VARCHAR" />
+    <result column="opcode" property="opcode" jdbcType="CHAR" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="belonger" property="belonger" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="parent_brand_id" property="parentBrandId" jdbcType="INTEGER" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, brand_no, name, en_name, en_short_name, opcode, category, belonger, status, sys_no, 
+    search_code, parent_brand_id, logo_url, create_user, create_time, update_user, update_time, 
+    remark
+  </sql>
+  <sql id="condition" >
+    -- AND @brand_no
+    /*belonger*/
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND brand_no = #{params.brandNo}
+      </if>
+      <if test="null!=params.name and ''!=params.name" >
+        AND name LIKE '%${params.name}%'
+      </if>
+      <if test="null!=params.brandName and ''!=params.brandName" >
+        AND name LIKE '%${params.brandName}%'
+      </if>
+      <if test="null!=params.sysNo and ''!=params.sysNo" >
+        AND sys_no LIKE '%${params.sysNo}%'
+      </if>
+      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+        AND sys_no = #{params.brandUnitNo}
+      </if>
+      <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (UPPER(brand_no) LIKE UPPER(CONCAT(#{params.q},'%')) OR UPPER(name) LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+	  <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(brand_no) IN ${params.multiq} OR UPPER(name) IN ${params.multiq} ) 
+	  </if>
+	  <if test="null != params.multiBrandUnitNo and '' != params.multiBrandUnitNo">
+			AND sys_no in ${params.multiBrandUnitNo}
+			 
+	  </if>
+      <if test="null != params.brandUnitNos and '' != params.brandUnitNos">
+			AND sys_no in 
+			<foreach collection="params.brandUnitNos" item="item" separator="," open="(" close=")" index=""> 
+				#{item}  
+			</foreach>  
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM brand
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM brand WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM brand WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="findAllBrandWithoutPermission" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM brand
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM brand WHERE 1=1 
+    <include refid="condition" />
+    ORDER BY sys_no ASC
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM brand
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.Brand" >
+    DELETE FROM brand
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.Brand" >
+    INSERT INTO brand (id, brand_no, name, 
+      en_name, en_short_name, opcode, 
+      category, belonger, status, 
+      sys_no, search_code, parent_brand_id, 
+      logo_url, create_user, create_time, 
+      update_user, update_time, remark
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{brandNo,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{enName,jdbcType=VARCHAR}, #{enShortName,jdbcType=VARCHAR}, #{opcode,jdbcType=CHAR}, 
+      #{category,jdbcType=VARCHAR}, #{belonger,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{sysNo,jdbcType=VARCHAR}, #{searchCode,jdbcType=VARCHAR}, #{parentBrandId,jdbcType=INTEGER}, 
+      #{logoUrl,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.Brand" >
+    INSERT INTO brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="enName != null" >
+        en_name,
+      </if>
+      <if test="enShortName != null" >
+        en_short_name,
+      </if>
+      <if test="opcode != null" >
+        opcode,
+      </if>
+      <if test="category != null" >
+        category,
+      </if>
+      <if test="belonger != null" >
+        belonger,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="sysNo != null" >
+        sys_no,
+      </if>
+      <if test="searchCode != null" >
+        search_code,
+      </if>
+      <if test="parentBrandId != null" >
+        parent_brand_id,
+      </if>
+      <if test="logoUrl != null" >
+        logo_url,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null" >
+        #{enName,jdbcType=VARCHAR},
+      </if>
+      <if test="enShortName != null" >
+        #{enShortName,jdbcType=VARCHAR},
+      </if>
+      <if test="opcode != null" >
+        #{opcode,jdbcType=CHAR},
+      </if>
+      <if test="category != null" >
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="belonger != null" >
+        #{belonger,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sysNo != null" >
+        #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="searchCode != null" >
+        #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentBrandId != null" >
+        #{parentBrandId,jdbcType=INTEGER},
+      </if>
+      <if test="logoUrl != null" >
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.Brand" >
+    UPDATE brand
+    <set >
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null" >
+        en_name = #{enName,jdbcType=VARCHAR},
+      </if>
+      <if test="enShortName != null" >
+        en_short_name = #{enShortName,jdbcType=VARCHAR},
+      </if>
+      <if test="opcode != null" >
+        opcode = #{opcode,jdbcType=CHAR},
+      </if>
+      <if test="category != null" >
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="belonger != null" >
+        belonger = #{belonger,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sysNo != null" >
+        sys_no = #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="searchCode != null" >
+        search_code = #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentBrandId != null" >
+        parent_brand_id = #{parentBrandId,jdbcType=INTEGER},
+      </if>
+      <if test="logoUrl != null" >
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.Brand" >
+    UPDATE brand
+    SET brand_no = #{brandNo,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      en_name = #{enName,jdbcType=VARCHAR},
+      en_short_name = #{enShortName,jdbcType=VARCHAR},
+      opcode = #{opcode,jdbcType=CHAR},
+      category = #{category,jdbcType=VARCHAR},
+      belonger = #{belonger,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      sys_no = #{sysNo,jdbcType=VARCHAR},
+      search_code = #{searchCode,jdbcType=VARCHAR},
+      parent_brand_id = #{parentBrandId,jdbcType=INTEGER},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="queryBrandNameByNo" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT name FROM brand WHERE brand_no=#{brandNo}
+  </select>
+  
+  <select id="selectBrandWithBrandUnit" resultMap="BaseResultMap" parameterType="map">
+	SELECT bu.`brand_unit_no`,bu.`name` AS brand_unit_name,b.`brand_no`,b.`name` AS name
+	FROM brand_unit bu 
+		JOIN brand b ON bu.`brand_unit_no` = b.`sys_no`
+	WHERE 1=1
+		-- AND @brand_no
+		<if test="null!=params" >
+			<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+			${params.queryCondition}
+			</if>
+			<if test="null!=params.status and ''!=params.status" >
+				AND bu.`status` = #{params.status} AND b.`status` = #{params.status}
+			</if>
+		</if>
+	ORDER BY b.`brand_no`
+  </select>
+</mapper>

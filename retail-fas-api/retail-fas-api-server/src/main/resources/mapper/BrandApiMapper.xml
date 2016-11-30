@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.BrandApiMapper" >
+ <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Brand" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="en_name" property="enName" jdbcType="VARCHAR" />
+    <result column="en_short_name" property="enShortName" jdbcType="VARCHAR" />
+    <result column="opcode" property="opcode" jdbcType="CHAR" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="belonger" property="belonger" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="parent_brand_id" property="parentBrandId" jdbcType="INTEGER" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    b.id, b.brand_no, b.name, b.en_name, b.en_short_name, b.opcode, b.category, b.belonger, b.status, b.sys_no, 
+    b.search_code, b.parent_brand_id, b.logo_url, b.create_user, b.create_time, b.update_user, b.update_time, 
+    b.remark, bu.name AS brand_unit_name
+  </sql>
+  <select id="findByBrandNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM brand AS b
+     LEFT JOIN brand_unit AS bu ON b.sys_no = bu.brand_unit_no
+     WHERE 1=1 
+    <if test="null!=brandNo and ''!=brandNo" >
+        AND b.brand_no = UPPER(#{brandNo})
+      </if>
+  </select>
+</mapper>

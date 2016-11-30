@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.RegionCostMaintainMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.RegionCostMaintain" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="effective_time" property="effectiveTime" jdbcType="DATE" />
+    <result column="add_rule_no" property="addRuleNo" jdbcType="VARCHAR" />
+    <result column="add_basis" property="addBasis" jdbcType="CHAR" />
+    <result column="add_price" property="addPrice" jdbcType="DECIMAL" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="add_discount" property="addDiscount" jdbcType="DECIMAL" />
+    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    <result column="firstNew" property="firstNew" jdbcType="CHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, zone_no, zone_name, item_no, item_code, item_name, brand_no, brand_name, supplier_no, 
+    supplier_name, effective_time, add_rule_no, add_basis, add_price, add_discount, discount_rate, 
+    region_cost, create_user, create_time, update_user, update_time, sharding_flag,production_cost,is_first,
+    (SELECT LE.NAME FROM ITEM INNER JOIN LOOKUP_ENTRY LE WHERE ITEM.ITEM_NO = region_cost_maintain.ITEM_NO AND ITEM.YEARS = LE.CODE LIMIT 1) year,
+    (SELECT LE.NAME FROM ITEM INNER JOIN LOOKUP_ENTRY LE WHERE ITEM.ITEM_NO = region_cost_maintain.ITEM_NO AND ITEM.sell_season = LE.CODE LIMIT 1) season,
+    		IF(factory_price IS NOT NULL, factory_price,(SELECT 
+		      pp.factory_price 
+		    FROM
+		      purchase_price PP 
+		    WHERE 1 = 1 
+		      AND PP.effective_date &lt;= region_cost_maintain.effective_time 
+		      AND PP.item_no = region_cost_maintain.item_no
+		      AND PP.supplier_no = region_cost_maintain.supplier_no
+		    ORDER BY item_no DESC,
+		      STATUS DESC,
+		      effective_date DESC,
+		      create_time DESC
+		      LIMIT 1)) as factory_price,
+    	   IF(headquarter_cost IS NOT NULL, headquarter_cost,(SELECT 
+		      pp.headquarter_cost 
+		    FROM
+		      headquarter_cost_maintain PP 
+		    WHERE 1 = 1 
+		      AND PP.effective_time &lt;= region_cost_maintain.effective_time 
+		      AND PP.item_no = region_cost_maintain.item_no
+		    ORDER BY PP.item_no DESC,
+		      PP.effective_time DESC,
+		      PP.create_time DESC
+		      LIMIT 1)) as headquarter_cost,
+      (SELECT CASE WHEN COUNT(*) > 0 THEN '否' ELSE '是' END FROM region_cost_maintain rr WHERE rr.item_no=region_cost_maintain.`item_no` AND rr.zone_no=region_cost_maintain.`zone_no`  AND  rr.effective_time &lt; region_cost_maintain.`effective_time`) as firstNew 
+  </sql>
+  <sql id="Base_Column_List_Region" >
+    id, zone_no, zone_name, item_no, item_code, item_name, brand_no, brand_name, supplier_no, 
+    supplier_name, effective_time, add_rule_no, add_basis, add_price, add_discount, discount_rate, 
+    region_cost, create_user, create_time, update_user, update_time, sharding_flag,production_cost,is_first,
+    (select tag_price 
+    	from 
+    		(select item_no,organ_type,organ_id,organ_name,quotation_tactics,tag_price from price_quotation_list where organ_type=0 and quotation_tactics=0) 
+    		pql where pql.item_no=region_cost_maintain.item_no) as tag_price,
+    (select tag_price 
+    	from 
+    		(select item_no,organ_type,organ_id,organ_name,quotation_tactics,tag_price from price_quotation_list where organ_type=1 and quotation_tactics=1) 
+    		pql where pql.item_no=region_cost_maintain.item_no and region_cost_maintain.zone_no=pql.organ_id) as headquarter_cost
+  </sql>
+  <sql id="condition" >
+  	-- AND @brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.zoneNo and ''!=params.zoneNo">
+       	   and zone_no = #{params.zoneNo,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo">
+       	   and brand_no IN ${params.multiBrandNo}
+      </if>
+      <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo">
+       	   and brand_no IN (SELECT BRAND_NO FROM BRAND WHERE SYS_NO IN ${params.multiBrandUnitNo})
+      </if>
+      <if test="null!=params.multiPriceZoneNo and ''!=params.multiPriceZoneNo">
+       	   and zone_no IN ${params.multiPriceZoneNo}
+      </if>
+      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo">
+       	   and EXISTS(SELECT 1 FROM item WHERE item.item_no = region_cost_maintain.item_no AND item.root_category_no IN ${params.multiCategoryNo})
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo">
+       	   and item_no = #{params.itemNo,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.itemSql and ''!=params.itemSql" >
+		AND item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+	  </if>
+      <if test="null!=params.itemCode and ''!=params.itemCode">
+       	   and item_code = #{params.itemCode,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.addRuleNo and ''!=params.addRuleNo">
+       	   and add_rule_no = #{params.addRuleNo,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.effectiveTime and ''!=params.effectiveTime">
+       	   and effective_time = #{params.effectiveTime}
+      </if>
+      <if test="null!=params.effectiveTimeStart and ''!=params.effectiveTimeStart">
+       	   and effective_time &gt;= #{params.effectiveTimeStart}
+      </if>
+      <if test="null!=params.effectiveTimeEnd and ''!=params.effectiveTimeEnd">
+       	   and effective_time &lt;= #{params.effectiveTimeEnd}
+      </if>
+      <if test="null!=params.zoneNos and ''!=params.zoneNos">
+       	   and zone_no in 
+       	   <foreach collection="params.zoneNos" index="index" item="zoneNos" open="(" separator="," close=")">
+					#{zoneNos,jdbcType=VARCHAR}
+		   </foreach>
+      </if>
+       <if test="null!=params.firstNew and ''!=params.firstNew">
+       	 	and (SELECT COUNT(*) FROM region_cost_maintain rcm WHERE rcm.item_no=region_cost_maintain.`item_no` AND rcm.zone_no=region_cost_maintain.`zone_no` AND  rcm.effective_time &lt; region_cost_maintain.`effective_time`)
+       		<if test="0==params.firstNew">
+       			 = 0 
+       		</if>
+       		<if test="1==params.firstNew">
+       			&gt; 0
+       		</if>
+      </if>
+      <if test="null!=params.createTimeStart and ''!=params.createTimeStart">
+       	   and create_time &gt;= '${params.createTimeStart} 00:00:00'
+      </if>
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd">
+       	   and create_time &lt;= '${params.createTimeEnd}  23:59:59'
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo">
+       	   and brand_no = #{params.brandNo,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo">
+       	   and item_no IN(SELECT it.item_no FROM item it WHERE it.root_category_no=#{params.categoryNo})
+      </if>
+      <if test="null!=params.updateId and ''!=params.updateId">
+       	   and id &lt;&gt; #{params.updateId}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM region_cost_maintain
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM region_cost_maintain WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM region_cost_maintain WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField">
+		ORDER BY create_time DESC
+	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+   <select id="selectRegionCostReport" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List_Region" />
+     FROM region_cost_maintain WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField">
+		ORDER BY create_time DESC
+	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM region_cost_maintain WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM region_cost_maintain
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.RegionCostMaintain" >
+    DELETE FROM region_cost_maintain
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.RegionCostMaintain" >
+    INSERT INTO region_cost_maintain (id, zone_no, zone_name, 
+      item_no, item_code, item_name, 
+      brand_no, brand_name, supplier_no, 
+      supplier_name, effective_time, add_rule_no, 
+      add_basis, add_price, add_discount, 
+      discount_rate, region_cost, create_user, 
+      create_time, update_user, update_time, 
+      sharding_flag,is_first,production_cost,factory_price,tag_price,headquarter_cost)
+    VALUES (#{id,jdbcType=CHAR}, #{zoneNo,jdbcType=CHAR}, #{zoneName,jdbcType=VARCHAR}, 
+      #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, #{supplierNo,jdbcType=CHAR}, 
+      #{supplierName,jdbcType=VARCHAR}, #{effectiveTime,jdbcType=DATE}, #{addRuleNo,jdbcType=VARCHAR}, 
+      #{addBasis,jdbcType=CHAR}, #{addPrice,jdbcType=DECIMAL}, #{addDiscount,jdbcType=DECIMAL}, 
+      #{discountRate,jdbcType=DECIMAL}, #{regionCost,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{shardingFlag,jdbcType=CHAR},#{isFirst,jdbcType=INTEGER},#{productionCost,jdbcType=DECIMAL},#{factoryPrice,jdbcType=DECIMAL},#{tagPrice,jdbcType=DECIMAL},#{headquarterCost,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.RegionCostMaintain" >
+    INSERT INTO region_cost_maintain
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="zoneName != null" >
+        zone_name,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="effectiveTime != null" >
+        effective_time,
+      </if>
+      <if test="addRuleNo != null" >
+        add_rule_no,
+      </if>
+      <if test="addBasis != null" >
+        add_basis,
+      </if>
+      <if test="addPrice != null" >
+        add_price,
+      </if>
+      <if test="addDiscount != null" >
+        add_discount,
+      </if>
+      <if test="discountRate != null" >
+        discount_rate,
+      </if>
+      <if test="regionCost != null" >
+        region_cost,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+      <if test="isFirst != null" >
+        is_first,
+      </if>
+      <if test="productionCost != null" >
+        production_cost,
+      </if>
+      <if test="factoryPrice != null" >
+        factory_price,
+      </if>
+      <if test="tagPrice != null" >
+        tag_price,
+      </if>
+      <if test="headquarterCost != null" >
+        headquarter_cost,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveTime != null" >
+        #{effectiveTime,jdbcType=DATE},
+      </if>
+      <if test="addRuleNo != null" >
+        #{addRuleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="addBasis != null" >
+        #{addBasis,jdbcType=CHAR},
+      </if>
+      <if test="addPrice != null" >
+        #{addPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="addDiscount != null" >
+        #{addDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate != null" >
+        #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCost != null" >
+        #{regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+      <if test="isFirst != null" >
+        #{isFirst,jdbcType=INTEGER},
+      </if>
+      <if test="productionCost != null" >
+        #{productionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="factoryPrice != null" >
+        #{factoryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tagPrice != null" >
+       #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="headquarterCost != null" >
+       #{headquarterCost,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.RegionCostMaintain" >
+    UPDATE region_cost_maintain
+    <set >
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveTime != null" >
+        effective_time = #{effectiveTime,jdbcType=DATE},
+      </if>
+      <if test="addRuleNo != null" >
+        add_rule_no = #{addRuleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="addBasis != null" >
+        add_basis = #{addBasis,jdbcType=CHAR},
+      </if>
+      <if test="addPrice != null" >
+        add_price = #{addPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="addPrice == null" >
+        add_price = #{addPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="addDiscount != null" >
+        add_discount = #{addDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="addDiscount == null" >
+        add_discount = #{addDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate != null" >
+        discount_rate = #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate == null" >
+        discount_rate = #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCost != null" >
+        region_cost = #{regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isFirst != null" >
+        is_first = #{isFirst,jdbcType=INTEGER},
+      </if>
+      <if test="productionCost != null" >
+        production_cost = #{productionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="factoryPrice != null" >
+        factory_price = #{factoryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tagPrice != null" >
+        tag_price = #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="headquarterCost != null" >
+        headquarter_cost = #{headquarterCost,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.RegionCostMaintain" >
+    UPDATE region_cost_maintain
+    SET zone_no = #{zoneNo,jdbcType=CHAR},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      effective_time = #{effectiveTime,jdbcType=DATE},
+      add_rule_no = #{addRuleNo,jdbcType=VARCHAR},
+      add_basis = #{addBasis,jdbcType=CHAR},
+      add_price = #{addPrice,jdbcType=DECIMAL},
+      add_discount = #{addDiscount,jdbcType=DECIMAL},
+      discount_rate = #{discountRate,jdbcType=DECIMAL},
+      region_cost = #{regionCost,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_first = #{isFirst,jdbcType=INTEGER},
+      production_cost = #{productionCost,jdbcType=DECIMAL},
+      factory_price = #{factoryPrice,jdbcType=DECIMAL},
+      tag_price = #{tagPrice,jdbcType=DECIMAL},
+      headquarter_cost = #{headquarterCost,jdbcType=DECIMAL}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <select id="findRegionCost" parameterType="map" resultType="java.math.BigDecimal">
+		SELECT region_cost FROM region_cost_maintain  
+			WHERE 1=1 
+			 <!-- AND @brand_no -->
+			 <!-- AND @zone_no -->
+			 <if test="null!=params.itemNo and ''!=params.itemNo" >
+        		  and item_no = #{params.itemNo} 
+     		 </if>
+     		 <if test="null!=params.zoneNo and ''!=params.zoneNo" >
+        		  and zone_no = #{params.zoneNo} 
+     		 </if>
+     		 <if test="null!=params.effectiveDate and ''!=params.effectiveDate" >
+        		  and effective_time &lt;= #{params.effectiveDate,jdbcType=DATE}
+     		 </if>
+			 order by effective_time desc limit 0,1
+	</select>
+	
+	<select id="findZoneRegionCost" parameterType="map" resultMap="BaseResultMap">
+		SELECT zone_name,
+			   (SELECT 
+			   	region_cost FROM region_cost_maintain rcm 
+				   	WHERE 
+				   		rcm.zone_no=region_cost_maintain.`zone_no` AND rcm.item_no=region_cost_maintain.`item_no` 
+				   		 <if test="null!=params.effectiveDate and ''!=params.effectiveDate" >
+			        		  and rcm.effective_time &lt;= #{params.effectiveDate,jdbcType=DATE}
+			     		 </if>
+				   		ORDER BY effective_time DESC LIMIT 0,1) AS region_cost
+			   FROM region_cost_maintain
+			WHERE 1=1 
+			 <if test="null!=params.itemNo and ''!=params.itemNo" >
+        		  and item_no = #{params.itemNo} 
+     		 </if>
+     		
+			 GROUP BY zone_no,item_no   
+	</select>
+	
+	<select id="getRegionCost" resultMap="BaseResultMap" parameterType="map" >
+		SELECT 
+			id, zone_no, zone_name, item_no, item_code, item_name, brand_no, brand_name, supplier_no, 
+			supplier_name, effective_time, add_rule_no, add_basis, add_price, add_discount, discount_rate, 
+			region_cost, create_user, create_time, update_user, update_time, sharding_flag
+		FROM region_cost_maintain
+		WHERE 1=1
+			AND item_no = #{params.itemNo, jdbcType=CHAR}
+			AND effective_time &lt;= #{params.date,jdbcType=DATE}
+			AND zone_no = #{params.zoneNo, jdbcType=CHAR}
+		ORDER BY effective_time DESC LIMIT 1
+	</select>
+	
+	<select id="selectItemByRuleNo" resultMap="BaseResultMap" parameterType="map">
+    SELECT 
+	  * 
+	FROM
+	  (SELECT 
+	    it.item_no,
+	    it.code item_code,
+	    it.name item_name,
+	    it.brand_no,
+	    b.name brand_name,
+	    it.supplier_no,
+	    sgr.supplier_name,
+	    hpr.add_rule_no,
+	    hpr.add_basis,
+	    hpr.add_discount,
+	    hpr.add_price,
+	    hpr.discount_rate,
+	    (SELECT 
+	      factory_price 
+	    FROM
+	      purchase_price pp 
+	    WHERE pp.item_no = it.item_no 
+	      AND pp.status = 100
+	      LIMIT 1) factory_price,
+	    (SELECT 
+	      tag_price 
+	    FROM
+	      price_quotation_list pp 
+	    WHERE pp.item_no = it.item_no 
+	      AND pp.organ_id = '0000' 
+	      AND pp.quotation_tactics = 0
+	      LIMIT 1) tag_price,
+	    (SELECT 
+	      pp.headquarter_cost 
+	    FROM
+	      headquarter_cost_maintain PP 
+	    WHERE 1 = 1 
+	      AND PP.item_no = it.item_no
+	    ORDER BY PP.effective_time DESC
+	      LIMIT 1) AS headquarter_cost,  
+	    IF(
+	      add_basis = 1,
+	      (SELECT 
+	        IF(
+	          hpr.add_price IS NOT NULL,
+	          pp.factory_price + hpr.add_price,
+	          IF(
+	            hpr.add_discount IS NOT NULL,
+	            pp.factory_price * hpr.add_discount,
+	            IF(
+	              hpr.discount_rate IS NOT NULL,
+	              pp.factory_price * hpr.discount_rate,
+	              NULL
+	            )
+	          )
+	        ) 
+	      FROM
+	        purchase_price pp 
+	      WHERE pp.item_no = it.item_no 
+	        AND pp.status = 100 
+	      LIMIT 1),
+	      IF(
+	        add_basis = 2,
+	        ROUND((SELECT 
+	          IF(
+	            hpr.add_price IS NOT NULL,
+	            pp.tag_price + hpr.add_price,
+	            IF(
+	              hpr.add_discount IS NOT NULL,
+	              pp.tag_price * hpr.add_discount,
+	              IF(
+	                hpr.discount_rate IS NOT NULL,
+	                pp.tag_price * hpr.discount_rate,
+	                NULL
+	              )
+	            )
+	          ) 
+	        FROM
+	          price_quotation_list pp 
+	        WHERE pp.item_no = it.item_no 
+	          AND pp.organ_id = '0000' 
+	          AND pp.quotation_tactics = 0 
+	        LIMIT 1),0),
+	        IF(
+	          add_basis = 3,
+	          (SELECT 
+	            IF(
+	              hpr.add_price IS NOT NULL,
+	              pp.headquarter_cost + hpr.add_price,
+	              IF(
+	                hpr.add_discount IS NOT NULL,
+	                pp.headquarter_cost * hpr.add_discount,
+	                IF(
+	                  hpr.discount_rate IS NOT NULL,
+	                  pp.headquarter_cost * hpr.discount_rate,
+	                  NULL
+	                )
+	              )
+	            ) 
+	          FROM
+	            headquarter_cost_maintain pp 
+	          WHERE pp.item_no = it.item_no 
+	            ORDER BY PP.effective_time DESC	
+	          LIMIT 1),
+	          NULL
+	        )
+	      )
+	    ) region_cost 
+	  FROM
+	    item it 
+	    INNER JOIN supplier_group_rel sgr 
+	      ON it.supplier_no = sgr.supplier_no 
+	    INNER JOIN settle_category_dtl scd 
+	      ON it.root_category_no = scd.category_no 
+	    INNER JOIN brand b 
+	      ON it.brand_no = b.brand_no 
+	    LEFT JOIN `settle_new_style_dtl` snsd 
+	      ON it.`years` = snsd.`year_code` 
+	      AND (
+	        it.`sell_season` = snsd.`season_no` 
+	        OR snsd.season_no = 'ALL'
+	      ) 
+	    INNER JOIN region_price_rule hpr 
+	      ON FIND_IN_SET(
+	        sgr.group_no,
+	        hpr.supplier_group_no
+	      ) 
+	      AND FIND_IN_SET(
+	        scd.settle_category_no,
+	        hpr.category_no
+	      ) 
+	      AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+	      AND (
+	        (
+	          hpr.style_type = snsd.style_no 
+	          AND hpr.new_style_flag = 1
+	        ) 
+	        OR (
+	          hpr.new_style_flag = 0 
+	          AND FIND_IN_SET(it.years, hpr.year_code) 
+	          AND (
+	            hpr.season = it.sell_season 
+	            OR hpr.season = 'ALL'
+	          )
+	        )
+	      ) 
+	      AND (
+	        FIND_IN_SET(
+	          LEFT(it.category_no, 4),
+	          hpr.two_level_category_no
+	        ) 
+	        OR (
+	          hpr.two_level_category_no = '' 
+	          OR hpr.two_level_category_no IS NULL
+	        )
+	      ) 
+	  WHERE 1 = 1 
+	    AND hpr.add_rule_no = #{addRuleNo}
+		AND FIND_IN_SET(#{zoneNo}, hpr.zone_no)
+		) G 
+		WHERE G.region_cost IS NOT NULL 
+		  LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.SettlePathDtlApiMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.model.SettlePathDtlModel" >
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="financial_basis" property="financialBasis" jdbcType="VARCHAR" />
+    <result column="financial_basis_text" property="financialBasisText" jdbcType="VARCHAR" />
+    <result column="path_order" property="pathOrder" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, path_no, company_no, company_name, financial_basis, financial_basis_text, path_order
+  </sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByPathNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  	SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_path_dtl WHERE 1=1 
+     <if test="null!=pathNo and ''!=pathNo" >
+        AND path_no = #{pathNo,jdbcType=CHAR}
+     </if>
+    ORDER BY path_order ASC
+  </select>
+  
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.SelfShopBankInfoMapper" >
+  
+  <resultMap type="cn.wonhigh.retail.fas.api.model.ShopBankAccountModel" id="BaseShopBankInfo">
+	<result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+	<result column="terminal_number" property="terminalNo" jdbcType="VARCHAR" />
+    <result column="credit_card_account" property="creditCardAccount" jdbcType="VARCHAR" />
+    <result column="deposit_account" property="depositAccount" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getShopBankInfo" resultMap="BaseShopBankInfo" >
+    select shop_no,terminal_number,credit_card_account,deposit_account from self_shop_bank_info where shop_no = #{shopNo};
+  </select>
+  
+  <select id="getShopTerminalAccountInfo" resultMap="BaseShopBankInfo" >
+    SELECT shop_no,terminal_number,credit_card_account FROM self_shop_terminal_account where 1=1 and status = 0 and shop_no = #{shopNo};
+  </select>
+  
+  <select id="getShopDepositAccountInfo" resultMap="BaseShopBankInfo" >
+    SELECT shop_no,deposit_account FROM self_shop_deposit_account where 1=1 and status = 0 and shop_no = #{shopNo};
+  </select>
+  
+</mapper>

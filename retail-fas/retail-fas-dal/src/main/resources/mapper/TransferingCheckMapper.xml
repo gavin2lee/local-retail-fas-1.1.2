@@ -1,0 +1,1073 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.TransferingCheckMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.TransferingCheckDto" >
+  	<id column="id" property="id" jdbcType="CHAR" />  
+	<result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="CHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+    <result column="yearsName" property="yearsName" jdbcType="CHAR" />
+    <result column="seasonName" property="seasonName" jdbcType="CHAR" />
+    <result column="orderfromName" property="orderfromName" jdbcType="CHAR" />
+    <result column="genderName" property="genderName" jdbcType="CHAR" />
+    <result column="two_level_category_no"   property="twoLevelCategoryNo" jdbcType="CHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="currMonSenNum" property="currMonSenNum" jdbcType="DECIMAL" />
+  	<result column="currMonSenRMB" property="currMonSenRMB" jdbcType="INTEGER" />
+    <result column="currMonRecNum" property="currMonRecNum" jdbcType="DECIMAL" />
+  	<result column="currMonRecRMB" property="currMonRecRMB" jdbcType="INTEGER" />
+    <result column="nextMonRecNum" property="nextMonRecNum" jdbcType="DECIMAL" />
+    <result column="nextMonRecRMB" property="nextMonRecRMB" jdbcType="INTEGER" />
+    <result column="currMonYetRecNum" property="currMonYetRecNum" jdbcType="DECIMAL" />
+    <result column="currMonYetRecRMB" property="currMonYetRecRMB" jdbcType="INTEGER" />
+    <result column="currMonDiffNum" property="currMonDiffNum" jdbcType="DECIMAL" />
+    <result column="currMonDiffRMB" property="currMonDiffRMB" jdbcType="INTEGER" />
+    <result column="lastMonSenNum" property="lastMonSenNum" jdbcType="DECIMAL" />
+    <result column="lastMonSenRMB" property="lastMonSenRMB" jdbcType="INTEGER" />
+    <result column="lastMonLastRecNum" property="lastMonLastRecNum" jdbcType="DECIMAL" />
+    <result column="lastMonLastRecRMB" property="lastMonLastRecRMB" jdbcType="INTEGER" />
+    <result column="lastMonRecNum" property="lastMonRecNum" jdbcType="DECIMAL" />
+    <result column="lastMonRecRMB" property="lastMonRecRMB" jdbcType="INTEGER" />
+    <result column="lastMonYetRecNum" property="lastMonYetRecNum" jdbcType="DECIMAL" />
+    <result column="lastMonYetRecRMB" property="lastMonYetRecRMB" jdbcType="INTEGER" />
+    <result column="lastMonDiffNum" property="lastMonDiffNum" jdbcType="DECIMAL" />
+    <result column="lastMonDiffRMB" property="lastMonDiffRMB" jdbcType="INTEGER" />
+    <result column="balance_type_name" property="balanceTypeName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 查询条件 -->
+  <sql id="condition" >
+    <if test="null!=params" >
+      <!-- 公司权限控制 -->
+      <if test="(null!=params.salerNo and ''!=params.salerNo) and (''==params.buyerNo or null==params.buyerNo)" >
+          AND saler_no = #{params.salerNo}
+      </if>  
+	  <if test="(null!=params.buyerNo and ''!=params.buyerNo) and (''==params.salerNo or null==params.salerNo)" >
+	      AND buyer_no = #{params.buyerNo}
+      </if>   
+      <if test="(null==params.buyerNo or ''==params.buyerNo) and (''==params.salerNo or null==params.salerNo)" >
+          -- AND @company_no!buyer_no
+      </if> 
+      <if test="(null!=params.buyerNo and ''!=params.buyerNo) and (''!=params.salerNo and null!=params.salerNo)" >
+          AND buyer_no = #{params.buyerNo}
+          AND saler_no = #{params.salerNo}
+      </if>   
+      
+      <if test="null!=params.organNo and ''!=params.organNo" >
+        AND organ_no in  ${params.organNo}
+      </if>     
+       <if test="null!=params.organNoFrom and ''!=params.organNoFrom" >
+        AND organ_no_from in ${params.organNoFrom}
+      </if> 
+      <if test="null!=params.orderUnitNoFrom and ''!=params.orderUnitNoFrom" >
+        AND order_unit_no_from in ${params.orderUnitNoFrom}
+      </if> 
+      <if test="null!=params.orderUnitNo and ''!=params.orderUnitNo" >
+        AND order_unit_no in ${params.orderUnitNo}
+      </if> 
+	  <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND brand_no in ${params.brandNo}
+      </if>   
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+        AND LEFT(CATEGORY_NO, 2) in ${params.categoryNo}
+      </if>
+      <if test="null!=params.orderForm and ''!=params.orderForm" >
+       	 AND ORDERFROM = #{params.orderForm}
+      </if>  
+      <if test="null!=params.itemCode and ''!=params.itemCode" >
+       	 AND ITEM_CODE = #{params.itemCode}
+      </if>  
+    </if>
+  </sql>
+  
+  <!-- 根据参数取价格字段 -->
+   <sql id = "getPrice">
+     <choose>
+		<when test="null!=params.priceFrom and ''!=params.priceFrom and params.priceFrom == 1">
+			REGION_COST 
+		</when>
+		<when test="null!=params.priceFrom and ''!=params.priceFrom and params.priceFrom == 2">
+			HEADQUARTER_COST 
+		</when>
+		<when test="null!=params.priceFrom and ''!=params.priceFrom and params.priceFrom == 3">
+			UNIT_COST 
+		</when>
+		<when test="null!=params.priceFrom and ''!=params.priceFrom and params.priceFrom == 4">
+			PURCHASE_PRICE 
+		</when>
+		<otherwise>
+			COST
+		</otherwise>
+	 </choose>
+   </sql>
+
+  <!-- 总部职能结算公司 -->
+  <sql id ="headquaters_company_data">
+    <if test="null!=params" >
+   		<if test="null!=params.hqCompanyData and ''!=params.hqCompanyData" >
+       		  (${params.hqCompanyData})
+     	 </if>
+     </if>
+  </sql>
+   
+   <!-- 本月区间 -->
+   <sql id = "currentDate">
+		<if test="null!=params" >
+			<if test="null!=params.currentDateStart and ''!=params.currentDateStart and  
+			null!=params.currentDateEnd and ''!=params.currentDateEnd"> 
+				 BETWEEN  '${params.currentDateStart}' AND '${params.currentDateEnd}'
+			 </if>
+		 </if>
+   </sql>
+   
+   <!-- 上月区间 -->
+   <sql id = "lastMonthDate">
+		<if test="null!=params" >
+			<if test="null!=params.lastDateStart and ''!=params.lastDateStart and  
+			null!=params.currentDateStart and ''!=params.currentDateStart"> 
+				 BETWEEN  '${params.lastDateStart}' AND DATE_SUB('${params.currentDateStart}',INTERVAL 1 DAY)
+			 </if>
+		 </if>
+   </sql>
+   
+  <!-- 下月区间 -->
+  <sql id = "nextDate">
+		<if test="null!=params" >
+			<if test="null!=params.currentDateEnd and ''!=params.currentDateEnd and 
+				null!=params.nextDateEnd and ''!=params.nextDateEnd"  >
+				 BETWEEN  DATE_ADD('${params.currentDateEnd}',INTERVAL 1 DAY) AND '${params.nextDateEnd}'
+			 </if>
+		 </if>
+   </sql>
+  
+  <!-- 查询明细sql -->
+  <sql id ="business_type_dtl">
+  	SELECT 
+	A1.*,
+	<!-- 本月发未收 = 本月发出 - 本月发本月收 - 本月发下月收-->
+	CASE WHEN A1.FAS_BILL_CODE in ('FG13720404','FG13720504','FG13710404','FG13710504') AND (A1.SEND_DATE > A1.RECEIVE_DATE  OR A1.SEND_DATE IS NULL) THEN 0
+	ELSE currMonSenNum - currMonRecNum - nextMonRecNum   END AS currMonYetRecNum,
+	CASE WHEN A1.FAS_BILL_CODE in ('FG13720404','FG13720504','FG13710404','FG13710504') AND (A1.SEND_DATE > A1.RECEIVE_DATE  OR A1.SEND_DATE IS NULL) THEN 0
+	ELSE    currMonSenRMB - currMonRecRMB - nextMonRecRMB  END AS currMonYetRecRMB,
+	<!-- 本月差异 = 本月发出 - 本月发本月收-->
+	CASE WHEN A1.FAS_BILL_CODE in ('FG13720404','FG13720504','FG13710404','FG13710504') AND (A1.SEND_DATE > A1.RECEIVE_DATE  OR A1.SEND_DATE IS NULL) THEN 0
+	ELSE  currMonSenNum - currMonRecNum END AS currMonDiffNum,
+	CASE WHEN A1.FAS_BILL_CODE in ('FG13720404','FG13720504','FG13710404','FG13710504') AND (A1.SEND_DATE > A1.RECEIVE_DATE  OR A1.SEND_DATE IS NULL) THEN 0
+	ELSE    currMonSenRMB - currMonRecRMB END AS currMonDiffRMB,
+	<!-- 前月发未收 = 前月发出 - 前月发前月收 - 前月发本月收-->
+	lastMonSenNum - lastMonLastRecNum - lastMonRecNum AS lastMonYetRecNum,
+	lastMonSenRMB - lastMonLastRecRMB - lastMonRecRMB AS lastMonYetRecRMB,
+	<!-- 前月差异 = 前月发出 - 前月发前月收-->
+	lastMonSenNum - lastMonLastRecNum AS lastMonDiffNum,
+	lastMonSenRMB - lastMonLastRecRMB AS lastMonDiffRMB,
+	C1.CATEGORY_NO AS ONE_LEVEL_CATEGORY_NO,
+	C1.NAME AS ONE_LEVEL_CATEGORY_NAME,
+	C2.CATEGORY_NO AS TWO_LEVEL_CATEGORY_NO,
+	C2.NAME AS TWO_LEVEL_CATEGORY_NAME,
+	LE1.NAME AS YEARSNAME,
+	LE2.NAME AS SEASONNAME,
+	LE4.NAME AS ORDERFROMNAME,
+	LE3.NAME AS GENDERNAME 
+FROM (
+	SELECT A.FAS_BILL_CODE,
+		A.BALANCE_TYPE_NAME,A.BILL_NO,
+		CASE WHEN A.BILL_TYPE='1304' THEN '1301'
+			 WHEN A.BILL_TYPE='1372' THEN '1371'
+			 ELSE A.BILL_TYPE
+		END AS BILL_TYPE,
+		A.ZONE_NO,A.ZONE_NAME,A.BUYER_NO,A.BUYER_NAME,A.ORGAN_NO,A.ORGAN_NAME,A.ORDER_UNIT_NO,A.ORDER_UNIT_NAME,
+		A.ZONE_NO_FROM,A.ZONE_NAME_FROM,A.SALER_NO,A.SALER_NAME,A.ORGAN_NO_FROM,A.ORGAN_NAME_FROM,A.ORDER_UNIT_NO_FROM,A.ORDER_UNIT_NAME_FROM,
+		A.ITEM_NO,A.ITEM_CODE,A.ITEM_NAME,A.BRAND_NO,A.BRAND_NAME,A.BRAND_UNIT_NO,A.BRAND_UNIT_NAME,A.CATEGORY_NO,A.CATEGORY_NAME,
+		A.YEARS,A.SEASON,A.ORDERFROM,A.GENDER,
+		A.SEND_DATE,MAX(A.RECEIVE_DATE) AS RECEIVE_DATE,
+		<!-- 本月发出-->
+		SUM(IF(A.SEND_DATE <include refid ="currentDate"/> AND A.IS_SEND_BILL = 1,A.QTY,0)) AS currMonSenNum,
+		SUM(IF(A.SEND_DATE <include refid ="currentDate"/> AND A.IS_SEND_BILL = 1,A.AMOUNT,0)) AS currMonSenRMB,
+		<!-- 本月发本月收-->
+		SUM(IF(A.FAS_BILL_CODE NOT in ('FG13720404','FG13720504') AND A.SEND_DATE  <include refid ="currentDate"/> AND A.RECEIVE_DATE  <include refid ="currentDate"/> AND A.IS_RECEIVE_BILL = 1,A.QTY,0))
+        + SUM(IF(A.FAS_BILL_CODE in ('FG13720404','FG13720504')  AND A.RECEIVE_DATE  <include refid ="currentDate"/> AND A.IS_RECEIVE_BILL = 1,A.QTY,0)) AS currMonRecNum,
+      	SUM(IF(A.FAS_BILL_CODE NOT in ('FG13720404','FG13720504') AND A.SEND_DATE <include refid ="currentDate"/> AND A.RECEIVE_DATE <include refid ="currentDate"/> AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0))
+        + SUM(IF(A.FAS_BILL_CODE in ('FG13720404','FG13720504')  AND A.RECEIVE_DATE <include refid ="currentDate"/> AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0)) AS currMonRecRMB,	
+      	<!-- 本月发下月收-->
+		SUM(IF(A.SEND_DATE <include refid ="currentDate"/>
+			AND A.RECEIVE_DATE  <include refid ="nextDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.QTY,0)) AS nextMonRecNum,
+		SUM(IF(A.SEND_DATE <include refid ="currentDate"/>
+			AND A.RECEIVE_DATE  <include refid ="nextDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0)) AS nextMonRecRMB,
+		<!-- 前月发出-->
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/> AND A.IS_SEND_BILL = 1,A.QTY,0)) AS lastMonSenNum,
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/> AND A.IS_SEND_BILL = 1,A.AMOUNT,0)) AS lastMonSenRMB,
+		<!-- 前月发前月收-->
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/>
+			AND A.RECEIVE_DATE <include refid ="lastMonthDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.QTY,0)) AS lastMonLastRecNum,
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/>
+			AND A.RECEIVE_DATE <include refid ="lastMonthDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0)) AS lastMonLastRecRMB,
+		<!-- 前月发本月收-->
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/>
+			AND A.RECEIVE_DATE <include refid ="currentDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.QTY,0)) AS lastMonRecNum,
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/>
+			AND A.RECEIVE_DATE <include refid ="currentDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0)) AS lastMonRecRMB
+	FROM (
+		SELECT FAS_BILL_CODE,
+			CASE
+			    <!-- 总部厂商-->
+				WHEN(BILL_TYPE IN ('1301', '1333') AND BALANCE_TYPE &lt;&gt; 4
+					AND BUYER_NO IN <include refid="headquaters_company_data" />
+				)
+				THEN '总部厂商'
+				<!-- 总部其他入库-->
+				WHEN (1=2)
+				THEN '总部其他入库'
+				<!-- 地区采购-->
+				WHEN((BILL_TYPE = '1304' AND BIZ_TYPE IN ('0', '1')
+					AND SALER_NO IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+					OR (BILL_TYPE = '1372'
+					AND SALER_NO IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+				)
+				THEN '地区采购'
+				<!-- 总部代采-->
+				WHEN ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('0', '1') AND IS_SPLIT IS NULL
+					AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+					OR (BILL_TYPE = '1304' AND BIZ_TYPE IN ('0', '1') AND IS_SPLIT IS NULL
+					AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+					OR (BILL_TYPE = '1333' AND IS_SPLIT IS NULL
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+				)
+				THEN '总部代采'
+				<!-- 地区间-->
+				WHEN (BILL_TYPE = '1372'
+					AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+				)
+				THEN '地区间'
+				<!-- 地区自购-->
+				WHEN ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('2', '33') 
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+					OR (BILL_TYPE = '1304' AND BIZ_TYPE IN ('2', '33', '12', '34') 
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+				)
+				THEN '地区自购'
+				<!-- 地区其他入库-->
+				WHEN (BILL_TYPE = '2006' AND BIZ_TYPE = '36'
+					AND SALER_NO IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+				)
+				THEN '地区其他入库'
+				ELSE '未知类型'
+			END AS BALANCE_TYPE_NAME,
+			CASE 
+				WHEN BILL_TYPE = '1304'
+				THEN REF_BILL_NO
+				ELSE ORIGINAL_BILL_NO
+			END AS BILL_NO,
+			BILL_TYPE,
+			ZONE_NO,ZONE_NAME,BUYER_NO,BUYER_NAME,ORGAN_NO,ORGAN_NAME,ORDER_UNIT_NO,ORDER_UNIT_NAME,
+			ZONE_NO_FROM,ZONE_NAME_FROM,SALER_NO,SALER_NAME,ORGAN_NO_FROM,ORGAN_NAME_FROM,ORDER_UNIT_NO_FROM,ORDER_UNIT_NAME_FROM,
+			ITEM_NO,ITEM_CODE,ITEM_NAME,BRAND_NO,BRAND_NAME,BRAND_UNIT_NO,BRAND_UNIT_NAME,CATEGORY_NO,CATEGORY_NAME,
+			YEARS,SEASON,ORDERFROM,GENDER,
+			CASE
+				WHEN BILL_TYPE IN ('1301','1333')
+				THEN 1
+				ELSE 0
+			END AS IS_SEND_BILL,
+			CASE
+				WHEN BILL_TYPE IN ('1304','1333','2006','1372') 
+					OR (BILL_TYPE = '1301' AND BUYER_NO IN <include refid="headquaters_company_data" />)
+				THEN 1
+				ELSE 0
+			END AS IS_RECEIVE_BILL,
+			SEND_DATE,
+			CASE
+				WHEN BILL_TYPE = '1333'
+					OR (BILL_TYPE = '1301' AND BUYER_NO IN <include refid="headquaters_company_data" />)
+				THEN SEND_DATE
+				ELSE RECEIVE_DATE
+			END AS RECEIVE_DATE,
+			CASE
+				WHEN BILL_TYPE IN ('1301','1333')
+				THEN SEND_QTY
+				ELSE RECEIVE_QTY
+			END AS QTY,
+			CASE
+				WHEN BILL_TYPE IN ('1301','1333')
+				THEN <include refid="getPrice"/> * SEND_QTY
+				ELSE <include refid="getPrice"/> * RECEIVE_QTY
+			END AS AMOUNT
+			
+		FROM BILL_BUY_BALANCE
+		WHERE 1=1
+			<include refid="condition"/>
+			AND (
+				((SEND_DATE <include refid ="lastMonthDate"/>
+					OR SEND_DATE <include refid ="currentDate"/>)
+					AND BILL_TYPE IN ('1301','1333'))
+				OR((RECEIVE_DATE <include refid ="lastMonthDate"/>
+					OR RECEIVE_DATE <include refid ="currentDate"/>
+					OR (SEND_DATE <include refid ="currentDate"/> AND RECEIVE_DATE <include refid ="nextDate"/>))
+					AND BILL_TYPE IN ('1304','1372','2006'))
+			)
+			AND (
+			     <!-- 结算类型不为空 -->
+			     <if test="null!=params.balanceTypes">
+					 <foreach collection="params.balanceTypes" index="index" item="balanceType" separator="OR">
+						 <if test="balanceType == 7">
+						 	<include refid="buy_area_other" />
+						 </if>
+						 <if test="balanceType == 5">
+						 	<include refid="buy_hq_instead" />
+						 </if>
+						 <if test="balanceType == 3">
+						   <include refid="buy_area_buy" />
+						 </if>
+						 <if test="balanceType == 2">
+						   <include refid="buy_area_among" />
+						 </if>
+						 <if test="balanceType == 1">
+						   <include refid="buy_area_self" />
+						 </if>
+						 <if test="balanceType == 6">
+						 	 (1=2)
+						 </if>
+						 <if test="balanceType == 4">
+							<include refid="buy_hq_supplier" />
+						 </if> 
+		  			 </foreach>
+		  	    </if>
+			    <!-- 结算类型为空 -->
+		       <if test="null==params.balanceTypes">
+				 	<if test="params.type == 2">
+				 		<include refid="buy_hq_supplier" />
+				 		OR (1=2)
+				 	</if>
+				 	<if test="params.type == 1">
+				 		<include refid="buy_area_buy" /> OR
+						<include refid="buy_hq_instead" /> OR
+						<include refid="buy_area_among" /> OR
+					    <include refid="buy_area_self" /> OR
+					    <include refid="buy_area_other" />
+				 	</if>
+				</if>
+			)
+		UNION ALL
+		SELECT FAS_BILL_CODE,
+			CASE
+			    <!-- 总部厂商-->
+				WHEN (1=2)
+				THEN '总部厂商'
+				<!-- 总部其他入库-->
+				WHEN ( (BILL_TYPE = '1335' AND BIZ_TYPE = '3')
+					OR (BILL_TYPE = '1361' AND BIZ_TYPE IN ('7', '25'))
+					OR (BILL_TYPE = '2005' AND BIZ_TYPE = '35')
+					OR (BILL_TYPE = '1371' 
+						AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+						AND BUYER_NO  IN <include refid="headquaters_company_data" />)
+				)
+				THEN '总部其他入库'
+				<!-- 地区采购-->
+				WHEN ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('0', '1'))
+					OR (BILL_TYPE = '1371'
+						AND SALER_NO IN <include refid="headquaters_company_data" />
+						AND BUYER_NO NOT IN <include refid="headquaters_company_data" />) 
+					OR BILL_TYPE = '1333'
+				)
+				THEN '地区采购'
+				<!-- 总部代采-->
+				WHEN (1=2)
+				THEN '总部代采'
+				<!-- 地区间-->
+				WHEN (BILL_TYPE = '1371'
+					AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+				)
+				THEN '地区间'
+				<!-- 地区自购-->
+				WHEN (1=2)
+				THEN '地区自购'
+				<!-- 地区其他入库-->
+				WHEN (BILL_TYPE = '2006' AND BIZ_TYPE = '36'
+					AND SALER_NO IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+				)
+				THEN '地区其他入库'
+				ELSE '未知类型'
+			END AS BALANCE_TYPE_NAME,
+			ORIGINAL_BILL_NO AS BILL_NO,BILL_TYPE,
+			ZONE_NO,ZONE_NAME,BUYER_NO,BUYER_NAME,ORGAN_NO,ORGAN_NAME,ORDER_UNIT_NO,ORDER_UNIT_NAME,
+			ZONE_NO_FROM,ZONE_NAME_FROM,SALER_NO,SALER_NAME,ORGAN_NO_FROM,ORGAN_NAME_FROM,ORDER_UNIT_NO_FROM,ORDER_UNIT_NAME_FROM,
+			ITEM_NO,ITEM_CODE,ITEM_NAME,BRAND_NO,BRAND_NAME,BRAND_UNIT_NO,BRAND_UNIT_NAME,CATEGORY_NO,CATEGORY_NAME,
+			YEARS,SEASON,ORDERFROM,GENDER,
+			1 AS IS_SEND_BILL,
+			CASE
+				WHEN BILL_TYPE IN ('1333','1335','1361','2005')
+				THEN 1
+				ELSE 0
+			END AS IS_RECEIVE_BILL,
+			SEND_DATE,
+			CASE
+				WHEN BILL_TYPE IN ('1333','1335','1361','2005')
+				THEN SEND_DATE
+				ELSE RECEIVE_DATE
+			END AS RECEIVE_DATE,
+			SEND_QTY AS QTY,
+			<include refid="getPrice"/> * SEND_QTY AS AMOUNT
+			
+		FROM BILL_SALE_BALANCE
+		WHERE 1=1
+			<include refid="condition"/>
+			AND (SEND_DATE <include refid ="lastMonthDate"/>
+				OR SEND_DATE <include refid ="currentDate"/>
+			)
+			AND (
+			    <!-- 结算类型不为空 -->
+			     <if test="null!=params.balanceTypes">
+					 <foreach collection="params.balanceTypes" index="index" item="balanceType" separator="OR">
+						 <if test="balanceType == 7">
+						    <include refid="sale_area_other" />
+						 </if>
+						 <if test="balanceType == 5">
+						 	 (1=2)
+						 </if>
+						 <if test="balanceType == 3">
+						 	 <include refid="sale_area_buy" />
+						 </if>
+						 <if test="balanceType == 2">
+						 	 <include refid="sale_area_among" />
+						 </if>
+						 <if test="balanceType == 1">
+						 	 (1=2)
+						 </if>
+						 <if test="balanceType == 6">
+						 	 <include refid="sale_hq_other" />
+						 </if>
+						 <if test="balanceType == 4">
+							(1=2)
+						</if>
+		  			 </foreach>
+	  			</if>
+			    <!-- 结算类型为空 -->
+			    <if test="null==params.balanceTypes">
+				 	<if test="params.type == 2">
+				 	    (1=2) OR
+				 		<include refid="sale_hq_other" />
+				 	</if>
+				 	<if test="params.type == 1">
+				 		<include refid="sale_area_buy" />
+						OR (1=2) OR
+						<include refid="sale_area_among" />
+					  	OR (1=2) OR
+					    <include refid="sale_area_other" />
+				 	</if>
+				</if>
+			)
+	) AS A
+	GROUP BY A.BILL_NO,A.ITEM_NO
+) AS A1
+  	LEFT JOIN CATEGORY C1 ON LEFT(A1.CATEGORY_NO, 2) = C1.CATEGORY_NO 
+	LEFT JOIN CATEGORY C2 ON LEFT(A1.CATEGORY_NO, 4) = C2.CATEGORY_NO 
+	LEFT JOIN LOOKUP_ENTRY LE1 ON A1.YEARS = LE1.CODE AND LE1.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'YEAR') 
+	LEFT JOIN LOOKUP_ENTRY LE2 ON A1.SEASON = LE2.CODE AND LE2.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'SELL_SEASON') 
+	LEFT JOIN LOOKUP_ENTRY LE3 ON A1.GENDER = LE3.CODE AND LE3.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'GENDER') 
+	LEFT JOIN LOOKUP_ENTRY LE4 ON A1.ORDERFROM = LE4.CODE AND LE4.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'ORDER_STYLE') 
+</sql>
+  
+  <!-- 总部厂商 -->
+  <sql id="buy_hq_supplier">
+  	(BILL_TYPE IN ('1301', '1333') AND BALANCE_TYPE != 4
+		AND BUYER_NO IN <include refid="headquaters_company_data" />
+	)
+  </sql>
+  
+  <!-- buy地区采购 -->
+  <sql id="buy_area_buy">
+  	 ((BILL_TYPE = '1304' AND BIZ_TYPE IN ('0', '1')
+		AND SALER_NO IN <include refid="headquaters_company_data" />
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+		OR (BILL_TYPE = '1372'
+		AND SALER_NO IN <include refid="headquaters_company_data" />
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+	)
+  </sql>
+  
+  <!-- buy总部代采-->
+  <sql id="buy_hq_instead">
+	 ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('0', '1') AND IS_SPLIT IS NULL
+		AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+		OR (BILL_TYPE = '1304' AND BIZ_TYPE IN ('0', '1') AND IS_SPLIT IS NULL
+		AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+		OR (BILL_TYPE = '1333' AND IS_SPLIT IS NULL
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+	)
+  </sql>
+  
+  <!-- buy地区间-->
+  <sql id="buy_area_among">
+	 (BILL_TYPE = '1372'
+		AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+	)
+  </sql>
+  
+  <!-- buy地区自购 -->
+  <sql id="buy_area_self">
+     ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('2', '33') 
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+		OR (BILL_TYPE = '1304' AND BIZ_TYPE IN ('2', '33', '12', '34') 
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+	)
+  </sql>
+  
+  <!-- buy地区其他入库 -->
+  <sql id="buy_area_other">
+  	 (BILL_TYPE = '2006' AND BIZ_TYPE = '36'
+		AND SALER_NO IN <include refid="headquaters_company_data" />
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+	)
+  </sql>
+  
+  <!-- sale地区采购-->
+  <sql id="sale_area_buy">
+	 ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('0', '1'))
+		OR (BILL_TYPE = '1371'
+			AND SALER_NO IN <include refid="headquaters_company_data" />
+			AND BUYER_NO NOT IN <include refid="headquaters_company_data" />) 
+		OR BILL_TYPE = '1333'
+	)
+  </sql>
+  
+  <!-- sale地区间 -->
+  <sql id="sale_area_among">
+	 (BILL_TYPE = '1371'
+		AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+	)
+  </sql>
+  
+  <!-- sale地区其他出库 -->
+  <sql id="sale_area_other">
+	 (BILL_TYPE = '2006' AND BIZ_TYPE = '36'
+		AND SALER_NO IN <include refid="headquaters_company_data" />
+		AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+	)
+  </sql>
+  
+  <!-- sale总部其他入库 -->
+  <sql id="sale_hq_other">
+  	((BILL_TYPE = '1335' AND BIZ_TYPE = '3')
+		OR (BILL_TYPE = '1361' AND BIZ_TYPE IN ('7', '25'))
+		OR (BILL_TYPE = '2005' AND BIZ_TYPE = '35')
+		OR (BILL_TYPE = '1371' 
+			AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+			AND BUYER_NO  IN <include refid="headquaters_company_data" />)
+	)
+  </sql>
+  
+   <sql id="where_condition_second" >
+    	WHERE 
+		 currMonSenNum &lt;&gt; 0 OR
+		 currMonSenRMB &lt;&gt; 0 OR
+		 currMonRecNum &lt;&gt; 0 OR
+		 currMonRecRMB &lt;&gt; 0 OR
+		 nextMonRecNum &lt;&gt; 0 OR	
+		 nextMonRecRMB &lt;&gt; 0 OR
+		 currMonYetRecNum &lt;&gt; 0 OR	
+		 currMonYetRecRMB &lt;&gt; 0 OR
+		 currMonDiffNum   &lt;&gt; 0 OR
+		 currMonDiffRMB   &lt;&gt; 0 OR
+		 lastMonRecNum    &lt;&gt; 0 OR
+		 lastMonRecRMB	  &lt;&gt; 0 OR
+		 lastMonYetRecNum &lt;&gt; 0 OR		
+		 lastMonYetRecRMB &lt;&gt; 0 OR	
+		 lastMonDiffNum   &lt;&gt; 0 OR
+		 lastMonDiffRMB   &lt;&gt; 0 
+  </sql>
+  
+  <!-- 查询收发货在途核对明细数量 -->
+  <select id="selectTransferingCheckDtlCount" resultType="java.lang.Integer" >
+     /*balance*/
+   	 SELECT COUNT(1) FROM (
+   	 	 <include refid="business_type_dtl" />
+     ) temp_all_dtl
+   </select>
+  
+  <!-- 查询收发货在途核对明细 -->
+  <select id="selectTransferingCheckDtl" resultMap="BaseResultMap" parameterType="map" >
+    /*balance*/
+	select * from (
+	    <include refid="business_type_dtl" />
+    ) temp_all_dtl
+    <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	</if>
+    <if test="orderByField == null or  ''==orderByField " >
+       ORDER BY ONE_LEVEL_CATEGORY_NO,BRAND_NO DESC
+    </if>
+    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <!-- 查询收发货在途核对明细 全合计 -->
+   <select id="selectTransferingCheckDtlFooter" resultMap="BaseResultMap" parameterType="map">
+     /*balance*/
+   	 SELECT  
+   	    '合计:' AS zone_name,
+		SUM(currMonSenNum) currMonSenNum,
+		SUM(currMonSenRMB) currMonSenRMB,
+		SUM(currMonRecNum) currMonRecNum,
+		SUM(currMonRecRMB) currMonRecRMB,
+		SUM(nextMonRecNum) nextMonRecNum,
+		SUM(nextMonRecRMB) nextMonRecRMB,
+		SUM(currMonYetRecNum) currMonYetRecNum,
+		SUM(currMonYetRecRMB) currMonYetRecRMB,
+		SUM(currMonDiffNum) currMonDiffNum,
+		SUM(currMonDiffRMB) currMonDiffRMB,
+		SUM(lastMonSenNum) lastMonSenNum,
+		SUM(lastMonSenRMB) lastMonSenRMB,
+		SUM(lastMonLastRecNum) lastMonLastRecNum,
+		SUM(lastMonLastRecRMB) lastMonLastRecRMB,
+		SUM(lastMonRecNum) lastMonRecNum,
+		SUM(lastMonRecRMB) lastMonRecRMB,
+		SUM(lastMonYetRecNum) lastMonYetRecNum,
+		SUM(lastMonYetRecRMB) lastMonYetRecRMB,
+		SUM(lastMonDiffNum) lastMonDiffNum,
+		SUM(lastMonDiffRMB) lastMonDiffRMB
+	  FROM (
+   	 	 <include refid="business_type_dtl" />
+     ) temp_all_dtl
+   </select>
+   
+   <!-- 查询汇总sql -->
+  <sql id ="business_type_gather">
+SELECT 
+	A1.*,
+	<!-- 本月发未收 = 本月发出 - 本月发本月收 - 本月发下月收-->
+	CASE WHEN A1.FAS_BILL_CODE in ('FG13720404','FG13720504','FG13710404','FG13710504') AND (A1.SEND_DATE > A1.RECEIVE_DATE  OR A1.SEND_DATE IS NULL) THEN 0
+	ELSE currMonSenNum - currMonRecNum - nextMonRecNum   END AS currMonYetRecNum,
+	CASE WHEN A1.FAS_BILL_CODE in ('FG13720404','FG13720504','FG13710404','FG13710504') AND (A1.SEND_DATE > A1.RECEIVE_DATE  OR A1.SEND_DATE IS NULL) THEN 0
+	ELSE    currMonSenRMB - currMonRecRMB - nextMonRecRMB  END AS currMonYetRecRMB,
+	<!-- 本月差异 = 本月发出 - 本月发本月收-->
+	CASE WHEN A1.FAS_BILL_CODE in ('FG13720404','FG13720504','FG13710404','FG13710504') AND (A1.SEND_DATE > A1.RECEIVE_DATE  OR A1.SEND_DATE IS NULL) THEN 0
+	ELSE  currMonSenNum - currMonRecNum END AS currMonDiffNum,
+	CASE WHEN A1.FAS_BILL_CODE in ('FG13720404','FG13720504','FG13710404','FG13710504') AND (A1.SEND_DATE > A1.RECEIVE_DATE  OR A1.SEND_DATE IS NULL) THEN 0
+	ELSE    currMonSenRMB - currMonRecRMB END AS currMonDiffRMB,
+	<!-- 前月发未收 = 前月发出 - 前月发前月收 - 前月发本月收-->
+	lastMonSenNum - lastMonLastRecNum - lastMonRecNum AS lastMonYetRecNum,
+	lastMonSenRMB - lastMonLastRecRMB - lastMonRecRMB AS lastMonYetRecRMB,
+	<!-- 前月差异 = 前月发出 - 前月发前月收-->
+	lastMonSenNum - lastMonLastRecNum AS lastMonDiffNum,
+	lastMonSenRMB - lastMonLastRecRMB AS lastMonDiffRMB,
+	C1.CATEGORY_NO AS ONE_LEVEL_CATEGORY_NO,
+	C1.NAME AS ONE_LEVEL_CATEGORY_NAME,
+	C2.CATEGORY_NO AS TWO_LEVEL_CATEGORY_NO,
+	C2.NAME AS TWO_LEVEL_CATEGORY_NAME,
+	LE1.NAME AS YEARSNAME,
+	LE2.NAME AS SEASONNAME,
+	LE4.NAME AS ORDERFROMNAME,
+	LE3.NAME AS GENDERNAME 
+FROM (
+	SELECT A.FAS_BILL_CODE,
+		A.BALANCE_TYPE_NAME,A.BILL_NO,A.ZONE_NO,A.ZONE_NAME,A.BUYER_NO,A.BUYER_NAME,A.ORGAN_NO,A.ORGAN_NAME,A.ORDER_UNIT_NO,A.ORDER_UNIT_NAME,
+		A.ZONE_NO_FROM,A.ZONE_NAME_FROM,A.SALER_NO,A.SALER_NAME,A.ORGAN_NO_FROM,A.ORGAN_NAME_FROM,A.ORDER_UNIT_NO_FROM,A.ORDER_UNIT_NAME_FROM,
+		A.ITEM_NO,A.ITEM_CODE,A.ITEM_NAME,A.BRAND_NO,A.BRAND_NAME,A.BRAND_UNIT_NO,A.BRAND_UNIT_NAME,A.CATEGORY_NO,A.CATEGORY_NAME,
+		A.YEARS,A.SEASON,A.ORDERFROM,A.GENDER,
+		A.SEND_DATE,MAX(A.RECEIVE_DATE) AS RECEIVE_DATE,
+		<!-- 本月发出-->
+		SUM(IF(A.SEND_DATE <include refid ="currentDate"/> AND A.IS_SEND_BILL = 1,A.QTY,0)) AS currMonSenNum,
+		SUM(IF(A.SEND_DATE <include refid ="currentDate"/> AND A.IS_SEND_BILL = 1,A.AMOUNT,0)) AS currMonSenRMB,
+		<!-- 本月发本月收-->
+		SUM(IF(A.FAS_BILL_CODE NOT in ('FG13720404','FG13720504') AND A.SEND_DATE  <include refid ="currentDate"/> AND A.RECEIVE_DATE  <include refid ="currentDate"/> AND A.IS_RECEIVE_BILL = 1,A.QTY,0))
+        + SUM(IF(A.FAS_BILL_CODE in ('FG13720404','FG13720504')  AND A.RECEIVE_DATE  <include refid ="currentDate"/> AND A.IS_RECEIVE_BILL = 1,A.QTY,0)) AS currMonRecNum,
+      	SUM(IF(A.FAS_BILL_CODE NOT in ('FG13720404','FG13720504') AND A.SEND_DATE <include refid ="currentDate"/> AND A.RECEIVE_DATE <include refid ="currentDate"/> AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0))
+        + SUM(IF(A.FAS_BILL_CODE in ('FG13720404','FG13720504')  AND A.RECEIVE_DATE <include refid ="currentDate"/> AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0)) AS currMonRecRMB,	
+       	<!-- 本月发下月收-->
+		SUM(IF(A.SEND_DATE <include refid ="currentDate"/>
+			AND A.RECEIVE_DATE  <include refid ="nextDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.QTY,0)) AS nextMonRecNum,
+		SUM(IF(A.SEND_DATE <include refid ="currentDate"/>
+			AND A.RECEIVE_DATE  <include refid ="nextDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0)) AS nextMonRecRMB,
+		<!-- 前月发出-->
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/> AND A.IS_SEND_BILL = 1,A.QTY,0)) AS lastMonSenNum,
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/> AND A.IS_SEND_BILL = 1,A.AMOUNT,0)) AS lastMonSenRMB,
+		<!-- 前月发前月收-->
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/>
+			AND A.RECEIVE_DATE <include refid ="lastMonthDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.QTY,0)) AS lastMonLastRecNum,
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/>
+			AND A.RECEIVE_DATE <include refid ="lastMonthDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0)) AS lastMonLastRecRMB,
+		<!-- 前月发本月收-->
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/>
+			AND A.RECEIVE_DATE <include refid ="currentDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.QTY,0)) AS lastMonRecNum,
+		SUM(IF(A.SEND_DATE <include refid ="lastMonthDate"/>
+			AND A.RECEIVE_DATE <include refid ="currentDate"/>
+			AND A.IS_RECEIVE_BILL = 1,A.AMOUNT,0)) AS lastMonRecRMB
+	FROM (
+		SELECT FAS_BILL_CODE,
+			CASE
+			    <!-- 总部厂商-->
+				WHEN(BILL_TYPE IN ('1301', '1333') AND BALANCE_TYPE &lt;&gt; 4
+					AND BUYER_NO IN <include refid="headquaters_company_data" />
+				)
+				THEN '总部厂商'
+				<!-- 总部其他入库-->
+				WHEN (1=2)
+				THEN '总部其他入库'
+				<!-- 地区采购-->
+				WHEN((BILL_TYPE = '1304' AND BIZ_TYPE IN ('0', '1')
+					AND SALER_NO IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+					OR (BILL_TYPE = '1372'
+					AND SALER_NO IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+				)
+				THEN '地区采购'
+				<!-- 总部代采-->
+				WHEN ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('0', '1') AND IS_SPLIT IS NULL
+					AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+					OR (BILL_TYPE = '1304' AND BIZ_TYPE IN ('0', '1') AND IS_SPLIT IS NULL
+					AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+					OR (BILL_TYPE = '1333' AND IS_SPLIT IS NULL
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+				)
+				THEN '总部代采'
+				<!-- 地区间-->
+				WHEN (BILL_TYPE = '1372'
+					AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+				)
+				THEN '地区间'
+				<!-- 地区自购-->
+				WHEN ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('2', '33') 
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+					OR (BILL_TYPE = '1304' AND BIZ_TYPE IN ('2', '33', '12', '34') 
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />)
+				)
+				THEN '地区自购'
+				<!-- 地区其他入库-->
+				WHEN (BILL_TYPE = '2006' AND BIZ_TYPE = '36'
+					AND SALER_NO IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+				)
+				THEN '地区其他入库'
+				ELSE '未知类型'
+			END AS BALANCE_TYPE_NAME,
+			CASE 
+				WHEN BILL_TYPE = '1304'
+				THEN REF_BILL_NO
+				ELSE ORIGINAL_BILL_NO
+			END AS BILL_NO,
+			ZONE_NO,ZONE_NAME,BUYER_NO,BUYER_NAME,ORGAN_NO,ORGAN_NAME,ORDER_UNIT_NO,ORDER_UNIT_NAME,
+			ZONE_NO_FROM,ZONE_NAME_FROM,SALER_NO,SALER_NAME,ORGAN_NO_FROM,ORGAN_NAME_FROM,ORDER_UNIT_NO_FROM,ORDER_UNIT_NAME_FROM,
+			ITEM_NO,ITEM_CODE,ITEM_NAME,BRAND_NO,BRAND_NAME,BRAND_UNIT_NO,BRAND_UNIT_NAME,CATEGORY_NO,CATEGORY_NAME,
+			YEARS,SEASON,ORDERFROM,GENDER,
+			CASE
+				WHEN BILL_TYPE IN ('1301','1333')
+				THEN 1
+				ELSE 0
+			END AS IS_SEND_BILL,
+			CASE
+				WHEN BILL_TYPE IN ('1304','1333','2006','1372') 
+					OR (BILL_TYPE = '1301' AND BUYER_NO IN <include refid="headquaters_company_data" />)
+				THEN 1
+				ELSE 0
+			END AS IS_RECEIVE_BILL,
+			SEND_DATE,
+			CASE
+				WHEN BILL_TYPE = '1333'
+					OR (BILL_TYPE = '1301' AND BUYER_NO IN <include refid="headquaters_company_data" />)
+				THEN SEND_DATE
+				ELSE RECEIVE_DATE
+			END AS RECEIVE_DATE,
+			CASE
+				WHEN BILL_TYPE IN ('1301','1333')
+				THEN SEND_QTY
+				ELSE RECEIVE_QTY
+			END AS QTY,
+			CASE
+				WHEN BILL_TYPE IN ('1301','1333')
+				THEN <include refid="getPrice"/> * SEND_QTY
+				ELSE <include refid="getPrice"/> * RECEIVE_QTY
+			END AS AMOUNT
+			
+		FROM BILL_BUY_BALANCE
+		WHERE 1=1
+			<include refid="condition"/>
+			AND (
+				((SEND_DATE <include refid ="lastMonthDate"/>
+					OR SEND_DATE <include refid ="currentDate"/>)
+					AND BILL_TYPE IN ('1301','1333'))
+			OR((RECEIVE_DATE <include refid ="lastMonthDate"/>
+					OR RECEIVE_DATE <include refid ="currentDate"/>
+					OR (SEND_DATE <include refid ="currentDate"/> AND RECEIVE_DATE <include refid ="nextDate"/>))
+					AND BILL_TYPE IN ('1304','1372','2006'))
+			)
+			AND (
+			     <!-- 结算类型不为空 -->
+			     <if test="null!=params.balanceTypes">
+					 <foreach collection="params.balanceTypes" index="index" item="balanceType" separator="OR">
+						 <if test="balanceType == 7">
+						 	<include refid="buy_area_other" />
+						 </if>
+						 <if test="balanceType == 5">
+						 	<include refid="buy_hq_instead" />
+						 </if>
+						 <if test="balanceType == 3">
+						   <include refid="buy_area_buy" />
+						 </if>
+						 <if test="balanceType == 2">
+						   <include refid="buy_area_among" />
+						 </if>
+						 <if test="balanceType == 1">
+						   <include refid="buy_area_self" />
+						 </if>
+						 <if test="balanceType == 6">
+						 	 (1=2)
+						 </if>
+						 <if test="balanceType == 4">
+							<include refid="buy_hq_supplier" />
+						 </if> 
+		  			 </foreach>
+		  	    </if>
+			    <!-- 结算类型为空 -->
+		       <if test="null==params.balanceTypes">
+				 	<if test="params.type == 2">
+				 		<include refid="buy_hq_supplier" />
+				 		OR (1=2)
+				 	</if>
+				 	<if test="params.type == 1">
+				 		<include refid="buy_area_buy" /> OR
+						<include refid="buy_hq_instead" /> OR
+						<include refid="buy_area_among" /> OR
+					    <include refid="buy_area_self" /> OR
+					    <include refid="buy_area_other" />
+				 	</if>
+				</if>
+			)
+		UNION ALL
+		SELECT FAS_BILL_CODE,
+			CASE
+			    <!-- 总部厂商-->
+				WHEN (1=2)
+				THEN '总部厂商'
+				<!-- 总部其他入库-->
+				WHEN ( (BILL_TYPE = '1335' AND BIZ_TYPE = '3')
+					OR (BILL_TYPE = '1361' AND BIZ_TYPE IN ('7', '25'))
+					OR (BILL_TYPE = '2005' AND BIZ_TYPE = '35')
+					OR (BILL_TYPE = '1371' 
+						AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+						AND BUYER_NO  IN <include refid="headquaters_company_data" />)
+				)
+				THEN '总部其他入库'
+				<!-- 地区采购-->
+				WHEN ((BILL_TYPE = '1301' AND BIZ_TYPE IN ('0', '1'))
+					OR (BILL_TYPE = '1371'
+						AND SALER_NO IN <include refid="headquaters_company_data" />
+						AND BUYER_NO NOT IN <include refid="headquaters_company_data" />) 
+					OR BILL_TYPE = '1333'
+				)
+				THEN '地区采购'
+				<!-- 总部代采-->
+				WHEN (1=2)
+				THEN '总部代采'
+				<!-- 地区间-->
+				WHEN (BILL_TYPE = '1371'
+					AND SALER_NO NOT IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+				)
+				THEN '地区间'
+				<!-- 地区自购-->
+				WHEN (1=2)
+				THEN '地区自购'
+				<!-- 地区其他入库-->
+				WHEN (BILL_TYPE = '2006' AND BIZ_TYPE = '36'
+					AND SALER_NO IN <include refid="headquaters_company_data" />
+					AND BUYER_NO NOT IN <include refid="headquaters_company_data" />
+				)
+				THEN '地区其他入库'
+				ELSE '未知类型'
+			END AS BALANCE_TYPE_NAME,
+			ORIGINAL_BILL_NO AS BILL_NO,
+			ZONE_NO,ZONE_NAME,BUYER_NO,BUYER_NAME,ORGAN_NO,ORGAN_NAME,ORDER_UNIT_NO,ORDER_UNIT_NAME,
+			ZONE_NO_FROM,ZONE_NAME_FROM,SALER_NO,SALER_NAME,ORGAN_NO_FROM,ORGAN_NAME_FROM,ORDER_UNIT_NO_FROM,ORDER_UNIT_NAME_FROM,
+			ITEM_NO,ITEM_CODE,ITEM_NAME,BRAND_NO,BRAND_NAME,BRAND_UNIT_NO,BRAND_UNIT_NAME,CATEGORY_NO,CATEGORY_NAME,
+			YEARS,SEASON,ORDERFROM,GENDER,
+			1 AS IS_SEND_BILL,
+			CASE
+				WHEN BILL_TYPE IN ('1333','1335','1361','2005')
+				THEN 1
+				ELSE 0
+			END AS IS_RECEIVE_BILL,
+			SEND_DATE,
+			CASE
+				WHEN BILL_TYPE IN ('1333','1335','1361','2005')
+				THEN SEND_DATE
+				ELSE RECEIVE_DATE
+			END AS RECEIVE_DATE,
+			SEND_QTY AS QTY,
+			<include refid="getPrice"/> * SEND_QTY AS AMOUNT
+			
+		FROM BILL_SALE_BALANCE
+			WHERE 1=1
+			<include refid="condition"/>
+			AND (SEND_DATE <include refid ="lastMonthDate"/>
+				OR SEND_DATE <include refid ="currentDate"/>
+			)
+			AND (
+			    <!-- 结算类型不为空 -->
+			     <if test="null!=params.balanceTypes">
+					 <foreach collection="params.balanceTypes" index="index" item="balanceType" separator="OR">
+						 <if test="balanceType == 7">
+						    <include refid="sale_area_other" />
+						 </if>
+						 <if test="balanceType == 5">
+						 	 (1=2)
+						 </if>
+						 <if test="balanceType == 3">
+						 	 <include refid="sale_area_buy" />
+						 </if>
+						 <if test="balanceType == 2">
+						 	 <include refid="sale_area_among" />
+						 </if>
+						 <if test="balanceType == 1">
+						 	 (1=2)
+						 </if>
+						 <if test="balanceType == 6">
+						 	 <include refid="sale_hq_other" />
+						 </if>
+						 <if test="balanceType == 4">
+							(1=2)
+						</if>
+		  			 </foreach>
+	  			</if>
+			    <!-- 结算类型为空 -->
+			    <if test="null==params.balanceTypes">
+				 	<if test="params.type == 2">
+				 	    (1=2) OR
+				 		<include refid="sale_hq_other" />
+				 	</if>
+				 	<if test="params.type == 1">
+				 		<include refid="sale_area_buy" />
+						OR (1=2) OR
+						<include refid="sale_area_among" />
+					  	OR (1=2) OR
+					    <include refid="sale_area_other" />
+				 	</if>
+				</if>
+			)
+	) AS A
+	GROUP BY A.SALER_NO, A.BUYER_NO,A.ORDER_UNIT_NO_FROM, A.ORDER_UNIT_NO
+) AS A1
+  	LEFT JOIN CATEGORY C1 ON LEFT(A1.CATEGORY_NO, 2) = C1.CATEGORY_NO 
+	LEFT JOIN CATEGORY C2 ON LEFT(A1.CATEGORY_NO, 4) = C2.CATEGORY_NO 
+	LEFT JOIN LOOKUP_ENTRY LE1 ON A1.YEARS = LE1.CODE AND LE1.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'YEAR') 
+	LEFT JOIN LOOKUP_ENTRY LE2 ON A1.SEASON = LE2.CODE AND LE2.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'SELL_SEASON') 
+	LEFT JOIN LOOKUP_ENTRY LE3 ON A1.GENDER = LE3.CODE AND LE3.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'GENDER') 
+	LEFT JOIN LOOKUP_ENTRY LE4 ON A1.ORDERFROM = LE4.CODE AND LE4.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'ORDER_STYLE') 
+  </sql>
+   
+   <!-- 查询收发货在途核对汇总数量 -->
+  <select id="selectCount" resultType="java.lang.Integer" >
+     /*balance*/
+  	 SELECT COUNT(1) FROM (
+   	 		<include refid="business_type_gather" />
+     ) temp_all_total
+  </select>
+  
+  <!-- 查询收发货在途核对汇总明细 -->
+  <select id="selectTransferingCheckTotal" resultMap="BaseResultMap" parameterType="map" >
+    /*balance*/
+   	select * from (
+	    <include refid="business_type_gather" />
+    ) temp_all_total
+    <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	</if>
+    <if test="orderByField == null or  ''==orderByField " >
+      ORDER BY brand_no DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+   <!-- 查询收发货在途核对汇总 全合计  -->
+  <select id="selectTransferingCheckGatherFooter" resultMap="BaseResultMap" parameterType="map">
+     /*balance*/
+  	 SELECT '合计:' AS zone_name,
+			SUM(currMonSenNum) currMonSenNum,
+			SUM(currMonSenRMB) currMonSenRMB,
+			SUM(currMonRecNum) currMonRecNum,
+			SUM(currMonRecRMB) currMonRecRMB,
+			SUM(nextMonRecNum) nextMonRecNum,
+			SUM(nextMonRecRMB) nextMonRecRMB,
+			SUM(currMonYetRecNum) currMonYetRecNum,
+			SUM(currMonYetRecRMB) currMonYetRecRMB,
+			SUM(currMonDiffNum) currMonDiffNum,
+			SUM(currMonDiffRMB) currMonDiffRMB,
+			SUM(lastMonSenNum) lastMonSenNum,
+			SUM(lastMonSenRMB) lastMonSenRMB,
+			SUM(lastMonLastRecNum) lastMonLastRecNum,
+			SUM(lastMonLastRecRMB) lastMonLastRecRMB,
+			SUM(lastMonRecNum) lastMonRecNum,
+			SUM(lastMonRecRMB) lastMonRecRMB,
+			SUM(lastMonYetRecNum) lastMonYetRecNum,
+			SUM(lastMonYetRecRMB) lastMonYetRecRMB,
+			SUM(lastMonDiffNum) lastMonDiffNum,
+			SUM(lastMonDiffRMB) lastMonDiffRMB
+		 FROM (
+   	 		<include refid="business_type_gather" />
+     ) temp_all_total
+  </select>
+</mapper>

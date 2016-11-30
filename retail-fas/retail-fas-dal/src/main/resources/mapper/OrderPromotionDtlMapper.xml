@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.OrderPromotionDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.OrderPromotionDtl" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="seq_id" property="seqId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_dtl_id" property="orderDtlId" jdbcType="CHAR" />
+    <result column="pro_no" property="proNo" jdbcType="VARCHAR" />
+    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="discount_type" property="discountType" jdbcType="BIT" />
+    <result column="discount_source_id" property="discountSourceId" jdbcType="VARCHAR" />
+    <result column="order_type" property="orderType" jdbcType="BIT" />
+    <result column="create_user_no" property="createUserNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, seq_id, order_no, order_dtl_id, pro_no, pro_name, discount, discount_type, discount_source_id, 
+    order_type, create_user_no, create_user, create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM order_promotion_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM order_promotion_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM order_promotion_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM order_promotion_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM order_promotion_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.OrderPromotionDtl" >
+    DELETE FROM order_promotion_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.OrderPromotionDtl" >
+    INSERT INTO order_promotion_dtl (id, seq_id, order_no, 
+      order_dtl_id, pro_no, pro_name, 
+      discount, discount_type, discount_source_id, 
+      order_type, create_user_no, create_user, 
+      create_time, update_user, update_time
+      )
+    VALUES (#{id,jdbcType=CHAR}, #{seqId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, 
+      #{orderDtlId,jdbcType=CHAR}, #{proNo,jdbcType=VARCHAR}, #{proName,jdbcType=VARCHAR}, 
+      #{discount,jdbcType=DECIMAL}, #{discountType,jdbcType=BIT}, #{discountSourceId,jdbcType=VARCHAR}, 
+      #{orderType,jdbcType=BIT}, #{createUserNo,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.OrderPromotionDtl" >
+    INSERT INTO order_promotion_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="seqId != null" >
+        seq_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="orderDtlId != null" >
+        order_dtl_id,
+      </if>
+      <if test="proNo != null" >
+        pro_no,
+      </if>
+      <if test="proName != null" >
+        pro_name,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="discountType != null" >
+        discount_type,
+      </if>
+      <if test="discountSourceId != null" >
+        discount_source_id,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="seqId != null" >
+        #{seqId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDtlId != null" >
+        #{orderDtlId,jdbcType=CHAR},
+      </if>
+      <if test="proNo != null" >
+        #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="proName != null" >
+        #{proName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountType != null" >
+        #{discountType,jdbcType=BIT},
+      </if>
+      <if test="discountSourceId != null" >
+        #{discountSourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=BIT},
+      </if>
+      <if test="createUserNo != null" >
+        #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.OrderPromotionDtl" >
+    UPDATE order_promotion_dtl
+    <set >
+      <if test="seqId != null" >
+        seq_id = #{seqId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDtlId != null" >
+        order_dtl_id = #{orderDtlId,jdbcType=CHAR},
+      </if>
+      <if test="proNo != null" >
+        pro_no = #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="proName != null" >
+        pro_name = #{proName,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountType != null" >
+        discount_type = #{discountType,jdbcType=BIT},
+      </if>
+      <if test="discountSourceId != null" >
+        discount_source_id = #{discountSourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        order_type = #{orderType,jdbcType=BIT},
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.OrderPromotionDtl" >
+    UPDATE order_promotion_dtl
+    SET seq_id = #{seqId,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      order_dtl_id = #{orderDtlId,jdbcType=CHAR},
+      pro_no = #{proNo,jdbcType=VARCHAR},
+      pro_name = #{proName,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=DECIMAL},
+      discount_type = #{discountType,jdbcType=BIT},
+      discount_source_id = #{discountSourceId,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=BIT},
+      create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

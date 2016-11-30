@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillInvCostAdjustDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillInvCostAdjustDtl" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="style_no" property="styleNo" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="size_kind" property="sizeKind" jdbcType="CHAR" />
+    <result column="adjust_cost" property="adjustCost" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="closing_qty" property="closingQty" jdbcType="INTEGER" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="closing_amount" property="closingAmount" jdbcType="DECIMAL" />
+    <result column="adjust_amount" property="adjustAmount" jdbcType="DECIMAL" />
+    <result column="diver_amount" property="diverAmount" jdbcType="DECIMAL" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="zone_yyyymm" property="zoneYyyymm" jdbcType="CHAR" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, item_no, barcode, item_code, item_name, brand_no, size_kind, adjust_cost, 
+    unit_cost, closing_qty,(unit_cost * closing_qty) closing_amount,
+    (adjust_cost * closing_qty) adjust_amount,
+    ((adjust_cost - unit_cost) * closing_qty) diver_amount,
+     create_user, create_time, remark, update_time, zone_yyyymm, 
+    sharding_flag
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shardingFlagIn and ''!=params.shardingFlagIn">
+		AND sharding_flag in (${params.shardingFlagIn})
+	  </if>
+	  <if test="null!=params.shardingFlag and ''!=params.shardingFlag">
+		AND sharding_flag = #{params.shardingFlag,jdbcType=VARCHAR}
+	  </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+       	AND bill_no = #{params.billNo}
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo" >
+       	AND item_no = #{params.itemNo}
+      </if>
+      <if test="null != params.itemNos and '' != params.itemNos">
+	    <foreach collection="params.itemNos" item="itemNo" separator="," open="AND item_no in (" close=")" index=""> 
+			#{itemNo}  
+		</foreach>  
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_inv_cost_adjust_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_inv_cost_adjust_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_inv_cost_adjust_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_inv_cost_adjust_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="findListBLKcount" resultType="java.lang.Integer" >
+  SELECT COUNT(1) FROM (
+	SELECT
+		i.style_no,dtl.brand_no,dtl.size_kind,dtl.adjust_cost,dtl.unit_cost,
+		SUM(dtl.closing_qty) closing_qty,
+		SUM(dtl.adjust_cost * dtl.closing_qty) adjust_amount,
+		SUM((dtl.adjust_cost - dtl.unit_cost) * closing_qty) diver_amount
+	FROM
+		bill_inv_cost_adjust_dtl dtl
+	LEFT JOIN item i ON dtl.item_no = i.item_no
+	WHERE 1 = 1
+	AND style_no IS NOT NULL
+	AND trim(style_no) != '' 
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+       	AND dtl.bill_no = #{params.billNo}
+      </if>
+    </if>
+	GROUP BY i.style_no
+	) A
+  </select>
+  
+  <select id="findListBLK" resultMap="BaseResultMap" parameterType="map">
+  	SELECT
+		i.style_no,dtl.brand_no,dtl.size_kind,dtl.adjust_cost,dtl.unit_cost,
+		SUM(dtl.closing_qty) closing_qty,SUM(dtl.unit_cost * dtl.closing_qty) closing_amount,
+		SUM(dtl.adjust_cost * dtl.closing_qty) adjust_amount,
+		SUM((dtl.adjust_cost - dtl.unit_cost) * closing_qty) diver_amount
+	FROM
+		bill_inv_cost_adjust_dtl dtl
+	LEFT JOIN item i ON dtl.item_no = i.item_no
+	WHERE 1 = 1
+	AND style_no IS NOT NULL
+	AND trim(style_no) != '' 
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+       	AND dtl.bill_no = #{params.billNo}
+      </if>
+    </if>
+	GROUP BY i.style_no
+	 <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_inv_cost_adjust_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjustDtl" >
+    DELETE FROM bill_inv_cost_adjust_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjustDtl" >
+    INSERT INTO bill_inv_cost_adjust_dtl (id, bill_no, item_no, barcode, 
+      item_code, item_name, brand_no, 
+      size_kind, adjust_cost, unit_cost, 
+      closing_qty, create_user, create_time, 
+      remark, update_time, zone_yyyymm, 
+      sharding_flag)
+    VALUES (#{id,jdbcType=CHAR}, #{billNo,jdbcType=CHAR}, #{itemNo,jdbcType=CHAR}, #{barcode,jdbcType=VARCHAR}, 
+      #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{brandNo,jdbcType=CHAR}, 
+      #{sizeKind,jdbcType=CHAR}, #{adjustCost,jdbcType=DECIMAL}, #{unitCost,jdbcType=DECIMAL}, 
+      #{closingQty,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{zoneYyyymm,jdbcType=CHAR}, 
+      #{shardingFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjustDtl" >
+    INSERT INTO bill_inv_cost_adjust_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="barcode != null" >
+        barcode,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="sizeKind != null" >
+        size_kind,
+      </if>
+      <if test="adjustCost != null" >
+        adjust_cost,
+      </if>
+      <if test="unitCost != null" >
+        unit_cost,
+      </if>
+      <if test="closingQty != null" >
+        closing_qty,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="zoneYyyymm != null" >
+        zone_yyyymm,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="barcode != null" >
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeKind != null" >
+        #{sizeKind,jdbcType=CHAR},
+      </if>
+      <if test="adjustCost != null" >
+        #{adjustCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        #{unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="closingQty != null" >
+        #{closingQty,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zoneYyyymm != null" >
+        #{zoneYyyymm,jdbcType=CHAR},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjustDtl" >
+    UPDATE bill_inv_cost_adjust_dtl
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="barcode != null" >
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeKind != null" >
+        size_kind = #{sizeKind,jdbcType=CHAR},
+      </if>
+      <if test="adjustCost != null" >
+        adjust_cost = #{adjustCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        unit_cost = #{unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="closingQty != null" >
+        closing_qty = #{closingQty,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zoneYyyymm != null" >
+        zone_yyyymm = #{zoneYyyymm,jdbcType=CHAR},
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag = #{shardingFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjustDtl" >
+    UPDATE bill_inv_cost_adjust_dtl
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      barcode = #{barcode,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      size_kind = #{sizeKind,jdbcType=CHAR},
+      adjust_cost = #{adjustCost,jdbcType=DECIMAL},
+      unit_cost = #{unitCost,jdbcType=DECIMAL},
+      closing_qty = #{closingQty,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      zone_yyyymm = #{zoneYyyymm,jdbcType=CHAR},
+      sharding_flag = #{shardingFlag,jdbcType=CHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <delete id="deleteByBillNo" parameterType="java.lang.String">
+  	DELETE FROM bill_inv_cost_adjust_dtl WHERE bill_no = #{billNo}
+  </delete>
+  
+  <select id="findLastJoinHeaderByParams" resultMap="BaseResultMap" parameterType="map" >
+  	SELECT D.id, D.bill_no, D.item_no, D.item_code, D.item_name, D.brand_no,D.adjust_cost, D.unit_cost, D.closing_qty, 
+    D.create_user, D.create_time, D.remark,
+    (D.unit_cost * D.closing_qty) closing_amount,
+    (D.adjust_cost * D.closing_qty) adjust_amount,
+    ((D.adjust_cost - D.unit_cost) * D.closing_qty) diver_amount,
+    D.size_kind,D.sharding_flag, T.audit_time
+		FROM bill_inv_cost_adjust T
+  			INNER JOIN bill_inv_cost_adjust_dtl D
+   		ON D.bill_no = T.bill_no
+		WHERE T.status = #{params.status}
+			AND T.company_no = #{params.companyNo}
+	 		AND D.item_no = #{params.itemNo}
+	 		AND T.YEAR = #{params.year}
+	 		AND T.MONTH = #{params.month}
+	 		AND T.sharding_flag = #{params.shardingFlag}
+	 		AND T.bill_no != #{params.billNo}
+	ORDER BY T.audit_time DESC
+	LIMIT 0, 1
+  </select>
+</mapper>

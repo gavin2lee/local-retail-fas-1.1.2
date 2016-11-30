@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PricingRangeMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PricingRange" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="json_str" property="jsonStr" jdbcType="VARCHAR" />
+    <result column="query_condition" property="queryCondition" jdbcType="VARCHAR" />
+    <result column="is_start" property="isStart" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, json_str, query_condition, is_start, remark, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM pricing_range
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM pricing_range WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM pricing_range WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM pricing_range WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM pricing_range
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.PricingRange" >
+    DELETE FROM pricing_range
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.PricingRange" >
+    INSERT INTO pricing_range (id, json_str, query_condition, 
+      is_start, remark, update_time
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{jsonStr,jdbcType=VARCHAR}, #{queryCondition,jdbcType=VARCHAR}, 
+      #{isStart,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.PricingRange" >
+    INSERT INTO pricing_range
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="jsonStr != null" >
+        json_str,
+      </if>
+      <if test="queryCondition != null" >
+        query_condition,
+      </if>
+      <if test="isStart != null" >
+        is_start,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="jsonStr != null" >
+        #{jsonStr,jdbcType=VARCHAR},
+      </if>
+      <if test="queryCondition != null" >
+        #{queryCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="isStart != null" >
+        #{isStart,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.PricingRange" >
+    UPDATE pricing_range
+    <set >
+      <if test="jsonStr != null" >
+        json_str = #{jsonStr,jdbcType=VARCHAR},
+      </if>
+      <if test="queryCondition != null" >
+        query_condition = #{queryCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="isStart != null" >
+        is_start = #{isStart,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.PricingRange" >
+    UPDATE pricing_range
+    SET json_str = #{jsonStr,jdbcType=VARCHAR},
+      query_condition = #{queryCondition,jdbcType=VARCHAR},
+      is_start = #{isStart,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getPricingItemCount" resultType="java.lang.Integer" >
+    SELECT 
+	  COUNT(1) 
+	FROM
+	  item 
+	  INNER JOIN brand 
+	    ON brand.brand_no = item.brand_no 
+	  INNER JOIN brand_unit 
+	    ON brand_unit.brand_unit_no = brand.sys_no 
+	  INNER JOIN supplier_group_rel 
+	    ON supplier_group_rel.supplier_no = item.supplier_no 
+	WHERE 1 = 1 
+    {params.pricingRangeCondition}
+    <if test="null != params.itemNo and '' != params.itemNo">
+		AND item_no = #{params.itemNo}    
+    </if>
+  </select>
+</mapper>

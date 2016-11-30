@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<properties url="file:///d:/wonhighconf/mybatis-ibator-conf.properties" />
+	<classPathEntry location="${mysql.jar.path}" />
+	<context id="context1" targetRuntime="MyBatis3">
+
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://172.17.210.180:3306/retail_fms?useUnicode=true&amp;characterEncoding=UTF-8"
+			userId="retail_fms" password="retail_fms" />
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+			<!-- 
+				只有一个属于forceBigDecimals，默认false。如果字段精确超过0，生成BigDecimal 
+			           如果字段精确是0，总长度10-18生成Long; 如果字段精确是0，总长5-9生成Integer; 
+			           如果字段精确是0，总长小于5生成Short; 如果forceBigDecimals为true,统一生成BigDecimal
+			-->
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="cn.wonhigh.retail.fas.api.vo"
+			targetProject="retail-fas-api-client" />
+		<sqlMapGenerator targetPackage="mapper"
+			targetProject="retail-fas-api-server/src/main/resources" />
+		<javaClientGenerator targetPackage="cn.wonhigh.retail.fas.api.dal"
+			targetProject="retail-fas-api-server" type="XMLMAPPER">
+			<property name="interfaceExtendSupInterface"
+				value="com.yougou.logistics.base.dal.database.BaseCrudMapper" />
+			<property name="enableInterfaceSupInterfaceGenericity"
+				value="false" />
+			<property name="exclusionsMethods"
+				value="countByQuery,deleteByQuery,deleteByPrimaryKey,insert,insertSelective,selectByQuery,selectByQueryWithBLOBs,selectByPrimaryKey,selectCount,selectByPage,updateByQuery,updateByQueryWithBLOBs,updateByPrimaryKeySelective,updateByPrimaryKeyWithBLOBs" />
+		</javaClientGenerator>
+
+		<sqlMapConfigFileAppend targetPackage="META-INF"
+			targetProject="retail-fas-api-server/src/main/resources"
+			confileFileName="mybatis-fas-dal-config.xml"
+			confileFilePackagePath="mapper" />
+		<!-- <javaServiceGenerator targetPackage="com.yougou.logistics.uc.service" 
+			targetProject="logistics-uc-service" interfaceExtendSupInterface="com.yougou.logistics.base.service.BaseCrudService" 
+			enableInterfaceSupInterfaceGenericity="false" extendSupClass="com.yougou.logistics.base.service.BaseCrudServiceImpl" 
+			enableSupClassGenericity="false" /> <javaManagerGenerator targetPackage="com.yougou.logistics.uc.manager" 
+			targetProject="logistics-uc-manager" interfaceExtendSupInterface="com.yougou.logistics.base.manager.BaseCrudManager" 
+			enableInterfaceSupInterfaceGenericity="false" extendSupClass="com.yougou.logistics.base.manager.BaseCrudManagerImpl" 
+			enableSupClassGenericity="false" /> <javaControllerGenerator targetPackage="com.yougou.logistics.uc.web.controller" 
+			targetProject="logistics-uc-web" extendSupClass="com.yougou.logistics.base.web.controller.BaseCrud4RestfulController" 
+			enableSupClassGenericity="true" /> <table schema="dev1" tableName="logistics_base" 
+			domainObjectName="LogisticsBase" enableCountByExample="false" enableUpdateByExample="false" 
+			enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"> 
+			<columnOverride column="BASE_ID" javaType="Long"></columnOverride> </table> -->
+
+		<tableSetting isSchema="true" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+			<prop name="replaceTablePrefix">
+				<list>
+					<prefix name="" value="" />
+				</list>
+			</prop>
+			<!-- 忽略schema，避免在xml中出现schema.表名 -->
+			<prop name="ignoreGeneratorSchema" value="true" />
+		</tableSetting>
+
+	</context>
+</generatorConfiguration>

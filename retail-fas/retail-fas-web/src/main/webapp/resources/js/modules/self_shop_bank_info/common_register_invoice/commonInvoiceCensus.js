@@ -1,0 +1,1 @@
+var commonInvoiceCensus = new Object();

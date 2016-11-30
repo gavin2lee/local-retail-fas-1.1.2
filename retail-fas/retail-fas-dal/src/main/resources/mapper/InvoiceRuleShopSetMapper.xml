@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.InvoiceRuleShopSetMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.InvoiceRuleShopSet" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_group_no" property="shopGroupNo" jdbcType="VARCHAR" />
+    <result column="invoice_rule_no" property="invoiceRuleNo" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="group_flag" property="groupFlag" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_group_no, invoice_rule_no, shop_no, short_name, full_name, group_flag, create_user, 
+    create_time, update_user, update_time, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      
+      <if test="null!=params.createUser and ''!=params.createUser" >
+        AND create_user = #{params.createUser}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM invoice_rule_shop_set
+    WHERE id = #{id,jdbcType=INTEGER}
+    or shop_no = #{shopNo,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM invoice_rule_shop_set WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM invoice_rule_shop_set WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM invoice_rule_shop_set WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM invoice_rule_shop_set
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleShopSet" >
+    DELETE FROM invoice_rule_shop_set
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleShopSet" >
+    INSERT INTO invoice_rule_shop_set (id, shop_group_no, invoice_rule_no, 
+      shop_no, short_name, full_name, 
+      group_flag, create_user, create_time, 
+      update_user, update_time, remark
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{shopGroupNo,jdbcType=VARCHAR}, #{invoiceRuleNo,jdbcType=CHAR}, 
+      #{shopNo,jdbcType=CHAR}, #{shortName,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, 
+      #{groupFlag,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleShopSet" >
+    INSERT INTO invoice_rule_shop_set
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopGroupNo != null" >
+        shop_group_no,
+      </if>
+      <if test="invoiceRuleNo != null" >
+        invoice_rule_no,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="fullName != null" >
+        full_name,
+      </if>
+      <if test="groupFlag != null" >
+        group_flag,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="shopGroupNo != null" >
+        #{shopGroupNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceRuleNo != null" >
+        #{invoiceRuleNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupFlag != null" >
+        #{groupFlag,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleShopSet" >
+    UPDATE invoice_rule_shop_set
+    <set >
+      <if test="shopGroupNo != null" >
+        shop_group_no = #{shopGroupNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceRuleNo != null" >
+        invoice_rule_no = #{invoiceRuleNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupFlag != null" >
+        group_flag = #{groupFlag,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleShopSet" >
+    UPDATE invoice_rule_shop_set
+    SET shop_group_no = #{shopGroupNo,jdbcType=VARCHAR},
+      invoice_rule_no = #{invoiceRuleNo,jdbcType=CHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      group_flag = #{groupFlag,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

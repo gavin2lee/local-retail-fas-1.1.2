@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillDifferencesMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillDifferences" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="handle_no" property="handleNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="asn_bill_no" property="asnBillNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="adjustment_type" property="adjustmentType" jdbcType="TINYINT" />
+    <result column="sys_no" property="sysNo" jdbcType="CHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="store_no_from" property="storeNoFrom" jdbcType="CHAR" />
+    <result column="store_name_from" property="storeNameFrom" jdbcType="VARCHAR" />
+    <result column="shop_no_from" property="shopNoFrom" jdbcType="CHAR" />
+    <result column="store_no" property="storeNo" jdbcType="CHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receipt_date" property="receiptDate" jdbcType="DATE" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="color_no" property="colorNo" jdbcType="CHAR" />
+    <result column="color_name" property="colorName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+    <result column="send_out_qty" property="sendOutQty" jdbcType="INTEGER" />
+    <result column="stock_in_qty" property="stockInQty" jdbcType="INTEGER" />
+    <result column="differences_qty" property="differencesQty" jdbcType="INTEGER" />
+    <result column="adjustment_qty" property="adjustmentQty" jdbcType="INTEGER" />
+    <result column="adjustment_direction" property="adjustmentDirection" jdbcType="INTEGER" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="adjustment_cost" property="adjustmentCost" jdbcType="DECIMAL" />
+    <result column="merchandiser" property="merchandiser" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="box_no" property="boxNo" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, handle_no, bill_type, asn_bill_no, status, adjustment_type, sys_no, 
+    order_unit_no_from, order_unit_name_from, order_unit_no, order_unit_name, store_no_from, 
+    store_name_from, shop_no_from, store_no, store_name, shop_no, supplier_no, supplier_name, 
+    send_date, receipt_date, item_no, item_code, item_name, color_no, color_name, brand_no, 
+    brand_name, sku_no, size_no, send_out_qty, stock_in_qty, differences_qty, adjustment_qty, 
+    adjustment_direction, cost, adjustment_cost, merchandiser, create_user, create_time, 
+    auditor, audit_time, box_no, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_differences
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_differences WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_differences WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_differences WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_differences
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillDifferences" >
+    DELETE FROM bill_differences
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillDifferences" >
+    INSERT INTO bill_differences (id, bill_no, handle_no, 
+      bill_type, asn_bill_no, status, 
+      adjustment_type, sys_no, order_unit_no_from, 
+      order_unit_name_from, order_unit_no, order_unit_name, 
+      store_no_from, store_name_from, shop_no_from, 
+      store_no, store_name, shop_no, 
+      supplier_no, supplier_name, send_date, 
+      receipt_date, item_no, item_code, 
+      item_name, color_no, color_name, 
+      brand_no, brand_name, sku_no, 
+      size_no, send_out_qty, stock_in_qty, 
+      differences_qty, adjustment_qty, adjustment_direction, 
+      cost, adjustment_cost, merchandiser, 
+      create_user, create_time, auditor, 
+      audit_time, box_no, remark
+      )
+    VALUES (#{id,jdbcType=CHAR}, #{billNo,jdbcType=CHAR}, #{handleNo,jdbcType=CHAR}, 
+      #{billType,jdbcType=INTEGER}, #{asnBillNo,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
+      #{adjustmentType,jdbcType=TINYINT}, #{sysNo,jdbcType=CHAR}, #{orderUnitNoFrom,jdbcType=CHAR}, 
+      #{orderUnitNameFrom,jdbcType=VARCHAR}, #{orderUnitNo,jdbcType=CHAR}, #{orderUnitName,jdbcType=VARCHAR}, 
+      #{storeNoFrom,jdbcType=CHAR}, #{storeNameFrom,jdbcType=VARCHAR}, #{shopNoFrom,jdbcType=CHAR}, 
+      #{storeNo,jdbcType=CHAR}, #{storeName,jdbcType=VARCHAR}, #{shopNo,jdbcType=CHAR}, 
+      #{supplierNo,jdbcType=CHAR}, #{supplierName,jdbcType=VARCHAR}, #{sendDate,jdbcType=DATE}, 
+      #{receiptDate,jdbcType=DATE}, #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{colorNo,jdbcType=CHAR}, #{colorName,jdbcType=VARCHAR}, 
+      #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, #{skuNo,jdbcType=CHAR}, 
+      #{sizeNo,jdbcType=VARCHAR}, #{sendOutQty,jdbcType=INTEGER}, #{stockInQty,jdbcType=INTEGER}, 
+      #{differencesQty,jdbcType=INTEGER}, #{adjustmentQty,jdbcType=INTEGER}, #{adjustmentDirection,jdbcType=INTEGER}, 
+      #{cost,jdbcType=DECIMAL}, #{adjustmentCost,jdbcType=DECIMAL}, #{merchandiser,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{auditor,jdbcType=VARCHAR}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{boxNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillDifferences" >
+    INSERT INTO bill_differences
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="handleNo != null" >
+        handle_no,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="asnBillNo != null" >
+        asn_bill_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="adjustmentType != null" >
+        adjustment_type,
+      </if>
+      <if test="sysNo != null" >
+        sys_no,
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        order_unit_no_from,
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        order_unit_name_from,
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no,
+      </if>
+      <if test="orderUnitName != null" >
+        order_unit_name,
+      </if>
+      <if test="storeNoFrom != null" >
+        store_no_from,
+      </if>
+      <if test="storeNameFrom != null" >
+        store_name_from,
+      </if>
+      <if test="shopNoFrom != null" >
+        shop_no_from,
+      </if>
+      <if test="storeNo != null" >
+        store_no,
+      </if>
+      <if test="storeName != null" >
+        store_name,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="sendDate != null" >
+        send_date,
+      </if>
+      <if test="receiptDate != null" >
+        receipt_date,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="colorNo != null" >
+        color_no,
+      </if>
+      <if test="colorName != null" >
+        color_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="skuNo != null" >
+        sku_no,
+      </if>
+      <if test="sizeNo != null" >
+        size_no,
+      </if>
+      <if test="sendOutQty != null" >
+        send_out_qty,
+      </if>
+      <if test="stockInQty != null" >
+        stock_in_qty,
+      </if>
+      <if test="differencesQty != null" >
+        differences_qty,
+      </if>
+      <if test="adjustmentQty != null" >
+        adjustment_qty,
+      </if>
+      <if test="adjustmentDirection != null" >
+        adjustment_direction,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="adjustmentCost != null" >
+        adjustment_cost,
+      </if>
+      <if test="merchandiser != null" >
+        merchandiser,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="boxNo != null" >
+        box_no,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="handleNo != null" >
+        #{handleNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="asnBillNo != null" >
+        #{asnBillNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="adjustmentType != null" >
+        #{adjustmentType,jdbcType=TINYINT},
+      </if>
+      <if test="sysNo != null" >
+        #{sysNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        #{orderUnitNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        #{orderUnitNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNo != null" >
+        #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitName != null" >
+        #{orderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNoFrom != null" >
+        #{storeNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="storeNameFrom != null" >
+        #{storeNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNoFrom != null" >
+        #{shopNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="storeNo != null" >
+        #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="sendDate != null" >
+        #{sendDate,jdbcType=DATE},
+      </if>
+      <if test="receiptDate != null" >
+        #{receiptDate,jdbcType=DATE},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="colorNo != null" >
+        #{colorNo,jdbcType=CHAR},
+      </if>
+      <if test="colorName != null" >
+        #{colorName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null" >
+        #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeNo != null" >
+        #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendOutQty != null" >
+        #{sendOutQty,jdbcType=INTEGER},
+      </if>
+      <if test="stockInQty != null" >
+        #{stockInQty,jdbcType=INTEGER},
+      </if>
+      <if test="differencesQty != null" >
+        #{differencesQty,jdbcType=INTEGER},
+      </if>
+      <if test="adjustmentQty != null" >
+        #{adjustmentQty,jdbcType=INTEGER},
+      </if>
+      <if test="adjustmentDirection != null" >
+        #{adjustmentDirection,jdbcType=INTEGER},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustmentCost != null" >
+        #{adjustmentCost,jdbcType=DECIMAL},
+      </if>
+      <if test="merchandiser != null" >
+        #{merchandiser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="boxNo != null" >
+        #{boxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillDifferences" >
+    UPDATE bill_differences
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="handleNo != null" >
+        handle_no = #{handleNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="asnBillNo != null" >
+        asn_bill_no = #{asnBillNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="adjustmentType != null" >
+        adjustment_type = #{adjustmentType,jdbcType=TINYINT},
+      </if>
+      <if test="sysNo != null" >
+        sys_no = #{sysNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        order_unit_no_from = #{orderUnitNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        order_unit_name_from = #{orderUnitNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitName != null" >
+        order_unit_name = #{orderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNoFrom != null" >
+        store_no_from = #{storeNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="storeNameFrom != null" >
+        store_name_from = #{storeNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNoFrom != null" >
+        shop_no_from = #{shopNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="storeNo != null" >
+        store_no = #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="sendDate != null" >
+        send_date = #{sendDate,jdbcType=DATE},
+      </if>
+      <if test="receiptDate != null" >
+        receipt_date = #{receiptDate,jdbcType=DATE},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="colorNo != null" >
+        color_no = #{colorNo,jdbcType=CHAR},
+      </if>
+      <if test="colorName != null" >
+        color_name = #{colorName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null" >
+        sku_no = #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="sizeNo != null" >
+        size_no = #{sizeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendOutQty != null" >
+        send_out_qty = #{sendOutQty,jdbcType=INTEGER},
+      </if>
+      <if test="stockInQty != null" >
+        stock_in_qty = #{stockInQty,jdbcType=INTEGER},
+      </if>
+      <if test="differencesQty != null" >
+        differences_qty = #{differencesQty,jdbcType=INTEGER},
+      </if>
+      <if test="adjustmentQty != null" >
+        adjustment_qty = #{adjustmentQty,jdbcType=INTEGER},
+      </if>
+      <if test="adjustmentDirection != null" >
+        adjustment_direction = #{adjustmentDirection,jdbcType=INTEGER},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustmentCost != null" >
+        adjustment_cost = #{adjustmentCost,jdbcType=DECIMAL},
+      </if>
+      <if test="merchandiser != null" >
+        merchandiser = #{merchandiser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="boxNo != null" >
+        box_no = #{boxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillDifferences" >
+    UPDATE bill_differences
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      handle_no = #{handleNo,jdbcType=CHAR},
+      bill_type = #{billType,jdbcType=INTEGER},
+      asn_bill_no = #{asnBillNo,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      adjustment_type = #{adjustmentType,jdbcType=TINYINT},
+      sys_no = #{sysNo,jdbcType=CHAR},
+      order_unit_no_from = #{orderUnitNoFrom,jdbcType=CHAR},
+      order_unit_name_from = #{orderUnitNameFrom,jdbcType=VARCHAR},
+      order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      order_unit_name = #{orderUnitName,jdbcType=VARCHAR},
+      store_no_from = #{storeNoFrom,jdbcType=CHAR},
+      store_name_from = #{storeNameFrom,jdbcType=VARCHAR},
+      shop_no_from = #{shopNoFrom,jdbcType=CHAR},
+      store_no = #{storeNo,jdbcType=CHAR},
+      store_name = #{storeName,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      send_date = #{sendDate,jdbcType=DATE},
+      receipt_date = #{receiptDate,jdbcType=DATE},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      color_no = #{colorNo,jdbcType=CHAR},
+      color_name = #{colorName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      sku_no = #{skuNo,jdbcType=CHAR},
+      size_no = #{sizeNo,jdbcType=VARCHAR},
+      send_out_qty = #{sendOutQty,jdbcType=INTEGER},
+      stock_in_qty = #{stockInQty,jdbcType=INTEGER},
+      differences_qty = #{differencesQty,jdbcType=INTEGER},
+      adjustment_qty = #{adjustmentQty,jdbcType=INTEGER},
+      adjustment_direction = #{adjustmentDirection,jdbcType=INTEGER},
+      cost = #{cost,jdbcType=DECIMAL},
+      adjustment_cost = #{adjustmentCost,jdbcType=DECIMAL},
+      merchandiser = #{merchandiser,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      box_no = #{boxNo,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

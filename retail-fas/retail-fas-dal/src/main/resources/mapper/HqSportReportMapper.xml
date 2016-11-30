@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.HqSportReportMapper" >
+	<!-- 出货统计 -->
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.HqShipmentCollet" >
+    <result column="saler_no" property="salerNo" jdbcType="CHAR"/>
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR"/>
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR"/>
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR"/>
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="total_amount_01" property="totalAmount01" jdbcType="DECIMAL" />
+    <result column="total_amount_02" property="totalAmount02" jdbcType="DECIMAL" />
+    <result column="total_amount_03" property="totalAmount03" jdbcType="DECIMAL" />
+    <result column="total_qty_01" property="totalQty01" jdbcType="INTEGER" />
+    <result column="total_qty_02" property="totalQty02" jdbcType="INTEGER" />
+    <result column="total_qty_03" property="totalQty03" jdbcType="INTEGER" />
+    <result column="total_amount_04" property="totalAmount04" jdbcType="DECIMAL" />
+    <result column="total_qty_04" property="totalQty04" jdbcType="INTEGER" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="supplier_amount" property="supplierAmount" jdbcType="DECIMAL" />
+    <result column="zone_amount" property="zoneAmount" jdbcType="DECIMAL" />
+    <result column="zone_add_amount" property="zoneAddAmount" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="loss_amount" property="lossAmount" jdbcType="DECIMAL" />
+    <result column="year_months" property="yearMonths" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="TotalResultMap" type="cn.wonhigh.retail.fas.common.model.HqShipmentCollet" >
+  	<result column="total" property="total" jdbcType="INTEGER" />
+  	<result column="total_amount_01" property="totalAmount01" jdbcType="DECIMAL" />
+    <result column="total_amount_02" property="totalAmount02" jdbcType="DECIMAL" />
+    <result column="total_amount_03" property="totalAmount03" jdbcType="DECIMAL" />
+    <result column="total_qty_01" property="totalQty01" jdbcType="INTEGER" />
+    <result column="total_qty_02" property="totalQty02" jdbcType="INTEGER" />
+    <result column="total_qty_03" property="totalQty03" jdbcType="INTEGER" />
+    <result column="total_qty_04" property="totalQty04" jdbcType="INTEGER" />
+    <result column="total_amount_04" property="totalAmount04" jdbcType="DECIMAL" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="supplier_amount" property="supplierAmount" jdbcType="DECIMAL" />
+    <result column="zone_amount" property="zoneAmount" jdbcType="DECIMAL" />
+    <result column="zone_add_amount" property="zoneAddAmount" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="loss_amount" property="lossAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <!-- 退供应商统计 -->
+  <resultMap id="ReturnSupplierResultMap" type="cn.wonhigh.retail.fas.common.model.HqShipmentCollet" >
+  	<result column="zone_no_from" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneName" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR"/>
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR"/>
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="biz_type_name" property="bizTypeName" jdbcType="CHAR"/>
+    <result column="order_no" property="returnNo" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="send_qty" property="qty" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+  	<result column="re_date" property="reDate" jdbcType="DATE" />
+    <result column="re_qty" property="totalQty01" jdbcType="INTEGER" />
+    <result column="re_amount" property="totalAmount01" jdbcType="DECIMAL" />
+    <result column="ncf_date" property="noAffirmDate" jdbcType="DATE" />
+    <result column="ncf_qty" property="totalQty02" jdbcType="INTEGER" />
+    <result column="ncf_amount" property="totalAmount02" jdbcType="DECIMAL" />
+    <result column="nre_qty" property="totalQty03" jdbcType="INTEGER" />
+    <result column="nre_amount" property="totalAmount03" jdbcType="DECIMAL" />
+    <result column="invoice_apply_date" property="applyDate" jdbcType="DATE" />
+    <result column="invoice_apply_qty" property="totalQty04" jdbcType="INTEGER" />
+    <result column="invoice_apply_amount" property="totalAmount04" jdbcType="DECIMAL" />
+    <result column="tag_amount" property="tagAmount" jdbcType="DECIMAL" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ReturnTotalResultMap" type="cn.wonhigh.retail.fas.common.model.HqShipmentCollet" >
+  	<result column="total" property="total" jdbcType="INTEGER" />
+  	<result column="send_qty" property="qty" jdbcType="INTEGER" />
+    <result column="tag_amount" property="tagAmount" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+  	<result column="re_qty" property="totalQty01" jdbcType="INTEGER" />
+    <result column="re_amount" property="totalAmount01" jdbcType="DECIMAL" />
+    <result column="ncf_qty" property="totalQty02" jdbcType="INTEGER" />
+    <result column="ncf_amount" property="totalAmount02" jdbcType="DECIMAL" />
+    <result column="nre_qty" property="totalQty03" jdbcType="INTEGER" />
+    <result column="nre_amount" property="totalAmount03" jdbcType="DECIMAL" />
+    <result column="invoice_apply_qty" property="totalQty04" jdbcType="INTEGER" />
+    <result column="invoice_apply_amount" property="totalAmount04" jdbcType="DECIMAL" />
+  </resultMap>
+  
+   <resultMap id="RecallSupplierResultMap" type="cn.wonhigh.retail.fas.common.model.HqShipmentCollet" extends="ReturnSupplierResultMap">
+   	<result column="rc_attribute" property="rcAttribute" jdbcType="VARCHAR" />
+   </resultMap>
+  <sql id="Base_Column_List" >
+    
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.salerNos and ''!=params.salerNos">
+		AND bsb.saler_no IN
+		<foreach collection="params.salerNos" index="index" item="salerNo" open="(" separator="," close=")">
+			#{salerNo, jdbcType=CHAR}
+		</foreach>
+	  </if>
+      
+      <if test="null!=params.outDateStart and ''!=params.outDateStart" >
+        AND bsb.send_date &gt;= '${params.outDateStart}'
+      </if>
+      <if test="null!=params.outDateEnd and ''!=params.outDateEnd" >
+        AND bsb.send_date &lt;= '${params.outDateEnd}'
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+        AND bsb.order_no = #{params.orderNo}
+      </if>
+      <if test="null!=params.brandNos and ''!=params.brandNos" >
+        AND bsb.brand_no in
+        <foreach collection="params.brandNos" index="index" item="brandNo" open="(" separator="," close=")">
+			#{brandNo, jdbcType=CHAR}
+		</foreach>
+      </if>
+      <if test="null!=params.zoneNo and ''!=params.zoneNo" >
+		AND bsb.zone_no_from = #{params.zoneNo} 
+	  </if>
+	  <if test="null!=params.organNos and ''!=params.organNos" >
+		AND bsb.organ_no_from IN
+		<foreach collection="params.organNos" index="index" item="organNos" open="(" separator="," close=")">
+			#{organNos, jdbcType=CHAR}
+		</foreach>
+	  </if>
+    </if>
+  </sql>
+  <!-- 出货统计表 -->
+  <sql id="outCondition">
+	  <if test="null!=params.supplierNos and ''!=params.supplierNos">
+		AND bbb.supplier_no IN
+		<foreach collection="params.supplierNos" index="index" item="supplierNo" open="(" separator="," close=")">
+			#{supplierNo, jdbcType=CHAR}
+		</foreach>
+	  </if>
+      <if test="null!=params.startDate and ''!=params.startDate" >
+        AND date_format(bbb.send_date,'%Y%m') &gt;= '${params.startDate}'
+      </if> 
+      <if test="null!=params.endDate and ''!=params.endDate" >
+        AND date_format(bbb.send_date,'%Y%m') &lt;= '${params.endDate}'
+      </if>
+  </sql>
+  <!-- sale退厂-->
+  <sql id="sale_return_factory">
+	 (BILL_TYPE = '1341' AND BIZ_TYPE IN (2))
+  </sql>
+  
+  <!-- sale召回出库-->
+  <sql id="sale_return_out">
+	 (BILL_TYPE = '1341' AND BIZ_TYPE IN (0))
+  </sql>
+  
+  <!-- sale退残-->
+  <sql id="sale_return_disabled">
+	 (BILL_TYPE = '1341' AND BIZ_TYPE IN (1))
+  </sql>
+  
+  <!-- sale供应商索赔-->
+  <sql id="sale_supplier_claim">
+	 (BILL_TYPE = '1355' AND BIZ_TYPE IN (4))
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   
+  </select>
+ 
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+   
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+   
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.HqShipmentCollet" >
+   
+  </delete>
+ 
+  <sql id="algorithmA" >
+         IFNULL(ROUND(ROUND(ROUND(bbb.tag_price * cd.refer_discount1,2) / 1.17,2) * cd.refer_discount2 *1.17,2),0.00)
+  </sql>
+  <sql id="algorithmB" >
+         IFNULL(ROUND(ROUND(ROUND(bbb.tag_price * cd.refer_discount1,0) / 1.17,2) * cd.refer_discount2 *1.17,2),0.00)
+  </sql>
+  <sql id="algorithmC" >
+         IFNULL(ROUND(bbb.tag_price * cd.refer_discount1 * cd.refer_discount2,2),0.00)
+  </sql>
+  
+  <!-- 查询出货统计的记录数  -->
+  <select id="findHqShipmentColletCount" resultMap="TotalResultMap" parameterType="map" >
+   	SELECT COUNT(*) total,
+   		sum(qty) qty,
+		sum(total_qty_01) total_qty_01,
+		sum(total_amount_01) total_amount_01,
+		sum(total_qty_02) total_qty_02,
+		sum(total_amount_02) total_amount_02,
+		sum(total_qty_03) total_qty_03,
+		sum(total_amount_03) total_amount_03,
+		sum(total_qty_04) total_qty_04,
+		sum(total_amount_04) total_amount_04,
+		sum(supplier_amount) supplier_amount,
+		sum(zone_amount) zone_amount,
+		sum(zone_add_amount) zone_add_amount,
+		sum(amount) amount,
+		sum(loss_amount) loss_amount
+   	FROM(
+		<include refid="queryListSql" />
+	) tbs
+  </select>
+ 
+  <!--出货统计查询  -->
+   <select id="findHqShipmentColletByCondition" resultMap="BaseResultMap" parameterType="map" >   
+      <include refid="queryListSql" />
+	  <if test="null != page and '' != page">
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	  </if>
+   </select>
+   
+   <sql id="queryListSql">
+	select zone_name,
+		zone_no,
+		saler_name,
+		saler_no,
+		buyer_name,
+		buyer_no,
+		supplier_no,
+		supplier_name,
+		year_months,
+		category_no,
+		brand_unit_no,
+		brand_unit_name,
+		brand_no,
+		brand_name,
+		SUM(IF(category_no = '410101',qty,0)) total_qty_01,
+		SUM(IF(category_no = '410101',amount,0)) total_amount_01,
+		SUM(IF(category_no = '460101',qty,0)) total_qty_02,
+		SUM(IF(category_no = '460101',amount,0)) total_amount_02,
+		SUM(IF(category_no = '470101',qty,0)) total_qty_03,
+		SUM(IF(category_no = '470101',amount,0)) total_amount_03,
+		SUM(IF(category_no = '490101',qty,0)) total_qty_04,
+		SUM(IF(category_no = '490101',amount,0)) total_amount_04,
+		SUM(qty) qty,
+		SUM(supplier_amount) supplier_amount,
+		SUM(zone_amount) zone_amount,
+		SUM(other_aoumt) amount,
+		SUM(supplier_amount) - SUM(other_aoumt) zone_add_amount,
+		SUM(zone_amount) - SUM(other_aoumt) loss_amount
+		from (
+			select bbb.zone_name,
+				bbb.zone_no,
+				bbb.saler_name,
+				bbb.saler_no,
+				bbb.buyer_name,
+				bbb.buyer_no,
+				bbb.supplier_no,
+				bbb.supplier_name,
+				date_format(bbb.send_date,'%Y%m') year_months,
+				bbb.category_no,
+				bbb.brand_unit_no,
+				bbb.brand_unit_name,
+				bbb.brand_no,
+				bbb.brand_name,
+				bbb.send_qty qty,
+				bbb.cost * IFNULL(bbb.send_qty, 0) amount,
+				bbb.tag_price * IFNULL(bbb.send_qty, 0) tag_price,
+				bbb.unit_cost * IFNULL(bbb.send_qty, 0) unit_cost,
+				bbb.region_cost * IFNULL(bbb.send_qty, 0) region_cost,
+				bbb.headquarter_cost * IFNULL(bbb.send_qty, 0) headquarter_cost,
+				ta.supplier_amount,
+				bbb.cost * IFNULL(bbb.send_qty, 0) zone_amount,
+				CASE WHEN cd.algorithm='A' THEN <include refid="algorithmA" /> 
+				WHEN cd.algorithm='B' THEN <include refid="algorithmB" /> 
+				WHEN cd.algorithm='C' THEN <include refid="algorithmC" /> 
+				ELSE 0.00 END other_aoumt
+			from (
+				SELECT bbb.original_bill_no,
+					bbb.send_qty * bbb.cost supplier_amount
+				FROM bill_buy_balance bbb
+				where bbb.buyer_no in (${params.hqCompanyData})
+				<include refid="outCondition" />
+			)ta INNER JOIN bill_buy_balance bbb ON ta.original_bill_no = bbb.original_bill_no
+			LEFT JOIN (
+				SELECT
+					saler_no,
+					buyer_no,
+					category_no,
+					brand_no,
+					max(effective_date),
+					`algorithm`,
+					price_basis,
+					refer_discount1,
+					refer_discount2
+				FROM
+					contract_discount
+				WHERE
+					contract_discount_type = 2 and order_type = 1
+				GROUP BY
+					saler_no,
+					buyer_no,
+					category_no,
+					brand_no
+			) cd ON bbb.category_no = cd.category_no  and bbb.brand_no = cd.brand_no 
+			and bbb.saler_no = cd.saler_no AND bbb.buyer_no = cd.buyer_no
+			where 1=1
+			<if test="null!=params.buyerNos and ''!=params.buyerNos">
+				AND bbb.buyer_no IN
+				<foreach collection="params.buyerNos" index="index" item="buyerNo" open="(" separator="," close=")">
+					#{buyerNo, jdbcType=CHAR}
+				</foreach>
+			</if>
+			<include refid="outCondition" />
+		) tb
+		GROUP BY saler_no,supplier_no,year_months
+   </sql>
+   
+   <!-- 查询退供应商统计表   召回业务 -->
+   <select id="findRecallSupplierList" resultMap="RecallSupplierResultMap" parameterType="map">
+   	<include refid="queryRecallSupplierSql" />
+   	<if test="null != page and '' != page">
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</if>
+   </select>
+   
+   <select id="findRecallSupplierCount" resultMap="ReturnTotalResultMap" parameterType="map" >
+   	SELECT COUNT(*) total,
+   		sum(tbs.qty) qty,
+		sum(tbs.amount) amount,
+		sum(tbs.re_qty) re_qty,
+		sum(tbs.re_amount) re_amount,
+		sum(tbs.ncf_qty) ncf_qty,
+		sum(tbs.ncf_amount) ncf_amount,
+		sum(tbs.nre_qty) nre_qty,
+		sum(tbs.nre_amount) nre_amount,
+		sum(tbs.tag_amount) tag_amount,
+		sum(tbs.invoice_apply_qty) invoice_apply_qty,
+		sum(tbs.invoice_apply_amount) invoice_apply_amount
+   	FROM(
+		<include refid="queryRecallSupplierSql" />
+	) tbs
+  </select>
+  
+   <!-- 查询退供应商统计表   残次业务 -->
+   <select id="findReturnSupplierList" resultMap="ReturnSupplierResultMap" parameterType="map">
+   	<include refid="queryReturnSupplierSql" />
+   	<if test="null != page and '' != page">
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</if>
+   </select>
+   
+    <select id="findReturnSupplierCount" resultMap="ReturnTotalResultMap" parameterType="map" >
+	   	SELECT COUNT(*) total,
+	   		sum(tbs.qty) qty,
+			sum(tbs.amount) amount,
+			sum(tbs.re_qty) re_qty,
+			sum(tbs.re_amount) re_amount,
+			sum(tbs.ncf_qty) ncf_qty,
+			sum(tbs.ncf_amount) ncf_amount,
+			sum(tbs.nre_qty) nre_qty,
+			sum(tbs.nre_amount) nre_amount,
+			sum(tbs.nre_qty) nre_qty,
+			sum(tbs.invoice_apply_qty) invoice_apply_qty,
+			sum(tbs.invoice_apply_amount) invoice_apply_amount
+	   	FROM(
+		   	<include refid="queryReturnSupplierSql" />
+		) tbs
+  	</select>
+   
+   <sql id="querySuppliertListSql">
+   	SELECT
+		bsb.supplier_name,
+		bsb.supplier_no,
+		CASE WHEN (bsb.bill_type =1341 and bsb.biz_type = 0) THEN '召回出为' WHEN (bsb.bill_type =1341 and bsb.biz_type = 1) THEN '退残'
+		WHEN (bsb.bill_type =1341 and bsb.biz_type = 2) THEN '退厂' WHEN (bsb.bill_type =1355 and bsb.biz_type = 4) THEN '供应商索赔' END biz_type_name,
+		bsb.bill_no,
+		bsb.return_no,
+		bsb.item_code,
+		bsb.item_name,
+		bsb.brand_no,
+		bsb.brand_name,
+		bsb.brand_unit_no,
+		bsb.brand_unit_name,
+		bsb.category_no,
+		bsb.category_name,
+		bsb.send_qty,
+		bsb.tag_price * IFNULL(bsb.send_qty,0) tag_amount,
+		bsb.send_qty * IFNULL(bsb.cost,0) amount,
+		bsb.send_date,
+		bsb.order_unit_name_from,
+		bsb.order_unit_no_from,
+		bsb.organ_no_from,
+		bsb.organ_name_from,
+		bsb.zone_no_from,
+		bsb.zone_name_from,
+		bsb.saler_no,
+		bsb.saler_name,
+		bsb.buyer_no,
+		bsb.buyer_name,
+		bsb.receive_store_no,
+		bsb.receive_store_name,
+		CASE WHEN bsb.bill_type =1355 THEN bsb.send_qty ELSE tb.in_send_qty END affirm_qty,
+		CASE WHEN bsb.bill_type =1355 THEN (bsb.tag_price * IFNULL(bsb.send_qty,0)) ELSE tb.in_tag_amount END affirm_tag_amount,
+		CASE WHEN bsb.bill_type =1355 THEN (bsb.send_qty * IFNULL(bsb.cost,0)) ELSE tb.in_amount END affirm_amount,
+		CASE WHEN bsb.bill_type =1355 THEN 0 ELSE (bsb.send_qty - IFNULL(tb.in_send_qty,0)) END no_affirm_qty,
+		CASE WHEN bsb.bill_type =1355 THEN 0 ELSE (bsb.tag_price * IFNULL(bsb.send_qty,0) - IFNULL(tb.in_tag_amount,0)) END no_tag_amount,
+		CASE WHEN bsb.bill_type =1355 THEN 0 ELSE (bsb.send_qty * IFNULL(bsb.cost,0) - IFNULL(tb.in_amount,0)) END no_affirm_amount
+	FROM (
+		SELECT
+			bsb.return_no,
+			bsb.send_qty in_send_qty,
+			bsb.tag_price * IFNULL(bsb.send_qty, 0) in_tag_amount,
+			bsb.cost * IFNULL(bsb.send_qty, 0) in_amount
+		FROM bill_sale_balance bsb
+		WHERE bsb.bill_type = 1333 AND bsb.biz_type IN (0, 1, 2)
+		<include refid="condition" />
+	) tb
+	RIGHT JOIN bill_sale_balance bsb ON bsb.return_no = tb.return_no
+	WHERE 
+	<if test="null!=params.businessTypes">
+		( <foreach collection="params.businessTypes" index="index" item="businessType" separator="OR">
+			 <if test="businessType == 1">
+			    <include refid="sale_return_out" />
+			 </if>
+			 <if test="businessType == 2">
+			    <include refid="sale_return_disabled" />
+			 </if>
+			 <if test="businessType == 3">
+			    <include refid="sale_return_factory" />
+			 </if>
+			 <if test="businessType == 4">
+			    <include refid="sale_supplier_claim" />
+			 </if>
+		 </foreach>
+		 )
+	  </if>
+	  <if test="null==params.businessTypes">
+	  	((bsb.bill_type = 1341 AND bsb.biz_type in (0,1,2))
+		OR (bsb.bill_type = 1355 and bsb.biz_type = 4))
+	  </if>
+	<include refid="condition" />
+   </sql>
+
+   <!-- 退供应报表－－退残业务  -->
+   <sql id="queryReturnSupplierSql">
+   	SELECT
+		bsb.zone_no_from,
+		bsb.zone_name_from,
+		bsb.organ_no_from,
+		bsb.organ_name_from,
+		bsb.saler_no,
+		bsb.saler_name,
+		bsb.brand_unit_no,
+		bsb.brand_unit_name,
+		'自营' biz_type_name,
+		bsb.order_no,
+		bsb.buyer_no,
+		bsb.buyer_name,
+		bsb.supplier_no,
+		bsb.supplier_name,
+		bsb.brand_no,
+		bsb.brand_name,
+		bsb.category_no,
+		bsb.category_name,
+		bsb.send_date re_date,
+		sum(bsb.send_qty) re_qty,
+		sum(bsb.send_qty * IFNULL(ic.unit_cost,0)) re_amount,
+		IFNULL(conf.qty,0) qty,
+		conf.send_date,
+		IFNULL(conf.amount,0) amount,
+		conf.invoice_apply_date ,
+		IF(conf.invoice_apply_date is null,0,IFNULL(conf.qty,0)) invoice_apply_qty,
+		IF(conf.invoice_apply_date is null,0,IFNULL(conf.amount,0)) invoice_apply_amount,
+		ncftb.ncf_date,
+		IFNULL(ncftb.ncf_qty,0) ncf_qty,
+		IFNULL(ncftb.ncf_amount,0) ncf_amount,
+		(sum(bsb.send_qty) - IFNULL(conf.qty,0) - IFNULL(ncftb.ncf_qty,0)) nre_qty,
+		(sum(bsb.send_qty * IFNULL(ic.unit_cost,0)) - IFNULL(conf.amount,0) - IFNULL(ncftb.ncf_amount,0)) nre_amount,
+		0 tag_amount
+	FROM bill_buy_balance bsb LEFT JOIN item_cost ic ON bsb.saler_no = ic.company_no
+	AND bsb.item_no = ic.item_no AND ic. YEAR = DATE_FORMAT(bsb.send_date, '%Y')
+	AND ic.MONTH = DATE_FORMAT(DATE_ADD(send_date, INTERVAL - 1 MONTH),'%c')
+	LEFT JOIN (
+		SELECT
+			bsb.order_no,
+			bsb.send_date ncf_date,
+			sum(bsb.send_qty) ncf_qty,
+			sum(bsb.send_qty * ic.unit_cost) ncf_amount
+		FROM
+			bill_buy_balance bsb
+		LEFT JOIN item_cost ic ON bsb.saler_no = ic.company_no
+		AND bsb.item_no = ic.item_no
+		AND ic. YEAR = DATE_FORMAT(bsb.send_date, '%Y')
+		AND ic. MONTH = DATE_FORMAT(bsb.send_date,'%c')
+		WHERE(bsb.bill_type = 1341 AND bsb.biz_type =1) AND bsb.ref_bill_type = 2016
+		<include refid="innerQueryCondition" />
+		GROUP BY bsb.order_no
+	) ncftb ON bsb.order_no = ncftb.order_no
+	LEFT JOIN (
+			SELECT
+				bsb.order_no,
+				sum(bsb.send_qty) qty,
+				bsb.send_date,
+				sum(bsb.send_qty * bsb.cost) amount,
+				bba.invoice_apply_date 
+			FROM bill_sale_balance bsb
+			LEFT JOIN bill_balance_invoice_source bbs ON bsb.balance_no = bbs.balance_no and bbs.balance_type =11
+			LEFT JOIN bill_balance_invoice_apply bba ON bbs.bill_no = bba.bill_no
+			WHERE bsb.bill_type = 1333
+			<include refid="innerQueryCondition" />
+			GROUP BY bsb.order_no
+	) conf ON conf.order_no = bsb.order_no			
+	WHERE(bsb.bill_type = 1341 AND bsb.biz_type =1) AND bsb.ref_bill_type = 2015
+	<include refid="condition" />
+	GROUP BY bsb.order_no
+   </sql>
+   
+   <!-- 退供应报表    召回业务sql  -->
+   <sql id="queryRecallSupplierSql">
+	SELECT
+		bsb.zone_no_from,
+		bsb.zone_name_from,
+		bsb.organ_no_from,
+		bsb.organ_name_from,
+		bsb.saler_no,
+		bsb.saler_name,
+		bsb.brand_unit_no,
+		bsb.brand_unit_name,
+		'自营' biz_type_name,
+		CASE WHEN bsb.biz_type = 0 THEN '正常召回' ELSE '正常退货' END rc_attribute,
+		bsb.order_no,
+		bsb.buyer_no,
+		bsb.buyer_name,
+		bsb.supplier_no,
+		bsb.supplier_name,
+		bsb.brand_no,
+		bsb.brand_name,
+		bsb.category_no,
+		bsb.category_name,
+		bsb.send_date re_date,
+		sum(bsb.send_qty) re_qty,
+		sum(bsb.send_qty * IFNULL(ic.unit_cost,0)) re_amount,
+		IFNULL(conf.qty,0) qty,
+		conf.send_date,
+		IFNULL(conf.amount,0) amount,
+		conf.invoice_apply_date ,
+		IF(conf.invoice_apply_date is null,0,IFNULL(conf.qty,0)) invoice_apply_qty,
+		IF(conf.invoice_apply_date is null,0,IFNULL(conf.amount,0)) invoice_apply_amount,
+		ncftb.ncf_date,
+		IFNULL(ncftb.ncf_qty,0) ncf_qty,
+		IFNULL(ncftb.ncf_amount,0) ncf_amount,
+		(sum(bsb.send_qty) - IFNULL(conf.qty,0) - IFNULL(ncftb.ncf_qty,0)) nre_qty,
+		(sum(bsb.send_qty * IFNULL(ic.unit_cost,0)) - IFNULL(conf.amount,0) - IFNULL(ncftb.ncf_amount,0)) nre_amount,
+		 IFNULL(conf.tag_amount,0) tag_amount
+	FROM bill_buy_balance bsb LEFT JOIN item_cost ic ON bsb.saler_no = ic.company_no
+	AND bsb.item_no = ic.item_no AND ic. YEAR = DATE_FORMAT(bsb.send_date, '%Y')
+	AND ic.MONTH = DATE_FORMAT(DATE_ADD(send_date, INTERVAL - 1 MONTH),'%c')
+	LEFT JOIN (
+		SELECT
+			bsb.order_no,
+			bsb.send_date ncf_date,
+			sum(bsb.send_qty) ncf_qty,
+			sum(bsb.send_qty * ic.unit_cost) ncf_amount
+		FROM
+			bill_buy_balance bsb
+		LEFT JOIN item_cost ic ON bsb.saler_no = ic.company_no
+		AND bsb.item_no = ic.item_no
+		AND ic. YEAR = DATE_FORMAT(bsb.send_date, '%Y')
+		AND ic. MONTH = DATE_FORMAT(bsb.send_date,'%c')
+		WHERE(bsb.bill_type = 1341 AND bsb.biz_type in (0,2)) AND bsb.ref_bill_type = 2016
+		<include refid="innerQueryCondition" />
+		GROUP BY bsb.order_no
+	) ncftb ON bsb.order_no = ncftb.order_no
+	LEFT JOIN (
+			SELECT
+				bsb.order_no,
+				sum(bsb.send_qty) qty,
+				bsb.send_date,
+				sum(bsb.send_qty * bsb.cost) amount,
+				sum(bsb.other_deduct_cost) tag_amount,
+				bba.invoice_apply_date 
+			FROM bill_sale_balance bsb
+			LEFT JOIN bill_balance_invoice_source bbs ON bsb.balance_no = bbs.balance_no and bbs.balance_type =11
+			LEFT JOIN bill_balance_invoice_apply bba ON bbs.bill_no = bba.bill_no
+			WHERE bsb.bill_type = 1333
+			<include refid="innerQueryCondition" />
+			GROUP BY bsb.order_no
+	) conf ON conf.order_no = bsb.order_no			
+	WHERE(bsb.bill_type = 1341 AND bsb.biz_type in (0,2)) AND bsb.ref_bill_type = 2015
+	<include refid="condition" />
+	GROUP BY bsb.order_no
+   </sql>
+   
+   <sql id="innerQueryCondition">
+   	  <if test="null!=params.salerNos and ''!=params.salerNos">
+		AND bsb.saler_no IN
+		<foreach collection="params.salerNos" index="index" item="salerNo" open="(" separator="," close=")">
+			#{salerNo, jdbcType=CHAR}
+		</foreach>
+	  </if>
+      <if test="null!=params.zoneNo and ''!=params.zoneNo" >
+		AND bsb.zone_no_from = #{params.zoneNo} 
+	  </if>
+   </sql>
+</mapper>

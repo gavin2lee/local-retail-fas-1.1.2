@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SettleCategoryMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SettleCategory" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="settle_category_no" property="settleCategoryNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <!-- 
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+     -->
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="organ_type_no" property="organTypeNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ComplexBaseResultMap" type="cn.wonhigh.retail.fas.common.dto.SettleCategoryDto" extends="BaseResultMap">
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+ </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, settle_category_no, name, status, create_user, create_time, update_user, 
+    update_time, remark,organ_type_no
+  </sql>
+  
+  <sql id="Complex_Base_Column_List" >
+    T.id, T.settle_category_no, T.name, T.status, D.create_user, D.create_time, D.update_user, 
+    D.update_time, T.remark, D.category_no category_no, 
+    (SELECT name FROM category WHERE D.category_no = category.category_no) category_name 
+  </sql>
+  
+  <sql id="condition" >
+    /*organ_type_no*/  
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.name and ''!=params.name" >
+        AND T.name LIKE CONCAT('%',#{params.name},'%')
+      </if>
+      <if test="null!=params.settleCategoryNoCondition and ''!=params.settleCategoryNoCondition" >
+        AND T.settle_category_no LIKE CONCAT('%',#{params.settleCategoryNoCondition},'%')
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        AND T.status = #{params.status}
+      </if>
+      <if test="null!=params.settleCategoryNo2 and ''!=params.settleCategoryNo2" >
+        AND T.settle_category_no = #{params.settleCategoryNo2}
+      </if>
+       <if test="null!=params.organTypeNo and ''!=params.organTypeNo" >
+        AND T.organ_type_no = #{params.organTypeNo}
+      </if>
+      <if test="null!=params.uniqueSettleCategoryNo and ''!=params.uniqueSettleCategoryNo" >
+        AND T.settle_category_no = #{params.uniqueSettleCategoryNo}
+        <if test="null!=params.uniqueSettleCategoryName and ''!=params.uniqueSettleCategoryName" >
+        	OR T.name = #{params.uniqueSettleCategoryName}
+        </if>
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM settle_category T
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM settle_category T WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_category T WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_category T WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  
+   <select id="selectRelationCount" resultType="java.lang.Integer">
+	SELECT COUNT(1) as s FROM settle_category T LEFT JOIN settle_category_dtl D
+	ON T.settle_category_no = D.settle_category_no WHERE 1 = 1
+	<include refid="condition" />
+   </select>
+   <select id="selectRelationByPage" resultMap="ComplexBaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Complex_Base_Column_List" />
+		FROM settle_category T LEFT JOIN settle_category_dtl D
+		ON T.settle_category_no = D.settle_category_no WHERE 1 = 1
+		<include refid="condition" />
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM settle_category
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.SettleCategory" >
+    DELETE FROM settle_category
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SettleCategory" >
+    INSERT INTO settle_category (id, settle_category_no, name, 
+      category_no, status, create_user, 
+      create_time, update_user, update_time, 
+      remark,organ_type_no)
+    VALUES (#{id,jdbcType=INTEGER}, #{settleCategoryNo,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{organTypeNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SettleCategory" >
+    INSERT INTO settle_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="settleCategoryNo != null" >
+        settle_category_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>  
+       <if test="organTypeNo != null" >
+        organ_type_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="settleCategoryNo != null" >
+        #{settleCategoryNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="organTypeNo != null" >
+        #{organTypeNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SettleCategory" >
+    UPDATE settle_category
+    <set >
+      <if test="settleCategoryNo != null" >
+        settle_category_no = #{settleCategoryNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SettleCategory" >
+    UPDATE settle_category
+    SET settle_category_no = #{settleCategoryNo,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

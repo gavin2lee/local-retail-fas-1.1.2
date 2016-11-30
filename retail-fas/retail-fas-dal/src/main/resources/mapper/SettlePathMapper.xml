@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SettlePathMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SettlePath" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="bill_basis" property="billBasis" jdbcType="INTEGER" />
+    <result column="bill_type" property="billType" jdbcType="CHAR" />
+    <result column="settle_category_no" property="settleCategoryNo" jdbcType="CHAR" />
+    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="audit_status" property="auditStatus" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="return_own_flag" property="returnOwnFlag" jdbcType="TINYINT" />
+     <result column="organ_type_no" property="organTypeNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ComplexBaseResultMap" type="cn.wonhigh.retail.fas.common.dto.SettlePathDto" extends="BaseResultMap">
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="settle_category_name" property="settleCategoryName" jdbcType="VARCHAR" />
+    <result column="style_name" property="styleName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="ComplexDetailBaseResultMap" type="cn.wonhigh.retail.fas.common.dto.SettlePathQueryExportDto" extends="ComplexBaseResultMap">
+    <result column="path_order" property="pathOrder" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="financial_basis" property="financialBasis" jdbcType="VARCHAR" />
+    <result column="financial_basis_text" property="financialBasisText" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, path_no, name, bill_basis, bill_type, settle_category_no, style_no, start_date, end_date, 
+    audit_status, status, create_user, create_time, update_user, update_time, auditor, 
+    audit_time, return_own_flag
+  </sql>
+  
+  <sql id="Complex_Base_Column_List" >
+    id, path_no, name, bill_basis, bill_type, settle_category_no, style_no, start_date, end_date, 
+    audit_status, status, create_user, create_time, update_user, update_time, auditor, audit_time,return_own_flag,
+    (SELECT GROUP_CONCAT(b.name SEPARATOR "\\") FROM settle_path_brand_rel r LEFT JOIN brand_unit b ON r.brand_unit_no = b.brand_unit_no WHERE r.path_no = p.path_no GROUP BY r.path_no) brand_unit_name,
+    (SELECT s.name FROM settle_category s WHERE p.settle_category_no = s.settle_category_no) settle_category_name,
+    (SELECT s.name FROM settle_new_style s WHERE p.style_no = s.style_no) style_name
+  </sql>
+  
+  <sql id="Complex_Detail_Base_Column_List" >
+	  D.id,
+	  p.path_no,
+	  p.name,
+	  p.bill_basis,
+	  p.bill_type,
+	  p.settle_category_no,
+	  p.style_no,
+	  p.start_date,
+	  p.end_date,
+	  p.audit_status,
+	  p.status,
+	  D.create_user,
+	  D.create_time,
+	  P.update_user,
+	  P.update_time,
+	  p.auditor,
+	  p.audit_time,
+	  p.return_own_flag,
+	  (SELECT
+	     GROUP_CONCAT(b.name SEPARATOR "\\")
+	   FROM settle_path_brand_rel r
+	     LEFT JOIN brand_unit b
+	       ON r.brand_unit_no = b.brand_unit_no
+	   WHERE r.path_no = p.path_no
+	   GROUP BY r.path_no)    brand_unit_name,
+	  (SELECT
+	     s.name
+	   FROM settle_category s
+	   WHERE p.settle_category_no = s.settle_category_no) settle_category_name,
+	  (SELECT
+	     s.name
+	   FROM settle_new_style s
+	   WHERE p.style_no = s.style_no) style_name,
+	  D.path_order,
+	  D.company_no,
+	  D.company_name,
+	  D.financial_basis,
+	  D.financial_basis_text
+  </sql>
+  
+  <sql id="condition" >
+    /*organ_type_no*/    
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.pathNo and ''!=params.pathNo">
+         AND p.path_no = #{params.pathNo}
+      </if>
+       <if test="null!=params.name and ''!=params.name" >
+         AND p.name LIKE '%${params.name}%'
+      </if>
+       <if test="null!=params.status and ''!=params.status">
+         AND p.status = #{params.status}
+      </if>
+      <if test="null!=params.auditStatus and ''!=params.auditStatus">
+         AND p.audit_status = #{params.auditStatus}
+      </if>
+      <if test="null!=params.styleNo and ''!=params.styleNo">
+         AND p.style_no = #{params.styleNo}
+      </if>
+      <if test="null!=params.settleCategoryNo and ''!=params.settleCategoryNo">
+         AND p.settle_category_no = #{params.settleCategoryNo}
+      </if>
+       <if test="null!=params.queryDate and ''!=params.queryDate">
+         AND (p.start_date &lt;= #{params.queryDate} and p.end_date &gt;= #{params.queryDate})
+      </if>
+      <if test="null!=params.companyNos and ''!=params.companyNos" >
+         AND EXISTS(SELECT 'X' FROM settle_path_dtl d  
+         	WHERE d.company_no IN (${params.companyNos})
+         		AND d.path_no = p.path_no AND d.path_order != 1)
+      </if>
+      <if test="null!=params.supplierNos and ''!=params.supplierNos" >
+         AND EXISTS(SELECT 'X' FROM settle_path_dtl d JOIN supplier_group_rel r ON d.company_no = r.group_no
+         	WHERE d.path_order = 1
+         		AND d.path_no = p.path_no 
+         		AND r.supplier_no IN (${params.supplierNos})
+         	)
+      </if>
+      <if test="null!=params.brandNos and ''!=params.brandNos" >
+         AND EXISTS(SELECT 'X' FROM settle_path_brand_rel br JOIN brand b ON br.brand_unit_no = b.sys_no
+         	WHERE br.path_no = p.path_no 
+         		AND b.brand_no IN (${params.brandNos})
+         	)
+      </if>
+      <if test="null!=params.returnOwnFlag and ''!=params.returnOwnFlag">
+         AND p.return_own_flag= #{params.returnOwnFlag}
+      </if>
+      <if test="null!=params.beginStartDate and ''!=params.beginStartDate">
+         AND p.start_date &gt;= #{params.beginStartDate}
+      </if>
+       <if test="null!=params.endStartDate and ''!=params.endStartDate">
+         AND p.start_date &lt;= #{params.endStartDate}
+      </if>
+      <if test="null!=params.beginEndDate and ''!=params.beginEndDate">
+         AND p.end_date &gt;= #{params.beginEndDate}
+      </if>
+       <if test="null!=params.endEndDate and ''!=params.endEndDate">
+         AND p.end_date &lt;= #{params.endEndDate}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectRelationCount" resultType="java.lang.Integer">
+	SELECT COUNT(1) as s FROM settle_path p LEFT JOIN settle_path_dtl D
+	ON p.path_no = D.path_no WHERE 1 = 1
+	<include refid="condition" />
+   </select>
+   <select id="selectRelationByPage" resultMap="ComplexDetailBaseResultMap" parameterType="map">
+   		/*#mycat:sql=SELECT 1 FROM bill_buy_balance */ 
+		SELECT
+		<include refid="Complex_Detail_Base_Column_List" />
+		FROM settle_path p LEFT JOIN settle_path_dtl D
+		ON p.path_no = D.path_no WHERE 1 = 1
+		<include refid="condition" />
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		<if test="orderByField == null or ''==orderByField">
+			ORDER BY p.create_time DESC, D.path_order ASC
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+  
+  
+  <select id="selectByQueryVo" resultMap="BaseResultMap" parameterType="map">
+  	SELECT 
+	  <include refid="Base_Column_List" />
+	FROM
+	  settle_path T 
+	WHERE 1 = 1
+	   <if test="null!=params.billType and ''!=params.billType">
+	 		AND FIND_IN_SET(#{params.billType,jdbcType=INTEGER}, T.bill_type)
+	   </if>
+	   <if test="null!=params.billBasis and ''!=params.billBasis">
+	  		AND T.bill_basis = #{params.billBasis,jdbcType=INTEGER}
+	  </if> 
+	  <!-- 
+	  <if test="null!=params.categoryNo and ''!=params.categoryNo">
+		  AND EXISTS 
+		  (SELECT 
+		    1 
+		  FROM
+		    settle_category_dtl d WHERE d.category_no = #{params.categoryNo,jdbcType=VARCHAR})
+	  </if>
+	  <if test="null!=params.brandNo and ''!=params.brandNo">
+	  	 AND EXISTS (SELECT 1 FROM settle_path_brand_rel r WHERE r.brand_no=#{params.brandNo,jdbcType=VARCHAR})
+	  </if>
+	   -->
+	    <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+	  	 AND EXISTS (SELECT 1 FROM settle_path_brand_rel r WHERE r.brand_unit_no=#{params.brandUnitNo,jdbcType=VARCHAR}
+	  	 				 AND r.path_no = T.path_no)
+	  </if>
+	  <if test="null!=params.categoryNo and ''!=params.categoryNo">
+		  AND EXISTS (SELECT 1 FROM settle_category_dtl d WHERE d.category_no = #{params.categoryNo,jdbcType=VARCHAR}
+		  				AND d.settle_category_no = T.settle_category_no)
+	  </if>
+	  <if test="null!=params.status and ''!=params.status">
+         AND T.status = #{params.status}
+      </if>
+      <if test="null!=params.auditStatus and ''!=params.auditStatus">
+         AND T.audit_status = #{params.auditStatus}
+      </if>
+      <if test="null!=params.queryDate and ''!=params.queryDate">
+         AND (T.start_date &lt;= #{params.queryDate} and T.end_date &gt;= #{params.queryDate})
+      </if>
+      <if test="null!=params.returnOwnFlag and ''!=params.returnOwnFlag">
+         AND p.return_own_flag= #{params.returnOwnFlag}
+      </if>
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM settle_path p
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM settle_path p WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="ComplexBaseResultMap" parameterType="map" >
+    /*#mycat:sql=SELECT 1 FROM bill_buy_balance */ 
+    SELECT 
+    <include refid="Complex_Base_Column_List" />
+     FROM settle_path p WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField">
+		ORDER BY p.create_time DESC
+	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_path p WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM settle_path
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.SettlePath" >
+    DELETE FROM settle_path
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SettlePath" >
+    INSERT INTO settle_path (id, path_no, name, 
+      bill_basis, bill_type, settle_category_no, 
+      style_no, start_date, end_date, 
+      audit_status, status, create_user, 
+      create_time, update_user, update_time, 
+      auditor, audit_time,return_own_flag,organ_type_no)
+    VALUES (#{id,jdbcType=INTEGER}, #{pathNo,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{billBasis,jdbcType=INTEGER}, #{billType,jdbcType=CHAR}, #{settleCategoryNo,jdbcType=CHAR}, 
+      #{styleNo,jdbcType=CHAR}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{auditStatus,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{auditor,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP},#{returnOwnFlag,jdbcType=TINYINT}, #{organTypeNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SettlePath" >
+    INSERT INTO settle_path
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pathNo != null" >
+        path_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="billBasis != null" >
+        bill_basis,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="settleCategoryNo != null" >
+        settle_category_no,
+      </if>
+      <if test="styleNo != null" >
+        style_no,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="returnOwnFlag != null" >
+        return_own_flag,
+      </if>
+      <if test="organTypeNo != null" >
+        organ_type_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pathNo != null" >
+        #{pathNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="billBasis != null" >
+        #{billBasis,jdbcType=INTEGER},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=CHAR},
+      </if>
+      <if test="settleCategoryNo != null" >
+        #{settleCategoryNo,jdbcType=CHAR},
+      </if>
+      <if test="styleNo != null" >
+        #{styleNo,jdbcType=CHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnOwnFlag != null" >
+        #{returnOwnFlag,jdbcType=TINYINT},
+      </if>
+       <if test="organTypeNo != null" >
+        #{organTypeNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SettlePath" >
+    UPDATE settle_path
+    <set >
+      <if test="pathNo != null" >
+        path_no = #{pathNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="billBasis != null" >
+        bill_basis = #{billBasis,jdbcType=INTEGER},
+      </if>
+      <if test="billBasis == null" >
+        bill_basis = #{billBasis,jdbcType=INTEGER},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=CHAR},
+      </if>
+      <if test="billType == null" >
+        bill_type = #{billType,jdbcType=CHAR},
+      </if>
+      <if test="settleCategoryNo != null" >
+        settle_category_no = #{settleCategoryNo,jdbcType=CHAR},
+      </if>
+      <if test="styleNo != null" >
+        style_no = #{styleNo,jdbcType=CHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="startDate == null or startDate == ''" >
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="endDate == null or endDate == ''" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnOwnFlag != null" >
+        return_own_flag = #{returnOwnFlag,jdbcType=TINYINT},
+      </if>
+      <if test="returnOwnFlag == null" >
+        return_own_flag = #{returnOwnFlag,jdbcType=TINYINT},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SettlePath" >
+    UPDATE settle_path
+    SET path_no = #{pathNo,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      bill_basis = #{billBasis,jdbcType=INTEGER},
+      bill_type = #{billType,jdbcType=CHAR},
+      settle_category_no = #{settleCategoryNo,jdbcType=CHAR},
+      style_No = #{styleNo,jdbcType=CHAR},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      audit_status = #{auditStatus,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      return_own_flag = #{returnOwnFlag,jdbcType=TINYINT}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateStatus" parameterType="map">
+  	UPDATE settle_path SET status = #{params.status,jdbcType=TINYINT} 
+  		WHERE end_date &lt; #{params.queryDate}
+  </update>
+  
+  <update id="doAudit" parameterType="cn.wonhigh.retail.fas.common.model.SettlePath">
+  	 UPDATE settle_path SET audit_status = #{auditStatus,jdbcType=TINYINT}, 
+  	 						auditor = #{auditor,jdbcType=VARCHAR},
+      						audit_time = #{auditTime,jdbcType=TIMESTAMP}
+      WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="doStatus" parameterType="cn.wonhigh.retail.fas.common.model.SettlePath">
+  	 UPDATE settle_path SET status = #{status,jdbcType=TINYINT}, 
+  	 						update_user = #{updateUser,jdbcType=VARCHAR},
+      						update_time = #{updateTime,jdbcType=TIMESTAMP}
+      WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

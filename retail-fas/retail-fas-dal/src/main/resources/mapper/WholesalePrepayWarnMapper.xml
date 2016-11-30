@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.WholesalePrepayWarnMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.WholesalePrepayWarnDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="customer_no" property="customerNo" jdbcType="CHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="margin_amount" property="marginAmount" jdbcType="DECIMAL" />
+    <result column="reced_margin_amount" property="recedMarginAmount" jdbcType="DECIMAL" />
+    <result column="margin_full" property="marginFull" jdbcType="TINYINT" />
+    <result column="pre_payment" property="prePayment" jdbcType="DECIMAL" />
+    <result column="pre_order_no" property="preOrderNo" jdbcType="CHAR" />
+    <result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="send_out_amount" property="sendOutAmount" jdbcType="DECIMAL" />
+    <result column="pre_order_full" property="preOrderFull" jdbcType="TINYINT" />
+    <result column="pre_send_out_full" property="preSendOutFull" jdbcType="TINYINT" />
+    <result column="pre_payment_profit" property="prePaymentProfit" jdbcType="DECIMAL" />
+    <result column="reversal_amount" property="reversalAmount" jdbcType="DECIMAL" />
+    <result column="reversal_over_amount" property="reversalOverAmount" jdbcType="DECIMAL" />
+    <result column="pre_payment_over" property="prePaymentOver" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, company_name, customer_no, customer_name, margin_amount, reced_margin_amount, 
+    margin_full, pre_payment, pre_order_no, order_amount, send_out_amount, pre_order_full, 
+    pre_send_out_full, pre_payment_profit, reversal_amount, reversal_over_amount, pre_payment_over, remark
+  </sql>
+  <sql id="condition" >
+  		-- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.companyName and ''!=params.companyName" >
+        AND company_name LIKE '%${params.companyName}%'
+      </if>
+      <if test="null!=params.customerNo and ''!=params.customerNo" >
+        AND customer_no = #{params.customerNo}
+      </if>
+       <if test="null!=params.preOrderNo and ''!=params.preOrderNo" >
+        AND pre_order_no = #{params.preOrderNo}
+      </if>
+    </if>
+  </sql>
+  
+  <!-- 查询可冲销的数据集合 -->
+   <select id="selectReversal" resultMap="BaseResultMap" parameterType="map">
+  	SELECT 
+  		<include refid="Base_Column_List" />
+    	FROM wholesale_prepay_warn
+		WHERE company_no = #{params.companyNo,jdbcType=VARCHAR} 
+			AND customer_no = #{params.customerNo,jdbcType=VARCHAR}
+			<if test="null!=params.billPrePayAudit and ''!=params.billPrePayAudit">
+				AND reversal_over_amount &gt; 0
+			</if>
+			<if test="null!=params.billPrePayAntiAudit and ''!=params.billPrePayAntiAudit">
+				AND reversal_amount &gt; 0
+			</if>
+    	GROUP BY company_no, customer_no
+    	ORDER BY pre_order_no ASC
+  </select>
+  
+  <!-- 查询保证金金额 -->
+   <select id="selectMarginAmount" resultType="java.util.HashMap" parameterType="map">
+  	SELECT 
+  		ROUND(SUM(margin_amount), 2) marginAmount, 
+  		ROUND(SUM(reced_margin_amount), 2) recedMarginAmount,
+  		ROUND(SUM(margin_amount - reced_margin_amount), 2) receMarginAmount,
+  		ROUND(SUM(pre_payment_profit - reversal_amount), 2) reversalAmount,
+  		ROUND(SUM(reversal_over_amount), 2) reversalOverAmount,
+  		ROUND(SUM(pre_payment), 2) prePayment
+		FROM wholesale_prepay_warn 
+		WHERE company_no = #{params.companyNo,jdbcType=VARCHAR} 
+			AND customer_no = #{params.customerNo,jdbcType=VARCHAR}
+			<if test="null!=params.preOrderNo and ''!=params.preOrderNo">
+				AND pre_order_no= #{params.preOrderNo,jdbcType=VARCHAR} 
+			</if>
+    	GROUP BY company_no, customer_no
+  </select>
+  
+  <select id="selectTotalAmount" resultType="java.util.HashMap" parameterType="map">
+  	SELECT 
+	    (CASE WHEN SUM(order_amount) IS NULL THEN 0 ELSE SUM(order_amount) END) totalOrderAmount,
+	    (CASE WHEN SUM(pre_payment) IS NULL THEN 0 ELSE SUM(pre_payment) END) totalPrePayment,
+	    (CASE WHEN SUM(send_out_amount) IS NULL THEN 0 ELSE SUM(send_out_amount) END) totalSendOutAmount
+	FROM wholesale_prepay_warn 
+	WHERE company_no = #{params.companyNo,jdbcType=VARCHAR} 
+			AND customer_no = #{params.customerNo,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM wholesale_prepay_warn
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM wholesale_prepay_warn WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM wholesale_prepay_warn WHERE 1=1 
+    <include refid="condition" />
+    ORDER BY company_no,customer_no DESC
+    <!-- 
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     -->
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM wholesale_prepay_warn WHERE 1=1 
+    <include refid="condition" />
+    ORDER BY company_no,customer_no DESC
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM wholesale_prepay_warn
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.WholesalePrepayWarn" >
+    DELETE FROM wholesale_prepay_warn
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.WholesalePrepayWarn" >
+    INSERT INTO wholesale_prepay_warn (id, company_no, company_name, 
+      customer_no, customer_name, margin_amount, 
+      reced_margin_amount, margin_full, pre_payment, 
+      pre_order_no, order_amount, send_out_amount, 
+      pre_order_full, pre_send_out_full, pre_payment_profit, 
+      reversal_amount, reversal_over_amount, pre_payment_over, remark
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{customerNo,jdbcType=CHAR}, #{customerName,jdbcType=VARCHAR}, #{marginAmount,jdbcType=DECIMAL}, 
+      #{recedMarginAmount,jdbcType=DECIMAL}, #{marginFull,jdbcType=TINYINT}, #{prePayment,jdbcType=DECIMAL}, 
+      #{preOrderNo,jdbcType=CHAR}, #{orderAmount,jdbcType=DECIMAL}, #{sendOutAmount,jdbcType=DECIMAL}, 
+      #{preOrderFull,jdbcType=TINYINT}, #{preSendOutFull,jdbcType=TINYINT}, #{prePaymentProfit,jdbcType=DECIMAL}, 
+      #{reversalAmount,jdbcType=DECIMAL},#{reversalOverAmount,jdbcType=DECIMAL}, #{prePaymentOver,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.WholesalePrepayWarn" >
+    INSERT INTO wholesale_prepay_warn
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="customerNo != null" >
+        customer_no,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="marginAmount != null" >
+        margin_amount,
+      </if>
+      <if test="recedMarginAmount != null" >
+        reced_margin_amount,
+      </if>
+      <if test="marginFull != null" >
+        margin_full,
+      </if>
+      <if test="prePayment != null" >
+        pre_payment,
+      </if>
+      <if test="preOrderNo != null" >
+        pre_order_no,
+      </if>
+      <if test="orderAmount != null" >
+        order_amount,
+      </if>
+      <if test="sendOutAmount != null" >
+        send_out_amount,
+      </if>
+      <if test="preOrderFull != null" >
+        pre_order_full,
+      </if>
+      <if test="preSendOutFull != null" >
+        pre_send_out_full,
+      </if>
+      <if test="prePaymentProfit != null" >
+        pre_payment_profit,
+      </if>
+      <if test="reversalAmount != null" >
+        reversal_amount,
+      </if>
+      <if test="reversalOverAmount != null" >
+        reversal_over_amount,
+      </if>
+      <if test="prePaymentOver != null" >
+        pre_payment_over,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="marginAmount != null" >
+        #{marginAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="recedMarginAmount != null" >
+        #{recedMarginAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="marginFull != null" >
+        #{marginFull,jdbcType=TINYINT},
+      </if>
+      <if test="prePayment != null" >
+        #{prePayment,jdbcType=DECIMAL},
+      </if>
+      <if test="preOrderNo != null" >
+        #{preOrderNo,jdbcType=CHAR},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sendOutAmount != null" >
+        #{sendOutAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="preOrderFull != null" >
+        #{preOrderFull,jdbcType=TINYINT},
+      </if>
+      <if test="preSendOutFull != null" >
+        #{preSendOutFull,jdbcType=TINYINT},
+      </if>
+      <if test="prePaymentProfit != null" >
+        #{prePaymentProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="reversalAmount != null" >
+        #{reversalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reversalOverAmount != null" >
+        #{reversalOverAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prePaymentOver != null" >
+        #{prePaymentOver,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.WholesalePrepayWarn" >
+    UPDATE wholesale_prepay_warn
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="marginAmount != null" >
+        margin_amount = #{marginAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="marginAmount == null" >
+        margin_amount = #{marginAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="recedMarginAmount != null" >
+        reced_margin_amount = #{recedMarginAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="recedMarginAmount == null" >
+        reced_margin_amount = #{recedMarginAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="marginFull != null" >
+        margin_full = #{marginFull,jdbcType=TINYINT},
+      </if>
+      <if test="marginFull == null" >
+        margin_full = #{marginFull,jdbcType=TINYINT},
+      </if>
+      <if test="prePayment != null" >
+        pre_payment = #{prePayment,jdbcType=DECIMAL},
+      </if>
+      <if test="preOrderNo != null" >
+        pre_order_no = #{preOrderNo,jdbcType=CHAR},
+      </if>
+      <if test="orderAmount != null" >
+        order_amount = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sendOutAmount != null" >
+        send_out_amount = #{sendOutAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="preOrderFull != null" >
+        pre_order_full = #{preOrderFull,jdbcType=TINYINT},
+      </if>
+      <if test="preSendOutFull != null" >
+        pre_send_out_full = #{preSendOutFull,jdbcType=TINYINT},
+      </if>
+      <if test="prePaymentProfit != null" >
+        pre_payment_profit = #{prePaymentProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="reversalAmount != null" >
+        reversal_amount = #{reversalAmount,jdbcType=DECIMAL},
+      </if>
+       <if test="reversalOverAmount != null" >
+        reversal_over_amount = #{reversalOverAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prePaymentOver != null" >
+        pre_payment_over = #{prePaymentOver,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.WholesalePrepayWarn" >
+    UPDATE wholesale_prepay_warn
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=CHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      margin_amount = #{marginAmount,jdbcType=DECIMAL},
+      reced_margin_amount = #{recedMarginAmount,jdbcType=DECIMAL},
+      margin_full = #{marginFull,jdbcType=TINYINT},
+      pre_payment = #{prePayment,jdbcType=DECIMAL},
+      pre_order_no = #{preOrderNo,jdbcType=CHAR},
+      order_amount = #{orderAmount,jdbcType=DECIMAL},
+      send_out_amount = #{sendOutAmount,jdbcType=DECIMAL},
+      pre_order_full = #{preOrderFull,jdbcType=TINYINT},
+      pre_send_out_full = #{preSendOutFull,jdbcType=TINYINT},
+      pre_payment_profit = #{prePaymentProfit,jdbcType=DECIMAL},
+      reversal_amount = #{reversalAmount,jdbcType=DECIMAL},
+      reversal_over_amount = #{reversalOverAmount,jdbcType=DECIMAL},
+      pre_payment_over = #{prePaymentOver,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateMargin" parameterType="map">
+  		UPDATE wholesale_prepay_warn SET reced_margin_amount = #{params.recedMarginAmount,jdbcType=DECIMAL},
+      			margin_full = #{params.marginFull,jdbcType=TINYINT} 
+      		WHERE company_no = #{params.companyNo,jdbcType=VARCHAR}
+      			AND customer_no = #{params.customerNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

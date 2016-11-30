@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ShopNameReplaceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ShopNameReplace" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="replace_no" property="replaceNo" jdbcType="VARCHAR" />
+    <result column="replace_name" property="replaceName" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    t.id, t.shop_no, t.shop_name, t.brand_unit_no, t.brand_unit_name,t.replace_no, t.replace_name, t.create_user, 
+    t.create_time, t.update_user, t.update_time, t.remark, t.sharding_flag
+  </sql>
+  <sql id="condition" >
+  -- AND @s.company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNos and ''!=params.companyNos" > 
+        AND s.company_no IN ${params.companyNos} 
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND t.shop_no IN ${params.shopNos}
+      </if>
+      <if test="null!=params.brandUnitNos and ''!=params.brandUnitNos" >
+        AND t.brand_unit_no IN ${params.brandUnitNos}
+      </if>
+       <if test="null!=params.shopNo and ''!=params.shopNo" >
+        AND t.shop_no = #{params.shopNo,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+        AND t.brand_unit_no = #{params.brandUnitNo,jdbcType=CHAR}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from shop_name_replace t
+    join shop s on t.shop_no = s.shop_no
+    where t.id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from shop_name_replace t 
+    join shop s on t.shop_no = s.shop_no
+    where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from shop_name_replace t 
+     join shop s on t.shop_no = s.shop_no
+     where 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      order by ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    limit #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from shop_name_replace t 
+     join shop s on t.shop_no = s.shop_no
+     where 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from shop_name_replace
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.String" >
+    delete from shop_name_replace
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ShopNameReplace" >
+    insert into shop_name_replace (id, shop_no, shop_name, 
+      brand_unit_no, brand_unit_name, replace_no,replace_name, 
+      create_user, create_time, update_user, 
+      update_time, remark, sharding_flag
+      )
+    values (#{id,jdbcType=CHAR}, #{shopNo,jdbcType=CHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{brandUnitNo,jdbcType=CHAR}, #{brandUnitName,jdbcType=VARCHAR}, #{replaceNo,jdbcType=VARCHAR},  #{replaceName,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{shardingFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ShopNameReplace" >
+    insert into shop_name_replace
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+       <if test="replaceNo != null" >
+        replace_no,
+      </if>
+      <if test="replaceName != null" >
+        replace_name,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+       <if test="replaceNo != null" >
+        #{replaceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceName != null" >
+        #{replaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ShopNameReplace" >
+    update shop_name_replace
+    <set >
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceNo != null" >
+        replace_no = #{replaceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceName != null" >
+        replace_name = #{replaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag = #{shardingFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ShopNameReplace" >
+    update shop_name_replace
+    set shop_no = #{shopNo,jdbcType=CHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      replace_no = #{replaceNo,jdbcType=VARCHAR},
+      replace_name = #{replaceName,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      sharding_flag = #{shardingFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  
+    <select id="selectReplaceName" resultMap="BaseResultMap"  parameterType="java.lang.String" >
+  	select  <include refid="Base_Column_List" />  from shop_name_replace  t  
+  	  where  1=1 
+  	  <if test="shopNo != null" >
+        AND t.shop_no = #{shopNo,jdbcType=CHAR}
+      </if>
+  		<if test="brandUnitNo != null" >
+        and t.brand_unit_no = #{brandUnitNo,jdbcType=CHAR}
+      </if>
+  		
+  </select>
+  
+  <select id="selectReplaceNames" resultMap="BaseResultMap"  >
+  	select  <include refid="Base_Column_List" />  from shop_name_replace  t  
+  </select>
+</mapper>

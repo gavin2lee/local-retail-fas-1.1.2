@@ -1,0 +1,86 @@
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:amq="http://activemq.apache.org/schema/core"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+	<!-- 加载base工程配置 -->
+	<import resource="classpath:META-INF/spring-base-jms.xml"/>
+	
+	<!-- queue 队列定义 -->
+	<!-- <bean id="destinationTest" class="org.apache.activemq.command.ActiveMQQueue">  
+		<constructor-arg value="com.retail.mdm.test.queue"></constructor-arg>  
+	</bean> -->
+	
+	<!-- topic 主题定义 -->
+	<bean id="destinationTest" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg value="com.retail.mdm.test.topic" />
+	</bean>
+
+    <!-- 生产方使用配置 1、JmsTemplate 定义 -->
+	<bean id="jmsTemplateTest"
+		class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<bean
+				class="org.springframework.jms.connection.SingleConnectionFactory">
+				<property name="targetConnectionFactory"
+					ref="jmsConnectionFactory" />
+			</bean>
+		</property>
+		<property name="messageConverter" ref="messageConverter" />
+		<!--  发布/订阅模式打开下列配置 -->
+		<property name="pubSubDomain" value="true" /> 
+        <property name="receiveTimeout" value="10000" />
+        <!-- 默认消息持久化,可设置不持久 -->
+       <!--  <property name="deliveryPersistent" value="false" /> -->
+	</bean>
+	 <!-- 生产方使用配置 2、messageProducer 定义 -->
+	<bean id="messageProducerTest" parent="messageProducer">
+		<property name="template" ref="jmsTemplateTest" />
+		<property name="destination" ref="destinationTest" />
+	</bean>
+
+	<!-- Thread Safety -->
+	<!-- <bean id="messageConverterTest" parent="messageConverter" /> -->
+
+	<!--  消费方使用配置 1、MessageListenerAdapter-->
+	<bean id="listenerTest"
+		class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg>
+			<bean
+				class="cn.wonhigh.retail.fas.jms.TestConsumer">
+			</bean>
+		</constructor-arg>
+		<property name="defaultListenerMethod" value="messageListener" />
+		<property name="messageConverter" ref="messageConverter" />
+	</bean>
+	<!--  消费方使用配置 2、DefaultMessageListenerContainer-->
+	<bean id="listenerContainerTest"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<!--<property name="transactionManager" ref="transManager" />-->
+		 <!-- 发布/订阅模式 打开如下配置 -->  
+        <property name="pubSubDomain" value="true"/>
+        <!--  如果是持久化订阅时,请同时打开如下两个选项,并且clientId做到对同一TOPIC唯一-->
+        <property name="subscriptionDurable" value="true"/>
+        <property name="clientId" value="${activemq.listener.clientId}" />
+		<property name="concurrentConsumers" value="${activemq.listener.concurrentConsumers}"/>
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+		<property name="destination" ref="destinationTest" />
+		<property name="messageListener" ref="listenerTest" />
+		<property name="taskExecutor" ref="jmsThreadPoolExecutor"/>
+	</bean>
+	
+	<!--  消费方使用配置 3、ThreadPool Executor -->
+	<bean id="jmsThreadPoolExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- <property name="threadFactory" ref="threadFactory" /> -->
+		<property name="corePoolSize" value="${activemq.threadpoolexecutor.corePoolSize}" />
+		<property name="maxPoolSize" value="${activemq.threadpoolexecutor.maxPoolSize}"/>
+		<property name="queueCapacity" value="${activemq.threadpoolexecutor.queueCapacity}"/>
+		<property name="keepAliveSeconds" value="${activemq.threadpoolexecutor.keepAliveSeconds}"/>
+		<property name="rejectedExecutionHandler">
+			<bean class="com.yougou.logistics.base.jms.CallerRunsPolicy"/>
+		</property>
+	</bean>
+
+</beans>

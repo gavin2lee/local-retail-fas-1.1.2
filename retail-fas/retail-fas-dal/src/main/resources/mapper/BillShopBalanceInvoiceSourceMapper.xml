@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillShopBalanceInvoiceSourceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceSource" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="invoiceapply_no" property="invoiceapplyNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="billing_amount" property="billingAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, invoiceapply_no, balance_no, shop_no, billing_amount
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+       <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if>
+      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND balance_no = #{params.balanceNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_shop_balance_invoice_source
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_shop_balance_invoice_source WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_invoice_source WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_invoice_source WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_shop_balance_invoice_source
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceSource" >
+    DELETE FROM bill_shop_balance_invoice_source
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceSource" >
+    INSERT INTO bill_shop_balance_invoice_source (id, bill_no, invoiceapply_no, 
+      balance_no, shop_no, billing_amount
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{billNo,jdbcType=CHAR}, #{invoiceapplyNo,jdbcType=CHAR}, 
+      #{balanceNo,jdbcType=CHAR}, #{shopNo,jdbcType=CHAR}, #{billingAmount,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceSource" >
+    INSERT INTO bill_shop_balance_invoice_source
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="invoiceapplyNo != null" >
+        invoiceapply_no,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="billingAmount != null" >
+        billing_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceapplyNo != null" >
+        #{invoiceapplyNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="billingAmount != null" >
+        #{billingAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceSource" >
+    UPDATE bill_shop_balance_invoice_source
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceapplyNo != null" >
+        invoiceapply_no = #{invoiceapplyNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="billingAmount != null" >
+        billing_amount = #{billingAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceInvoiceSource" >
+    UPDATE bill_shop_balance_invoice_source
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      invoiceapply_no = #{invoiceapplyNo,jdbcType=CHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      billing_amount = #{billingAmount,jdbcType=DECIMAL}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

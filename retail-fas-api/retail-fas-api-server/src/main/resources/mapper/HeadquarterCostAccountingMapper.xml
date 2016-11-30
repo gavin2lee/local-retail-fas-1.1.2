@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.HeadquarterCostAccountingMapper" >
+  
+  <select id="findHeadquarterCost" parameterType="map" resultType="java.math.BigDecimal">
+		select headquarter_cost from headquarter_cost_maintain  
+			where item_no = #{itemNo} and 
+			effective_time &lt;= DATE_FORMAT(#{effectiveDate},'%Y-%m-%d') 
+			order by effective_time desc limit 0,1
+  </select>
+  
+  <select id="qryHeadquarterCostExist" parameterType="map" resultType="java.lang.Integer" >
+  	 SELECT IFNULL(count(1),0) FROM headquarter_cost_maintain hcm 
+  	 	WHERE hcm.item_no = #{params.itemNo} and hcm.supplier_no = #{params.supplierNo}
+  </select>
+  
+  <select id="qryHeadquarterCostIsEffective" parameterType="map" resultType="java.lang.Integer" >
+  	 SELECT IFNULL(count(1),0) FROM headquarter_cost_maintain hcm 
+  	 	WHERE hcm.item_no = #{params.itemNo} and hcm.supplier_no = #{params.supplierNo} 
+  	 		GROUP BY hcm.item_no, hcm.supplier_no HAVING MAX(hcm.effective_time) &lt;  #{params.effectiveTime} 
+  </select>
+  
+</mapper>

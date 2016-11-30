@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.OfficialItemMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.OfficialItem" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="quote_no" property="quoteNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="root_category_no" property="rootCategoryNo" jdbcType="CHAR" />
+    <result column="root_category_name" property="rootCategoryName" jdbcType="VARCHAR" />
+    <result column="year_no" property="yearNo" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+    <result column="season_no" property="seasonNo" jdbcType="CHAR" />
+    <result column="season" property="season" jdbcType="CHAR" />
+    <result column="aprice" property="aprice" jdbcType="DECIMAL" />
+    <result column="qprice" property="qprice" jdbcType="DECIMAL" />
+    <result column="sys_price" property="sysPrice" jdbcType="DECIMAL" />
+    <result column="excess_status" property="excessStatus" jdbcType="TINYINT" />
+    <result column="excess_status_name" property="excessStatusName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, quote_no, item_code, item_name, supplier_no, supplier_name, brand_no, brand_name, 
+    brand_unit_no, brand_unit_name, category_no, category_name, root_category_no, root_category_name, 
+    year_no, year, season_no, season, aprice, qprice, sys_price, excess_status, excess_status_name,style_no, 
+    update_time
+  </sql>
+  <sql id="condition" >
+    -- AND @brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+        AND item_code IN ${params.multiItemCode}
+      </if>
+      <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+        AND brand_unit_no IN ${params.multiBrandUnitNo}
+      </if>
+      <if test="null!=params.itemCode and ''!=params.itemCode" >
+        AND item_code = #{params.itemCode}
+      </if>
+      <if test="null!=params.quoteNo and ''!=params.quoteNo" >
+        AND quote_no = #{params.quoteNo}
+      </if>
+      <if test="null!=params.excessStatus and ''!=params.excessStatus" >
+        AND excess_status = #{params.excessStatus}
+      </if>
+      <if test="null!=params.updateStartDate and ''!=params.updateStartDate" >
+        AND update_time &gt;= '${params.updateStartDate} 00:00:00'
+      </if>  
+       <if test="null!=params.updateEndDate and ''!=params.updateEndDate" >
+        AND update_time &lt;= '${params.updateEndDate} 23:59:59'
+      </if>  
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM official_item
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM official_item WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM official_item WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM official_item WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM official_item
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.OfficialItem" >
+    DELETE FROM official_item
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByItemCodeAndQuotoNo" parameterType="map" >
+    DELETE FROM official_item
+    WHERE item_code = #{itemCode} AND quote_no = #{quoteNo}
+  </delete>
+  <delete id="deleteAll" parameterType="java.lang.String" >
+    DELETE FROM official_item
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.OfficialItem" >
+    INSERT INTO official_item (id, quote_no, item_code, 
+      item_name, supplier_no, supplier_name, 
+      brand_no, brand_name, brand_unit_no, 
+      brand_unit_name, category_no, category_name, 
+      root_category_no, root_category_name, year_no, 
+      year, season_no, season, aprice, 
+      qprice, sys_price, excess_status, style_no,
+      excess_status_name, update_time)
+    VALUES (#{id,jdbcType=CHAR}, #{quoteNo,jdbcType=CHAR}, #{itemCode,jdbcType=CHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{supplierNo,jdbcType=CHAR}, #{supplierName,jdbcType=VARCHAR}, 
+      #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, #{brandUnitNo,jdbcType=CHAR}, 
+      #{brandUnitName,jdbcType=VARCHAR}, #{categoryNo,jdbcType=CHAR}, #{categoryName,jdbcType=VARCHAR}, 
+      #{rootCategoryNo,jdbcType=CHAR}, #{rootCategoryName,jdbcType=VARCHAR}, #{yearNo,jdbcType=CHAR}, 
+      #{year,jdbcType=CHAR}, #{seasonNo,jdbcType=CHAR}, #{season,jdbcType=CHAR}, #{aprice,jdbcType=DECIMAL}, 
+      #{qprice,jdbcType=DECIMAL}, #{sysPrice,jdbcType=DECIMAL}, #{excessStatus,jdbcType=TINYINT},  #{styleNo,jdbcType=CHAR}, 
+      #{excessStatusName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.OfficialItem" >
+    INSERT INTO official_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="styleNo != null" >
+        style_no,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="quoteNo != null" >
+        quote_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="rootCategoryNo != null" >
+        root_category_no,
+      </if>
+      <if test="rootCategoryName != null" >
+        root_category_name,
+      </if>
+      <if test="yearNo != null" >
+        year_no,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="seasonNo != null" >
+        season_no,
+      </if>
+      <if test="season != null" >
+        season,
+      </if>
+      <if test="aprice != null" >
+        aprice,
+      </if>
+      <if test="qprice != null" >
+        qprice,
+      </if>
+      <if test="sysPrice != null" >
+        sys_price,
+      </if>
+      <if test="excessStatus != null" >
+        excess_status,
+      </if>
+      <if test="excessStatusName != null" >
+        excess_status_name,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="styleNo != null" >
+        #{styleNo,jdbcType=CHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="quoteNo != null" >
+        #{quoteNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="rootCategoryNo != null" >
+        #{rootCategoryNo,jdbcType=CHAR},
+      </if>
+      <if test="rootCategoryName != null" >
+        #{rootCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="yearNo != null" >
+        #{yearNo,jdbcType=CHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=CHAR},
+      </if>
+      <if test="seasonNo != null" >
+        #{seasonNo,jdbcType=CHAR},
+      </if>
+      <if test="season != null" >
+        #{season,jdbcType=CHAR},
+      </if>
+      <if test="aprice != null" >
+        #{aprice,jdbcType=DECIMAL},
+      </if>
+      <if test="qprice != null" >
+        #{qprice,jdbcType=DECIMAL},
+      </if>
+      <if test="sysPrice != null" >
+        #{sysPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="excessStatus != null" >
+        #{excessStatus,jdbcType=TINYINT},
+      </if>
+      <if test="excessStatusName != null" >
+        #{excessStatusName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.OfficialItem" >
+    UPDATE official_item
+    <set >
+      <if test="styleNo != null" >
+        style_no = #{styleNo,jdbcType=CHAR},
+      </if>
+      <if test="quoteNo != null" >
+        quote_no = #{quoteNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="rootCategoryNo != null" >
+        root_category_no = #{rootCategoryNo,jdbcType=CHAR},
+      </if>
+      <if test="rootCategoryName != null" >
+        root_category_name = #{rootCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="yearNo != null" >
+        year_no = #{yearNo,jdbcType=CHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=CHAR},
+      </if>
+      <if test="seasonNo != null" >
+        season_no = #{seasonNo,jdbcType=CHAR},
+      </if>
+      <if test="season != null" >
+        season = #{season,jdbcType=CHAR},
+      </if>
+      <if test="aprice != null" >
+        aprice = #{aprice,jdbcType=DECIMAL},
+      </if>
+      <if test="qprice != null" >
+        qprice = #{qprice,jdbcType=DECIMAL},
+      </if>
+      <if test="sysPrice != null" >
+        sys_price = #{sysPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="excessStatus != null" >
+        excess_status = #{excessStatus,jdbcType=TINYINT},
+      </if>
+      <if test="excessStatusName != null" >
+        excess_status_name = #{excessStatusName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.OfficialItem" >
+    UPDATE official_item
+    SET quote_no = #{quoteNo,jdbcType=CHAR},
+      style_no = #{styleNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      root_category_no = #{rootCategoryNo,jdbcType=CHAR},
+      root_category_name = #{rootCategoryName,jdbcType=VARCHAR},
+      year_no = #{yearNo,jdbcType=CHAR},
+      year = #{year,jdbcType=CHAR},
+      season_no = #{seasonNo,jdbcType=CHAR},
+      season = #{season,jdbcType=CHAR},
+      aprice = #{aprice,jdbcType=DECIMAL},
+      qprice = #{qprice,jdbcType=DECIMAL},
+      sys_price = #{sysPrice,jdbcType=DECIMAL},
+      excess_status = #{excessStatus,jdbcType=TINYINT},
+      excess_status_name = #{excessStatusName,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

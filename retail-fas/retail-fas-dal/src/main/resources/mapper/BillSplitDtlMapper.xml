@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillSplitDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSplitDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="bill_flag" property="billFlag" jdbcType="TINYINT" />
+    <result column="send_out_qty" property="sendOutQty" jdbcType="INTEGER" />
+    <result column="send_out_date" property="sendOutDate" jdbcType="DATE" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="exclusive_cost" property="exclusiveCost" jdbcType="DECIMAL" />
+    <result column="store_no" property="storeNo" jdbcType="CHAR" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="send_out_amount" property="sendOutAmount" jdbcType="DECIMAL" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_group_no" property="supplierGroupNo" jdbcType="CHAR" />
+    <result column="supplier_cost" property="supplierCost" jdbcType="DECIMAL" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, ref_bill_no, bill_type, item_no, item_name, category_no, brand_no, saler_no, buyer_no, bill_flag, 
+    send_out_qty, send_out_date, cost, tax_rate, exclusive_cost, store_no, order_no,balance_no, supplier_no, 
+    supplier_group_no, supplier_cost, path_no
+  </sql>
+    <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if>   
+       <if test="null!=params.refBillNo and ''!=params.refBillNo" >
+        AND ref_bill_no = #{params.refBillNo}
+      </if>  
+	  <if test="null!=params.salerNo and ''!=params.salerNo" >
+        AND saler_no = #{params.salerNo}
+      </if>    
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+        AND buyer_no = #{params.buyerNo}
+      </if>    
+	  <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND brand_no = #{params.brandNo}
+      </if>    
+	  <if test="null!=params.billFlag and ''!=params.billFlag" >
+        AND bill_flag = #{params.billFlag}
+      </if>             
+      <if test="null!=params.sendOutDateStart and ''!=params.sendOutDateStart" >
+        AND send_out_date  &gt;= #{params.sendOutDateStart}
+      </if>  
+      <if test="null!=params.sendOutDateEnd and ''!=params.sendOutDateEnd" >
+        AND send_out_date   &lt;=  #{params.sendOutDateEnd}
+      </if> 
+      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND balance_no = #{params.balanceNo}
+      </if>   
+      <if test="null!=params.billType and ''!=params.billType" >
+        AND bill_type = #{params.billType}
+      </if>   
+      <if test="null!=params.cost and ''!=params.cost" >
+        AND cost = #{params.cost}
+      </if>      
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_split_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findSplitCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) FROM (SELECT COUNT(1) as s FROM bill_split_dtl WHERE 1=1 
+    <include refid="condition" />
+     GROUP BY bill_no, ref_bill_no) t
+  </select>
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_split_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_split_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_split_dtl WHERE 1=1 
+    <include refid="condition" />
+     <if test="params.groupBy != null and ''!=params.groupBy" >
+      	GROUP BY #{params.groupBy}
+     </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_split_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitDtl" >
+    DELETE FROM bill_split_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitDtl" >
+    INSERT INTO bill_split_dtl (id, bill_no, ref_bill_no, 
+      bill_type, item_no, item_name, category_no, brand_no, saler_no, 
+      buyer_no, bill_flag, send_out_qty, 
+      send_out_date, cost, tax_rate, 
+      exclusive_cost, store_no, order_no, balance_no, 
+      supplier_no, supplier_group_no, supplier_cost, path_no)
+    VALUES (#{id,jdbcType=INTEGER}, #{billNo,jdbcType=CHAR}, #{refBillNo,jdbcType=CHAR}, 
+      #{billType,jdbcType=INTEGER}, #{itemNo,jdbcType=CHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{categoryNo,jdbcType=CHAR}, #{brandNo,jdbcType=CHAR}, #{salerNo,jdbcType=CHAR}, 
+      #{buyerNo,jdbcType=CHAR}, #{billFlag,jdbcType=TINYINT}, #{sendOutQty,jdbcType=INTEGER}, 
+      #{sendOutDate,jdbcType=DATE}, #{cost,jdbcType=DECIMAL}, #{taxRate,jdbcType=DECIMAL}, 
+      #{exclusiveCost,jdbcType=DECIMAL},#{storeNo,jdbcType=CHAR},#{orderNo,jdbcType=CHAR},
+      #{balanceNo,jdbcType=CHAR},#{supplierNo,jdbcType=CHAR},#{supplierGroupNo,jdbcType=CHAR},
+      #{supplierCost,jdbcType=DECIMAL}, #{pathNo,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitDtl" >
+    INSERT INTO bill_split_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="billFlag != null" >
+        bill_flag,
+      </if>
+      <if test="sendOutQty != null" >
+        send_out_qty,
+      </if>
+      <if test="sendOutDate != null" >
+        send_out_date,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="taxRate != null" >
+        tax_rate,
+      </if>
+      <if test="exclusiveCost != null" >
+        exclusive_cost,
+      </if>
+      <if test="storeNo != null" >
+        store_no,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierGroupNo != null" >
+        supplier_group_no,
+      </if>
+      <if test="supplierCost != null" >
+        supplier_cost
+      </if>
+      <if test="pathNo != null" >
+        path_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="refBillNo != null" >
+        #{refBillNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="billFlag != null" >
+        #{billFlag,jdbcType=TINYINT},
+      </if>
+      <if test="sendOutQty != null" >
+        #{sendOutQty,jdbcType=INTEGER},
+      </if>
+      <if test="sendOutDate != null" >
+        #{sendOutDate,jdbcType=DATE},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="exclusiveCost != null" >
+        #{exclusiveCost,jdbcType=DECIMAL},
+      </if>
+      <if test="storeNo != null" >
+        #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=CHAR},
+      </if>
+       <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR}
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierGroupNo != null" >
+        #{supplierGroupNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierCost != null" >
+        #{supplierCost,jdbcType=DECIMAL},
+      </if>
+      <if test="path_no != null" >
+        #{pathNo,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  
+   <insert id="batchAdd" parameterType="java.util.List" >
+    INSERT INTO bill_split_dtl(
+        bill_no,
+        ref_bill_no,
+        bill_type,
+        item_no,
+        item_name,
+        category_no,
+        brand_no,
+        saler_no,
+        buyer_no,
+        bill_flag,
+        send_out_qty,
+        send_out_date,
+        cost,
+        tax_rate,
+        exclusive_cost,
+        store_no,
+        order_no,
+        balance_no,
+        supplier_no,
+        supplier_group_no,
+        supplier_cost,
+        path_no
+     )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">  
+    	(
+	        #{item.billNo,jdbcType=CHAR},
+	        #{item.refBillNo,jdbcType=CHAR},
+	        #{item.billType,jdbcType=INTEGER},
+	        #{item.itemNo,jdbcType=CHAR},
+	        #{item.itemName,jdbcType=VARCHAR},
+	        #{item.categoryNo,jdbcType=CHAR},
+	        #{item.brandNo,jdbcType=CHAR},
+	        #{item.salerNo,jdbcType=CHAR},
+	        #{item.buyerNo,jdbcType=CHAR},
+	        #{item.billFlag,jdbcType=TINYINT},
+	        #{item.sendOutQty,jdbcType=INTEGER},
+	        #{item.sendOutDate,jdbcType=DATE},
+	        #{item.cost,jdbcType=DECIMAL},
+	        #{item.taxRate,jdbcType=DECIMAL},
+	        #{item.exclusiveCost,jdbcType=DECIMAL},
+	        #{item.storeNo,jdbcType=CHAR},
+	        #{item.orderNo,jdbcType=CHAR},
+	        #{item.balanceNo,jdbcType=CHAR},
+	        #{item.supplierNo,jdbcType=CHAR},
+	        #{item.supplierGroupNo,jdbcType=CHAR},
+	        #{item.supplierCost,jdbcType=DECIMAL},
+	        #{item.pathNo,jdbcType=CHAR}
+	    )
+	  </foreach>
+  </insert>
+  
+  <update id="batchUpdateBalanceNoById" parameterType="map">  
+    UPDATE bill_split_dtl SET balance_no = #{balanceNo,jdbcType=CHAR} WHERE id IN  
+    <foreach collection="stockOutList" item="item" index="index" open="(" separator="," close=")" >  
+        #{item.id}  
+    </foreach>  
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitDtl" >
+    UPDATE bill_split_dtl
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no = #{refBillNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="billFlag != null" >
+        bill_flag = #{billFlag,jdbcType=TINYINT},
+      </if>
+      <if test="sendOutQty != null" >
+        send_out_qty = #{sendOutQty,jdbcType=INTEGER},
+      </if>
+      <if test="sendOutDate != null" >
+        send_out_date = #{sendOutDate,jdbcType=DATE},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        tax_rate = #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="exclusiveCost != null" >
+        exclusive_cost = #{exclusiveCost,jdbcType=DECIMAL},
+      </if>
+      <if test="storeNo != null" >
+        store_no = #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierGroupNo != null" >
+        supplier_group_no = #{supplierGroupNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierCost != null" >
+        supplier_cost = #{supplierCost,jdbcType=DECIMAL}
+      </if>
+      <if test="pathNo != null" >
+        path_no = #{pathNo,jdbcType=CHAR}
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitDtl" >
+    UPDATE bill_split_dtl
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      ref_bill_no = #{refBillNo,jdbcType=CHAR},
+      bill_type = #{billType,jdbcType=INTEGER},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      saler_no = #{salerNo,jdbcType=CHAR},
+      buyer_no = #{buyerNo,jdbcType=CHAR},
+      bill_flag = #{billFlag,jdbcType=TINYINT},
+      send_out_qty = #{sendOutQty,jdbcType=INTEGER},
+      send_out_date = #{sendOutDate,jdbcType=DATE},
+      cost = #{cost,jdbcType=DECIMAL},
+      tax_rate = #{taxRate,jdbcType=DECIMAL},
+      exclusive_cost = #{exclusiveCost,jdbcType=DECIMAL},
+      store_no = #{storeNo,jdbcType=CHAR},
+      order_no = #{orderNo,jdbcType=CHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_group_no = #{supplierGroupNo,jdbcType=CHAR},
+      supplier_cost = #{supplierCost,jdbcType=DECIMAL},
+      path_no = #{pathNo,jdbcType=CHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

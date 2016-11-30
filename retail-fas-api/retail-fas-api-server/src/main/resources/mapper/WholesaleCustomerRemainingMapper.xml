@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.WholesaleCustomerRemainingMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.dto.WholesaleCustomerRemainingDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="customer_no" property="customerNo" jdbcType="CHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="remaining_amount" property="remainingAmount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="BaseResultDtlMap" type="cn.wonhigh.retail.fas.api.dto.WholesaleCustomerRemainingDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="main_id" property="mainId" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="remaining_amount" property="remainingAmount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="position" property="position" jdbcType="BIGINT" />
+  </resultMap>
+
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.mainId and ''!=params.mainId" >
+        AND main_id = #{params.mainId}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.customerNo and ''!=params.customerNo" >
+        AND customer_no = #{params.customerNo}
+      </if>
+      <if test="null!=params.orderUnitNo and ''!=params.orderUnitNo">
+      	AND company_no = (SELECT MAX(company_no) FROM order_unit WHERE order_unit_no = #{params.orderUnitNo}) 
+      </if>
+      <if test="null!=params.createTime and ''!=params.createTime" >
+        AND create_time = #{params.createTime} 
+      </if>
+    </if>
+  </sql>
+ 
+  <select id="selectRemainingSumByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT  id, company_no, company_name, customer_no, customer_name, remaining_amount, create_time, update_time 
+    FROM wholesale_customer_remaining_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="selectRemainingDtlByParams" resultMap="BaseResultDtlMap" parameterType="map" >
+    SELECT  id, main_id, money, remaining_amount, create_time, update_time, position  
+    FROM wholesale_customer_remaining_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+
+  <insert id="insertCustomerRemainingSum" useGeneratedKeys="true" keyProperty="id" parameterType="cn.wonhigh.retail.fas.api.dto.WholesaleCustomerRemainingDto" >
+  	INSERT INTO wholesale_customer_remaining_sum 
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null">
+      	company_no,
+      </if>
+      <if test="companyName != null">
+      	company_name,
+      </if>
+      <if test="customerNo != null">
+      	customer_no,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=CHAR},
+      </if>
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=CHAR},
+      </if>
+      <if test="remainingAmount != null" >
+        #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="insertCustomerRemainingDtl" useGeneratedKeys="true" keyProperty="id" parameterType="cn.wonhigh.retail.fas.api.dto.WholesaleCustomerRemainingDto" >
+    insert into wholesale_customer_remaining_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mainId != null">
+      	main_id,
+      </if>
+      <if test="prePaymentId!= null">
+      	pre_payment_id,
+      </if>
+      <if test="type!= null">
+      	type,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount,
+      </if>
+      <if test="refNo != null" >
+      	ref_no,
+      </if>
+      <if test="position != null">
+      	position,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mainId != null" >
+        #{mainId,jdbcType=INTEGER},
+      </if>
+      <if test="prePaymentId != null" >
+        #{prePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="remainingAmount != null" >
+        #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refNo != null" >
+        #{refNo,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateCustomerRemainingSum" parameterType="cn.wonhigh.retail.fas.api.dto.WholesaleCustomerRemainingDto" >
+    update wholesale_customer_remaining_sum
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

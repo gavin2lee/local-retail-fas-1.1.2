@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillPaymentDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillPaymentDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="settle_method_no" property="settleMethodNo" jdbcType="CHAR" />
+    <result column="settle_method_name" property="settleMethodName" jdbcType="CHAR" />
+    <result column="payment_application" property="paymentApplication" jdbcType="CHAR" />
+    <result column="advance_payment_order_no" property="advancePaymentOrderNo" jdbcType="CHAR" />
+    <result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+    <result column="pay_qty" property="payQty" jdbcType="DECIMAL" />
+    <result column="money_discount" property="moneyDiscount" jdbcType="DECIMAL" />
+    <result column="discount_amount" property="discountAmount" jdbcType="DECIMAL" />
+    <result column="fee" property="fee" jdbcType="DECIMAL" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+    <result column="bank_account" property="bankAccount" jdbcType="CHAR" />
+    <result column="bank_balance_no" property="bankBalanceNo" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, settle_method_no, settle_method_name, payment_application, advance_payment_order_no, 
+    pay_amount,pay_qty, money_discount, discount_amount, fee, balance_amount, bank_account, bank_balance_no, 
+    remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_payment_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_payment_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_payment_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_payment_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_payment_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillPaymentDtl" >
+    DELETE FROM bill_payment_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillPaymentDtl" >
+    INSERT INTO bill_payment_dtl (id, bill_no, settle_method_no, 
+      settle_method_name, payment_application, advance_payment_order_no, 
+      pay_amount, money_discount, discount_amount, 
+      fee, balance_amount, bank_account, 
+      bank_balance_no, remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{billNo,jdbcType=CHAR}, #{settleMethodNo,jdbcType=CHAR}, 
+      #{settleMethodName,jdbcType=CHAR}, #{paymentApplication,jdbcType=CHAR}, #{advancePaymentOrderNo,jdbcType=CHAR}, 
+      #{payAmount,jdbcType=DECIMAL}, #{moneyDiscount,jdbcType=DECIMAL}, #{discountAmount,jdbcType=DECIMAL}, 
+      #{fee,jdbcType=DECIMAL}, #{balanceAmount,jdbcType=DECIMAL}, #{bankAccount,jdbcType=CHAR}, 
+      #{bankBalanceNo,jdbcType=CHAR}, #{remark,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillPaymentDtl" >
+    INSERT INTO bill_payment_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="settleMethodNo != null" >
+        settle_method_no,
+      </if>
+      <if test="settleMethodName != null" >
+        settle_method_name,
+      </if>
+      <if test="paymentApplication != null" >
+        payment_application,
+      </if>
+      <if test="advancePaymentOrderNo != null" >
+        advance_payment_order_no,
+      </if>
+      <if test="payAmount != null" >
+        pay_amount,
+      </if>
+      <if test="payQty != null" >
+        pay_qty,
+      </if>
+      <if test="moneyDiscount != null" >
+        money_discount,
+      </if>
+      <if test="discountAmount != null" >
+        discount_amount,
+      </if>
+      <if test="fee != null" >
+        fee,
+      </if>
+      <if test="balanceAmount != null" >
+        balance_amount,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="bankBalanceNo != null" >
+        bank_balance_no,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="settleMethodNo != null" >
+        #{settleMethodNo,jdbcType=CHAR},
+      </if>
+      <if test="settleMethodName != null" >
+        #{settleMethodName,jdbcType=CHAR},
+      </if>
+      <if test="paymentApplication != null" >
+        #{paymentApplication,jdbcType=CHAR},
+      </if>
+      <if test="advancePaymentOrderNo != null" >
+        #{advancePaymentOrderNo,jdbcType=CHAR},
+      </if>
+      <if test="payAmount != null" >
+        #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payQty != null" >
+        #{payQty,jdbcType=INTEGER},
+      </if>
+      <if test="moneyDiscount != null" >
+        #{moneyDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountAmount != null" >
+        #{discountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="fee != null" >
+        #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceAmount != null" >
+        #{balanceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=CHAR},
+      </if>
+      <if test="bankBalanceNo != null" >
+        #{bankBalanceNo,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillPaymentDtl" >
+    UPDATE bill_payment_dtl
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="settleMethodNo != null" >
+        settle_method_no = #{settleMethodNo,jdbcType=CHAR},
+      </if>
+      <if test="settleMethodName != null" >
+        settle_method_name = #{settleMethodName,jdbcType=CHAR},
+      </if>
+      <if test="paymentApplication != null" >
+        payment_application = #{paymentApplication,jdbcType=CHAR},
+      </if>
+      <if test="advancePaymentOrderNo != null" >
+        advance_payment_order_no = #{advancePaymentOrderNo,jdbcType=CHAR},
+      </if>
+      <if test="payAmount != null" >
+        pay_amount = #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payQty != null" >
+        pay_qty = #{payQty,jdbcType=INTEGER},
+      </if>
+      <if test="moneyDiscount != null" >
+        money_discount = #{moneyDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountAmount != null" >
+        discount_amount = #{discountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceAmount != null" >
+        balance_amount = #{balanceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=CHAR},
+      </if>
+      <if test="bankBalanceNo != null" >
+        bank_balance_no = #{bankBalanceNo,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=CHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillPaymentDtl" >
+    UPDATE bill_payment_dtl
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      settle_method_no = #{settleMethodNo,jdbcType=CHAR},
+      settle_method_name = #{settleMethodName,jdbcType=CHAR},
+      payment_application = #{paymentApplication,jdbcType=CHAR},
+      advance_payment_order_no = #{advancePaymentOrderNo,jdbcType=CHAR},
+      pay_amount = #{payAmount,jdbcType=DECIMAL},
+      money_discount = #{moneyDiscount,jdbcType=DECIMAL},
+      discount_amount = #{discountAmount,jdbcType=DECIMAL},
+      fee = #{fee,jdbcType=DECIMAL},
+      balance_amount = #{balanceAmount,jdbcType=DECIMAL},
+      bank_account = #{bankAccount,jdbcType=CHAR},
+      bank_balance_no = #{bankBalanceNo,jdbcType=CHAR},
+      remark = #{remark,jdbcType=CHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByBillNo" parameterType="java.lang.String" >
+    DELETE FROM bill_payment_dtl
+    WHERE bill_no = #{billNo,jdbcType=CHAR}
+  </delete> 
+</mapper>

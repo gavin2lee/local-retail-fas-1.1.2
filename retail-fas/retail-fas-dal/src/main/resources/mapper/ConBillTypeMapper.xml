@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ConBillTypeMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ConBillType" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_code" property="billCode" jdbcType="VARCHAR" />
+    <result column="bill_name" property="billName" jdbcType="VARCHAR" />
+    <result column="rel_sys" property="relSys" jdbcType="VARCHAR" />
+    <result column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="transfer_type" property="transferType" jdbcType="TINYINT" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_code, bill_name, rel_sys, table_name, transfer_type, `describe`, `status`, create_user, 
+    create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.billCode and ''!=params.billCode" >
+       AND bill_code = #{params.billCode}
+      </if>
+      <if test="null!=params.billCodes and ''!=params.billCodes" >
+       AND bill_code IN (${params.billCodes})
+      </if>
+      <if test="null!=params.relSys and ''!=params.relSys" >
+       AND rel_sys = #{params.relSys}
+      </if>
+      <if test="null!=params.tableName and ''!=params.tableName" >
+       AND table_name = #{params.tableName}
+      </if>
+      <if test="null!=params.transferType and ''!=params.transferType" >
+       AND transfer_type = #{params.transferType}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+       AND status = #{params.status}
+      </if>
+      <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (UPPER(bill_code) LIKE UPPER(CONCAT('%',#{params.q},'%')) OR bill_name LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from con_bill_type
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from con_bill_type where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM con_bill_type WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField">
+    	order by bill_code
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from con_bill_type where 1=1 
+    <include refid="condition" />
+    order by bill_code
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from con_bill_type
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.String" >
+    delete from con_bill_type
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ConBillType" >
+    insert into con_bill_type (id, bill_code, bill_name, 
+      rel_sys, table_name, transfer_type, 
+      describe, status, create_user, 
+      create_time, update_user, update_time
+      )
+    values (#{id,jdbcType=CHAR}, #{billCode,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, 
+      #{relSys,jdbcType=VARCHAR}, #{tableName,jdbcType=VARCHAR}, #{transferType,jdbcType=TINYINT}, 
+      #{describe,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ConBillType" >
+    insert into con_bill_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billCode != null" >
+        bill_code,
+      </if>
+      <if test="billName != null" >
+        bill_name,
+      </if>
+      <if test="relSys != null" >
+        rel_sys,
+      </if>
+      <if test="tableName != null" >
+        table_name,
+      </if>
+      <if test="transferType != null" >
+        transfer_type,
+      </if>
+      <if test="describe != null" >
+        describe,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="billCode != null" >
+        #{billCode,jdbcType=VARCHAR},
+      </if>
+      <if test="billName != null" >
+        #{billName,jdbcType=VARCHAR},
+      </if>
+      <if test="relSys != null" >
+        #{relSys,jdbcType=VARCHAR},
+      </if>
+      <if test="tableName != null" >
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="transferType != null" >
+        #{transferType,jdbcType=TINYINT},
+      </if>
+      <if test="describe != null" >
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ConBillType" >
+    update con_bill_type
+    <set >
+      <if test="billCode != null" >
+        bill_code = #{billCode,jdbcType=VARCHAR},
+      </if>
+      <if test="billName != null" >
+        bill_name = #{billName,jdbcType=VARCHAR},
+      </if>
+      <if test="relSys != null" >
+        rel_sys = #{relSys,jdbcType=VARCHAR},
+      </if>
+      <if test="tableName != null" >
+        table_name = #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="transferType != null" >
+        transfer_type = #{transferType,jdbcType=TINYINT},
+      </if>
+      <if test="describe != null" >
+        describe = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ConBillType" >
+    update con_bill_type
+    set bill_code = #{billCode,jdbcType=VARCHAR},
+      bill_name = #{billName,jdbcType=VARCHAR},
+      rel_sys = #{relSys,jdbcType=VARCHAR},
+      table_name = #{tableName,jdbcType=VARCHAR},
+      transfer_type = #{transferType,jdbcType=TINYINT},
+      describe = #{describe,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

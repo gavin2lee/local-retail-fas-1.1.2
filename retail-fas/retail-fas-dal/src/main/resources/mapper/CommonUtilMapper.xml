@@ -1,0 +1,1602 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CommonUtilMapper">
+	<resultMap id="regionCostMaintainMap" type="cn.wonhigh.retail.fas.common.model.RegionCostMaintain" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+	    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+	    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+	    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+	    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+	    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+	    <result column="effective_time" property="effectiveTime" jdbcType="DATE" />
+	    <result column="add_rule_no" property="addRuleNo" jdbcType="VARCHAR" />
+	    <result column="add_basis" property="addBasis" jdbcType="CHAR" />
+	    <result column="add_price" property="addPrice" jdbcType="DECIMAL" />
+	    <result column="add_discount" property="addDiscount" jdbcType="DECIMAL" />
+	    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+	    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+	    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+	    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+	     <result column="firstNew" property="firstNew" jdbcType="CHAR" />
+	     
+	     <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+	     <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+	     <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+	     <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+	     <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+	     <result column="years" property="year" jdbcType="VARCHAR" />
+	     <result column="sell_season" property="season" jdbcType="VARCHAR" />
+	     <result column="suggest_tag_price" property="suggestTagPrice" jdbcType="DECIMAL" />
+	  </resultMap>
+  
+	<resultMap id="hqCostMaintainMap" type="cn.wonhigh.retail.fas.common.model.HeadquarterCostMaintain" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+	    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+	    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+	    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+	    <result column="effective_time" property="effectiveTime" jdbcType="DATE" />
+	    <result column="add_rule_no" property="addRuleNo" jdbcType="VARCHAR" />
+	    <result column="add_basis" property="addBasis" jdbcType="CHAR" />
+	    <result column="add_price" property="addPrice" jdbcType="DECIMAL" />
+	    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+	    <result column="add_discount" property="addDiscount" jdbcType="DECIMAL" />
+	    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+	    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+	    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="firstNew" property="firstNew" jdbcType="CHAR" />
+	     
+	     <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+	     <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+	     <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+	     <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+	     <result column="years" property="year" jdbcType="VARCHAR" />
+	     <result column="sell_season" property="season" jdbcType="VARCHAR" />
+	     <result column="suggest_tag_price" property="suggestTagPrice" jdbcType="DECIMAL" />
+	     <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+	  </resultMap>
+  
+	<select id="queryHeadquarterMaintainedItems" resultType="java.lang.String" >
+		SELECT DISTINCT item_no itemNo FROM headquarter_cost_maintain
+	</select>
+
+	<select id="queryRegionMaintainedItems" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT DISTINCT item_no itemNo FROM region_cost_maintain WHERE zone_no= #{params.zoneNo,jdbcType=CHAR} 
+	</select>
+
+	<select id="countHQNeedRuleMatchItems" resultType="java.lang.Integer" parameterType="map" >
+		SELECT COUNT(1) FROM
+		(							
+			SELECT T.item_no FROM 
+				    (SELECT pp.item_no, pp.item_code, pp.supplier_no, pp.purchase_price, pp.material_price,
+					    	pp.factory_price, pp.effective_date, pp.status
+					    FROM purchase_price pp
+					    INNER JOIN 
+					      (SELECT 
+						  T1.item_no,
+						  T1.effective_time,
+						  T1.headquarter_cost,
+						  IF(
+				            T1.add_price IS NOT NULL,
+				            T1.headquarter_cost - T1.add_price,
+				            IF(
+				              T1.`add_discount` IS NOT NULL,
+				              T1.`headquarter_cost` / T1.add_discount,
+				              0
+				            )
+				          ) factory_price
+						FROM
+						  (SELECT 
+						    item_no,
+						    MAX(effective_time) effective_time 
+						  FROM
+						    headquarter_cost_maintain 
+						    WHERE 1=1
+						  GROUP BY item_no) T0 
+						  INNER JOIN headquarter_cost_maintain T1 
+						    ON T0.item_no = T1.item_no 
+						    AND T0.effective_time = T1.effective_time ) hcm 
+					      ON pp.item_no = hcm.item_no 
+					      AND pp.effective_date &gt;= hcm.effective_time 
+					      AND pp.effective_date &lt;= #{params.effectiveDate}
+					      AND pp.factory_price != hcm.factory_price
+						WHERE pp.status=100  
+				    ) T
+					INNER JOIN item mm ON T.item_no = mm.item_no AND T.supplier_no = mm.supplier_no
+					where 1 = 1 
+					<if test="null != params.brandNo and '' != params.brandNo">
+						AND mm.brand_no =  #{params.brandNo}
+					</if>
+					<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+						AND mm.root_category_no IN ${params.multiCategoryNo}
+					</if>
+					
+		) A
+  	</select>
+  
+  <select id="queryHQNeedRuleMatchItems" resultMap="hqCostMaintainMap" parameterType="map" >
+	SELECT mm.item_no,mm.code item_code,mm.name item_name, mm.brand_no,
+		mm.root_category_no category_no, LEFT(mm.category_no,4) two_level_category_no, mm.suggest_tag_price, mm.years, 
+		mm.sell_season,mm.supplier_no,T.effective_date effective_time,T.purchase_price,T.material_price,T.factory_price,
+		supplier.short_name supplier_name, brand.name brand_name
+	    FROM 
+			(SELECT pp.item_no, pp.item_code, pp.supplier_no, pp.purchase_price, pp.material_price,
+					pp.factory_price, pp.effective_date, pp.status
+			FROM purchase_price pp
+			INNER JOIN 
+		      (SELECT 
+			  T1.item_no,
+			  T1.effective_time,
+			  T1.headquarter_cost,
+	  		  IF(
+	            T1.add_price IS NOT NULL,
+	            T1.headquarter_cost - T1.add_price,
+	            IF(
+	              T1.`add_discount` IS NOT NULL,
+	              T1.`headquarter_cost` / T1.add_discount,
+	              0
+	            )
+	          ) factory_price
+			FROM
+			  (SELECT 
+			    item_no,
+			    MAX(effective_time) effective_time 
+			  FROM
+			    headquarter_cost_maintain 
+			    WHERE 1=1
+			  GROUP BY item_no) T0 
+			  INNER JOIN headquarter_cost_maintain T1 
+			    ON T0.item_no = T1.item_no 
+			    AND T0.effective_time = T1.effective_time ) hcm 
+		      ON pp.item_no = hcm.item_no 
+		      AND pp.effective_date &gt;= hcm.effective_time 
+		      AND pp.effective_date &lt;= #{params.effectiveDate}
+		      AND pp.factory_price != hcm.factory_price
+			WHERE pp.status=100  
+		) T
+		INNER JOIN item mm ON T.item_no = mm.item_no AND T.supplier_no = mm.supplier_no
+		LEFT JOIN supplier ON mm.supplier_no = supplier.supplier_no 
+  		LEFT JOIN brand ON mm.brand_no=brand.brand_no
+  		WHERE 1 = 1 
+		<if test="null != params.brandNo and '' != params.brandNo">
+			AND mm.brand_no =  #{params.brandNo}
+		</if>
+		<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+			AND mm.root_category_no IN ${params.multiCategoryNo}
+		</if>
+		 LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  
+  <select id="countHQFirstNewNeedRuleMatchItems" resultType="java.lang.Integer" parameterType="map" >
+		SELECT COUNT(1) FROM
+		(							
+			SELECT T.item_no FROM 
+				    (SELECT pp.item_no, pp.item_code, pp.supplier_no, pp.purchase_price, pp.material_price,
+					    	pp.factory_price, pp.effective_date, pp.status
+					    FROM purchase_price pp
+					    LEFT JOIN headquarter_cost_maintain hcm
+					    ON pp.item_no = hcm.item_no
+					    WHERE pp.status=100 AND hcm.item_no is null
+					    AND pp.effective_date &lt;= #{params.effectiveDate}
+				    ) T
+					INNER JOIN item mm ON T.item_no = mm.item_no AND T.supplier_no = mm.supplier_no
+					WHERE 1 = 1
+					<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+						AND mm.root_category_no IN ${params.multiCategoryNo}
+					</if>
+					<if test="null != params.brandNo and '' != params.brandNo">
+						AND mm.brand_no =  #{params.brandNo}
+					</if>
+		) A
+  	</select>
+  	
+  	<select id="queryHQFirstNewNeedRuleMatchItems" resultMap="hqCostMaintainMap" parameterType="map" >
+	SELECT mm.item_no,mm.code item_code,mm.name item_name, mm.brand_no,
+		mm.root_category_no category_no,LEFT(mm.category_no,4) two_level_category_no, mm.suggest_tag_price, mm.years, 
+		mm.sell_season,mm.supplier_no,T.status,T.effective_date effective_time,T.purchase_price,T.material_price,T.factory_price,
+		supplier.short_name supplier_name, brand.name brand_name
+	    FROM 
+		(SELECT pp.item_no, pp.item_code, pp.supplier_no, pp.purchase_price, pp.material_price,
+				pp.factory_price, pp.effective_date, pp.status
+			FROM purchase_price pp
+			LEFT JOIN headquarter_cost_maintain hcm
+			ON pp.item_no = hcm.item_no
+			WHERE pp.status=100 AND hcm.item_no is null
+			AND pp.effective_date &lt;= #{params.effectiveDate}
+		) T
+		INNER JOIN item mm ON T.item_no = mm.item_no AND T.supplier_no = mm.supplier_no 
+		LEFT JOIN supplier ON mm.supplier_no = supplier.supplier_no 
+  		LEFT JOIN brand ON mm.brand_no=brand.brand_no
+  		WHERE 1 = 1 
+		<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+			AND mm.root_category_no IN ${params.multiCategoryNo}
+		</if>
+		<if test="null != params.brandNo and '' != params.brandNo">
+			AND mm.brand_no =  #{params.brandNo}
+		</if>
+		<if test="orderByField != null and ''!=orderByField" >
+		      ORDER BY ${orderByField}
+		      <if test="orderByField" >
+		        ${orderBy}
+		      </if>
+		 </if>
+		 LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  
+  
+  <select id="countQuotationRuleMatchItems" resultType="java.lang.Integer" parameterType="map" >
+		SELECT COUNT(1) FROM
+		(							
+			SELECT T.item_no FROM 
+				    (SELECT pp.item_no, pp.tag_price FROM price_quotation_list pp
+					    LEFT JOIN headquarter_cost_maintain hcm ON pp.item_no = hcm.item_no 
+					    WHERE pp.organ_id='0000' AND pp.quotation_tactics=0 AND (hcm.item_no IS NULL OR pp.tag_price*hcm.`discount_rate` != hcm.headquarter_cost)
+				    ) T
+					INNER JOIN item mm ON T.item_no = mm.item_no 
+					WHERE 1 = 1
+					<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+						AND mm.root_category_no IN ${params.multiCategoryNo}
+					</if>
+					<if test="null != params.brandNo and '' != params.brandNo">
+						AND mm.brand_no =  #{params.brandNo}
+					</if>
+		) A
+  	</select>
+  	
+  	<select id="queryQuotationRuleMatchItems" resultMap="hqCostMaintainMap" parameterType="map" >
+	SELECT mm.item_no,mm.code item_code,mm.name item_name, mm.brand_no,
+		mm.root_category_no category_no,LEFT(mm.category_no,4) two_level_category_no, mm.suggest_tag_price, mm.years, 
+		mm.sell_season,mm.supplier_no,T.tag_price,
+		supplier.short_name supplier_name, brand.name brand_name
+	    FROM 
+		(SELECT pp.item_no, pp.tag_price FROM price_quotation_list pp
+		LEFT JOIN headquarter_cost_maintain hcm ON pp.item_no = hcm.item_no 
+		WHERE pp.organ_id='0000' AND pp.quotation_tactics=0 AND (hcm.item_no IS NULL OR pp.tag_price*hcm.`discount_rate` != hcm.headquarter_cost)
+		) T
+		INNER JOIN item mm ON T.item_no = mm.item_no
+		LEFT JOIN supplier ON mm.supplier_no = supplier.supplier_no 
+  		LEFT JOIN brand ON mm.brand_no=brand.brand_no
+  		WHERE 1 = 1 
+		<if test="null != params.brandNo and '' != params.brandNo">
+			AND mm.brand_no =  #{params.brandNo}
+		</if>
+		<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+			AND mm.root_category_no IN ${params.multiCategoryNo}
+		</if>
+		<if test="orderByField != null and ''!=orderByField" >
+		      ORDER BY ${orderByField}
+		      <if test="orderByField" >
+		        ${orderBy}
+		      </if>
+		 </if>
+		 LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  
+  <select id="countRegionNeedRuleMatchItems" resultType="java.lang.Integer" parameterType="map" >
+	SELECT COUNT(1) FROM 
+	(
+		SELECT hcm.item_no FROM headquarter_cost_maintain hcm 
+		INNER JOIN item mm ON hcm.item_no = mm.item_no
+		WHERE NOT EXISTS
+		(SELECT 
+	      item_no 
+	    FROM
+	      region_cost_maintain rcm 
+	    WHERE hcm.item_no = rcm.item_no 
+	      AND hcm.effective_time &lt; rcm.effective_time 
+	      AND rcm.zone_no = #{params.zoneNo}) 
+	      AND NOT EXISTS
+	      (SELECT 
+	      item_no 
+	    FROM
+	      region_cost_maintain rcm 
+	    WHERE hcm.item_no = rcm.item_no 
+	      AND hcm.effective_time = rcm.effective_time 
+	      AND IF(rcm.`add_basis` = 3,
+	      IF(rcm.add_price IS NOT NULL,hcm.`headquarter_cost` + rcm.`add_price` = rcm.`region_cost` ,
+	      IF(rcm.`add_discount` IS NOT NULL,hcm.`headquarter_cost` * rcm.add_discount = rcm.`region_cost`,hcm.`headquarter_cost` = rcm.`region_cost`))
+	      ,1 = 1)
+	      AND rcm.zone_no = #{params.zoneNo}) 
+		<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+			AND mm.root_category_no IN ${params.multiCategoryNo}
+		</if>
+		<if test="null != params.brands and '' != params.brands">
+				AND hcm.brand_no IN 
+			<foreach collection="params.brands" item="itemBrand" separator="," open="(" close=")" index=""> 
+				#{itemBrand.brandNo}
+			</foreach>
+		</if>
+	) A
+  </select>
+  
+  <select id="queryRegionNeedRuleMatchItems" resultMap="regionCostMaintainMap" parameterType="map" >
+  	SELECT 
+		  hcm.headquarter_cost,
+		  hcm.effective_time,
+		  mm.item_no,
+		  mm.code item_code,
+		  mm.name item_name,
+		  mm.brand_no,
+		  mm.root_category_no category_no,
+		  LEFT(mm.category_no, 4) two_level_category_no,
+		  mm.suggest_tag_price,
+		  mm.years,
+		  mm.sell_season,
+		  mm.supplier_no,
+		  supplier.short_name supplier_name,
+		  brand.name brand_name 
+		FROM
+		  headquarter_cost_maintain hcm 
+		  INNER JOIN item mm 
+		    ON hcm.item_no = mm.item_no 
+		  INNER JOIN supplier 
+		    ON mm.supplier_no = supplier.supplier_no 
+		  INNER JOIN brand 
+		    ON mm.brand_no = brand.brand_no 
+		WHERE NOT EXISTS 
+		  (SELECT 
+		    item_no 
+		  FROM
+		    region_cost_maintain rcm 
+		  WHERE hcm.item_no = rcm.item_no 
+		    AND hcm.effective_time &lt; rcm.effective_time 
+		    AND rcm.zone_no = #{params.zoneNo}) 
+		  AND NOT EXISTS 
+		  (SELECT 
+		    item_no 
+		  FROM
+		    region_cost_maintain rcm 
+		  WHERE hcm.item_no = rcm.item_no 
+		    AND hcm.effective_time = rcm.effective_time 
+		    AND IF(
+		      rcm.`add_basis` = 3,
+		      IF(
+		        rcm.add_price IS NOT NULL,
+		        hcm.`headquarter_cost` + rcm.`add_price` = rcm.`region_cost`,
+		        IF(
+		          rcm.`add_discount` IS NOT NULL,
+		          hcm.`headquarter_cost` * rcm.add_discount = rcm.`region_cost`,
+		          hcm.`headquarter_cost` = rcm.`region_cost`
+		        )
+		      ),
+		      1 = 1
+		    ) 
+		    AND rcm.zone_no = #{params.zoneNo}) 
+		    <if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+			AND mm.root_category_no IN ${params.multiCategoryNo}
+			</if>
+			<if test="null != params.brands and '' != params.brands">
+					AND hcm.brand_no IN 
+				<foreach collection="params.brands" item="itemBrand" separator="," open="(" close=")" index=""> 
+					#{itemBrand.brandNo}
+				</foreach>
+			</if>
+			ORDER BY hcm.effective_time
+		    LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  
+  <select id="countRegionNeedRuleFactoryMatchItems" resultType="java.lang.Integer" parameterType="map" >
+		SELECT
+			COUNT(1)
+		FROM
+			purchase_price pp
+		INNER JOIN item mm ON pp.item_no = mm.item_no
+		AND pp.supplier_no = mm.supplier_no
+		WHERE
+			NOT EXISTS (
+				SELECT
+					1
+				FROM
+					region_cost_maintain rcm
+				WHERE
+					1 = 1
+				AND rcm.item_no = pp.item_no
+				AND pp.effective_date &lt; rcm.effective_time
+				AND rcm.zone_no = #{params.zoneNo}
+			)
+			AND NOT EXISTS(
+				SELECT
+					1
+				FROM
+					region_cost_maintain rcm
+				WHERE
+					1 = 1
+				AND rcm.item_no = pp.item_no
+				AND pp.effective_date = rcm.effective_time
+				AND IF(rcm.`add_basis` = 1,
+			      IF(rcm.add_price IS NOT NULL,pp.`factory_price` + rcm.`add_price` = rcm.`region_cost` ,
+			      IF(rcm.`add_discount` IS NOT NULL,pp.`factory_price` * rcm.add_discount = rcm.`region_cost`,pp.`factory_price` = rcm.`region_cost`))
+			      ,1 = 1)
+				AND rcm.zone_no = #{params.zoneNo}
+			)
+			
+			
+			
+		AND pp.STATUS = 100
+		<if test="null != params.brands and '' != params.brands">
+			AND mm.brand_no in 
+			<foreach collection="params.brands" item="itemBrand" separator="," open="(" close=")" index=""> 
+				#{itemBrand.brandNo}  
+			</foreach>  
+		</if>
+		<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+			AND mm.root_category_no IN ${params.multiCategoryNo}
+		</if>
+  </select>
+  
+  <select id="queryRegionNeedRuleFactoryMatchItems" resultMap="regionCostMaintainMap" parameterType="map" >
+	  	SELECT
+			mm.item_no,
+			mm.code item_code,
+			mm.name item_name,
+			mm.brand_no,
+			mm.root_category_no category_no,
+			LEFT (category_no, 4) two_level_category_no,
+			mm.suggest_tag_price,
+			mm.years,
+			mm.sell_season,
+			mm.supplier_no,
+			pp.effective_date effective_time,
+			pp.factory_price,
+			supplier.short_name supplier_name,
+			brand.name brand_name
+		FROM
+			purchase_price pp
+		INNER JOIN item mm ON pp.item_no = mm.item_no
+		AND pp.supplier_no = mm.supplier_no
+		INNER JOIN brand  ON brand.brand_no = mm.brand_no
+		INNER JOIN supplier ON supplier.supplier_no = mm.supplier_no
+		WHERE
+			NOT EXISTS (
+				SELECT
+					1
+				FROM
+					region_cost_maintain rcm
+				WHERE 1 = 1
+				 and rcm.item_no = pp.item_no
+			   AND pp.effective_date &lt; rcm.effective_time AND rcm.zone_no = #{params.zoneNo}
+			)
+			AND NOT EXISTS(
+				SELECT
+					1
+				FROM
+					region_cost_maintain rcm
+				WHERE
+					1 = 1
+				AND rcm.item_no = pp.item_no
+				AND pp.effective_date = rcm.effective_time
+				AND IF(rcm.`add_basis` = 1,
+			      IF(rcm.add_price IS NOT NULL,pp.`factory_price` + rcm.`add_price` = rcm.`region_cost` ,
+			      IF(rcm.`add_discount` IS NOT NULL,pp.`factory_price` * rcm.add_discount = rcm.`region_cost`,pp.`factory_price` = rcm.`region_cost`))
+			      ,1 = 1)
+				AND rcm.zone_no = #{params.zoneNo}
+			)
+		AND pp.status = 100
+		<if test="null != params.brands and '' != params.brands">
+			AND mm.brand_no in 
+			<foreach collection="params.brands" item="itemBrand" separator="," open="(" close=")" index=""> 
+				#{itemBrand.brandNo}  
+			</foreach>  
+		</if>
+		<if test="null != params.multiCategoryNo and '' != params.multiCategoryNo">
+			AND mm.root_category_no IN ${params.multiCategoryNo}
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>  
+	<select id="getSerialNoByReqNo" parameterType="java.util.Map"
+		statementType="CALLABLE">
+     <![CDATA[  
+         { call TLS_Get_SerialNo(#{a.I_RequestID,mode=IN,jdbcType=VARCHAR},#{a.O_SerialNo,mode=OUT,jdbcType=VARCHAR})}
+     ]]>
+	</select>
+
+  <select id="selectHqMaxBillNo" resultType="java.lang.String" parameterType="map" >
+    SELECT ifNULL(MAX(${params.pkName}),'00000') FROM ${params.tableName} where 1 = 1  AND ${params.pkName} like '${params.pkValue}%'
+  </select>
+  
+  <select id="selectMaxBillNo" resultType="java.lang.String" parameterType="map" >
+    SELECT ifNULL(MAX(${params.no}),'0000') FROM ${params.tableName} where 1 = 1  AND ${params.no} like '%${params.dataNo}%'
+  </select>
+  
+  <resultMap id="LookUpMap" type="cn.wonhigh.retail.fas.common.vo.LookupVo" >
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+	    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+  </resultMap>
+	
+  <select id="selectPageOrganizationCount" resultType="java.lang.Integer" parameterType="map" >
+    SELECT 
+	  SUM(S) 
+	FROM
+	  (SELECT 
+	    COUNT(1) S 
+	  FROM
+	    company 
+	    WHERE 1 = 1
+	    /*organ_type_no*/
+	  <if test="params.q != null and ''!=params.q" >
+	  	AND (UPPER(company.company_no) LIKE UPPER('${params.q}%') OR UPPER(company.name) LIKE UPPER('%${params.q}%')) 
+	  </if>
+	  <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(company_no) IN ${params.multiq} OR company.name IN ${params.multiq} ) 
+	  </if>
+	  UNION
+	  ALL 
+	  SELECT 
+	    COUNT(1) S 
+	  FROM
+	    supplier
+	    WHERE 1 = 1
+	    /*organ_type_no*/
+	  <if test="params.q != null and ''!=params.q" >
+	  	AND (UPPER(supplier.supplier_no) LIKE UPPER('${params.q}%') OR UPPER(supplier.short_name) LIKE UPPER('%${params.q}%')) 
+	  </if>
+	  <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(supplier.supplier_no) IN ${params.multiq} OR supplier.short_name IN ${params.multiq} ) 
+	  </if>) G
+  </select>
+  
+  <select id="selectPageOrganizationList" resultMap="LookUpMap" parameterType="map" >
+    SELECT 
+	  supplier_no CODE,
+	  supplier.short_name NAME,
+	  bank_name,
+	  bank_account 
+	FROM
+	  supplier 
+	  WHERE 1 = 1
+	  /*organ_type_no*/
+	  <if test="params.q != null and ''!=params.q" >
+	  	AND (UPPER(supplier.supplier_no) LIKE UPPER('${params.q}%') OR UPPER(supplier.short_name) LIKE UPPER('%${params.q}%')) 
+	  </if>
+	  <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(supplier.supplier_no) IN ${params.multiq} OR supplier.short_name IN ${params.multiq} ) 
+	  </if>
+	UNION ALL 
+	SELECT 
+	  company_no CODE,
+	  company.name NAME,
+	  bank_name,
+	  bank_account 
+	FROM
+	  company 
+	  WHERE 1 = 1
+	  /*organ_type_no*/
+	  <if test="params.q != null and ''!=params.q" >
+	  	AND (UPPER(company.company_no) LIKE UPPER('${params.q}%') OR UPPER(company.name) LIKE UPPER('%${params.q}%')) 
+	  </if>
+	  <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(company.company_no) IN ${params.multiq} OR company.name IN ${params.multiq} ) 
+	  </if>
+	 LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+ <resultMap id="BaseItemDtoResultMap" type="cn.wonhigh.retail.fas.common.dto.ItemDto" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+	    <result column="en_name" property="enName" jdbcType="VARCHAR" />
+	    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+	    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	    <result column="shoe_model" property="shoeModel" jdbcType="VARCHAR" />
+	    <result column="ingredients" property="ingredients" jdbcType="VARCHAR" />
+	    <result column="mainqdb" property="mainqdb" jdbcType="VARCHAR" />
+	    <result column="lining" property="lining" jdbcType="VARCHAR" />
+	    <result column="color_no" property="colorNo" jdbcType="CHAR" />
+	    <result column="main_color" property="mainColor" jdbcType="VARCHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+	    <result column="root_category_no" property="rootCategoryNo" jdbcType="CHAR" />
+	    <result column="repeatlisting" property="repeatlisting" jdbcType="VARCHAR" />
+	    <result column="gender" property="gender" jdbcType="VARCHAR" />
+	    <result column="heeltype" property="heeltype" jdbcType="VARCHAR" />
+	    <result column="bottomtype" property="bottomtype" jdbcType="VARCHAR" />
+	    <result column="size_kind" property="sizeKind" jdbcType="CHAR" />
+	    <result column="status" property="status" jdbcType="TINYINT" />
+	    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+	    <result column="suggest_tag_price" property="suggestTagPrice" jdbcType="DECIMAL" />
+	    <result column="purchase_tax_price" property="purchaseTaxPrice" jdbcType="DECIMAL" />
+	    <result column="costtaxrate" property="costtaxrate" jdbcType="DECIMAL" />
+	    <result column="saletaxrate" property="saletaxrate" jdbcType="DECIMAL" />
+	    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+	    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+	    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+	    <result column="supplier_item_no" property="supplierItemNo" jdbcType="VARCHAR" />
+	    <result column="supplier_item_name" property="supplierItemName" jdbcType="VARCHAR" />
+	    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+	    <result column="years" property="years" jdbcType="VARCHAR" />
+	    <result column="sell_season" property="sellSeason" jdbcType="VARCHAR" />
+	    <result column="purchase_season" property="purchaseSeason" jdbcType="VARCHAR" />
+	    <result column="sale_date" property="saleDate" jdbcType="DATE" />
+	    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+	    <result column="style" property="style" jdbcType="VARCHAR" />
+	    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+	    <result column="years_name" property="yearsName" jdbcType="VARCHAR" />
+	    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+	    <result column="orderfrom_name" property="orderfromName" jdbcType="VARCHAR" />
+	    <result column="gender_name" property="genderName" jdbcType="VARCHAR" />
+	  </resultMap>
+	  
+	 <sql id="QueryItemCondition">
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+		    <if test="null!=params.itemNo and ''!=params.itemNo" >
+	        	AND t0.item_no = #{params.itemNo}
+	        </if>   
+			<if test="null!=params.itemCode and ''!=params.itemCode">
+				AND t0.code = #{params.itemCode}
+			</if>
+			<if test="null!=params.code and ''!=params.code">
+				AND t0.code = #{params.code}
+			</if>
+			<if test="null!=params.itemName and ''!=params.itemName">
+				AND t0.name = #{params.itemName}
+			</if>
+			<if test="null!=params.brandNo and ''!=params.brandNo">
+				AND t0.brand_no = #{params.brandNo}
+			</if>
+		</if>
+	 </sql>
+	  <select id="selectItemExtendsCount" resultType="java.lang.Integer">
+		SELECT 
+		  COUNT(1)
+		FROM
+		  item t0 
+		  WHERE 1 = 1
+		  <include refid="QueryItemCondition" /> 
+	</select>
+	<select id="selectItemExtendsList" resultMap="BaseItemDtoResultMap" parameterType="map" >
+		SELECT 
+		  t1.name brand_name,
+		  t2.name category_name,
+		  lookup1.name years_name,
+		  lookup2.name season_name,
+		  lookup3.name orderfrom_name,
+		  lookup4.name gender_name,
+		  t0.*
+		FROM
+		  item t0 
+		  LEFT JOIN brand t1 
+		    ON t0.`brand_no` = t1.`brand_no` 
+		  LEFT JOIN category t2 
+		    ON t0.`category_no` = t2.`category_no` 
+		  LEFT JOIN lookup_entry lookup1 
+		    ON t0.`years` = lookup1.`code` 
+		    AND lookup1.`lookup_id` = '5' 
+		  LEFT JOIN lookup_entry lookup2 
+		    ON t0.`sell_season` = lookup2.`code` 
+		    AND lookup2.`lookup_id` = '72'
+		  LEFT JOIN lookup_entry lookup3 
+		    ON t0.`orderfrom` = lookup3.`code` 
+		    AND lookup3.`lookup_id` = '29' 
+		  LEFT JOIN lookup_entry lookup4 
+		    ON t0.`gender` = lookup4.`code` 
+		    AND lookup4.`lookup_id` = '7'
+		  WHERE 1 = 1
+		  <include refid="QueryItemCondition" /> 
+	</select>
+	<resultMap id="PriceZoneMap" type="cn.wonhigh.retail.fas.common.model.ZoneInfo" >
+	    <result column="zone_no" property="zoneNo" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+	  <!-- 查询默认价格区 -->
+	  <select id="findPriceZones" resultMap="PriceZoneMap">
+		SELECT 
+			zone_no,name
+		FROM
+			zone_info
+			WHERE 1 = 1
+		  <if test="null!=params.q and ''!=params.q">
+			AND (UPPER(zone_no) LIKE UPPER(CONCAT(#{params.q},'%')) OR name LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+		  </if>
+		UNION ALL
+		SELECT
+			zone_no,name
+		FROM
+			special_zone_info where special_zone_info.status = 1
+			<if test="null!=params.q and ''!=params.q">
+			AND (UPPER(zone_no) LIKE UPPER(CONCAT(#{params.q},'%')) OR name LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+		  </if>
+	  </select>  
+	  
+ 	  <sql id="getRegionByFactoryPrice">
+	  	SELECT 
+		  G.*,
+		  rule.add_discount,
+		  rule.add_price,
+		  rule.discount_rate,
+		  rule.add_basis,
+		  (SELECT 
+		    pql.tag_price 
+		  FROM
+		    price_quotation_list pql 
+		  WHERE 1 = 1 
+		    AND pql.item_no = G.item_no 
+		    AND pql.organ_id = '0000' 
+		    AND pql.quotation_tactics = 0 
+		  LIMIT 1) tag_price,
+		  (SELECT 
+		    hcm.headquarter_cost 
+		  FROM
+		    headquarter_cost_maintain hcm 
+		  WHERE 1 = 1 
+		    AND hcm.item_no = G.item_no 
+		    ORDER BY effective_time DESC
+		  LIMIT 1) headquarter_cost,
+		  IF(
+		    add_price IS NOT NULL,
+		    factory_price + add_price,
+		    IF(
+		      add_discount IS NOT NULL,
+		      ROUND(factory_price * add_discount,0),
+		      0
+		    )
+		  ) region_cost 
+		FROM
+		  (SELECT 
+		    mm.item_no,
+		    mm.code item_code,
+		    mm.name item_name,
+		    b.brand_no,
+		    b.name brand_name,
+		    s.supplier_no,
+		    s.short_name supplier_name,
+		    pp.factory_price,
+		    (SELECT 
+		      hpr.add_rule_no 
+		    FROM
+		      item it 
+		      INNER JOIN supplier_group_rel sgr 
+		        ON it.supplier_no = sgr.supplier_no 
+		      INNER JOIN settle_category_dtl scd 
+		        ON it.root_category_no = scd.category_no 
+		      INNER JOIN brand b 
+		        ON it.brand_no = b.brand_no 
+		      INNER JOIN region_price_rule hpr 
+		        ON FIND_IN_SET(
+		          sgr.group_no,
+		          hpr.supplier_group_no
+		        ) 
+		        AND FIND_IN_SET(
+		          scd.settle_category_no,
+		          hpr.category_no
+		        ) 
+		        AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+		      LEFT JOIN `settle_new_style_dtl` snsd 
+		        ON it.`years` = snsd.`year_code` 
+		        AND (
+		          it.`sell_season` = snsd.`season_no` 
+		          OR snsd.season_no = 'ALL'
+		        ) 
+		    WHERE 1 = 1 
+		      AND mm.brand_no = #{params.brandNo} 
+		      AND mm.root_category_no IN ${params.multiCategoryNo}
+		      AND hpr.effective_time &lt;= #{params.effectiveTime} 
+		      AND FIND_IN_SET(#{params.zoneNo}, hpr.zone_no) 
+		      AND it.item_no = pp.item_no 
+		      AND hpr.add_basis = 1 
+		      AND (
+		        (
+		          hpr.style_type = snsd.style_no 
+		          AND hpr.new_style_flag = 1
+		        ) 
+		        OR (
+		          hpr.new_style_flag = 0 
+		          AND FIND_IN_SET(it.years, hpr.year_code) 
+		          AND (
+		            hpr.season = it.sell_season 
+		            OR hpr.season = 'ALL'
+		          )
+		        )
+		      ) 
+		      AND (
+		        FIND_IN_SET(
+		          LEFT(it.category_no, 4),
+		          hpr.two_level_category_no
+		        ) 
+		        OR (
+		          hpr.two_level_category_no = '' 
+		          OR hpr.two_level_category_no IS NULL
+		        )
+		      ) 
+		    ORDER BY hpr.effective_time DESC 
+		    LIMIT 1) add_rule_no 
+		  FROM
+		    purchase_price pp 
+		    INNER JOIN item mm 
+		      ON pp.item_no = mm.item_no 
+		      AND pp.supplier_no = mm.supplier_no 
+		    INNER JOIN brand b 
+		      ON b.brand_no = mm.brand_no 
+		    INNER JOIN supplier s 
+		      ON s.supplier_no = mm.supplier_no 
+		  WHERE 1 = 1 
+		    AND mm.brand_no = #{params.brandNo} 
+		    AND mm.root_category_no IN ${params.multiCategoryNo} 
+		    AND pp.status = 100 
+		    AND pp.effective_date &lt;= #{params.effectiveTime} 
+		    AND (
+		      NOT EXISTS 
+		      (SELECT 
+		        1 
+		      FROM
+		        region_cost_maintain rcm 
+		      WHERE 1 = 1 
+		        AND pp.item_no = rcm.item_no 
+		        AND rcm.brand_no = #{params.brandNo} 
+		        AND rcm.zone_no = #{params.zoneNo}) 
+		      OR EXISTS (
+		        (SELECT 
+		          1 
+		        FROM
+		          region_cost_maintain rcm 
+		          INNER JOIN 
+		            (SELECT 
+		              item_no,
+		              MAX(effective_time) effective_time 
+		            FROM
+		              region_cost_maintain rcm 
+		            WHERE 1 = 1 
+		              AND rcm.brand_no = #{params.brandNo} 
+		              AND rcm.zone_no = #{params.zoneNo}
+		            GROUP BY item_no) rcm1 
+		            ON rcm.item_no = rcm1.item_no 
+		            AND rcm.effective_time = rcm1.effective_time 
+		        WHERE 1 = 1 
+		          AND rcm.brand_no = #{params.brandNo} 
+		          AND rcm.zone_no = #{params.zoneNo}
+		          AND pp.item_no = rcm.item_no 
+		          AND pp.effective_date &gt;= rcm.effective_time 
+		          AND pp.factory_price != rcm.factory_price)
+		      )
+		    )) G 
+		  INNER JOIN region_price_rule rule 
+		    ON G.add_rule_no = rule.add_rule_no 
+		WHERE G.add_rule_no IS NOT NULL 
+	  </sql>
+	  <sql id="getRegionByHQCost">
+	  		SELECT 
+			  G.*,
+			  rule.add_discount,
+			  rule.add_price,
+			  rule.discount_rate,
+			  rule.add_basis,
+			  (SELECT 
+			    pql.tag_price 
+			  FROM
+			    price_quotation_list pql 
+			  WHERE 1 = 1 
+			    AND pql.item_no = G.item_no 
+			    AND pql.organ_id = '0000' 
+			    AND pql.quotation_tactics = 0 
+			  LIMIT 1) tag_price,
+			  (SELECT 
+			    pp.factory_price 
+			  FROM
+			    purchase_price pp 
+			  WHERE 1 = 1 
+			    AND pp.item_no = G.item_no 
+			    AND pp.supplier_no = G.supplier_no
+			    AND pp.status = 100
+			  ORDER BY effective_time DESC 
+			  LIMIT 1) factory_price,
+			  IF(
+			    add_price IS NOT NULL,
+			    headquarter_cost + add_price,
+			    IF(
+			      add_discount IS NOT NULL,
+			      ROUND(headquarter_cost * add_discount,0),
+			      0
+			    )
+			  ) region_cost 
+			FROM
+			  (SELECT 
+			    mm.item_no,
+			    mm.code item_code,
+			    mm.name item_name,
+			    b.brand_no,
+			    b.name brand_name,
+			    s.supplier_no,
+			    s.short_name supplier_name,
+			    hcm.headquarter_cost,
+			    (SELECT 
+			      hpr.add_rule_no 
+			    FROM
+			      item it 
+			      INNER JOIN supplier_group_rel sgr 
+			        ON it.supplier_no = sgr.supplier_no 
+			      INNER JOIN settle_category_dtl scd 
+			        ON it.root_category_no = scd.category_no 
+			      INNER JOIN brand b 
+			        ON it.brand_no = b.brand_no 
+			      INNER JOIN region_price_rule hpr 
+			        ON FIND_IN_SET(
+			          sgr.group_no,
+			          hpr.supplier_group_no
+			        ) 
+			        AND FIND_IN_SET(
+			          scd.settle_category_no,
+			          hpr.category_no
+			        ) 
+			        AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+			      LEFT JOIN `settle_new_style_dtl` snsd 
+			        ON it.`years` = snsd.`year_code` 
+			        AND (
+			          it.`sell_season` = snsd.`season_no` 
+			          OR snsd.season_no = 'ALL'
+			        ) 
+			    WHERE 1 = 1 
+			      AND mm.brand_no = #{params.brandNo} 
+			      AND mm.root_category_no IN ${params.multiCategoryNo}
+			      AND hpr.effective_time &lt;= #{params.effectiveTime} 
+			      AND FIND_IN_SET(#{params.zoneNo}, hpr.zone_no) 
+			      AND it.item_no = hcm.item_no 
+			      AND hpr.add_basis = 3 
+			      AND (
+			        (
+			          hpr.style_type = snsd.style_no 
+			          AND hpr.new_style_flag = 1
+			        ) 
+			        OR (
+			          hpr.new_style_flag = 0 
+			          AND FIND_IN_SET(it.years, hpr.year_code) 
+			          AND (
+			            hpr.season = it.sell_season 
+			            OR hpr.season = 'ALL'
+			          )
+			        )
+			      ) 
+			      AND (
+			        FIND_IN_SET(
+			          LEFT(it.category_no, 4),
+			          hpr.two_level_category_no
+			        ) 
+			        OR (
+			          hpr.two_level_category_no = '' 
+			          OR hpr.two_level_category_no IS NULL
+			        )
+			      ) 
+			    ORDER BY hpr.effective_time DESC 
+			    LIMIT 1) add_rule_no 
+			  FROM
+			    headquarter_cost_maintain hcm 
+			    INNER JOIN 
+			      (SELECT 
+			        item_no,
+			        MAX(effective_time) effective_time 
+			      FROM
+			        headquarter_cost_maintain 
+			      WHERE 1 = 1 
+			        AND brand_no = #{params.brandNo} 
+			      GROUP BY item_no) hcm1 
+			      ON hcm.item_no = hcm1.item_no 
+			      AND hcm.effective_time = hcm1.effective_time 
+			    INNER JOIN item mm 
+			      ON mm.item_no = hcm.item_no 
+			    INNER JOIN brand b 
+			      ON b.brand_no = mm.brand_no 
+			    INNER JOIN supplier s 
+			      ON s.supplier_no = mm.supplier_no 
+			  WHERE 1 = 1 
+			  	AND mm.brand_no = #{params.brandNo} 
+			    AND mm.root_category_no IN ${params.multiCategoryNo} 
+			    AND hcm.effective_time &lt;= #{params.effectiveTime} 
+			    AND (
+			      NOT EXISTS 
+			      (SELECT 
+			        1 
+			      FROM
+			        region_cost_maintain rcm 
+			      WHERE 1 = 1 
+			        AND hcm.item_no = rcm.item_no 
+			        AND rcm.brand_no = #{params.brandNo} 
+			        AND rcm.zone_no = #{params.zoneNo} ) 
+			      OR EXISTS 
+			      (SELECT 
+			        1 
+			      FROM
+			        region_cost_maintain rcm 
+			        INNER JOIN 
+			          (SELECT 
+			            item_no,
+			            MAX(effective_time) effective_time 
+			          FROM
+			            region_cost_maintain 
+			          WHERE 1 = 1 
+				        AND brand_no = #{params.brandNo} 
+				        AND zone_no = #{params.zoneNo} 
+			          GROUP BY item_no) rcm1 
+			          ON rcm.item_no = rcm1.item_no 
+			          AND rcm.effective_time = rcm1.effective_time 
+			      WHERE 1 = 1 
+			        AND hcm.item_no = rcm.item_no 
+			        AND hcm.headquarter_cost != rcm.headquarter_cost 
+			        AND rcm.brand_no = #{params.brandNo} 
+			        AND rcm.zone_no = #{params.zoneNo})
+			    )) G 
+			  INNER JOIN region_price_rule rule 
+			    ON G.add_rule_no = rule.add_rule_no 
+			WHERE G.add_rule_no IS NOT NULL 
+	  </sql>
+	  <sql id="getHQByFactoryPriceFirst">
+	  		SELECT 
+			  G.*,
+			  rule.add_discount,
+			  rule.add_price,
+			  rule.discount_rate,
+			  rule.add_basis,
+			  (SELECT 
+			    pql.tag_price 
+			  FROM
+			    price_quotation_list pql 
+			  WHERE 1 = 1 
+			    AND pql.item_no = G.item_no 
+			    AND pql.organ_id = '0000' 
+			    AND pql.quotation_tactics = 0 
+			  LIMIT 1) tag_price,
+			  IF(
+			    add_price IS NOT NULL,
+			    factory_price + add_price,
+			    IF(
+			      add_discount IS NOT NULL,
+			      ROUND(factory_price * add_discount,0),
+			      IF(
+			        discount_rate IS NOT NULL,
+			        factory_price * discount_rate,
+			        0
+			      )
+			    )
+			  ) headquarter_cost 
+			FROM
+			  (SELECT 
+			    mm.item_no,
+			    mm.code item_code,
+			    mm.name item_name,
+			    b.brand_no,
+			    b.name brand_name,
+			    s.supplier_no,
+			    s.short_name supplier_name,
+			    pp.factory_price,
+			    (SELECT 
+			      hpr.add_rule_no 
+			    FROM
+			      item it 
+			      INNER JOIN supplier_group_rel sgr 
+			        ON it.supplier_no = sgr.supplier_no 
+			      INNER JOIN settle_category_dtl scd 
+			        ON it.root_category_no = scd.category_no 
+			      INNER JOIN brand b 
+			        ON it.brand_no = b.brand_no 
+			      INNER JOIN headquarter_price_rule hpr 
+			        ON FIND_IN_SET(
+			          sgr.group_no,
+			          hpr.supplier_group_no
+			        ) 
+			        AND FIND_IN_SET(
+			          scd.settle_category_no,
+			          hpr.category_no
+			        ) 
+			        AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+			      LEFT JOIN `settle_new_style_dtl` snsd 
+			        ON it.`years` = snsd.`year_code` 
+			        AND (
+			          it.`sell_season` = snsd.`season_no` 
+			          OR snsd.season_no = 'ALL'
+			        ) 
+			    WHERE 1 = 1 
+			      AND mm.brand_no = #{params.brandNo} 
+			      AND mm.root_category_no IN ${params.multiCategoryNo}
+			      AND hpr.effective_time &lt;= #{params.effectiveTime} 
+			      AND it.item_no = pp.item_no 
+			      AND hpr.add_basis = 1 
+			      AND (
+			        (
+			          hpr.style_type = snsd.style_no 
+			          AND hpr.new_style_flag = 1
+			        ) 
+			        OR (
+			          hpr.new_style_flag = 0 
+			          AND FIND_IN_SET(it.years, hpr.year_code) 
+			          AND (
+			            hpr.season = it.sell_season 
+			            OR hpr.season = 'ALL'
+			          )
+			        )
+			      ) 
+			      AND (
+			        FIND_IN_SET(
+			          LEFT(it.category_no, 4),
+			          hpr.two_level_category_no
+			        ) 
+			        OR (
+			          hpr.two_level_category_no = '' 
+			          OR hpr.two_level_category_no IS NULL
+			        )
+			      ) 
+			    ORDER BY hpr.effective_time DESC 
+			    LIMIT 1) add_rule_no 
+			  FROM
+			    purchase_price pp 
+			    INNER JOIN item mm 
+			      ON pp.item_no = mm.item_no 
+			      AND pp.supplier_no = mm.supplier_no 
+			    INNER JOIN brand b 
+			      ON b.brand_no = mm.brand_no 
+			    INNER JOIN supplier s 
+			      ON s.supplier_no = mm.supplier_no 
+			  WHERE 1 = 1 
+			  	AND mm.brand_no = #{params.brandNo} 
+			    AND mm.root_category_no IN ${params.multiCategoryNo}
+			    AND pp.effective_date &lt;= #{params.effectiveTime} 
+			    AND pp.status = 100 
+			    AND NOT EXISTS
+				  (
+					SELECT 1 FROM headquarter_cost_maintain hcm WHERE hcm.item_no = pp.item_no
+				  )
+			    ) G 
+			  INNER JOIN headquarter_price_rule rule 
+			    ON G.add_rule_no = rule.add_rule_no 
+			WHERE G.add_rule_no IS NOT NULL
+
+	  </sql>
+	  <sql id="getHQByFactoryPrice">
+	  		SELECT 
+			  G.*,
+			  rule.add_discount,
+			  rule.add_price,
+			  rule.discount_rate,
+			  rule.add_basis,
+			  (SELECT 
+			    pql.tag_price 
+			  FROM
+			    price_quotation_list pql 
+			  WHERE 1 = 1 
+			    AND pql.item_no = G.item_no 
+			    AND pql.organ_id = '0000' 
+			    AND pql.quotation_tactics = 0 
+			  LIMIT 1) tag_price,
+			  IF(
+			    add_price IS NOT NULL,
+			    factory_price + add_price,
+			    IF(
+			      add_discount IS NOT NULL,
+			      ROUND(factory_price * add_discount,0),
+			      IF(
+			        discount_rate IS NOT NULL,
+			        factory_price * discount_rate,
+			        0
+			      )
+			    )
+			  ) headquarter_cost 
+			FROM
+			  (SELECT 
+			    mm.item_no,
+			    mm.code item_code,
+			    mm.name item_name,
+			    b.brand_no,
+			    b.name brand_name,
+			    s.supplier_no,
+			    s.short_name supplier_name,
+			    pp.factory_price,
+			    (SELECT 
+			      hpr.add_rule_no 
+			    FROM
+			      item it 
+			      INNER JOIN supplier_group_rel sgr 
+			        ON it.supplier_no = sgr.supplier_no 
+			      INNER JOIN settle_category_dtl scd 
+			        ON it.root_category_no = scd.category_no 
+			      INNER JOIN brand b 
+			        ON it.brand_no = b.brand_no 
+			      INNER JOIN headquarter_price_rule hpr 
+			        ON FIND_IN_SET(
+			          sgr.group_no,
+			          hpr.supplier_group_no
+			        ) 
+			        AND FIND_IN_SET(
+			          scd.settle_category_no,
+			          hpr.category_no
+			        ) 
+			        AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+			      LEFT JOIN `settle_new_style_dtl` snsd 
+			        ON it.`years` = snsd.`year_code` 
+			        AND (
+			          it.`sell_season` = snsd.`season_no` 
+			          OR snsd.season_no = 'ALL'
+			        ) 
+			    WHERE 1 = 1 
+			      AND mm.brand_no = #{params.brandNo} 
+			      AND mm.root_category_no IN ${params.multiCategoryNo}
+			      AND hpr.effective_time &lt;= #{params.effectiveTime} 
+			      AND it.item_no = pp.item_no 
+			      AND hpr.add_basis = 1 
+			      AND (
+			        (
+			          hpr.style_type = snsd.style_no 
+			          AND hpr.new_style_flag = 1
+			        ) 
+			        OR (
+			          hpr.new_style_flag = 0 
+			          AND FIND_IN_SET(it.years, hpr.year_code) 
+			          AND (
+			            hpr.season = it.sell_season 
+			            OR hpr.season = 'ALL'
+			          )
+			        )
+			      ) 
+			      AND (
+			        FIND_IN_SET(
+			          LEFT(it.category_no, 4),
+			          hpr.two_level_category_no
+			        ) 
+			        OR (
+			          hpr.two_level_category_no = '' 
+			          OR hpr.two_level_category_no IS NULL
+			        )
+			      ) 
+			    ORDER BY hpr.effective_time DESC 
+			    LIMIT 1) add_rule_no 
+			  FROM
+			    purchase_price pp 
+			    INNER JOIN item mm 
+			      ON pp.item_no = mm.item_no 
+			      AND pp.supplier_no = mm.supplier_no 
+			    INNER JOIN brand b 
+			      ON b.brand_no = mm.brand_no 
+			    INNER JOIN supplier s 
+			      ON s.supplier_no = mm.supplier_no 
+			  WHERE 1 = 1 
+			  	AND mm.brand_no = #{params.brandNo} 
+			    AND mm.root_category_no IN ${params.multiCategoryNo}
+			    AND pp.effective_date &lt;= #{params.effectiveTime} 
+			    AND pp.status = 100 
+			    AND EXISTS 
+			    (SELECT 
+			      1 
+			    FROM
+			      headquarter_cost_maintain hcm 
+			      INNER JOIN 
+			        (SELECT 
+			          item_no,
+			          MAX(effective_time) effective_time 
+			        FROM
+			          headquarter_cost_maintain 
+			        WHERE 1 = 1 
+			        AND brand_no = #{params.brandNo}
+			        AND effective_time &lt;= #{params.effectiveTime}  
+			        GROUP BY item_no) hcm1 
+			        ON hcm.item_no = hcm1.item_no 
+			        AND hcm.effective_time = hcm1.effective_time 
+			    WHERE 1 = 1
+			      AND hcm.brand_no = #{params.brandNo} 
+			      AND hcm.effective_time &lt;= #{params.effectiveTime} 
+			      AND hcm.item_no = pp.item_no 
+			      AND hcm.factory_price != pp.factory_price 
+			      AND hcm.effective_time &lt;= pp.effective_date) 
+			    ) G 
+			  INNER JOIN headquarter_price_rule rule 
+			    ON G.add_rule_no = rule.add_rule_no 
+			WHERE G.add_rule_no IS NOT NULL
+	  </sql>
+	  <sql id="getHQByTagPriceFirst">
+	  	SELECT 
+		  G.*,
+		  rule.add_discount,
+		  rule.add_price,
+		  rule.discount_rate,
+		  rule.add_basis,
+		  (SELECT 
+		    pp.factory_price 
+		  FROM
+		    purchase_price pp 
+		  WHERE 1 = 1 
+		    AND pp.item_no = G.item_no 
+		    AND pp.supplier_no = G.supplier_no 
+		    AND pp.status = 100 
+		  ORDER BY effective_time DESC 
+		  LIMIT 1) factory_price,
+		  ROUND(IF(
+		    add_price IS NOT NULL,
+		    tag_price + add_price,
+		    IF(
+		      add_discount IS NOT NULL,
+		      tag_price * add_discount,
+		      IF(
+		        discount_rate IS NOT NULL,
+		        tag_price * discount_rate,
+		        0
+		      )
+		    )
+		  ),0) headquarter_cost 
+		FROM
+		  (SELECT 
+		    mm.item_no,
+		    mm.code item_code,
+		    mm.name item_name,
+		    b.brand_no,
+		    b.name brand_name,
+		    s.supplier_no,
+		    s.short_name supplier_name,
+		    pql.tag_price,
+		    (SELECT 
+		      hpr.add_rule_no 
+		    FROM
+		      item it 
+		      INNER JOIN supplier_group_rel sgr 
+		        ON it.supplier_no = sgr.supplier_no 
+		      INNER JOIN settle_category_dtl scd 
+		        ON it.root_category_no = scd.category_no 
+		      INNER JOIN brand b 
+		        ON it.brand_no = b.brand_no 
+		      INNER JOIN headquarter_price_rule hpr 
+		        ON FIND_IN_SET(
+		          sgr.group_no,
+		          hpr.supplier_group_no
+		        ) 
+		        AND FIND_IN_SET(
+		          scd.settle_category_no,
+		          hpr.category_no
+		        ) 
+		        AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+		      LEFT JOIN `settle_new_style_dtl` snsd 
+		        ON it.`years` = snsd.`year_code` 
+		        AND (
+		          it.`sell_season` = snsd.`season_no` 
+		          OR snsd.season_no = 'ALL'
+		        ) 
+		    WHERE 1 = 1 
+			  AND mm.brand_no = #{params.brandNo} 
+			  AND mm.root_category_no IN ${params.multiCategoryNo}
+			  AND hpr.effective_time &lt;= #{params.effectiveTime}
+		      AND it.item_no = pql.item_no 
+		      AND hpr.add_basis = 2 
+		      AND (
+		        (
+		          hpr.style_type = snsd.style_no 
+		          AND hpr.new_style_flag = 1
+		        ) 
+		        OR (
+		          hpr.new_style_flag = 0 
+		          AND FIND_IN_SET(it.years, hpr.year_code) 
+		          AND (
+		            hpr.season = it.sell_season 
+		            OR hpr.season = 'ALL'
+		          )
+		        )
+		      ) 
+		      AND (
+		        FIND_IN_SET(
+		          LEFT(it.category_no, 4),
+		          hpr.two_level_category_no
+		        ) 
+		        OR (
+		          hpr.two_level_category_no = '' 
+		          OR hpr.two_level_category_no IS NULL
+		        )
+		      ) 
+		    ORDER BY hpr.effective_time DESC 
+		    LIMIT 1) add_rule_no 
+		  FROM
+		    price_quotation_list pql 
+		    INNER JOIN item mm 
+		      ON pql.item_no = mm.item_no 
+		    INNER JOIN brand b 
+		      ON b.brand_no = mm.brand_no 
+		    INNER JOIN supplier s 
+		      ON s.supplier_no = mm.supplier_no 
+		  WHERE 1 = 1 
+		  	AND mm.brand_no = #{params.brandNo} 
+			AND mm.root_category_no IN ${params.multiCategoryNo}
+		    AND pql.organ_id = '0000' 
+		    AND pql.quotation_tactics = 0 
+		    AND NOT EXISTS 
+		    (SELECT 
+		      1 
+		    FROM
+		      headquarter_cost_maintain hcm 
+		    WHERE 1 = 1
+		    AND hcm.item_no = pql.item_no
+		    AND hcm.brand_no = #{params.brandNo} ) 
+		    ) G 
+		  INNER JOIN headquarter_price_rule rule 
+		    ON G.add_rule_no = rule.add_rule_no 
+		WHERE G.add_rule_no IS NOT NULL 
+	  
+	  </sql>
+	  <sql id="getHQByTagPrice">
+		  	SELECT 
+			  G.*,
+			  rule.add_discount,
+			  rule.add_price,
+			  rule.discount_rate,
+			  rule.add_basis,
+			  (SELECT 
+			    pp.factory_price 
+			  FROM
+			    purchase_price pp 
+			  WHERE 1 = 1 
+			    AND pp.item_no = G.item_no 
+			    AND pp.supplier_no = G.supplier_no 
+			    AND pp.status = 100 
+			  ORDER BY effective_time DESC 
+			  LIMIT 1) factory_price,
+			  ROUND(IF(
+			    add_price IS NOT NULL,
+			    tag_price + add_price,
+			    IF(
+			      add_discount IS NOT NULL,
+			      tag_price * add_discount,
+			      IF(
+			        discount_rate IS NOT NULL,
+			        tag_price * discount_rate,
+			        0
+			      )
+			    )
+			  ),0) headquarter_cost 
+			FROM
+			  (SELECT 
+			    mm.item_no,
+			    mm.code item_code,
+			    mm.name item_name,
+			    b.brand_no,
+			    b.name brand_name,
+			    s.supplier_no,
+			    s.short_name supplier_name,
+			    pql.tag_price,
+			    (SELECT 
+			      hpr.add_rule_no 
+			    FROM
+			      item it 
+			      INNER JOIN supplier_group_rel sgr 
+			        ON it.supplier_no = sgr.supplier_no 
+			      INNER JOIN settle_category_dtl scd 
+			        ON it.root_category_no = scd.category_no 
+			      INNER JOIN brand b 
+			        ON it.brand_no = b.brand_no 
+			      INNER JOIN headquarter_price_rule hpr 
+			        ON FIND_IN_SET(
+			          sgr.group_no,
+			          hpr.supplier_group_no
+			        ) 
+			        AND FIND_IN_SET(
+			          scd.settle_category_no,
+			          hpr.category_no
+			        ) 
+			        AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+			      LEFT JOIN `settle_new_style_dtl` snsd 
+			        ON it.`years` = snsd.`year_code` 
+			        AND (
+			          it.`sell_season` = snsd.`season_no` 
+			          OR snsd.season_no = 'ALL'
+			        ) 
+			    WHERE 1 = 1 
+				  AND mm.brand_no = #{params.brandNo} 
+				  AND hpr.effective_time &lt;= #{params.effectiveTime}
+			      AND it.item_no = pql.item_no 
+			      AND hpr.add_basis = 2 
+			      AND (
+			        (
+			          hpr.style_type = snsd.style_no 
+			          AND hpr.new_style_flag = 1
+			        ) 
+			        OR (
+			          hpr.new_style_flag = 0 
+			          AND FIND_IN_SET(it.years, hpr.year_code) 
+			          AND (
+			            hpr.season = it.sell_season 
+			            OR hpr.season = 'ALL'
+			          )
+			        )
+			      ) 
+			      AND (
+			        FIND_IN_SET(
+			          LEFT(it.category_no, 4),
+			          hpr.two_level_category_no
+			        ) 
+			        OR (
+			          hpr.two_level_category_no = '' 
+			          OR hpr.two_level_category_no IS NULL
+			        )
+			      ) 
+			    ORDER BY hpr.effective_time DESC 
+			    LIMIT 1) add_rule_no 
+			  FROM
+			    price_quotation_list pql 
+			    INNER JOIN item mm 
+			      ON pql.item_no = mm.item_no 
+			    INNER JOIN brand b 
+			      ON b.brand_no = mm.brand_no 
+			    INNER JOIN supplier s 
+			      ON s.supplier_no = mm.supplier_no 
+			  WHERE 1 = 1 
+			  	AND mm.brand_no = #{params.brandNo} 
+				AND mm.root_category_no IN ${params.multiCategoryNo}
+			    AND pql.organ_id = '0000' 
+			    AND pql.quotation_tactics = 0 
+			    AND EXISTS 
+				  (SELECT 
+				    1 
+				  FROM
+				    headquarter_cost_maintain hcm 
+				    INNER JOIN 
+				      (SELECT 
+				        item_no,
+				        MAX(effective_time) effective_time 
+				      FROM
+				        headquarter_cost_maintain 
+				      WHERE 1 = 1 
+				      AND brand_no = #{params.brandNo} 
+				      AND effective_time &lt;= #{params.effectiveTime}
+				      GROUP BY item_no) hcm1 
+				      ON hcm.item_no = hcm1.item_no 
+				      AND hcm.effective_time = hcm1.effective_time 
+				  WHERE hcm.item_no = pql.item_no 
+				    AND hcm.brand_no = #{params.brandNo} 
+				    AND hcm.effective_time &lt;= #{params.effectiveTime}
+				    AND hcm.tag_price != pql.tag_price) 
+			    ) G 
+			  INNER JOIN headquarter_price_rule rule 
+			    ON G.add_rule_no = rule.add_rule_no 
+			WHERE G.add_rule_no IS NOT NULL   
+	  </sql>
+	  
+	  <select id="getRegionNeedRuleMatchItems" resultMap="regionCostMaintainMap" parameterType="map" >
+	  		<if test="null != params.addBasis and '1'.toString() == params.addBasis">
+	  			<include refid="getRegionByFactoryPrice" /> 
+	  		</if>
+	  		<if test="null != params.addBasis and '3'.toString() == params.addBasis">
+	  			<include refid="getRegionByHQCost" /> 
+	  		</if>
+	  		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	  </select>
+	  
+	  <select id="getHQNeedRuleMatchItems" resultMap="hqCostMaintainMap" parameterType="map" >
+	  		<if test="null != params.addBasis and '1'.toString() == params.addBasis">
+	  			<if test="null != params.isFirst and '0'.toString() == params.isFirst">
+	  				<include refid="getHQByFactoryPriceFirst" />
+	  			</if>
+	  			<if test="null != params.isFirst and '1'.toString() == params.isFirst">
+	  				<include refid="getHQByFactoryPrice" />
+	  			</if>
+	  		</if>
+	  		<if test="null != params.addBasis and '2'.toString() == params.addBasis">
+	  			<if test="null != params.isFirst and '0'.toString() == params.isFirst">
+	  				<include refid="getHQByTagPriceFirst" />
+	  			</if>
+	  			<if test="null != params.isFirst and '1'.toString() == params.isFirst">
+	  				<include refid="getHQByTagPrice" />
+	  			</if>
+	  		</if>
+	  		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	  </select>
+	  
+	  
+</mapper>

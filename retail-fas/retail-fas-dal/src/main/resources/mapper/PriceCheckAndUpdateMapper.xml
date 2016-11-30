@@ -1,0 +1,989 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PriceCheckAndUpdateMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.PriceCheckAndUpdateDto" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="buyer_No" property="buyerNo" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR"/>
+    <result column="brand_name" property="brandName" jdbcType="TINYINT" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="VARCHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+  </resultMap>
+  
+  <!-- 总部职能结算公司 -->
+  <sql id ="headquaters_company_data">
+    <if test="null!=params" >
+   		<if test="null!=params.hqCompanyData and ''!=params.hqCompanyData" >
+       		  (${params.hqCompanyData})
+     	 </if>
+     </if>
+  </sql>
+  
+  <!-- 品牌部 -->
+  <sql id ="brand_unit_cond">
+    <if test="null!=params" >
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND brand_unit_no in ${params.brandUnitNo}
+		</if>
+		<if test="null!=params.itemCode and ''!=params.itemCode">
+			AND item_code = #{params.itemCode}
+		</if>
+		<if test="null!=params.billNo and ''!=params.billNo">
+			AND original_bill_no = #{params.billNo}
+		</if>
+     </if>
+  </sql>
+  
+   <sql id="hq_sale_condition">
+	 <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			AND saler_no = #{params.saleCompanyNo}
+			AND buyer_no not in  <include refid="headquaters_company_data"/>
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	  </if>
+    </sql>
+  
+  <!-- 总部销售单价为0单据 -->
+  <select id="selectHqSaleBillCostIsZeroCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) AS s FROM ( 
+	SELECT 
+		saler_no,saler_name,buyer_no,buyer_name,
+	    item_code,item_name,send_date,cost,
+	    brand_unit_name,brand_name,bill_type,original_bill_no
+	FROM  
+	    bill_sale_balance 
+	WHERE 1=1 
+        <include refid="hq_sale_condition"/>
+        AND bill_type IN ('1301','1333','1371') 
+		AND balance_no IS NULL
+		<include refid="brand_unit_cond"/>
+        AND cost=0
+	) as tmp
+  </select>
+  
+  <select id="selectHqSaleBillCostIsZeroByPage" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+	   id,saler_no,saler_name,buyer_no,buyer_name,
+       item_no,item_code,item_name,send_date,cost,path_no,
+       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+	FROM  
+		bill_sale_balance 
+	WHERE 1=1 
+        <include refid="hq_sale_condition"/>
+        AND bill_type IN ('1301','1333','1371') 
+		AND balance_no IS NULL
+		<include refid="brand_unit_cond"/>
+        AND cost=0
+        <if test="null!=page and ''!=page">
+		   LIMIT #{page.startRowNum} ,#{page.pageSize} 
+    	</if>
+  </select>
+  
+  <sql id="hq_sale_Acondition">
+	 <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			AND A.saler_no = #{params.saleCompanyNo}
+			AND A.buyer_no not in  <include refid="headquaters_company_data"/>
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND A.send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	 </if>
+   </sql>
+   
+   <sql id="hq_sale_Bcondition">
+	 <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			AND B.saler_no = #{params.saleCompanyNo}
+			AND B.buyer_no not in  <include refid="headquaters_company_data"/>
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND B.send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	 </if>
+   </sql>
+   
+  <sql id ="brand_unit_Acond">
+    <if test="null!=params" >
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND A.brand_unit_no in ${params.brandUnitNo}
+		</if>
+		<if test="null!=params.itemCode and ''!=params.itemCode">
+			AND A.item_code = #{params.itemCode}
+		</if>
+		<if test="null!=params.billNo and ''!=params.billNo">
+			AND A.original_bill_no = #{params.billNo}
+		</if>
+     </if>
+  </sql>
+  
+  <sql id ="brand_unit_Bcond">
+    <if test="null!=params" >
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND B.brand_unit_no in ${params.brandUnitNo}
+		</if>
+		<if test="null!=params.itemCode and ''!=params.itemCode">
+			AND B.item_code = #{params.itemCode}
+		</if>
+		<if test="null!=params.billNo and ''!=params.billNo">
+			AND B.original_bill_no = #{params.billNo}
+		</if>
+     </if>
+  </sql>
+  
+  <!-- 总部销售单价与地区价不一致的单据 -->
+  <select id="selectHqSaleBillCostIsDiffCount" resultType="java.lang.Integer" >
+   select count(1) from (
+	SELECT 
+	       B.saler_no,B.saler_name,B.buyer_no,B.buyer_name,
+	       B.item_no,B.item_code,B.item_name,B.send_date,B.cost,
+	       B.brand_unit_name,B.brand_name,B.bill_type,B.original_bill_no
+	 FROM  
+	      bill_sale_balance B
+	WHERE 1=1 
+		    <include refid="hq_sale_Bcondition"/>
+			AND B.bill_type IN ('1301','1333','1371') 
+			AND B.balance_no IS NULL
+		    <include refid="brand_unit_Bcond"/>
+			AND B.COST &lt;&gt;
+			(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+		        AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.BUYER_NO = F.COMPANY_NO)),
+							  (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+							  (SELECT PRICE_ZONE  FROM financial_account F WHERE B.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+					           AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+				AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+				AND IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE B.BUYER_NO = F.COMPANY_NO)),
+					          (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+					          (SELECT PRICE_ZONE FROM`financial_account` F  WHERE B.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+					           AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)) ) as tmp
+  </select>
+  
+  <select id="selectHqSaleBillCostIsDiffByPage" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+	       B.id,B.saler_no,B.saler_name,B.buyer_no,B.buyer_name,
+	       B.item_no,B.item_code,B.item_name,B.send_date,B.cost,B.path_no,
+	       B.brand_unit_name,B.brand_name,B.bill_type,B.original_bill_no,B.biz_type
+	FROM  
+	       bill_sale_balance B
+	WHERE 1=1 
+		    <include refid="hq_sale_Bcondition"/>
+			AND B.bill_type IN ('1301','1333','1371') 
+			AND B.balance_no IS NULL
+		    <include refid="brand_unit_Bcond"/>
+			AND B.COST &lt;&gt;
+			(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+			        AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.BUYER_NO = F.COMPANY_NO)),
+								  (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+								  (SELECT PRICE_ZONE  FROM financial_account F WHERE B.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+						           AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+					AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+					AND IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE B.BUYER_NO = F.COMPANY_NO)),
+						          (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+						          (SELECT PRICE_ZONE FROM`financial_account` F  WHERE B.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+						           AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)) 
+         <if test="null!=page and ''!=page">
+		   LIMIT #{page.startRowNum} ,#{page.pageSize} 
+    	</if>
+  </select>
+  
+   <sql id="areaAmong_sale_condition">
+	 <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			AND saler_no = #{params.saleCompanyNo}
+			AND buyer_no not in  <include refid="headquaters_company_data"/>
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	 </if>
+    </sql>
+    
+    <sql id="areaHq_sale_condition">
+	 <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			AND saler_no = #{params.saleCompanyNo}
+			AND buyer_no  in  <include refid="headquaters_company_data"/>
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	 </if>
+    </sql>
+  
+    <!-- 地区销售单价为0的单据 -->
+    <select id="selectAreaSaleBillCostIsZeroCount" resultType="java.lang.Integer" >
+    select count(1) from (SELECT 
+	       saler_no,saler_name,buyer_no,buyer_name,
+	       item_code,item_name,send_date,cost,
+	       brand_unit_name,brand_name,bill_type,original_bill_no
+ 	FROM  
+           bill_sale_balance
+	WHERE 1=1 
+	        <include refid="areaAmong_sale_condition"/>
+	        AND bill_type ='1371'
+	        AND balance_no IS NULL
+	        <include refid="brand_unit_cond"/>
+	        AND cost=0
+	UNION ALL
+	SELECT 
+	       saler_no,saler_name,buyer_no,buyer_name,
+	       item_code,item_name,send_date,cost,
+	       brand_unit_name,brand_name,bill_type,original_bill_no
+	 FROM  
+	       bill_sale_balance 
+	 WHERE 1=1 
+	        <include refid="areaHq_sale_condition"/>
+	        AND bill_type ='1371'
+			AND balance_no IS NULL
+			<include refid="brand_unit_cond"/>
+	        AND cost=0) as tmp
+    </select>
+    
+    <select id="selectAreaSaleBillCostIsZeroByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+	       id,saler_no,saler_name,buyer_no,buyer_name,
+	       item_no,item_code,item_name,send_date,cost,path_no,
+	       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+ 	FROM  
+           bill_sale_balance
+	WHERE 1=1 
+	        <include refid="areaAmong_sale_condition"/>
+	        AND bill_type ='1371'
+	        AND balance_no IS NULL
+	        <include refid="brand_unit_cond"/>
+	        AND cost=0
+	UNION ALL
+	SELECT 
+	       id,saler_no,saler_name,buyer_no,buyer_name,
+	       item_no,item_code,item_name,send_date,cost,path_no,
+	       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+	 FROM  
+	       bill_sale_balance 
+	 WHERE 1=1 
+	        <include refid="areaHq_sale_condition"/>
+	        AND bill_type ='1371'
+			AND balance_no IS NULL
+			<include refid="brand_unit_cond"/>
+	        AND cost=0
+	 		<if test="null!=page and ''!=page">
+		  	 LIMIT #{page.startRowNum} ,#{page.pageSize} 
+    		</if>
+    </select>
+    
+   <!-- 地区销售单价与地区价不一致的单据  地区卖给总部取卖方地区价-->
+   <select id="selectAreaSaleBillCostIsDiffCount" resultType="java.lang.Integer" >
+   	select count(1) from (
+   	 SELECT 
+	       A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+	       A.item_code,A.item_name,A.send_date,A.cost,
+	       A.brand_unit_name,A.brand_name,A.bill_type,A.original_bill_no
+	 FROM  
+	       bill_sale_balance A
+	 WHERE 1=1 
+	        <include refid="areaAmong_sale_condition"/>
+	        AND A.bill_type ='1371'
+	        AND A.balance_no IS NULL
+	        <include refid="brand_unit_cond"/>
+			AND A.COST &lt;&gt;
+			(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+					AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)),
+					  (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+					  (SELECT PRICE_ZONE  FROM financial_account F WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+						   AND A.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+			AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+				AND 
+				IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)),
+						  (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+						  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+						   AND A.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))
+		UNION ALL
+	 	SELECT 
+	       B.saler_no,B.saler_name,B.buyer_no,B.buyer_name,
+	       B.item_code,B.item_name,B.send_date,B.cost,
+	       B.brand_unit_name,B.brand_name,B.bill_type,B.original_bill_no
+		FROM  
+		    bill_sale_balance B
+		WHERE 1=1 
+	        <include refid="areaHq_sale_condition"/>
+	        AND B.bill_type ='1371'
+			AND B.balance_no IS NULL
+			<include refid="brand_unit_cond"/>
+			AND B.COST &lt;&gt;
+			(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+					AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.saler_no = F.COMPANY_NO)),
+								  (SELECT ZONE_NO FROM COMPANY CO WHERE B.saler_no = CO.COMPANY_NO),
+								  (SELECT PRICE_ZONE  FROM financial_account F WHERE B.saler_no = F.COMPANY_NO)) = C.ZONE_NO 
+						   			AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+			AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+				AND IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE B.saler_no = F.COMPANY_NO)),
+							  (SELECT ZONE_NO FROM COMPANY CO WHERE B.saler_no = CO.COMPANY_NO),
+							  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE B.saler_no = F.COMPANY_NO)) = C.ZONE_NO 
+							   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))	
+   	) as tmp 
+   </select>
+   
+    <select id="selectAreaSaleBillCostIsDiffByPage" resultMap="BaseResultMap" parameterType="map" >
+     SELECT 
+	       A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+	       A.item_no,A.item_code,A.item_name,A.send_date,A.cost,A.path_no,
+	       A.brand_unit_name,A.brand_name,A.bill_type,A.original_bill_no,A.biz_type
+	 FROM  
+	       bill_sale_balance A
+	 WHERE 1=1 
+	        <include refid="areaAmong_sale_condition"/>
+	        AND A.bill_type ='1371'
+	        AND A.balance_no IS NULL
+	        <include refid="brand_unit_cond"/>
+			AND A.COST &lt;&gt;
+			(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+					AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)),
+					  (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+					  (SELECT PRICE_ZONE  FROM financial_account F WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+						   AND A.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+			AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+				AND 
+				IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)),
+						  (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+						  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+						   AND A.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))
+	UNION ALL
+ 	SELECT 
+       B.id,B.saler_no,B.saler_name,B.buyer_no,B.buyer_name,
+       B.item_no,B.item_code,B.item_name,B.send_date,B.cost,B.path_no,
+       B.brand_unit_name,B.brand_name,B.bill_type,B.original_bill_no,B.biz_type
+	FROM  
+	    bill_sale_balance B
+	WHERE 1=1 
+        <include refid="areaHq_sale_condition"/>
+        AND B.bill_type ='1371'
+		AND B.balance_no IS NULL
+		<include refid="brand_unit_cond"/>
+		AND B.COST &lt;&gt;
+		(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+				AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.saler_no = F.COMPANY_NO)),
+							  (SELECT ZONE_NO FROM COMPANY CO WHERE B.saler_no = CO.COMPANY_NO),
+							  (SELECT PRICE_ZONE  FROM financial_account F WHERE B.saler_no = F.COMPANY_NO)) = C.ZONE_NO 
+					   			AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+		AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+			AND IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE B.saler_no = F.COMPANY_NO)),
+						  (SELECT ZONE_NO FROM COMPANY CO WHERE B.saler_no = CO.COMPANY_NO),
+						  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE B.saler_no = F.COMPANY_NO)) = C.ZONE_NO 
+						   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))	
+		<if test="null!=page and ''!=page">
+		   LIMIT #{page.startRowNum} ,#{page.pageSize} 
+    	</if>
+    </select>
+    
+    <sql id="hq_buy_condition">
+       <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			AND saler_no  not in  <include refid="headquaters_company_data"/>
+			AND buyer_no = #{params.saleCompanyNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	 </if>
+    </sql>
+    
+    <!-- 总部采购单据单价为0 -->
+    <select id="selectHqBuyBillCostIsZeroCount" resultType="java.lang.Integer">
+    	select count(1) from (
+   		SELECT 
+	       id,saler_no,saler_name,buyer_no,buyer_name,
+	       item_no,item_code,item_name,send_date,cost,path_no,
+	       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+		FROM  
+	       bill_sale_balance 
+		WHERE 1=1 
+		    <include refid="hq_buy_condition"/>
+	        AND bill_type ='1371'
+		    AND balance_no IS NULL
+		  	<include refid="brand_unit_cond"/>
+	        AND cost=0
+    	) as tmp 
+    </select>
+    
+     <select id="selectHqBuyBillCostIsZeroByPage" resultMap="BaseResultMap" parameterType="map" >
+        SELECT 
+	       id,saler_no,saler_name,buyer_no,buyer_name,
+	       item_no,item_code,item_name,send_date,cost,path_no,
+	       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+		FROM  
+	       bill_sale_balance 
+		WHERE 1=1 
+		    <include refid="hq_buy_condition"/>
+	        AND bill_type ='1371'
+		    AND balance_no IS NULL
+		  	<include refid="brand_unit_cond"/>
+	        AND cost=0
+	        <if test="null!=page and ''!=page">
+		   		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+    		</if>
+     </select>
+     
+      <sql id="hq_buy_Bcondition">
+       <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			AND B.saler_no  not in  <include refid="headquaters_company_data"/>
+			AND B.buyer_no = #{params.saleCompanyNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND B.send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	  </if>
+     </sql>
+    
+    <!-- 总部采购单据单价与地区价不一致 -->
+    <select id="selectHqBuyBillCostIsDiffCount" resultType="java.lang.Integer">
+    select count(1) from (
+    SELECT 
+       B.id,B.saler_no,B.saler_name,B.buyer_no,B.buyer_name,
+       B.item_no,B.item_code,B.item_name,B.send_date,B.cost,B.path_no,
+       B.brand_unit_name,B.brand_name,B.bill_type,B.original_bill_no,B.biz_type
+	FROM  
+	    bill_sale_balance B
+	WHERE 1=1 
+        <include refid="hq_buy_Bcondition"/>
+        AND B.bill_type ='1371'
+		AND B.balance_no IS NULL
+		<include refid="brand_unit_Bcond"/>
+		AND B.COST &lt;&gt;
+		(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+			AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.saler_no = F.COMPANY_NO)),
+			  (SELECT ZONE_NO FROM COMPANY CO WHERE B.saler_no = CO.COMPANY_NO),
+			  (SELECT PRICE_ZONE  FROM financial_account F WHERE B.saler_no = F.COMPANY_NO)) = C.ZONE_NO 
+				   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+		AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+		AND 
+		IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE B.saler_no = F.COMPANY_NO)),
+				  (SELECT ZONE_NO FROM COMPANY CO WHERE B.saler_no = CO.COMPANY_NO),
+				  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE B.saler_no = F.COMPANY_NO)) = C.ZONE_NO 
+				   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))
+      ) as tmp
+    </select>
+    
+    <select id="selectHqBuyBillCostIsDiffByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+       B.id,B.saler_no,B.saler_name,B.buyer_no,B.buyer_name,
+       B.item_no,B.item_code,B.item_name,B.send_date,B.cost,B.path_no,
+       B.brand_unit_name,B.brand_name,B.bill_type,B.original_bill_no,B.biz_type
+	FROM  
+	    bill_sale_balance B
+	WHERE 1=1 
+        <include refid="hq_buy_Bcondition"/>
+        AND B.bill_type ='1371'
+		AND B.balance_no IS NULL
+		<include refid="brand_unit_Bcond"/>
+		AND B.COST &lt;&gt;
+		(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+			AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.saler_no = F.COMPANY_NO)),
+			  (SELECT ZONE_NO FROM COMPANY CO WHERE B.saler_no = CO.COMPANY_NO),
+			  (SELECT PRICE_ZONE  FROM financial_account F WHERE B.saler_no = F.COMPANY_NO)) = C.ZONE_NO 
+				   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+		AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+		AND 
+		IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE B.saler_no = F.COMPANY_NO)),
+				  (SELECT ZONE_NO FROM COMPANY CO WHERE B.saler_no = CO.COMPANY_NO),
+				  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE B.saler_no = F.COMPANY_NO)) = C.ZONE_NO 
+				   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))
+	    <if test="null!=page and ''!=page">
+	   		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+        </if>
+    </select>
+  
+   <sql id="areaAmong_buy_condition">
+	 <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			 AND saler_no not IN <include refid="headquaters_company_data"/>
+             AND BUYER_NO = #{params.saleCompanyNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	 </if>
+    </sql>
+    
+    <sql id="areaHq_buy_condition">
+	 <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+			 AND saler_no IN <include refid="headquaters_company_data"/>
+             AND BUYER_NO = #{params.saleCompanyNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			 AND send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	 </if>
+    </sql>
+  
+     <!-- 地区采购单据单价为0的单据 -->
+     <select id="selectAreaBuyBillCostIsZeroCount" resultType="java.lang.Integer" >
+     select count(1) from (SELECT 
+           saler_no,saler_name,buyer_no,buyer_name,
+	       item_code,item_name,send_date,receive_date,cost,
+	       brand_unit_name,brand_name,bill_type,original_bill_no
+	 FROM  
+		bill_buy_balance 
+	 WHERE 1=1 
+        <include refid="areaHq_buy_condition"/>
+        AND bill_type IN ('1304','1333','1372') 
+		AND balance_no IS NULL
+		<include refid="brand_unit_cond"/>
+        AND cost=0
+	 UNION ALL    
+	 SELECT 
+	       saler_no,saler_name,buyer_no,buyer_name,
+	       item_code,item_name,send_date,receive_date,cost,
+	       brand_unit_name,brand_name,bill_type,original_bill_no
+	 FROM  
+	    bill_buy_balance 
+	 WHERE 1=1 
+        <include refid="areaAmong_buy_condition"/>
+        AND bill_type ='1372'
+	    AND balance_no IS NULL
+	   	<include refid="brand_unit_cond"/>
+        AND cost=0) as tmp 
+     </select>
+     
+     <select id="selectAreaBuyBillCostIsZeroByPage" resultMap="BaseResultMap" parameterType="map" >
+     SELECT 
+           id,saler_no,saler_name,buyer_no,buyer_name,
+	       item_no,item_code,item_name,send_date,receive_date,cost,path_no,
+	       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+	 FROM  
+		bill_buy_balance 
+	 WHERE 1=1 
+        <include refid="areaHq_buy_condition"/>
+        AND bill_type IN ('1304','1333','1372') 
+		AND balance_no IS NULL
+		<include refid="brand_unit_cond"/>
+        AND cost=0
+	UNION ALL    
+	SELECT 
+	       id,saler_no,saler_name,buyer_no,buyer_name,
+	       item_no,item_code,item_name,send_date,receive_date,cost,path_no,
+	       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+	 FROM  
+	    bill_buy_balance 
+	WHERE 1=1 
+        <include refid="areaAmong_buy_condition"/>
+        AND bill_type ='1372'
+	    AND balance_no IS NULL
+	   	<include refid="brand_unit_cond"/>
+        AND cost=0
+        <if test="null!=page and ''!=page">
+		   LIMIT #{page.startRowNum} ,#{page.pageSize} 
+    	</if>
+     </select>
+   
+   <!-- 地区采购单据单价与地区价不一致 -->
+   <select id="selectAreaBuyBillCostIsDiffCount" resultType="java.lang.Integer" >
+    select count(1) from (
+    SELECT 
+       A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+       A.item_code,A.item_name,A.send_date,A.receive_date,A.cost,
+       A.brand_unit_name,A.brand_name,A.bill_type,A.original_bill_no
+	FROM  
+		bill_buy_balance A
+	WHERE 1=1 
+        <include refid="areaHq_buy_condition"/>
+        AND A.bill_type IN ('1304','1333','1372') 
+		AND A.balance_no IS NULL
+	 	<include refid="brand_unit_cond"/>
+		AND A.COST &lt;&gt;
+		(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+				AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)),
+							  (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+							  (SELECT PRICE_ZONE  FROM financial_account F WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+							   AND A.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+				AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+				AND IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)),
+							  (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+							  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+							   AND A.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))
+	UNION ALL    
+	SELECT 
+	       B.saler_no,B.saler_name,B.buyer_no,B.buyer_name,
+	       B.item_code,B.item_name,B.send_date,B.receive_date,B.cost,
+	       B.brand_unit_name,B.brand_name,B.bill_type,B.original_bill_no
+	 FROM  
+	    	bill_buy_balance B
+	 WHERE 1=1 
+	        <include refid="areaAmong_buy_condition"/>
+	        AND B.bill_type ='1372'
+			AND B.balance_no IS NULL
+			<include refid="brand_unit_cond"/>
+			AND B.COST &lt;&gt;
+			(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+					AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.BUYER_NO = F.COMPANY_NO)),
+								  (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+								  (SELECT PRICE_ZONE  FROM financial_account F WHERE B.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+								   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+					AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+					AND IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE B.BUYER_NO = F.COMPANY_NO)),
+								  (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+								  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE B.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+								   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))
+    ) as tmp
+   </select>
+  
+   <select id="selectAreaBuyBillCostIsDiffByPage" resultMap="BaseResultMap" parameterType="map" >
+   	SELECT 
+        A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+        A.item_no,A.item_code,A.item_name,A.send_date,A.receive_date,A.cost,A.path_no,
+        A.brand_unit_name,A.brand_name,A.bill_type,A.original_bill_no,A.biz_type
+	FROM  
+		bill_buy_balance A
+	WHERE 1=1 
+        <include refid="areaHq_buy_condition"/>
+        AND A.bill_type IN ('1304','1333','1372') 
+		AND A.balance_no IS NULL
+	 	<include refid="brand_unit_cond"/>
+		AND A.COST &lt;&gt;
+		(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+				AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)),
+							  (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+							  (SELECT PRICE_ZONE  FROM financial_account F WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+							   AND A.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+				AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+				AND IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)),
+							  (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+							  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE A.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+							   AND A.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))
+	UNION ALL    
+	SELECT 
+	       B.id,B.saler_no,B.saler_name,B.buyer_no,B.buyer_name,
+	       B.item_no,B.item_code,B.item_name,B.send_date,B.receive_date,B.cost,B.path_no,
+	       B.brand_unit_name,B.brand_name,B.bill_type,B.original_bill_no,B.biz_type
+	FROM  
+	       bill_buy_balance B
+	WHERE 1=1 
+	        <include refid="areaAmong_buy_condition"/>
+	        AND B.bill_type ='1372'
+			AND B.balance_no IS NULL
+			<include refid="brand_unit_cond"/>
+			AND B.COST &lt;&gt;
+			(SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+					AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.BUYER_NO = F.COMPANY_NO)),
+								  (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+								  (SELECT PRICE_ZONE  FROM financial_account F WHERE B.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+								   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1)  
+					AND NOT ISNULL((SELECT c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+					AND IF(ISNULL((SELECT PRICE_ZONE  FROM`financial_account` F  WHERE B.BUYER_NO = F.COMPANY_NO)),
+								  (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+								  (SELECT PRICE_ZONE FROM`financial_account` F  WHERE B.BUYER_NO = F.COMPANY_NO)) = C.ZONE_NO 
+								   AND B.ITEM_NO = C.ITEM_NO ORDER BY c.`effective_time` DESC LIMIT 0, 1))
+	       <if test="null!=page and ''!=page">
+		     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+    	   </if>
+   </select>
+   
+   <!-- 查询总部出库没有维护地区价的货号 -->
+   <select id="selectHqSaleBillCostIsNullCount"  resultType="java.lang.Integer" >
+    select count(1) from (
+	SELECT 
+       id,saler_no,saler_name,buyer_no,buyer_name,
+       item_no,item_code,item_name,send_date,cost,path_no,
+       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+	FROM
+	   bill_buy_balance A
+	WHERE 1 = 1 
+	  <include refid="hq_sale_Acondition"/>
+	  AND A.bill_type IN ('1301','1333') 
+	  AND A.balance_no IS NULL 
+	  <include refid="brand_unit_Acond"/>
+	  AND ISNULL(
+	    (SELECT  c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+	      AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)),
+	                    (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+	                    (SELECT PRICE_ZONE  FROM `financial_account` F 
+	        WHERE A.BUYER_NO = F.COMPANY_NO)
+	      ) = C.ZONE_NO 
+	      AND A.ITEM_NO = C.ITEM_NO 
+	    ORDER BY c.`effective_time` DESC 
+	    LIMIT 0, 1)
+  	 )
+   UNION ALL 
+   SELECT 
+       id,saler_no,saler_name,buyer_no,buyer_name,
+       item_no,item_code,item_name,send_date,cost,path_no,
+       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+	FROM
+	  bill_sale_balance B
+	WHERE 1 = 1 
+	  <include refid="hq_sale_Bcondition"/>
+	  AND B.bill_type IN ('1301','1333','1371') 
+	  AND B.balance_no IS NULL 
+	  <include refid="brand_unit_Bcond"/>
+	  AND ISNULL(
+	    (SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+	      AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.BUYER_NO = F.COMPANY_NO)),
+	                    (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+	                    (SELECT PRICE_ZONE  FROM `financial_account` F 
+	        WHERE B.BUYER_NO = F.COMPANY_NO)
+	      ) = C.ZONE_NO 
+	      AND B.ITEM_NO = C.ITEM_NO 
+	    ORDER BY c.`effective_time` DESC 
+	    LIMIT 0, 1)
+	  )
+     ) as tmp
+   </select>
+   
+   <select id="selectHqSaleBillCostIsNullByPage" resultMap="BaseResultMap" parameterType="map" >
+   	SELECT 
+       id,saler_no,saler_name,buyer_no,buyer_name,
+       item_no,item_code,item_name,send_date,cost,path_no,
+       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+	FROM
+	  bill_buy_balance A
+	WHERE 1 = 1 
+	  <include refid="hq_sale_Acondition"/>
+	  AND A.bill_type IN ('1301','1333') 
+	  AND A.balance_no IS NULL 
+	  <include refid="brand_unit_Acond"/>
+	  AND ISNULL(
+	    (SELECT  c.`region_cost` FROM region_cost_maintain c WHERE A.send_date >= c.`effective_time` 
+	      AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE A.BUYER_NO = F.COMPANY_NO)),
+	                    (SELECT ZONE_NO FROM COMPANY CO WHERE A.BUYER_NO = CO.COMPANY_NO),
+	                    (SELECT PRICE_ZONE  FROM `financial_account` F 
+	        WHERE A.BUYER_NO = F.COMPANY_NO)
+	      ) = C.ZONE_NO 
+	      AND A.ITEM_NO = C.ITEM_NO 
+	    ORDER BY c.`effective_time` DESC 
+	    LIMIT 0, 1)
+  	 )
+  	UNION ALL 
+    SELECT 
+       id,saler_no,saler_name,buyer_no,buyer_name,
+       item_no,item_code,item_name,send_date,cost,path_no,
+       brand_unit_name,brand_name,bill_type,original_bill_no,biz_type
+	FROM
+	  bill_sale_balance B
+	WHERE 1 = 1 
+	  <include refid="hq_sale_Bcondition"/>
+	  AND B.bill_type IN ('1301','1333','1371') 
+	  AND B.balance_no IS NULL 
+	  <include refid="brand_unit_Bcond"/>
+	  AND ISNULL(
+	    (SELECT  c.`region_cost` FROM region_cost_maintain c WHERE B.send_date >= c.`effective_time` 
+	      AND IF(ISNULL((SELECT PRICE_ZONE FROM `financial_account` F WHERE B.BUYER_NO = F.COMPANY_NO)),
+	                    (SELECT ZONE_NO FROM COMPANY CO WHERE B.BUYER_NO = CO.COMPANY_NO),
+	                    (SELECT PRICE_ZONE  FROM `financial_account` F 
+	        WHERE B.BUYER_NO = F.COMPANY_NO)
+	      ) = C.ZONE_NO 
+	      AND B.ITEM_NO = C.ITEM_NO 
+	    ORDER BY c.`effective_time` DESC 
+	    LIMIT 0, 1)
+	  )
+  	  <if test="null!=page and ''!=page">
+		     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+   	   </if>
+   </select>
+   
+   <sql id="Area_Buy_Diff">
+      <if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.saleCompanyNo and ''!=params.saleCompanyNo">
+             AND A.BUYER_NO = #{params.saleCompanyNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			 AND A.send_date BETWEEN #{params.sendDateStart} and  #{params.sendDateEnd}
+		</if>
+	 </if>
+   </sql>
+   
+   <select id="selectAreaBuyBillOneByPage" resultMap="BaseResultMap" parameterType="map" >
+     SELECT 
+        A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+        A.item_no,A.item_code,A.item_name,A.send_date,A.cost,
+        A.brand_unit_name,A.brand_name,A.bill_type,A.original_bill_no,A.biz_type,A.ref_bill_no
+	 FROM  
+	     bill_buy_balance A 
+	 LEFT JOIN 
+	     bill_sale_balance B
+		 ON A.ref_bill_no=B.original_bill_no 
+		 AND A.item_no=B.item_no
+	WHERE 1=1 
+        <include refid="Area_Buy_Diff"/>
+        AND A.bill_type='1304' 
+      	<include refid="brand_unit_Acond"/>
+		AND A.cost&lt;&gt;B.cost
+   </select>
+   
+   <select id="selectAreaBuyBillTwoByPage" resultMap="BaseResultMap" parameterType="map">
+   SELECT 
+       A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+       A.item_no,A.item_code,A.item_name,A.send_date,A.cost,
+       A.brand_unit_name,A.brand_name,A.bill_type,A.original_bill_no,A.biz_type,A.ref_bill_no
+   FROM  
+	   bill_buy_balance A 
+   LEFT JOIN bill_sale_balance B
+	  ON A.original_bill_no=B.original_bill_no 
+	  AND A.item_no=B.item_no
+   WHERE 1=1 
+        <include refid="Area_Buy_Diff"/>
+        AND A.bill_type IN ('1372','1333') 
+        <include refid="brand_unit_Acond"/>
+	    AND A.cost&lt;&gt;B.cost
+   </select>
+   
+  <select id="selectAreaBuyBillThreeByPage" resultMap="BaseResultMap" parameterType="map">
+	SELECT 
+	  A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,A.item_no,
+	  A.item_code,A.item_name,A.send_date,A.cost,A.brand_unit_name,
+	  A.brand_name,A.bill_type,A.original_bill_no,A.biz_type,A.ref_bill_no 
+	FROM
+	  bill_buy_balance A 
+	  LEFT JOIN bill_sale_balance B 
+	    ON A.original_bill_no = B.original_bill_no 
+	    AND A.item_no = B.item_no 
+	WHERE 1 = 1 
+	   <include refid="Area_Buy_Diff"/>
+	   AND A.bill_type = '1301' 
+	   <include refid="brand_unit_Acond"/>
+	   AND A.cost&lt;&gt;B.cost
+   </select>
+   
+   <!-- 地区验收单 调货入库单 原残退厂发货单与原出库单价格不一致 -->
+   <select id="selectAreaBuyDiffOutBillCount" resultType="java.lang.Integer" >
+   select count(1) from (
+   SELECT 
+	  A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+	  A.item_no,A.item_code,A.item_name,A.send_date,A.cost,
+	  A.brand_unit_name,A.brand_name,A.bill_type,A.original_bill_no,
+	  A.biz_type,A.ref_bill_no 
+  FROM
+  	bill_buy_balance A 
+  LEFT JOIN bill_sale_balance B 
+    ON A.ref_bill_no = B.original_bill_no 
+    AND A.item_no = B.item_no 
+  WHERE 1 = 1 
+	  <include refid="Area_Buy_Diff"/>
+	  AND A.bill_type = '1304' 
+	  <include refid="brand_unit_Acond"/>
+      AND A.cost &lt;&gt; B.cost 
+  UNION ALL 
+  SELECT 
+	  A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+	  A.item_no,A.item_code,A.item_name,A.send_date,A.cost,
+	  A.brand_unit_name,A.brand_name,A.bill_type,
+	  A.original_bill_no,A.biz_type,A.ref_bill_no 
+  FROM
+	  bill_buy_balance A 
+	  LEFT JOIN bill_sale_balance B 
+	    ON A.original_bill_no = B.original_bill_no 
+	    AND A.item_no = B.item_no 
+  WHERE 1 = 1 
+	  <include refid="Area_Buy_Diff"/>
+	  AND A.bill_type IN ('1372', '1333') 
+	  <include refid="brand_unit_Acond"/>
+	  AND A.cost&lt;&gt;B.cost
+      ) as tmp
+   </select>
+   
+   <select id="selectAreaBuyDiffOutBillByPage" resultMap="BaseResultMap" parameterType="map">
+  SELECT 
+	  A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+	  A.item_no,A.item_code,A.item_name,A.send_date,A.receive_date,A.cost,
+	  A.brand_unit_name,A.brand_name,A.bill_type,A.original_bill_no,
+	  A.biz_type,A.ref_bill_no 
+  FROM
+  	bill_buy_balance A 
+  LEFT JOIN bill_sale_balance B 
+    ON A.ref_bill_no = B.original_bill_no 
+    AND A.item_no = B.item_no 
+  WHERE 1 = 1 
+	  <include refid="Area_Buy_Diff"/>
+	  AND A.bill_type = '1304' 
+	  <include refid="brand_unit_Acond"/>
+      AND A.cost &lt;&gt; B.cost 
+  UNION ALL 
+  SELECT 
+	  A.id,A.saler_no,A.saler_name,A.buyer_no,A.buyer_name,
+	  A.item_no,A.item_code,A.item_name,A.send_date,A.receive_date,A.cost,
+	  A.brand_unit_name,A.brand_name,A.bill_type,
+	  A.original_bill_no,A.biz_type,A.ref_bill_no 
+  FROM
+	  bill_buy_balance A 
+	  LEFT JOIN bill_sale_balance B 
+	    ON A.original_bill_no = B.original_bill_no 
+	    AND A.item_no = B.item_no 
+  WHERE 1 = 1 
+	  <include refid="Area_Buy_Diff"/>
+	  AND A.bill_type IN ('1372', '1333') 
+	  <include refid="brand_unit_Acond"/>
+	  AND A.cost&lt;&gt;B.cost
+	  <if test="null!=page and ''!=page">
+		    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+   	  </if>
+   </select>
+   
+   <select id="selectAsnBillCost" parameterType="cn.wonhigh.retail.fas.common.dto.PriceCheckAndUpdateDto"  resultType="java.math.BigDecimal">
+   	 select cost from bill_sale_balance where original_bill_no=#{refBillNo} and item_no=#{itemNo}
+   </select>
+   
+   <select id="selectTransferAndReturnBillCost"  parameterType="cn.wonhigh.retail.fas.common.dto.PriceCheckAndUpdateDto"  resultType="java.math.BigDecimal">
+     select cost from bill_sale_balance where original_bill_no=#{originalBillNo} and item_no=#{itemNo}
+   </select>
+   
+    <select id="selectSaleAsnBillCost"  parameterType="cn.wonhigh.retail.fas.common.dto.PriceCheckAndUpdateDto"  resultType="java.math.BigDecimal">
+     select cost from bill_sale_balance where original_bill_no=#{originalBillNo} and item_no=#{itemNo}
+   </select>
+   
+    <!-- 更新buy表地区价 -->
+    <update id="updateBillBuyBalanceCost" parameterType="cn.wonhigh.retail.fas.common.dto.PriceCheckAndUpdateDto" >
+    	UPDATE bill_buy_balance SET cost = #{cost}  WHERE id = #{id}
+   </update>
+   
+   <!-- 更新sale表地区价 -->
+   <update id="updateBillSaleBalanceCost" parameterType="cn.wonhigh.retail.fas.common.dto.PriceCheckAndUpdateDto" >
+    	UPDATE bill_sale_balance SET cost = #{cost} WHERE id = #{id}
+   </update>
+ </mapper>
+  

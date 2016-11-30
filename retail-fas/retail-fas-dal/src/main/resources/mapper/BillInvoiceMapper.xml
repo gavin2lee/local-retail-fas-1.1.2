@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillInvoiceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillInvoice" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="ref_amount" property="refAmount" jdbcType="DECIMAL" />
+    <result column="payment_amount" property="paymentAmount" jdbcType="DECIMAL" />
+    <result column="payment_qty" property="paymentQty" jdbcType="DECIMAL" />
+    <result column="currency" property="currency" jdbcType="CHAR" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="payment_no" property="paymentNo" jdbcType="CHAR" />
+    <result column="create_user" property="createUser" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="CHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="auditor" property="auditor" jdbcType="CHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_generate" property="isGenerate" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, balance_type, bill_no, bill_date, status, saler_no, saler_name, buyer_no, buyer_name, 
+    amount, qty, ref_amount, payment_amount, payment_qty, currency, ref_bill_no, payment_no, create_user, create_time, update_user, 
+    update_time, auditor, audit_time, remark, is_generate
+  </sql>
+  <sql id="condition" >
+  	 -- AND @company_no!buyer_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+     <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if> 
+      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+        AND buyer_no = #{params.buyerNo}
+      </if>   
+      <if test="null!=params.salerNo and ''!=params.salerNo" >
+        AND saler_no = #{params.salerNo}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+       <if test="null!=params.billDateStart and ''!=params.billDateStart" >
+        AND bill_date &gt;= '${params.billDateStart} 00:00:00'
+      </if>  
+       <if test="null!=params.billDateEnd and ''!=params.billDateEnd" >
+        AND bill_date &lt;= '${params.billDateEnd} 23:59:59'
+      </if>  
+       <if test="null!=params.createUser and ''!=params.createUser" >
+        AND create_user = #{params.createUser}
+      </if>  
+       <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+        AND create_time &gt;= '${params.createTimeStart} 00:00:00'
+      </if>  
+       <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+        AND create_time &lt;= '${params.createTimeEnd} 23:59:59'
+      </if>  
+      <if test="null!=params.auditor and ''!=params.auditor" >
+        AND auditor = #{params.auditor}
+      </if>  
+       <if test="null!=params.auditTimeStart and ''!=params.auditTimeStart" >
+        AND audit_time &gt;= '${params.auditTimeStart} 00:00:00'
+      </if>  
+       <if test="null!=params.auditTimeEnd and ''!=params.auditTimeEnd" >
+        AND audit_time &lt;= '${params.auditTimeEnd}  23:59:59'
+      </if>  
+      <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no in ${params.multiBuyerNo}
+      </if>   
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND saler_no in ${params.multiSalerNo}
+      </if>
+      <if test="null!=params.multiStatus and ''!=params.multiStatus" >
+        AND status in ${params.multiStatus}
+      </if>
+      <if test="null!=params.isNull and ''!=params.isNull" >
+        AND (${params.isNull} IS NULL OR ${params.isNull} = '')
+      </if>
+      <if test="null!=params.invoiceBillNo and ''!=params.invoiceBillNo" >
+        AND bill_no = #{params.invoiceBillNo}
+      </if>
+      <if test="null!=params.refBillNo and ''!=params.refBillNo" >
+        AND ref_bill_no = #{params.refBillNo}
+      </if>
+      <if test="null!=params.q and ''!=params.q">
+        AND UPPER(bill_no) LIKE UPPER(CONCAT('%',#{params.q},'%'))
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_invoice
+    WHERE 1 = 1 AND (id = #{id,jdbcType=CHAR} or bill_no = #{id,jdbcType=CHAR})
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_invoice WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_invoice WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or  ''==orderByField " >
+      ORDER BY create_time DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_invoice WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectFooter" resultMap="BaseResultMap" parameterType="map" >
+    SELECT '合计' bill_no, SUM(amount) amount, SUM(qty) qty, SUM(payment_qty) payment_qty, SUM(payment_amount) payment_amount FROM bill_invoice WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_invoice
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoice" >
+    DELETE FROM bill_invoice
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoice" >
+    INSERT INTO bill_invoice (id, balance_type, bill_no, 
+      bill_date, status, saler_no, 
+      saler_name, buyer_no, buyer_name, 
+      amount, ref_amount, payment_amount, currency, ref_bill_no, 
+      payment_no, create_user, create_time, 
+      update_user, update_time, auditor, 
+      audit_time, remark, is_generate)
+    VALUES (#{id,jdbcType=CHAR}, #{balanceType,jdbcType=TINYINT}, #{billNo,jdbcType=CHAR}, 
+      #{billDate,jdbcType=DATE}, #{status,jdbcType=TINYINT}, #{salerNo,jdbcType=CHAR}, 
+      #{salerName,jdbcType=CHAR}, #{buyerNo,jdbcType=CHAR}, #{buyerName,jdbcType=CHAR}, 
+      #{amount,jdbcType=DECIMAL},#{refAmount,jdbcType=DECIMAL}, #{paymentAmount,jdbcType=DECIMAL}, #{currency,jdbcType=CHAR}, #{refBillNo,jdbcType=CHAR}, 
+      #{paymentNo,jdbcType=CHAR}, #{createUser,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=CHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{auditor,jdbcType=CHAR}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=CHAR}, #{isGenerate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoice" >
+    INSERT INTO bill_invoice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="billDate != null" >
+        bill_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="salerName != null" >
+        saler_name,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="refAmount != null" >
+        ref_amount,
+      </if>
+      <if test="paymentAmount != null" >
+        payment_amount,
+      </if>
+      <if test="paymentQty != null" >
+        payment_qty,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no,
+      </if>
+      <if test="paymentNo != null" >
+        payment_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isGenerate != null" >
+        is_generate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billDate != null" >
+        #{billDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        #{salerName,jdbcType=CHAR},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=CHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="refAmount != null" >
+        #{refAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentAmount != null" >
+        #{paymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentQty != null" >
+        #{paymentQty,jdbcType=INTEGER},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=CHAR},
+      </if>
+      <if test="refBillNo != null" >
+        #{refBillNo,jdbcType=CHAR},
+      </if>
+      <if test="paymentNo != null" >
+        #{paymentNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=CHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=CHAR},
+      </if>
+      <if test="isGenerate != null" >
+        #{isGenerate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoice" >
+    UPDATE bill_invoice
+    <set >
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billDate != null" >
+        bill_date = #{billDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        saler_name = #{salerName,jdbcType=CHAR},
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=CHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="refAmount != null" >
+        ref_amount = #{refAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentAmount != null" >
+        payment_amount = #{paymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentQty != null" >
+        payment_qty = #{paymentQty,jdbcType=INTEGER},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=CHAR},
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no = #{refBillNo,jdbcType=CHAR},
+      </if>
+      <if test="paymentNo != null" >
+        payment_no = #{paymentNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=CHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=CHAR},
+      </if>
+      <if test="isGenerate != null" >
+        is_generate = #{isGenerate,jdbcType=INTEGER},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoice" >
+    UPDATE bill_invoice
+    SET balance_type = #{balanceType,jdbcType=TINYINT},
+      bill_no = #{billNo,jdbcType=CHAR},
+      bill_date = #{billDate,jdbcType=DATE},
+      status = #{status,jdbcType=TINYINT},
+      saler_no = #{salerNo,jdbcType=CHAR},
+      saler_name = #{salerName,jdbcType=CHAR},
+      buyer_no = #{buyerNo,jdbcType=CHAR},
+      buyer_name = #{buyerName,jdbcType=CHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      ref_amount = #{refAmount,jdbcType=DECIMAL},
+      payment_amount = #{paymentAmount,jdbcType=DECIMAL},
+      currency = #{currency,jdbcType=CHAR},
+      ref_bill_no = #{refBillNo,jdbcType=CHAR},
+      payment_no = #{paymentNo,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=CHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=CHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=CHAR},
+      is_generate = #{isGenerate,jdbcType=INTEGER}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateBalanceInvoiceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillInvoice" >
+    UPDATE bill_balance 
+    	SET invoice_no = #{billNo}
+    WHERE 1 = 1 
+       	AND bill_no in ${refBillNo} 
+  </update>
+  
+  <update id="clearBalanceInvoiceNo" parameterType="java.lang.String" >
+    UPDATE bill_balance 
+    	SET invoice_no = NULL 
+    WHERE 1 = 1 
+       	AND invoice_no = #{invoiceNo}
+  </update>
+  <update id="verify" parameterType="cn.wonhigh.retail.fas.common.model.BillPayment" >
+	UPDATE 
+	  bill_invoice 
+	SET
+	  status = #{status} 
+	 <if test="status != 0 and status != 99" >
+   		,auditor = #{auditor}
+   	 	,audit_time = #{auditTime}
+     </if>
+     <if test="status == 0 " >
+   		,auditor = NULL
+   	 	,audit_time = NULL
+     </if>
+	WHERE 1 = 1
+	AND bill_no = #{billNo}  
+  </update>
+  
+  <!-- 删除采购发票回写发票登记号标志 -->
+  <update id="clearInvoiceNoFlag" parameterType="java.lang.String">
+	UPDATE 
+		bill_common_invoice_register
+    SET 
+    	invoice_no_flag=NULL
+	WHERE
+		invoice_no_flag=#{invoiceNoFlag}
+  </update>
+    <update id="updateDeductionDueDate" parameterType="map">
+	UPDATE 
+		other_deduction
+    SET 
+    	due_date=#{params.dueDate}
+	WHERE
+		balance_no in ${params.multiBalanceNo}
+  </update>
+  <update id="updatePayRelationDueDate" parameterType="map">
+	UPDATE 
+		pay_relationship
+    SET 
+    	due_date=#{params.dueDate}
+	WHERE
+		balance_no in ${params.multiBalanceNo}
+  </update>
+</mapper>

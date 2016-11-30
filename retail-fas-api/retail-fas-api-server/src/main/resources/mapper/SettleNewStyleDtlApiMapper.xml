@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.SettleNewStyleDtlApiMapper" >
+
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+ 
+  <select id="selectCount" resultType="java.lang.Integer"  parameterType="map">
+    SELECT COUNT(1) as s FROM settle_new_style_dtl WHERE 1=1
+    <if test="null!=params.styleNo and ''!=params.styleNo" >
+        AND style_no = #{params.styleNo}
+     </if>
+     <if test="null!=params.yearCode and ''!=params.yearCode" >
+        AND year_code = #{params.yearCode}
+     </if>
+     <if test="null!=params.year and ''!=params.year" >
+        AND year = #{params.year}
+     </if>
+     <if test="null!=params.seasonNo and ''!=params.seasonNo" >
+        AND (season_no = #{params.seasonNo} OR season_no = 'ALL')
+     </if>
+  </select>
+  
+</mapper>

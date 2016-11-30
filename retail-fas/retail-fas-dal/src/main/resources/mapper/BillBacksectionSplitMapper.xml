@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillBacksectionSplitMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillBacksectionSplit" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="backsection_no" property="backsectionNo" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="back_Type" property="backType" jdbcType="TINYINT" />
+    <result column="back_no" property="backNo" jdbcType="CHAR" />
+    <result column="back_name" property="backName" jdbcType="CHAR" />
+    <result column="back_amount" property="backAmount" jdbcType="DECIMAL" />
+    <result column="back_date" property="backDate" jdbcType="DATE" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="notreceive_amount" property="notreceiveAmount" jdbcType="DECIMAL" />
+    <result column="diff_amount" property="diffAmount" jdbcType="DECIMAL" />
+    <result column="diff_reason" property="diffReason" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, backsection_no, company_no, company_name, back_Type, back_no, back_name, back_amount, 
+    back_date, receive_amount, notreceive_amount, diff_amount, diff_reason, create_user, 
+    create_time, update_user, update_time, remark, status
+  </sql>
+ <sql id="condition" >
+  		-- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.backsectionNo and ''!=params.backsectionNo" >
+        AND backsection_no = #{params.backsectionNo}
+      </if>
+       <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if> 
+      <if test="null!=params.backNo and ''!=params.backNo" >
+        AND back_no = #{params.backNo}
+      </if>
+       <if test="null!=params.companyName and ''!=params.companyName" >
+        AND company_name = #{params.companyName}
+      </if>
+      <if test="null!=params.backName and ''!=params.backName" >
+        AND back_name = #{params.backName}
+      </if>
+      <if test="null!=params.backType and ''!=params.backType" >
+        AND back_Type = #{params.backType}
+      </if>
+       <if test="null!=params.backSectionDateStart and ''!=params.backSectionDateStart" >
+        AND back_date &gt;= #{params.backSectionDateStart}
+      </if>   
+      <if test="null!=params.backSectionDateEnd and ''!=params.backSectionDateEnd" >
+        AND back_date &lt;= #{params.backSectionDateEnd}
+      </if>
+       <if test="null!=params.bsgroupsNo and ''!=params.bsgroupsNo" >
+        AND back_no = #{params.bsgroupsNo}
+      </if> 
+       <if test="null!=params.bsgroupsName and ''!=params.bsgroupsName" >
+        AND bsgroups_name = #{params.bsgroupsName}
+      </if> 
+      <if test="null!=params.createUser and ''!=params.createUser" >
+        AND create_user = #{params.createUser}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_backsection_split
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_backsection_split WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_backsection_split WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     <if test="orderByField == null or  ''==orderByField " >
+      ORDER BY create_time DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_backsection_split WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectBacksectionMaxBillNo" resultType="java.lang.String" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplit" >
+    SELECT ifNULL(MAX(backsection_no),'00') FROM bill_backsection_split where 1 = 1 AND  backsection_no like '%${backsectionNo}%'
+    -- AND @company_no
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_backsection_split
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplit" >
+    DELETE FROM bill_backsection_split
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplit" >
+    INSERT INTO bill_backsection_split (sharding_flag, id, backsection_no, company_no, 
+      company_name, back_Type, back_no, 
+      back_name, back_amount, back_date, 
+      receive_amount, notreceive_amount, diff_amount, 
+      diff_reason, create_user, create_time, 
+      update_user, update_time, remark, 
+      status)
+    VALUES (#{shardingFlag,jdbcType=CHAR}, #{id,jdbcType=CHAR}, #{backsectionNo,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, 
+      #{companyName,jdbcType=VARCHAR}, #{backType,jdbcType=TINYINT}, #{backNo,jdbcType=CHAR}, 
+      #{backName,jdbcType=CHAR}, #{backAmount,jdbcType=DECIMAL}, #{backDate,jdbcType=DATE}, 
+      #{receiveAmount,jdbcType=DECIMAL}, #{notreceiveAmount,jdbcType=DECIMAL}, #{diffAmount,jdbcType=DECIMAL}, 
+      #{diffReason,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplit" >
+    INSERT INTO bill_backsection_split
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="backsectionNo != null" >
+        backsection_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="backType != null" >
+        back_Type,
+      </if>
+      <if test="backNo != null" >
+        back_no,
+      </if>
+      <if test="backName != null" >
+        back_name,
+      </if>
+      <if test="backAmount != null" >
+        back_amount,
+      </if>
+      <if test="backDate != null" >
+        back_date,
+      </if>
+      <if test="receiveAmount != null" >
+        receive_amount,
+      </if>
+      <if test="notreceiveAmount != null" >
+        notreceive_amount,
+      </if>
+      <if test="diffAmount != null" >
+        diff_amount,
+      </if>
+      <if test="diffReason != null" >
+        diff_reason,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>  
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="backsectionNo != null" >
+        #{backsectionNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="backType != null" >
+        #{backType,jdbcType=TINYINT},
+      </if>
+      <if test="backNo != null" >
+        #{backNo,jdbcType=CHAR},
+      </if>
+      <if test="backName != null" >
+        #{backName,jdbcType=CHAR},
+      </if>
+      <if test="backAmount != null" >
+        #{backAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="backDate != null" >
+        #{backDate,jdbcType=DATE},
+      </if>
+      <if test="receiveAmount != null" >
+        #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="notreceiveAmount != null" >
+        #{notreceiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffAmount != null" >
+        #{diffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffReason != null" >
+        #{diffReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplit" >
+    UPDATE bill_backsection_split
+    <set >
+      <if test="backsectionNo != null" >
+        backsection_no = #{backsectionNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="backType != null" >
+        back_Type = #{backType,jdbcType=TINYINT},
+      </if>
+      <if test="backNo != null" >
+        back_no = #{backNo,jdbcType=CHAR},
+      </if>
+      <if test="backName != null" >
+        back_name = #{backName,jdbcType=CHAR},
+      </if>
+      <if test="backAmount != null" >
+        back_amount = #{backAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="backDate != null" >
+        back_date = #{backDate,jdbcType=DATE},
+      </if>
+      <if test="receiveAmount != null" >
+        receive_amount = #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="notreceiveAmount != null" >
+        notreceive_amount = #{notreceiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffAmount != null" >
+        diff_amount = #{diffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffReason != null" >
+        diff_reason = #{diffReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplit" >
+    UPDATE bill_backsection_split
+    SET backsection_no = #{backsectionNo,jdbcType=CHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      back_Type = #{backType,jdbcType=TINYINT},
+      back_no = #{backNo,jdbcType=CHAR},
+      back_name = #{backName,jdbcType=CHAR},
+      back_amount = #{backAmount,jdbcType=DECIMAL},
+      back_date = #{backDate,jdbcType=DATE},
+      receive_amount = #{receiveAmount,jdbcType=DECIMAL},
+      notreceive_amount = #{notreceiveAmount,jdbcType=DECIMAL},
+      diff_amount = #{diffAmount,jdbcType=DECIMAL},
+      diff_reason = #{diffReason,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <!-- 统计晚于此回款单创建的回款单条数 -->
+  <select id="selectAfterCount" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    SELECT 
+	  COUNT(1) 
+	FROM
+	  `bill_backsection_split` a 
+	  LEFT JOIN `bill_backsection_split` b 
+	    ON a.`company_no` = b.`company_no` 
+	    AND a.`back_type` = b.`back_type` 
+	    AND a.`back_no` = b.`back_no` 
+	WHERE 1=1
+		-- AND @a.company_no
+		AND a.`id` = #{id,jdbcType=CHAR}
+	    AND a.`create_time` &lt; b.`create_time`
+  </select>
+</mapper>

@@ -1,0 +1,28 @@
+var report_gather_area = new Object();
+
+//查询
+report_gather_area.search = function() {
+	if($('#searchForm').form('validate')){
+		var params = $('#searchForm').form('getData');
+		var url = BasePath + '/report/report_gather_area.json';
+	    $('#dtlDataGrid').datagrid('options').queryParams= params;
+	    $('#dtlDataGrid').datagrid('options').url= url;
+	    $('#dtlDataGrid').datagrid('load');
+	}
+};
+
+//清空
+report_gather_area.clear = function() {
+	$('#searchForm').form("clear");
+	$('#searchForm').find("input[name!=balanceType]").val("");
+	common_util.initDate(); 
+};
+
+//初始化
+$(function(){
+	toolSearch({
+        appendTo:$('#top_bar'), //添加位置，默认为$('#toolbar')
+        target:$('#subLayout'), //控制对象，默认为$('#subLayout')
+        collapsible:true //是否显示下拉箭头
+	});
+});

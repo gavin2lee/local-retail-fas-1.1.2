@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillSplitMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSplit" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="bill_flag" property="billFlag" jdbcType="TINYINT" />
+    <result column="total_qty" property="totalQty" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="total_tax_amount" property="totalTaxAmount" jdbcType="DECIMAL" />
+    <result column="send_out_date" property="sendOutDate" jdbcType="DATE" />
+    <result column="recon_flag" property="reconFlag" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <resultMap id="SplitBillResultMap" type="cn.wonhigh.retail.fas.common.model.BillBuyBalance" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="ref_bill_type" property="refBillType" jdbcType="INTEGER" />
+    <result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="send_store_no" property="sendStoreNo" jdbcType="CHAR" />
+    <result column="send_store_name" property="sendStoreName" jdbcType="CHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="sku_id" property="skuId" jdbcType="CHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="bill_cost" property="billCost" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="exclusive_cost" property="exclusiveCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="balance_status" property="balanceStatus" jdbcType="TINYINT" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="is_split" property="isSplit" jdbcType="INTEGER" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    
+    <result column="difference_qty" property="differenceQty" jdbcType="INTEGER" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="difference_amount" property="differenceAmount" jdbcType="DECIMAL" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="CHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="CHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+    
+    <result column="cost_checked" property="costChecked" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <resultMap id="SettlePathResultMap" type="cn.wonhigh.retail.fas.common.dto.SettlePathDto" >
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="supplier_group_no" property="supplierGroupNo" jdbcType="VARCHAR" />
+    <result column="supplier_group_name" property="supplierGroupName" jdbcType="VARCHAR" />
+    <result column="middle_company_no" property="middleCompanyNo" jdbcType="VARCHAR" />
+    <result column="middle_company_name" property="middleCompanyName" jdbcType="VARCHAR" />
+    <result column="middle_financial_basis" property="middleFinancialBasis" jdbcType="VARCHAR" />
+    <result column="middle_financial_basis_text" property="middleFinancialBasisText" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="financial_basis" property="financialBasis" jdbcType="VARCHAR" />
+    <result column="financial_basis_text" property="financialBasisText" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="audit_status" property="auditStatus" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, ref_bill_no, saler_no, buyer_no, bill_flag, total_qty, total_amount, 
+    total_tax_amount, send_out_date, recon_flag
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.refBillNo and ''!=params.refBillNo">
+      	AND ref_bill_no = #{params.refBillNo}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo">
+      	AND bill_no = #{params.billNo}
+      </if>
+      <if test="null!=params.salerNo and ''!=params.salerNo">
+      	AND saler_no = #{params.salerNo}
+      </if>
+      <if test="null!=params.buyerNo and ''!=params.buyerNo">
+      	AND buyer_no = #{params.buyerNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_split
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_split WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_split WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_split WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_split
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillSplit" >
+    DELETE FROM bill_split
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillSplit" >
+    INSERT INTO bill_split (id, bill_no, ref_bill_no, 
+      saler_no, buyer_no, bill_flag, 
+      total_qty, total_amount, total_tax_amount, 
+      send_out_date, recon_flag)
+    VALUES (#{id,jdbcType=INTEGER}, #{billNo,jdbcType=CHAR}, #{refBillNo,jdbcType=CHAR}, 
+      #{salerNo,jdbcType=CHAR}, #{buyerNo,jdbcType=CHAR}, #{billFlag,jdbcType=TINYINT}, 
+      #{totalQty,jdbcType=INTEGER}, #{totalAmount,jdbcType=DECIMAL}, #{totalTaxAmount,jdbcType=DECIMAL}, 
+      #{sendOutDate,jdbcType=DATE}, #{reconFlag,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillSplit" >
+    INSERT INTO bill_split
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="billFlag != null" >
+        bill_flag,
+      </if>
+      <if test="totalQty != null" >
+        total_qty,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="totalTaxAmount != null" >
+        total_tax_amount,
+      </if>
+      <if test="sendOutDate != null" >
+        send_out_date,
+      </if>
+      <if test="reconFlag != null" >
+        recon_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="refBillNo != null" >
+        #{refBillNo,jdbcType=CHAR},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="billFlag != null" >
+        #{billFlag,jdbcType=TINYINT},
+      </if>
+      <if test="totalQty != null" >
+        #{totalQty,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalTaxAmount != null" >
+        #{totalTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sendOutDate != null" >
+        #{sendOutDate,jdbcType=DATE},
+      </if>
+      <if test="reconFlag != null" >
+        #{reconFlag,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="batchAdd" parameterType="java.util.List" >
+    INSERT INTO bill_split(
+        bill_no,
+        ref_bill_no,
+        saler_no,
+        buyer_no,
+        bill_flag,
+        total_qty,
+        total_amount,
+        total_tax_amount,
+        send_out_date,
+        recon_flag
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">  
+    	(
+	        #{item.billNo,jdbcType=CHAR},
+	        #{item.refBillNo,jdbcType=CHAR},
+	        #{item.salerNo,jdbcType=CHAR},
+	        #{item.buyerNo,jdbcType=CHAR},
+	        #{item.billFlag,jdbcType=TINYINT},
+	        #{item.totalQty,jdbcType=INTEGER},
+	        #{item.totalAmount,jdbcType=DECIMAL},
+	        #{item.totalTaxAmount,jdbcType=DECIMAL},
+	        #{item.sendOutDate,jdbcType=DATE},
+	        #{item.reconFlag,jdbcType=TINYINT}
+	     )
+	  </foreach>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillSplit" >
+    UPDATE bill_split
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no = #{refBillNo,jdbcType=CHAR},
+      </if>
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="billFlag != null" >
+        bill_flag = #{billFlag,jdbcType=TINYINT},
+      </if>
+      <if test="totalQty != null" >
+        total_qty = #{totalQty,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalTaxAmount != null" >
+        total_tax_amount = #{totalTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sendOutDate != null" >
+        send_out_date = #{sendOutDate,jdbcType=DATE},
+      </if>
+      <if test="reconFlag != null" >
+        recon_flag = #{reconFlag,jdbcType=TINYINT},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillSplit" >
+    UPDATE bill_split
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      ref_bill_no = #{refBillNo,jdbcType=CHAR},
+      saler_no = #{salerNo,jdbcType=CHAR},
+      buyer_no = #{buyerNo,jdbcType=CHAR},
+      bill_flag = #{billFlag,jdbcType=TINYINT},
+      total_qty = #{totalQty,jdbcType=INTEGER},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      total_tax_amount = #{totalTaxAmount,jdbcType=DECIMAL},
+      send_out_date = #{sendOutDate,jdbcType=DATE},
+      recon_flag = #{reconFlag,jdbcType=TINYINT}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="SplitBill_condition" >
+  		-- AND @company_no!buyer_no
+  		-- AND @brand_no
+  		<!-- AND @zone_no -->
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        AND ${params.queryCondition}
+      </if>
+      <if test="null!=params.originalBillNo and ''!=params.originalBillNo" >
+        AND B.original_bill_no = #{params.originalBillNo}
+      </if>
+      <if test="null!=params.refBillNo and ''!=params.refBillNo" >
+        AND B.ref_bill_no = #{params.refBillNo}
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo" >
+        AND B.item_no = #{params.itemNo}
+      </if>
+      <if test="null!=params.itemName and ''!=params.itemName" >
+      	<choose>
+      		<when test="null!=params.itemCode and ''!=params.itemCode">
+      			AND B.item_code = #{params.itemCode}
+      		</when>
+      		<otherwise>
+      			AND B.item_code = #{params.itemName}
+      		</otherwise>
+      	</choose>
+      </if>
+      <if test="null!=params.billType and ''!=params.billType" >
+        AND B.bill_type = #{params.billType}
+      </if>
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+        AND B.send_date &gt;= #{params.sendDateStart}
+      </if> 
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND B.send_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.receiveDateStart and ''!=params.receiveDateStart" >
+        AND B.receive_date &gt;= #{params.receiveDateStart}
+      </if> 
+      <if test="null!=params.receiveDateEnd and ''!=params.receiveDateEnd" >
+        AND B.receive_date &lt;= #{params.receiveDateEnd}
+      </if>
+      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+        AND B.buyer_no = #{params.buyerNo}
+      </if>
+      <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+        AND B.supplier_no = #{params.supplierNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND B.brand_no = #{params.brandNo}
+      </if>   
+       <if test="null!=params.brandNos and ''!=params.brandNos" >
+        AND B.brand_no in (${params.brandNos})
+      </if> 
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+        AND LEFT(B.category_no,2) = #{params.categoryNo}
+      </if>
+	  <if test="null!=params.balanceType and ''!=params.balanceType" >
+	  	<choose>
+      		<when test="params.balanceType==1">
+      			AND B.is_split = #{params.balanceType}
+      		</when>
+      		<otherwise>
+      			AND B.is_split IS NULL
+      		</otherwise>
+      	</choose>
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectSplitBillCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_buy_balance AS B WHERE 1=1 
+    <include refid="SplitBill_condition" />
+  </select>
+  <select id="selectSplitBill" resultMap="SplitBillResultMap" parameterType="map" >
+    SELECT a.*,
+	(CASE WHEN 
+	(SELECT id FROM bill_buy_balance b WHERE b.original_bill_no = a.original_bill_no AND b.item_no = a.item_no AND b.balance_no IS NOT NULL) IS NOT NULL
+	OR
+	(SELECT id FROM bill_sale_balance b WHERE b.original_bill_no = a.original_bill_no AND b.item_no = a.item_no AND b.balance_no IS NOT NULL) IS NOT NULL 
+	THEN '已结算' ELSE '未结算' END ) AS balance_no
+	FROM (
+	    SELECT 
+		    B.id, B.bill_no, B.bill_type, B.biz_type, B.ref_bill_no, B.ref_bill_type, B.original_bill_no, B.status, 
+		    B.buyer_no, B.buyer_name, B.saler_no, B.saler_name, B.send_date, B.receive_date, B.send_store_no, 
+		    B.send_store_name, B.receive_store_no, B.receive_store_name, B.sku_id, B.sku_no, B.supplier_no, 
+		    B.supplier_name, B.item_no, B.item_code, B.item_name, B.brand_no, B.brand_name, B.category_no, 
+		    B.category_name, B.cost, B.bill_cost, B.tax_rate, B.exclusive_cost, 
+		    B.headquarter_cost, B.region_cost, B.unit_cost, B.send_qty, B.receive_qty, 
+		    B.order_no, B.balance_status, B.balance_type, B.is_split, B.path_no, B.order_unit_no, 
+		    B.order_unit_name, B.organ_no, B.organ_name, B.order_unit_no_from, B.order_unit_name_from, 
+		    B.organ_no_from, B.organ_name_from, B.zone_no, B.zone_name, B.zone_no_from, B.zone_name_from, 
+		    B.years, B.season, B.create_user, B.create_time, B.cost_checked,
+		    C.category_no AS one_level_category_no, C.name AS one_level_category_name
+	     FROM bill_buy_balance AS B
+	     	LEFT JOIN category AS C ON LEFT(B.category_no,2) = C.category_no
+	     WHERE 1=1 
+	    <include refid="SplitBill_condition" />
+	    <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+	    <if test="orderByField == null or  ''==orderByField " >
+	      ORDER BY send_date DESC
+	    </if>
+	    <if test="page != null and ''!=page">
+	    	LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	    </if>
+	) AS a
+  </select>
+  
+  <select id="selectSettlePath" resultMap="SettlePathResultMap" parameterType="map" >
+  	SELECT 
+		main.`path_no`,main.`name`,main.`start_date`,main.`end_date`,main.`audit_status`,
+		sup.`company_no` AS supplier_group_no,sup.`company_name` AS supplier_group_name,
+		IF(dtl.path_order = 3,(SELECT s.company_no FROM settle_path_dtl s WHERE s.path_no = main.path_no AND s.path_order = 2), NULL) AS middle_company_no,
+		IF(dtl.path_order = 3,(SELECT s.company_name FROM settle_path_dtl s WHERE s.path_no = main.path_no AND s.path_order = 2), NULL) AS middle_company_name,
+		IF(dtl.path_order = 3,(SELECT s.financial_basis FROM settle_path_dtl s WHERE s.path_no = main.path_no AND s.path_order = 2), NULL) AS middle_financial_basis,
+		IF(dtl.path_order = 3,(SELECT s.financial_basis_text FROM settle_path_dtl s WHERE s.path_no = main.path_no AND s.path_order = 2), NULL) AS middle_financial_basis_text,
+		dtl.`company_no`,dtl.`company_name`,dtl.`financial_basis`,dtl.`financial_basis_text`
+	FROM `settle_path` AS main
+	JOIN `settle_path_dtl` AS sup ON main.`path_no` = sup.`path_no` AND sup.`path_order` = 1
+	JOIN `settle_path_dtl` AS dtl ON main.`path_no` = dtl.`path_no` AND dtl.`path_order` IN (2,3)
+	WHERE 1=1
+      	<if test="null!=params.auditStatus and ''!=params.auditStatus">
+			AND main.audit_status = #{params.auditStatus}
+      	</if>
+      	<if test="null!=params.queryDate and ''!=params.queryDate">
+			AND ((main.start_date &lt;= #{params.queryDate} OR main.start_date IS NULL) AND (main.end_date &gt;= #{params.queryDate} OR main.end_date IS NULL))
+		</if>
+		<if test="null!=params.companyNo and ''!=params.companyNo">
+			AND dtl.`company_no` = #{params.companyNo}
+		</if>
+		<if test="null!=params.supplierNo and ''!=params.supplierNo">
+			AND EXISTS(SELECT 1 FROM settle_path_dtl d INNER JOIN supplier_group_rel r
+		               			ON d.company_no = r.group_no 
+		                   			WHERE r.supplier_no = #{params.supplierNo,jdbcType=VARCHAR}
+					                   AND d.path_order = 1
+					                   AND d.path_no = main.path_no)
+		</if>
+  </select>
+  
+  <select id="selectBuySettleCount" parameterType="map"  resultType="java.lang.Integer" >
+  	SELECT count(1) FROM bill_buy_balance WHERE original_bill_no = #{params.originalBillNo} AND item_no = #{params.itemNo} AND (balance_no IS NOT NULL AND balance_no != '') 
+  </select>
+  
+  <select id="selectSaleSettleCount" parameterType="map"  resultType="java.lang.Integer" >
+  	SELECT count(1) FROM bill_sale_balance WHERE original_bill_no = #{params.originalBillNo} AND item_no = #{params.itemNo} AND (balance_no IS NOT NULL AND balance_no != '') 
+  </select>
+</mapper>

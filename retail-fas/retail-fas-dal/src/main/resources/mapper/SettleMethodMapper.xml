@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SettleMethodMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SettleMethod" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="settle_code" property="settleCode" jdbcType="VARCHAR" />
+    <result column="settle_name" property="settleName" jdbcType="VARCHAR" />
+    <result column="settle_type" property="settleType" jdbcType="TINYINT" />
+    <result column="business_type" property="businessType" jdbcType="TINYINT" />
+    <result column="pay_fees_flag" property="payFeesFlag" jdbcType="TINYINT" />
+    <result column="bearer" property="bearer" jdbcType="CHAR" />
+    <result column="payment_mode" property="paymentMode" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, settle_code, settle_name, settle_type, business_type, pay_fees_flag, bearer, 
+    payment_mode, status, create_user, create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+        <if test="null!=params.settleCode and ''!=params.settleCode" >
+      	 and settle_code like '%${params.settleCode}%' 
+      </if>
+       <if test="null!=params.settleName and ''!=params.settleName" >
+         and settle_name like '%${params.settleName}%' 
+      </if>
+       <if test="null!=params.settleType and ''!=params.settleType" >
+         and settle_type like '%${params.settleType}%' 
+      </if>
+       <if test="null!=params.businessType and ''!=params.businessType" >
+         and business_type like '%${params.businessType}%' 
+      </if>
+       <if test="null!=params.payFeesFlag and ''!=params.payFeesFlag" >
+         and pay_fees_flag like '%${params.payFeesFlag}%' 
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+       	 and status = #{params.status}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM settle_method
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM settle_method WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_method WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_method WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM settle_method
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.SettleMethod" >
+    DELETE FROM settle_method
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SettleMethod" >
+    INSERT INTO settle_method (id, settle_code, settle_name, 
+      settle_type, business_type, pay_fees_flag, 
+      bearer, payment_mode, status, 
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{id,jdbcType=INTEGER}, #{settleCode,jdbcType=VARCHAR}, #{settleName,jdbcType=VARCHAR}, 
+      #{settleType,jdbcType=TINYINT}, #{businessType,jdbcType=TINYINT}, #{payFeesFlag,jdbcType=TINYINT}, 
+      #{bearer,jdbcType=CHAR}, #{paymentMode,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SettleMethod" >
+    INSERT INTO settle_method
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="settleCode != null" >
+        settle_code,
+      </if>
+      <if test="settleName != null" >
+        settle_name,
+      </if>
+      <if test="settleType != null" >
+        settle_type,
+      </if>
+      <if test="businessType != null" >
+        business_type,
+      </if>
+      <if test="payFeesFlag != null" >
+        pay_fees_flag,
+      </if>
+      <if test="bearer != null" >
+        bearer,
+      </if>
+      <if test="paymentMode != null" >
+        payment_mode,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="settleCode != null" >
+        #{settleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="settleName != null" >
+        #{settleName,jdbcType=VARCHAR},
+      </if>
+      <if test="settleType != null" >
+        #{settleType,jdbcType=TINYINT},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=TINYINT},
+      </if>
+      <if test="payFeesFlag != null" >
+        #{payFeesFlag,jdbcType=TINYINT},
+      </if>
+      <if test="bearer != null" >
+        #{bearer,jdbcType=CHAR},
+      </if>
+      <if test="paymentMode != null" >
+        #{paymentMode,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SettleMethod" >
+    UPDATE settle_method
+    <set >
+      <if test="settleCode != null" >
+        settle_code = #{settleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="settleName != null" >
+        settle_name = #{settleName,jdbcType=VARCHAR},
+      </if>
+      <if test="settleType != null" >
+        settle_type = #{settleType,jdbcType=TINYINT},
+      </if>
+      <if test="businessType != null" >
+        business_type = #{businessType,jdbcType=TINYINT},
+      </if>
+      <if test="payFeesFlag != null" >
+        pay_fees_flag = #{payFeesFlag,jdbcType=TINYINT},
+      </if>
+      <if test="bearer != null" >
+        bearer = #{bearer,jdbcType=CHAR},
+      </if>
+      <if test="paymentMode != null" >
+        payment_mode = #{paymentMode,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SettleMethod" >
+    UPDATE settle_method
+    SET settle_code = #{settleCode,jdbcType=VARCHAR},
+      settle_name = #{settleName,jdbcType=VARCHAR},
+      settle_type = #{settleType,jdbcType=TINYINT},
+      business_type = #{businessType,jdbcType=TINYINT},
+      pay_fees_flag = #{payFeesFlag,jdbcType=TINYINT},
+      bearer = #{bearer,jdbcType=CHAR},
+      payment_mode = #{paymentMode,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

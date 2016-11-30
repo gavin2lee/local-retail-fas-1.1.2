@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillBalanceUpdateMapper" >
+	    <sql id="UpdateDetailCondition" >
+	      <if test="null!=brandNo and ''!=brandNo" >
+	 		AND	brand_no = #{brandNo}
+		  </if>
+		  <if test="null!=categoryNo and ''!=categoryNo" >
+	 		AND	C1.`category_no`  = #{categoryNo}
+		  </if>
+		  <if test="null!=multiBrandNo and ''!=multiBrandNo" >
+	 		AND	brand_no IN ${multiBrandNo}
+		  </if>
+		  <if test="null!=multiCategoryNo and ''!=multiCategoryNo" >
+	 		AND	C1.`category_no` IN ${multiCategoryNo}
+		  </if>
+	    </sql>
+	    <sql id="UpdateDeductionCondition" >
+	      <if test="null!=brandNo and ''!=brandNo" >
+	 		AND	brand_no = #{brandNo}
+		  </if>
+		  <if test="null!=categoryNo and ''!=categoryNo" >
+	 		AND	category_no  = #{categoryNo}
+		  </if>
+		  <if test="null!=multiBrandNo and ''!=multiBrandNo" >
+	 		AND	brand_no IN ${multiBrandNo}
+		  </if>
+		  <if test="null!=multiCategoryNo and ''!=multiCategoryNo" >
+	 		AND	category_no  IN ${multiCategoryNo}
+		  </if>
+	    </sql>
+	    <update id="updateDetailBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+			UPDATE ${tableName} 
+				LEFT JOIN category C1 ON LEFT(${tableName}.`category_no`, 2) = C1.`category_no` 
+		   	 SET balance_no = #{billNo}, balance_status = #{status}
+			   	WHERE 1 = 1 
+			   	AND ( balance_no IS NULL OR balance_no = '')
+			   	AND	saler_no = #{salerNo}
+	 			AND	buyer_no = #{buyerNo}
+				AND send_date &gt;= #{balanceStartDate}
+				AND send_date &lt;= #{balanceEndDate}
+		    	<include refid="UpdateDetailCondition" />
+	  	</update>
+	  	<update id="updateDeductionBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+			UPDATE other_deduction 
+		   	 SET balance_no = #{billNo}, balance_status = #{status}
+			   	WHERE 1 = 1 
+			   	AND ( balance_no IS NULL OR balance_no = '')
+			   	AND	saler_no = #{salerNo}
+	 			AND	buyer_no = #{buyerNo}
+				AND deduction_date &gt;= #{balanceStartDate}
+				AND deduction_date &lt;= #{balanceEndDate}
+		    	<include refid="UpdateDeductionCondition" />
+	  	</update>
+	  	<update id="clearDetailBalanceNo" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance" >
+		    UPDATE ${tableName} 
+		    	SET balance_no = NULL, balance_status = NULL
+		    WHERE 1 = 1 
+		       	AND balance_no = #{billNo}
+		</update>
+		  
+		<update id="clearDeductionBalanceNo" parameterType="java.lang.String" >
+		    UPDATE other_deduction
+		    	SET balance_no = NULL, balance_status = NULL
+		    WHERE 1 = 1 
+		       	AND balance_no = #{balanceNo}
+		</update>
+		<update id="updateDetailBalanceById" parameterType="cn.wonhigh.retail.fas.common.dto.BalanceDetailDto" >
+		    UPDATE ${tableName} 
+		    	SET balance_no = #{balanceNo}, balance_status = #{balanceStatus}
+		    WHERE 1 = 1 
+		       	AND id = #{id}
+		</update>
+		  
+		<update id="updateDeductionBalanceById" parameterType="cn.wonhigh.retail.fas.common.model.OtherDeduction" >
+		    UPDATE other_deduction
+		    	SET balance_no = #{balanceNo}, balance_status =  #{balanceStatus}
+		    WHERE 1 = 1 
+		       	AND id = #{id}
+		</update>
+</mapper>

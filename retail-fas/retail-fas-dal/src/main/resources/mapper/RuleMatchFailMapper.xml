@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.RuleMatchFailMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.RuleMatchFail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="match_type" property="matchType" jdbcType="TINYINT" />
+    <result column="fail_reason" property="failReason" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, item_no, item_code, zone_no, brand_no, brand_name, status, match_type, fail_reason, 
+    create_user, create_time
+  </sql>
+  <sql id="condition" >
+  	 <!-- AND @zone_no -->
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.itemCode and ''!=params.itemCode" >
+         AND item_code = #{params.itemCode}
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo" >
+         AND item_no = #{params.itemNo}
+      </if>
+       <if test="null!=params.zoneNo and ''!=params.zoneNo" >
+         AND zone_no = #{params.zoneNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+         AND brand_no = #{params.brandNo}
+      </if>
+       <if test="null!=params.failReason and ''!=params.failReason" >
+         AND fail_reason = #{params.failReason}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+         AND status = #{params.status}
+      </if>
+       <if test="null!=params.matchType and ''!=params.matchType" >
+         AND match_type = #{params.matchType}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM rule_match_fail
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM rule_match_fail WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM rule_match_fail WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField">
+		ORDER BY create_time DESC
+	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM rule_match_fail WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM rule_match_fail
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.RuleMatchFail" >
+    DELETE FROM rule_match_fail
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.RuleMatchFail" >
+    insert into rule_match_fail (id, item_no, item_code, 
+      zone_no, brand_no, brand_name, 
+      status, match_type, fail_reason, 
+      create_user, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=CHAR}, 
+      #{zoneNo,jdbcType=CHAR}, #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{matchType,jdbcType=TINYINT}, #{failReason,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.RuleMatchFail" >
+    INSERT INTO rule_match_fail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+       <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="matchType != null" >
+        match_type,
+      </if>
+      <if test="failReason != null" >
+        fail_reason,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="matchType != null" >
+        #{matchType,jdbcType=TINYINT},
+      </if>
+      <if test="failReason != null" >
+        #{failReason,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.RuleMatchFail" >
+    UPDATE rule_match_fail
+    <set >
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="matchType != null" >
+        match_type = #{matchType,jdbcType=TINYINT},
+      </if>
+      <if test="failReason != null" >
+        fail_reason = #{failReason,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.RuleMatchFail" >
+    UPDATE rule_match_fail
+    SET item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      match_type = #{matchType,jdbcType=TINYINT},
+      fail_reason = #{failReason,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findHQItemUnmatched" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM rule_match_fail WHERE match_type=0 
+     	AND item_no = #{itemNo}
+  </select>
+  
+  <select id="findRegionItemUnmatched" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM rule_match_fail WHERE match_type=1 
+     	AND item_no = #{params.itemNo} AND zone_no = #{params.zoneNo}
+  </select>
+  
+</mapper>

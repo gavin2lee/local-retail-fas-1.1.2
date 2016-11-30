@@ -1,0 +1,3312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillBalanceHqMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.BillBalanceDto" >
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+	<result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="entry_qty" property="entryQty" jdbcType="INTEGER" />
+    <result column="entry_amount" property="entryAmount" jdbcType="DECIMAL" />
+    <result column="custom_return_qty" property="customReturnQty" jdbcType="INTEGER" />
+    <result column="custom_return_amount" property="customReturnAmount" jdbcType="DECIMAL" />
+    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="out_qty" property="outQty" jdbcType="INTEGER" />
+    <result column="out_amount" property="outAmount" jdbcType="DECIMAL" />
+    <result column="deduction_qty" property="deductionQty" jdbcType="DECIMAL" />
+    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ExpricePriceBuyMap" type="cn.wonhigh.retail.fas.common.model.BillBuyBalance" >
+    <result column="id" property="id" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ExpricePriceSaleMap" type="cn.wonhigh.retail.fas.common.model.BillSaleBalance" >
+    <result column="id" property="id" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+  </resultMap>
+   <sql id="BalanceCondition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.extendCategoryCondition and ''!=params.extendCategoryCondition" >
+        ${params.extendCategoryCondition}
+      </if>
+	  <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+    	AND	send_date &gt;= '${params.balanceStartDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+  		AND	send_date &lt;= '${params.balanceEndDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.salerNo and ''!=params.salerNo" >
+ 		AND	saler_no = #{params.salerNo}
+	  </if>
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+ 		AND	buyer_no = #{params.buyerNo}
+	  </if>
+	  <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+ 		AND	brand_unit_no = #{params.brandUnitNo}
+	  </if>
+	  <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+ 		AND	C1.`category_no`  = #{params.categoryNo}
+	  </if>
+	  <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+ 		AND	saler_no in ${params.multiSalerNo}
+	  </if>
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+ 		AND	buyer_no in ${params.multiBuyerNo}
+	  </if>
+	  <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+ 		AND	brand_unit_no in ${params.multiBrandUnitNo}
+	  </if>
+	  <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+ 		AND	brand_no in ${params.multiBrandNo}
+	  </if>
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+ 		AND	C1.`category_no`  in ${params.multiCategoryNo}
+	  </if>
+	  <if test="null!=params.twoLevelCategoryNo and ''!=params.twoLevelCategoryNo" >
+ 		AND	C2.`category_no` IN ${params.twoLevelCategoryNo}
+	  </if>
+	  <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+ 		AND	supplier_no IN ${params.supplierNo}
+	  </if>
+	  <if test="null!=params.gender and ''!=params.gender" >
+ 		AND	gender IN ${params.gender}
+	  </if>
+	  <if test="null!=params.years and ''!=params.years" >
+ 		AND	years IN ${params.years}
+	  </if>
+	  <if test="null!=params.supplierGroupNo and ''!=params.supplierGroupNo" >
+        AND  EXISTS (SELECT 1 FROM supplier_group_rel sgr WHERE T.supplier_no = sgr.supplier_no AND sgr.group_no IN ${params.supplierGroupNo})
+      </if>  
+      <if test="null!=params.priceRangeCondition and ''!=params.priceRangeCondition">
+      	AND  NOT EXISTS 
+		  (SELECT 
+		    1 
+		  FROM
+		    item 
+		    INNER JOIN brand 
+		      ON brand.brand_no = item.brand_no 
+		    INNER JOIN brand_unit 
+		      ON brand_unit.brand_unit_no = brand.sys_no 
+		    INNER JOIN supplier_group_rel 
+		      ON supplier_group_rel.supplier_no = item.supplier_no 
+		  WHERE 1 = 1 
+		    ${params.priceRangeCondition}
+		    AND item.item_no = T.item_no
+		    AND (
+		      NOT EXISTS 
+		      (SELECT 
+		        1 
+		      FROM
+		        official_item OI 
+		      WHERE OI.item_code = item.code 
+		        AND OI.supplier_no = item.supplier_no 
+		        AND OI.brand_no = item.brand_no 
+		        AND OI.year_no = item.years 
+		        AND OI.season_no = item.purchase_season) 
+		      OR EXISTS 
+		      (SELECT 
+		        1 
+		      FROM
+		        official_item OI 
+		      WHERE OI.item_code = item.code 
+		        AND OI.supplier_no = item.supplier_no 
+		        AND OI.brand_no = item.brand_no 
+		        AND OI.year_no = item.years 
+		        AND OI.season_no = item.purchase_season
+		        AND OI.excess_status = '1')
+		    ) 
+	    )
+      </if>
+    </if>
+  </sql>
+  <sql id="PurchaseAdjustCondition" >
+    <if test="null!=params" >
+	  <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+    	AND	T.purchase_date &gt;= '${params.balanceStartDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+  		AND	T.purchase_date &lt;= '${params.balanceEndDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.salerNo and ''!=params.salerNo" >
+ 		AND	T.saler_no = #{params.salerNo}
+	  </if>
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+ 		AND	T.buyer_no = #{params.buyerNo}
+	  </if>
+	  <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+ 		AND	BU.`brand_unit_no` = #{params.brandUnitNo}
+	  </if>
+	  <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+ 		AND	C1.category_no = #{params.categoryNo}
+	  </if>
+	  <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+ 		AND	T.saler_no in ${params.multiSalerNo}
+	  </if>
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+ 		AND	T.buyer_no in ${params.multiBuyerNo}
+	  </if>
+	  <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+ 		AND	T.supplier_no in ${params.multiSupplierNo}
+	  </if>
+	  <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+ 		AND	BU.`brand_unit_no` in ${params.multiBrandUnitNo}
+	  </if>
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+ 		AND	C1.category_no  in ${params.multiCategoryNo}
+	  </if>
+    </if>
+  </sql>
+  <sql id="DeductionCondition" >
+    <if test="null!=params" >
+	  <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+    	AND	deduction_date &gt;= '${params.balanceStartDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+  		AND	deduction_date &lt;= '${params.balanceEndDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.salerNo and ''!=params.salerNo" >
+ 		AND	saler_no = #{params.salerNo}
+	  </if>
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+ 		AND	buyer_no = #{params.buyerNo}
+	  </if>
+	  <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+ 		AND	B1.`brand_unit_no` = #{params.brandUnitNo}
+	  </if>
+	  <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+ 		AND	category_no = #{params.categoryNo}
+	  </if>
+	  <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+ 		AND	saler_no in ${params.multiSalerNo}
+	  </if>
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+ 		AND	buyer_no in ${params.multiBuyerNo}
+	  </if>
+	  <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+ 		AND	B1.`brand_unit_no` in ${params.multiBrandUnitNo}
+	  </if>
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+ 		AND	category_no  in ${params.multiCategoryNo}
+	  </if>
+	  <if test="null!=params.gender and ''!=params.gender" >
+ 		AND	deduction_category IN ${params.gender}
+	  </if>
+	  <if test="null!=params.supplierGroupNo and ''!=params.supplierGroupNo" >
+        AND  EXISTS (SELECT 1 FROM supplier_group_rel sgr WHERE T.saler_no = sgr.supplier_no AND sgr.group_no IN ${params.supplierGroupNo})
+      </if>  
+    </if>
+  </sql>
+  <sql id="ReturnCondition" >
+    <if test="null!=params" >
+      <if test="null!=params.extendCategoryCondition and ''!=params.extendCategoryCondition" >
+        ${params.extendCategoryCondition}
+      </if>
+	  <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+    	AND	return_date &gt;= '${params.balanceStartDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+  		AND	return_date &lt;= '${params.balanceEndDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.salerNo and ''!=params.salerNo" >
+ 		AND	saler_no = #{params.salerNo}
+	  </if>
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+ 		AND	buyer_no = #{params.buyerNo}
+	  </if>
+	  <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+ 		AND	B1.`brand_unit_no` = #{params.brandUnitNo}
+	  </if>
+	  <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+ 		AND	C1.category_no = #{params.categoryNo}
+	  </if>
+	  <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+ 		AND	saler_no in ${params.multiSalerNo}
+	  </if>
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+ 		AND	buyer_no in ${params.multiBuyerNo}
+	  </if>
+	  <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+ 		AND	B1.`brand_unit_no` in ${params.multiBrandUnitNo}
+	  </if>
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+ 		AND	C1.category_no  in ${params.multiCategoryNo}
+	  </if>
+	  <if test="null!=params.twoLevelCategoryNo and ''!=params.twoLevelCategoryNo" >
+ 		AND	C2.`category_no` IN ${params.twoLevelCategoryNo}
+	  </if>
+	  <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+ 		AND	supplier_no IN ${params.supplierNo}
+	  </if>
+	  <if test="null!=params.gender and ''!=params.gender" >
+ 		AND	gender IN ${params.gender}
+	  </if>
+	  <if test="null!=params.years and ''!=params.years" >
+ 		AND	years IN ${params.years}
+	  </if>
+	  <if test="null!=params.supplierGroupNo and ''!=params.supplierGroupNo" >
+        AND  EXISTS (SELECT 1 FROM supplier_group_rel sgr WHERE T.saler_no = sgr.supplier_no AND sgr.group_no IN ${params.supplierGroupNo})
+      </if>  
+    </if>
+  </sql>
+  
+  <sql id="GatherQueryCondition" >
+    --	AND @brand_no 
+    <if test="null!=params" >
+      <if test="null!=params.balanceType and 1==params.balanceType" >
+         -- AND @company_no!buyer_no
+      </if> 
+      <if test="null!=params.balanceType and 2==params.balanceType" >
+      	 <if test="null!=params.isArea and 'true'==params.isArea" >
+         -- AND @company_no!buyer_no
+         </if>
+         <if test="null==params.isArea or ''==params.isArea" >
+         -- AND @company_no!saler_no
+         </if>
+      </if> 
+      <if test="null!=params.balanceType and 4==params.balanceType" >
+         -- AND @company_no!buyer_no
+      </if> 
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+    	AND	send_date &gt;= '${params.balanceStartDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+  		AND	send_date &lt;= '${params.balanceEndDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.salerNo and ''!=params.salerNo" >
+ 		AND	saler_no = #{params.salerNo}
+	  </if>
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+ 		AND	buyer_no = #{params.buyerNo}
+	  </if>
+	  <if test="null!=params.brandNo and ''!=params.brandNo" >
+ 		AND	brand_no = #{params.brandNo}
+	  </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+        AND C1.category_no = #{params.categoryNo}
+      </if>   
+	  <if test="null!=params.billType and ''!=params.billType" >
+ 		AND	bill_type = #{params.billType}
+	  </if>
+	  <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+ 		AND	saler_no in ${params.multiSalerNo}
+	  </if>
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+ 		AND	buyer_no in ${params.multiBuyerNo}
+	  </if>
+	  <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+ 		AND	brand_no in ${params.multiBrandNo}
+	  </if>
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+ 		AND	C1.`category_no`  in ${params.multiCategoryNo}
+	  </if>	  
+    </if>
+  </sql>
+  
+  <select id="selectAreaGatherCount" resultType="java.lang.Integer"  parameterType="map" >
+	SELECT COUNT(1) FROM (
+		SELECT 
+		  1
+		FROM
+		  (SELECT 
+		    B.id,
+		    B.bill_no,
+		    B.bill_type,
+		    B.original_bill_no,
+		    B.ref_bill_no,
+		    B.ref_bill_type,
+		    B.STATUS,
+		    B.buyer_no,
+		    B.buyer_name,
+		    B.send_date,
+		    B.receive_date,
+		    B.send_store_no,
+		    B.send_store_name,
+		    B.receive_store_no,
+		    B.receive_store_name,
+		    B.sku_id,
+		    B.sku_no,
+		    B.supplier_no,
+		    B.item_no,
+		    B.item_code,
+		    B.item_name,
+		    B.brand_no,
+		    B.brand_name,
+		    B.category_no,
+		    B.category_name,
+		    B.cost,
+		    B.bill_cost,
+		    B.tax_rate,
+		    B.exclusive_cost,
+		    B.order_no,
+		    B.is_split,
+		    B.supplier_name,
+		    B.order_unit_name,
+		    B.organ_name,
+		    B.zone_name,
+		    B.order_unit_name_from,
+		    B.organ_name_from,
+		    B.zone_name_from,
+		    IF(B.bill_type = 1333,B.send_qty,B.receive_qty) receive_qty,
+		    IF(B.bill_type = 1333,B.send_qty*B.cost,B.receive_qty*B.cost) receive_amount,
+		    B.saler_no,
+		    B.saler_name,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    BU.brand_unit_no,
+		    BU.name brand_unit_name 
+		  FROM
+		    bill_buy_balance B 
+		    LEFT JOIN category C1 
+		      ON LEFT(B.`category_no`, 2) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(B.`category_no`, 4) = C2.`category_no` 
+		    LEFT JOIN brand BR 
+		      ON BR.brand_no = B.brand_no 
+		    LEFT JOIN brand_unit BU 
+		      ON BU.brand_unit_no = BR.sys_no 
+		  WHERE 1 = 1 
+		  <include refid="AreaEnterCondition" />
+	    	AND B.bill_type IN (1304,1372,1333)
+		    AND B.saler_no IN (${params.zoneCompanyNo})
+		    AND B.buyer_no NOT IN (${params.zoneCompanyNo}) ) G 
+		  GROUP BY G.buyer_no,
+	      G.saler_no,
+	      G.brand_unit_no,
+	      G.one_level_category_no ) T
+  </select>
+  <select id="selectAreaGatherList" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+	  G.buyer_no,
+	  G.buyer_name,
+	  G.saler_no,
+	  G.saler_name,
+	  G.brand_unit_no,
+	  G.brand_unit_name,
+	  G.one_level_category_no category_no,
+	  G.one_level_category_name category_name,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1333 
+	      THEN IFNULL(receive_qty, 0) 
+	      ELSE 0 
+	    END
+	  ) return_qty,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1333 
+	      THEN IFNULL(receive_qty * cost, 0) 
+	      ELSE 0 
+	    END
+	  ) return_amount,
+	  SUM(
+	    CASE
+	      WHEN bill_type IN (1304, 1372) 
+	      THEN IFNULL(receive_qty, 0) 
+	      ELSE 0 
+	    END
+	  ) entry_qty,
+	  SUM(
+	    CASE
+	      WHEN bill_type IN (1304, 1372) 
+	      THEN IFNULL(receive_qty * cost, 0) 
+	      ELSE 0 
+	    END
+	  ) entry_amount,
+	  SUM(receive_qty * cost) balance_amount,
+	  SUM(receive_qty) balance_qty 
+	FROM
+	  (SELECT 
+		    B.id,
+		    B.bill_no,
+		    B.bill_type,
+		    B.original_bill_no,
+		    B.ref_bill_no,
+		    B.ref_bill_type,
+		    B.STATUS,
+		    B.buyer_no,
+		    B.buyer_name,
+		    B.send_date,
+		    B.receive_date,
+		    B.send_store_no,
+		    B.send_store_name,
+		    B.receive_store_no,
+		    B.receive_store_name,
+		    B.sku_id,
+		    B.sku_no,
+		    B.supplier_no,
+		    B.item_no,
+		    B.item_code,
+		    B.item_name,
+		    B.brand_no,
+		    B.brand_name,
+		    B.category_no,
+		    B.category_name,
+		    B.cost,
+		    B.bill_cost,
+		    B.tax_rate,
+		    B.exclusive_cost,
+		    B.order_no,
+		    B.is_split,
+		    B.supplier_name,
+		    B.order_unit_name,
+		    B.organ_name,
+		    B.zone_name,
+		    B.order_unit_name_from,
+		    B.organ_name_from,
+		    B.zone_name_from,
+		    IF(B.bill_type = 1333,B.send_qty,B.receive_qty) receive_qty,
+		    IF(B.bill_type = 1333,B.send_qty*B.cost,B.receive_qty*B.cost) receive_amount,
+		    B.saler_no,
+		    B.saler_name,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    BU.brand_unit_no,
+		    BU.name brand_unit_name 
+		  FROM
+		    bill_buy_balance B 
+		    LEFT JOIN category C1 
+		      ON LEFT(B.`category_no`, 2) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(B.`category_no`, 4) = C2.`category_no` 
+		    LEFT JOIN brand BR 
+		      ON BR.brand_no = B.brand_no 
+		    LEFT JOIN brand_unit BU 
+		      ON BU.brand_unit_no = BR.sys_no 
+		  WHERE 1 = 1 
+		  <include refid="AreaEnterCondition" />
+	    	AND B.bill_type IN (1304,1372,1333)
+		    AND B.saler_no IN (${params.zoneCompanyNo})
+		    AND B.buyer_no NOT IN (${params.zoneCompanyNo}) ) G 
+	  GROUP BY G.buyer_no,
+      G.saler_no,
+      G.brand_unit_no,
+      G.one_level_category_no 
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectAreaGatherFooter" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+	  '合计' buyer_name,	
+	  SUM(entry_qty) entry_qty,
+	  SUM(entry_amount) entry_amount,
+	  SUM(return_qty) return_qty,
+	  SUM(return_amount) return_amount,
+	  SUM(balance_qty) balance_qty,
+	  SUM(balance_amount) balance_amount 
+	FROM
+	  (SELECT 
+	  G.buyer_no,
+	  G.buyer_name,
+	  G.saler_no,
+	  G.saler_name,
+	  G.brand_unit_no,
+	  G.brand_unit_name,
+	  G.one_level_category_no category_no,
+	  G.one_level_category_name category_name,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1333 
+	      THEN IFNULL(receive_qty, 0) 
+	      ELSE 0 
+	    END
+	  ) return_qty,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1333 
+	      THEN IFNULL(receive_qty * cost, 0) 
+	      ELSE 0 
+	    END
+	  ) return_amount,
+	  SUM(
+	    CASE
+	      WHEN bill_type IN (1304, 1372) 
+	      THEN IFNULL(receive_qty, 0) 
+	      ELSE 0 
+	    END
+	  ) entry_qty,
+	  SUM(
+	    CASE
+	      WHEN bill_type IN (1304, 1372) 
+	      THEN IFNULL(receive_qty * cost, 0) 
+	      ELSE 0 
+	    END
+	  ) entry_amount,
+	  SUM(receive_qty * cost) balance_amount,
+	  SUM(receive_qty) balance_qty 
+	FROM
+	  (SELECT 
+		    B.id,
+		    B.bill_no,
+		    B.bill_type,
+		    B.original_bill_no,
+		    B.ref_bill_no,
+		    B.ref_bill_type,
+		    B.STATUS,
+		    B.buyer_no,
+		    B.buyer_name,
+		    B.send_date,
+		    B.receive_date,
+		    B.send_store_no,
+		    B.send_store_name,
+		    B.receive_store_no,
+		    B.receive_store_name,
+		    B.sku_id,
+		    B.sku_no,
+		    B.supplier_no,
+		    B.item_no,
+		    B.item_code,
+		    B.item_name,
+		    B.brand_no,
+		    B.brand_name,
+		    B.category_no,
+		    B.category_name,
+		    B.cost,
+		    B.bill_cost,
+		    B.tax_rate,
+		    B.exclusive_cost,
+		    B.order_no,
+		    B.is_split,
+		    B.supplier_name,
+		    B.order_unit_name,
+		    B.organ_name,
+		    B.zone_name,
+		    B.order_unit_name_from,
+		    B.organ_name_from,
+		    B.zone_name_from,
+		    IF(B.bill_type = 1333,B.send_qty,B.receive_qty) receive_qty,
+		    IF(B.bill_type = 1333,B.send_qty*B.cost,B.receive_qty*B.cost) receive_amount,
+		    B.saler_no,
+		    B.saler_name,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    BU.brand_unit_no,
+		    BU.name brand_unit_name 
+		  FROM
+		    bill_buy_balance B 
+		    LEFT JOIN category C1 
+		      ON LEFT(B.`category_no`, 2) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(B.`category_no`, 4) = C2.`category_no` 
+		    LEFT JOIN brand BR 
+		      ON BR.brand_no = B.brand_no 
+		    LEFT JOIN brand_unit BU 
+		      ON BU.brand_unit_no = BR.sys_no 
+		  WHERE 1 = 1 
+		  <include refid="AreaEnterCondition" />
+	    	AND B.bill_type IN (1304,1372,1333)
+		    AND B.saler_no IN (${params.zoneCompanyNo})
+		    AND B.buyer_no NOT IN (${params.zoneCompanyNo}) ) G 
+	  GROUP BY G.buyer_no,
+      G.saler_no,
+      G.brand_unit_no,
+      G.one_level_category_no ) T 
+  </select>
+  
+    <select id="selectHqBuyBalanceGatherCount" resultType="java.lang.Integer"  parameterType="map" >
+	SELECT COUNT(1) FROM (
+		SELECT 
+		  1
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    B1.brand_unit_no,
+		    B1.name brand_unit_name,
+		    C1.`category_no` category_no,
+		    C1.`name` category_name,
+		    (
+		      CASE
+		        WHEN bill_type = 1301 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    (
+		      CASE
+		        WHEN bill_type = 1301 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    (
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty,
+		    (
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    0 custom_return_qty,
+		    0 custom_return_amount,
+		    0 deduction_amount 
+		  FROM
+		    bill_buy_balance T 
+		    LEFT JOIN category C1 
+		      ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+		    LEFT JOIN brand B 
+		      ON T.`brand_no` = B.brand_no 
+		    LEFT JOIN brand_unit B1 
+		      ON B.sys_no = B1.brand_unit_no 
+		  WHERE 1 = 1 
+		    AND balance_no IN 
+		    (SELECT 
+		      bill_no 
+		    FROM
+		      bill_balance 
+		    WHERE 1 = 1 
+		      AND bill_balance.balance_type = 1
+		      <include refid="QueryCondition" />) 
+		    UNION
+		    ALL 
+		    SELECT 
+		      saler_no,
+		      saler_name,
+		      buyer_no,
+		      buyer_name,
+		      B1.brand_unit_no,
+		      B1.name brand_unit_name,
+		      category_no,
+		      category_name,
+		      0 out_qty,
+		      0 out_amount,
+		      0 return_qty,
+		      0 return_amount,
+		      0 custom_return_qty,
+		      0 custom_return_amount,
+		      deduction_amount 
+		    FROM
+		      other_deduction 
+		      LEFT JOIN brand B 
+		        ON other_deduction.`brand_no` = B.brand_no 
+		      LEFT JOIN brand_unit B1 
+		        ON B.sys_no = B1.brand_unit_no 
+		    WHERE 1 = 1 
+		      AND balance_no IN 
+		      (SELECT 
+		        bill_no 
+		      FROM
+		        bill_balance 
+		      WHERE 1 = 1 
+		        AND bill_balance.balance_type = 1
+		        <include refid="QueryCondition" />) 
+		      UNION
+		      ALL 
+		      SELECT 
+		        saler_no,
+		        saler_name,
+		        buyer_no,
+		        buyer_name,
+		        B1.brand_unit_no,
+		        B1.name brand_unit_name,
+		        C1.`category_no` category_no,
+		        C1.`name` category_name,
+		        0 out_qty,
+		        0 out_amount,
+		        0 return_qty,
+		        0 return_amount,
+		        qty custom_return_qty,
+		        amount custom_return_amount,
+		        0 deduction_amount 
+		      FROM
+		        custom_imperfect T 
+		        LEFT JOIN category C1 
+		          ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+		        LEFT JOIN brand B 
+		          ON T.`brand_no` = B.brand_no 
+		        LEFT JOIN brand_unit B1 
+		          ON B.sys_no = B1.brand_unit_no 
+		      WHERE 1 = 1 
+		        AND balance_no IN 
+		        (SELECT 
+		          bill_no 
+		        FROM
+		          bill_balance 
+		        WHERE 1 = 1 
+		          AND bill_balance.balance_type = 1
+		          <include refid="QueryCondition" />
+		          )) G 
+		    GROUP BY buyer_no,
+		      brand_unit_no,
+		      category_no,
+		      saler_no 
+		      ) T
+  </select>
+  
+  <select id="selectHqBuyBalanceGatherList" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+	  saler_no,
+	  saler_name,
+	  buyer_no,
+	  buyer_name,
+	  brand_unit_no,
+	  brand_unit_name,
+	  category_no,
+	  category_name,
+	  SUM(out_amount) out_amount,
+	  SUM(return_amount) return_amount,
+	  SUM(out_qty) out_qty,
+	  SUM(return_qty) return_qty,
+	  SUM(custom_return_qty) custom_return_qty,
+	  SUM(out_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+	  SUM(deduction_amount) deduction_amount,
+	  SUM(custom_return_amount) custom_return_amount,
+	  SUM(out_amount) + SUM(return_amount) - SUM(deduction_amount) - SUM(custom_return_amount) balance_amount 
+	FROM
+	  (SELECT 
+	    saler_no,
+	    saler_name,
+	    buyer_no,
+	    buyer_name,
+	    B1.brand_unit_no,
+	    B1.name brand_unit_name,
+	    C1.`category_no` category_no,
+	    C1.`name` category_name,
+	    (
+	      CASE
+	        WHEN bill_type != 1333 
+	        THEN IFNULL(send_qty, 0) 
+	        ELSE 0 
+	      END
+	    ) out_qty,
+	    (
+	      CASE
+	        WHEN bill_type != 1333 
+	        THEN IFNULL(send_qty * cost, 0) 
+	        ELSE 0 
+	      END
+	    ) out_amount,
+	    (
+	      CASE
+	        WHEN bill_type = 1333 
+	        THEN IFNULL(send_qty, 0) 
+	        ELSE 0 
+	      END
+	    ) return_qty,
+	    (
+	      CASE
+	        WHEN bill_type = 1333 
+	        THEN IFNULL(send_qty * cost, 0) 
+	        ELSE 0 
+	      END
+	    ) return_amount,
+	    0 custom_return_qty,
+	    0 custom_return_amount,
+	    0 deduction_amount 
+	  FROM
+	    bill_buy_balance T 
+	    LEFT JOIN category C1 
+	      ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+	    LEFT JOIN brand B 
+	      ON T.`brand_no` = B.brand_no 
+	    LEFT JOIN brand_unit B1 
+	      ON B.sys_no = B1.brand_unit_no 
+	  WHERE 1 = 1 
+	    AND balance_no IN 
+	    (SELECT 
+	      bill_no 
+	    FROM
+	      bill_balance 
+	    WHERE 1 = 1 
+	      AND bill_balance.balance_type = 1
+	      <include refid="QueryCondition" />) 
+	    UNION
+	    ALL 
+	    SELECT 
+	      saler_no,
+	      saler_name,
+	      buyer_no,
+	      buyer_name,
+	      B1.brand_unit_no,
+	      B1.name brand_unit_name,
+	      category_no,
+	      category_name,
+	      0 out_qty,
+	      0 out_amount,
+	      0 return_qty,
+	      0 return_amount,
+	      0 custom_return_qty,
+	      0 custom_return_amount,
+	      deduction_amount 
+	    FROM
+	      other_deduction 
+	      LEFT JOIN brand B 
+	        ON other_deduction.`brand_no` = B.brand_no 
+	      LEFT JOIN brand_unit B1 
+	        ON B.sys_no = B1.brand_unit_no 
+	    WHERE 1 = 1 
+	      AND balance_no IN 
+	      (SELECT 
+	        bill_no 
+	      FROM
+	        bill_balance 
+	      WHERE 1 = 1 
+	        AND bill_balance.balance_type = 1
+	        <include refid="QueryCondition" />) 
+	      UNION
+	      ALL 
+	      SELECT 
+	        saler_no,
+	        saler_name,
+	        buyer_no,
+	        buyer_name,
+	        B1.brand_unit_no,
+	        B1.name brand_unit_name,
+	        C1.`category_no` category_no,
+	        C1.`name` category_name,
+	        0 out_qty,
+	        0 out_amount,
+	        0 return_qty,
+	        0 return_amount,
+	        qty custom_return_qty,
+	        amount custom_return_amount,
+	        0 deduction_amount 
+	      FROM
+	        custom_imperfect T 
+	        LEFT JOIN category C1 
+	          ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+	        LEFT JOIN brand B 
+	          ON T.`brand_no` = B.brand_no 
+	        LEFT JOIN brand_unit B1 
+	          ON B.sys_no = B1.brand_unit_no 
+	      WHERE 1 = 1 
+	        AND balance_no IN 
+	        (SELECT 
+	          bill_no 
+	        FROM
+	          bill_balance 
+	        WHERE 1 = 1 
+	          AND bill_balance.balance_type = 1
+	          <include refid="QueryCondition" />
+	          )) G 
+	    GROUP BY buyer_no,
+	      brand_unit_no,
+	      category_no,
+	      saler_no 
+	    LIMIT #{page.startRowNum} ,#{page.pageSize}   
+  </select>
+  <select id="selectHqBuyBalanceGatherFooter" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+	  '合计' buyer_name,	
+	  SUM(out_qty) out_qty,
+	  SUM(out_amount) out_amount,
+	  SUM(return_qty)  return_qty,
+	  SUM(return_amount)  return_amount,
+	  SUM(custom_return_qty)  custom_return_qty,
+	  SUM(custom_return_amount)  custom_return_amount,
+	  SUM(deduction_amount)  deduction_amount,
+	  SUM(out_qty + return_qty - custom_return_qty)  balance_qty,
+	  SUM(out_amount + return_amount - custom_return_amount - deduction_amount)  balance_amount
+	FROM
+	  (SELECT 
+	  saler_no,
+	  saler_name,
+	  buyer_no,
+	  buyer_name,
+	  brand_unit_no,
+	  brand_unit_name,
+	  category_no,
+	  category_name,
+	  SUM(out_amount) out_amount,
+	  SUM(return_amount) return_amount,
+	  SUM(out_qty) out_qty,
+	  SUM(return_qty) return_qty,
+	  SUM(custom_return_qty) custom_return_qty,
+	  SUM(out_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+	  SUM(deduction_amount) deduction_amount,
+	  SUM(custom_return_amount) custom_return_amount,
+	  SUM(out_amount) + SUM(return_amount) - SUM(deduction_amount) - SUM(custom_return_amount) balance_amount 
+	FROM
+	  (SELECT 
+	    saler_no,
+	    saler_name,
+	    buyer_no,
+	    buyer_name,
+	    B1.brand_unit_no,
+	    B1.name brand_unit_name,
+	    C1.`category_no` category_no,
+	    C1.`name` category_name,
+	    (
+	      CASE
+	        WHEN bill_type != 1333 
+	        THEN IFNULL(send_qty, 0) 
+	        ELSE 0 
+	      END
+	    ) out_qty,
+	    (
+	      CASE
+	        WHEN bill_type != 1333  
+	        THEN IFNULL(send_qty * cost, 0) 
+	        ELSE 0 
+	      END
+	    ) out_amount,
+	    (
+	      CASE
+	        WHEN bill_type = 1333 
+	        THEN IFNULL(send_qty, 0) 
+	        ELSE 0 
+	      END
+	    ) return_qty,
+	    (
+	      CASE
+	        WHEN bill_type = 1333 
+	        THEN IFNULL(send_qty * cost, 0) 
+	        ELSE 0 
+	      END
+	    ) return_amount,
+	    0 custom_return_qty,
+	    0 custom_return_amount,
+	    0 deduction_amount 
+	  FROM
+	    bill_buy_balance T 
+	    LEFT JOIN category C1 
+	      ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+	    LEFT JOIN brand B 
+	      ON T.`brand_no` = B.brand_no 
+	    LEFT JOIN brand_unit B1 
+	      ON B.sys_no = B1.brand_unit_no 
+	  WHERE 1 = 1 
+	    AND balance_no IN 
+	    (SELECT 
+	      bill_no 
+	    FROM
+	      bill_balance 
+	    WHERE 1 = 1 
+	      AND bill_balance.balance_type = 1
+	      <include refid="QueryCondition" />) 
+	    UNION
+	    ALL 
+	    SELECT 
+	      saler_no,
+	      saler_name,
+	      buyer_no,
+	      buyer_name,
+	      B1.brand_unit_no,
+	      B1.name brand_unit_name,
+	      category_no,
+	      category_name,
+	      0 out_qty,
+	      0 out_amount,
+	      0 return_qty,
+	      0 return_amount,
+	      0 custom_return_qty,
+	      0 custom_return_amount,
+	      deduction_amount 
+	    FROM
+	      other_deduction 
+	      LEFT JOIN brand B 
+	        ON other_deduction.`brand_no` = B.brand_no 
+	      LEFT JOIN brand_unit B1 
+	        ON B.sys_no = B1.brand_unit_no 
+	    WHERE 1 = 1 
+	      AND balance_no IN 
+	      (SELECT 
+	        bill_no 
+	      FROM
+	        bill_balance 
+	      WHERE 1 = 1 
+	        AND bill_balance.balance_type = 1
+	        <include refid="QueryCondition" />) 
+	      UNION
+	      ALL 
+	      SELECT 
+	        saler_no,
+	        saler_name,
+	        buyer_no,
+	        buyer_name,
+	        B1.brand_unit_no,
+	        B1.name brand_unit_name,
+	        C1.`category_no` category_no,
+	        C1.`name` category_name,
+	        0 out_qty,
+	        0 out_amount,
+	        0 return_qty,
+	        0 return_amount,
+	        qty custom_return_qty,
+	        amount custom_return_amount,
+	        0 deduction_amount 
+	      FROM
+	        custom_imperfect T 
+	        LEFT JOIN category C1 
+	          ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+	        LEFT JOIN brand B 
+	          ON T.`brand_no` = B.brand_no 
+	        LEFT JOIN brand_unit B1 
+	          ON B.sys_no = B1.brand_unit_no 
+	      WHERE 1 = 1 
+	        AND balance_no IN 
+	        (SELECT 
+	          bill_no 
+	        FROM
+	          bill_balance 
+	        WHERE 1 = 1 
+	          AND bill_balance.balance_type = 1
+	          <include refid="QueryCondition" />
+	          )) G 
+	    GROUP BY buyer_no,
+	      brand_unit_no,
+	      category_no,
+	      saler_no  ) T
+  </select>
+  <select id="selectHqSaleBalanceGatherCount" resultType="java.lang.Integer"  parameterType="map" >
+   	SELECT 
+	  COUNT(1) 
+	FROM
+	  (
+	SELECT 
+	  1
+	FROM
+	  (SELECT 
+	    saler_no,
+	    saler_name,
+	    buyer_no,
+	    buyer_name,
+	    B1.brand_unit_no,
+	    B1.name brand_unit_name,
+	    C1.`category_no` category_no,
+	    C1.`name` category_name,
+	    (
+	      CASE
+	        WHEN bill_type != 1333 
+	        THEN IFNULL(send_qty, 0) 
+	        ELSE 0 
+	      END
+	    ) out_qty,
+	    (
+	      CASE
+	        WHEN bill_type != 1333  
+	        THEN IFNULL(send_qty * cost, 0) 
+	        ELSE 0 
+	      END
+	    ) out_amount,
+	    (
+	      CASE
+	        WHEN bill_type = 1333 
+	        THEN IFNULL(send_qty, 0) 
+	        ELSE 0 
+	      END
+	    ) return_qty,
+	    (
+	      CASE
+	        WHEN bill_type = 1333 
+	        THEN IFNULL(send_qty * cost, 0) 
+	        ELSE 0 
+	      END
+	    ) return_amount,
+	    0 custom_return_qty,
+	    0 custom_return_amount,
+	    0 deduction_amount 
+	  FROM
+	    bill_sale_balance T 
+	    LEFT JOIN category C1 
+	      ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+	    LEFT JOIN brand B 
+	      ON T.`brand_no` = B.brand_no 
+	    LEFT JOIN brand_unit B1 
+	      ON B.sys_no = B1.brand_unit_no 
+	  WHERE 1 = 1 
+	    AND balance_no IN 
+	    (SELECT 
+	      bill_no 
+	    FROM
+	      bill_balance 
+	    WHERE 1 = 1 
+	      AND bill_balance.balance_type = 2
+	      <include refid="QueryCondition" />) 
+	    UNION
+	    ALL 
+	    SELECT 
+	      saler_no,
+	      saler_name,
+	      buyer_no,
+	      buyer_name,
+	      B1.brand_unit_no,
+	      B1.name brand_unit_name,
+	      category_no,
+	      category_name,
+	      0 out_qty,
+	      0 out_amount,
+	      0 return_qty,
+	      0 return_amount,
+	      0 custom_return_qty,
+	      0 custom_return_amount,
+	      deduction_amount 
+	    FROM
+	      other_deduction 
+	      LEFT JOIN brand B 
+	        ON other_deduction.`brand_no` = B.brand_no 
+	      LEFT JOIN brand_unit B1 
+	        ON B.sys_no = B1.brand_unit_no 
+	    WHERE 1 = 1 
+	      AND balance_no IN 
+	      (SELECT 
+	        bill_no 
+	      FROM
+	        bill_balance 
+	      WHERE 1 = 1 
+	        AND bill_balance.balance_type = 2
+	        <include refid="QueryCondition" />) 
+	     ) G 
+	    GROUP BY buyer_no,
+	      brand_unit_no,
+	      category_no,
+	      saler_no ) T 
+	    
+	    
+  </select>
+  <select id="selectHqSaleBalanceGatherList" resultMap="BaseResultMap" parameterType="map" >
+	  	SELECT 
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name,
+		  brand_unit_no,
+		  brand_unit_name,
+		  category_no,
+		  category_name,
+		  SUM(out_amount) out_amount,
+		  SUM(return_amount) return_amount,
+		  SUM(out_qty) out_qty,
+		  SUM(return_qty) return_qty,
+		  SUM(custom_return_qty) custom_return_qty,
+		  SUM(out_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+		  SUM(deduction_qty) deduction_qty,
+		  SUM(deduction_amount) deduction_amount,
+		  SUM(custom_return_amount) custom_return_amount,
+		  SUM(out_amount) + SUM(return_amount) - SUM(deduction_amount) - SUM(custom_return_amount) balance_amount 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    B1.brand_unit_no,
+		    B1.name brand_unit_name,
+		    C1.`category_no` category_no,
+		    C1.`name` category_name,
+		    (
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    (
+		      CASE
+		        WHEN bill_type != 1333  
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    (
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty,
+		    (
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    0 custom_return_qty,
+		    0 custom_return_amount,
+		    0 deduction_qty,
+		    0 deduction_amount 
+		  FROM
+		    bill_sale_balance T 
+		    LEFT JOIN category C1 
+		      ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+		    LEFT JOIN brand B 
+		      ON T.`brand_no` = B.brand_no 
+		    LEFT JOIN brand_unit B1 
+		      ON B.sys_no = B1.brand_unit_no 
+		  WHERE 1 = 1 
+		    AND balance_no IN 
+		    (SELECT 
+		      bill_no 
+		    FROM
+		      bill_balance 
+		    WHERE 1 = 1 
+		      AND bill_balance.balance_type = 2
+		      <include refid="QueryCondition" />) 
+		    UNION
+		    ALL 
+		    SELECT 
+		      saler_no,
+		      saler_name,
+		      buyer_no,
+		      buyer_name,
+		      B1.brand_unit_no,
+		      B1.name brand_unit_name,
+		      category_no,
+		      category_name,
+		      0 out_qty,
+		      0 out_amount,
+		      0 return_qty,
+		      0 return_amount,
+		      0 custom_return_qty,
+		      0 custom_return_amount,
+		      deduction_qty,
+		      deduction_amount 
+		    FROM
+		      other_deduction 
+		      LEFT JOIN brand B 
+		        ON other_deduction.`brand_no` = B.brand_no 
+		      LEFT JOIN brand_unit B1 
+		        ON B.sys_no = B1.brand_unit_no 
+		    WHERE 1 = 1 
+		      AND balance_no IN 
+		      (SELECT 
+		        bill_no 
+		      FROM
+		        bill_balance 
+		      WHERE 1 = 1 
+		        AND bill_balance.balance_type = 2
+		        <include refid="QueryCondition" />) 
+		     ) G 
+		    GROUP BY buyer_no,
+		      brand_unit_no,
+		      category_no,
+		      saler_no 
+			LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectHqSaleBalanceGatherFooter" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+	  '合计' saler_name,	
+	  SUM(out_qty) out_qty,
+	  SUM(out_amount) out_amount,
+	  SUM(return_qty) return_qty,
+	  SUM(return_amount) return_amount,
+	  SUM(deduction_qty) deduction_qty,
+	  SUM(deduction_amount) deduction_amount,
+	  SUM(out_qty + return_qty -deduction_qty) balance_qty,
+	  SUM(out_amount + return_amount - deduction_amount) balance_amount
+	  FROM ( 
+	  	SELECT 
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name,
+		  brand_unit_no,
+		  brand_unit_name,
+		  category_no,
+		  category_name,
+		  SUM(out_amount) out_amount,
+		  SUM(return_amount) return_amount,
+		  SUM(out_qty) out_qty,
+		  SUM(return_qty) return_qty,
+		  SUM(custom_return_qty) custom_return_qty,
+		  SUM(out_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+		  SUM(deduction_qty) deduction_qty,
+		  SUM(deduction_amount) deduction_amount,
+		  SUM(custom_return_amount) custom_return_amount,
+		  SUM(out_amount) + SUM(return_amount) - SUM(deduction_amount) - SUM(custom_return_amount) balance_amount 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    B1.brand_unit_no,
+		    B1.name brand_unit_name,
+		    C1.`category_no` category_no,
+		    C1.`name` category_name,
+		    (
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    (
+		      CASE
+		        WHEN bill_type != 1333  
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    (
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty,
+		    (
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    0 custom_return_qty,
+		    0 custom_return_amount,
+		    0 deduction_qty,
+		    0 deduction_amount 
+		  FROM
+		    bill_sale_balance T 
+		    LEFT JOIN category C1 
+		      ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+		    LEFT JOIN brand B 
+		      ON T.`brand_no` = B.brand_no 
+		    LEFT JOIN brand_unit B1 
+		      ON B.sys_no = B1.brand_unit_no 
+		  WHERE 1 = 1 
+		    AND balance_no IN 
+		    (SELECT 
+		      bill_no 
+		    FROM
+		      bill_balance 
+		    WHERE 1 = 1 
+		      AND bill_balance.balance_type = 2
+		      <include refid="QueryCondition" />) 
+		    UNION
+		    ALL 
+		    SELECT 
+		      saler_no,
+		      saler_name,
+		      buyer_no,
+		      buyer_name,
+		      B1.brand_unit_no,
+		      B1.name brand_unit_name,
+		      category_no,
+		      category_name,
+		      0 out_qty,
+		      0 out_amount,
+		      0 return_qty,
+		      0 return_amount,
+		      0 custom_return_qty,
+		      0 custom_return_amount,
+		      deduction_qty,
+		      deduction_amount 
+		    FROM
+		      other_deduction 
+		      LEFT JOIN brand B 
+		        ON other_deduction.`brand_no` = B.brand_no 
+		      LEFT JOIN brand_unit B1 
+		        ON B.sys_no = B1.brand_unit_no 
+		    WHERE 1 = 1 
+		      AND balance_no IN 
+		      (SELECT 
+		        bill_no 
+		      FROM
+		        bill_balance 
+		      WHERE 1 = 1 
+		        AND bill_balance.balance_type = 2
+		        <include refid="QueryCondition" />) 
+		     ) G 
+		    GROUP BY buyer_no,
+		      brand_unit_no,
+		      category_no,
+		      saler_no  )G  
+  </select>
+  <resultMap id="BalanceMap" type="cn.wonhigh.retail.fas.common.model.BillBalance" >
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="entry_amount" property="entryAmount" jdbcType="DECIMAL" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="custom_return_amount" property="customReturnAmount" jdbcType="DECIMAL" />
+    <result column="out_amount" property="outAmount" jdbcType="DECIMAL" />
+    <result column="entry_qty" property="entryQty" jdbcType="INTEGER" />
+    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+    <result column="custom_return_qty" property="customReturnQty" jdbcType="INTEGER" />
+    <result column="out_qty" property="outQty" jdbcType="INTEGER" />
+    <result column="deduction_qty" property="deductionQty" jdbcType="INTEGER" />
+    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <select id="selectHqBuyGather" resultMap="BalanceMap" parameterType="map" >
+	SELECT 
+	  saler_no,
+	  saler_name,
+	  buyer_no,
+	  buyer_name,
+	  brand_unit_no,
+	  brand_unit_name,
+	  category_no,
+	  category_name,
+	  SUM(out_amount) out_amount,
+	  SUM(return_amount) return_amount,
+	  SUM(out_qty) out_qty,
+	  SUM(return_qty) return_qty,
+	  SUM(custom_return_qty) custom_return_qty,
+	  SUM(out_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+	  SUM(deduction_amount) deduction_amount,
+	  SUM(custom_return_amount) custom_return_amount,
+	  SUM(out_amount) + SUM(return_amount) - SUM(deduction_amount) - SUM(custom_return_amount) balance_amount 
+	FROM
+	  (SELECT 
+	    saler_no,
+	    saler_name,
+	    buyer_no,
+	    buyer_name,
+	    brand_unit_no,
+	    brand_unit_name,
+	    C1.`category_no` category_no,
+	    C1.`name` category_name,
+	    (
+	      CASE
+	        WHEN bill_type != 1333  
+	        THEN IFNULL(send_qty, 0) 
+	        ELSE 0 
+	      END
+	    ) out_qty,
+	    (
+	      CASE
+	        WHEN bill_type != 1333 
+	        THEN IFNULL(send_qty * cost, 0) 
+	        ELSE 0 
+	      END
+	    ) out_amount,
+	    (
+	      CASE
+	        WHEN bill_type = 1333 
+	        THEN IFNULL(send_qty, 0) 
+	        ELSE 0 
+	      END
+	    ) return_qty,
+	    (
+	      CASE
+	        WHEN bill_type = 1333 
+	        THEN IFNULL(send_qty * cost, 0) 
+	        ELSE 0 
+	      END
+	    ) return_amount,
+	    0 custom_return_qty,
+	    0 custom_return_amount,
+	    0 deduction_amount 
+	  FROM
+	    bill_buy_balance T 
+	    INNER JOIN category C1 
+	      ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+	    INNER JOIN category C2 
+	      ON LEFT(T.`category_no`, 4) = C2.`category_no`  
+	  WHERE 1 = 1 
+	    -- AND @T.brand_no
+	    AND (balance_no IS NULL OR balance_no = '') 
+	    <include refid="BalanceCondition" />
+	  UNION
+	  ALL 
+	  SELECT 
+	    saler_no,
+	    saler_name,
+	    buyer_no,
+	    buyer_name,
+	    B1.brand_unit_no,
+	    B1.name brand_unit_name,
+	    category_no,
+	    category_name,
+	    0 out_qty,
+	    0 out_amount,
+	    0 return_qty,
+	    0 return_amount,
+	    0 custom_return_qty,
+	    0 custom_return_amount,
+	    deduction_amount 
+	  FROM
+	    other_deduction T
+	    INNER JOIN brand B 
+	      ON T.`brand_no` = B.brand_no 
+	    INNER JOIN brand_unit B1 
+	      ON B.sys_no = B1.brand_unit_no 
+	  WHERE 1 = 1 
+	      -- AND @B.brand_no
+	      AND (balance_no IS NULL OR balance_no = '') 
+	      AND balance_type = 1
+	      <include refid="DeductionCondition" />
+	  UNION
+	  ALL 
+	  SELECT 
+	    saler_no,
+	    saler_name,
+	    buyer_no,
+	    buyer_name,
+	    B1.brand_unit_no,
+	    B1.name brand_unit_name,
+	    C1.`category_no` category_no,
+	    C1.`name` category_name,
+	    0 out_qty,
+	    0 out_amount,
+	    0 return_qty,
+	    0 return_amount,
+	    qty custom_return_qty,
+	    amount custom_return_amount,
+	    0 deduction_amount 
+	  FROM
+	    custom_imperfect T 
+	    INNER JOIN category C1 
+	      ON LEFT(T.`category_no`, 2) = C1.`category_no` 
+	    INNER JOIN category C2 
+	      ON LEFT(T.`category_no`, 4) = C2.`category_no`  
+	    INNER JOIN brand B 
+	      ON T.`brand_no` = B.brand_no 
+	    INNER JOIN brand_unit B1 
+	      ON B.sys_no = B1.brand_unit_no 
+	  WHERE 1 = 1 
+	  	  -- AND @B.brand_no
+	      AND (balance_no IS NULL OR balance_no = '') 
+	      AND balance_type = 1
+	      <include refid="ReturnCondition" />) G 
+		GROUP BY saler_no,
+		  buyer_no,
+		  brand_unit_no,
+		  category_no 
+  </select>  
+  
+  <select id="selectHqSaleGather" resultMap="BalanceMap" parameterType="map" >
+  	SELECT 
+	  T1.saler_no,
+	  T1.saler_name,
+	  T1.buyer_no,
+	  T1.buyer_name,
+	  <if test="null!=params.splitBrandUnit and 'false'!=params.splitBrandUnit" >
+		  T1.brand_unit_no,
+		  T1.brand_unit_name,
+      </if>
+	  <if test="null!=params.splitCategory and 'false'!=params.splitCategory" >
+		  T1.category_no,
+		  T1.category_name,
+	  </if>
+	  T1.out_amount,
+	  T1.entry_amount,
+	  T1.return_amount,
+	  T1.out_qty,
+	  T1.entry_qty,
+	  T1.return_qty,
+	  T1.out_qty +  T1.return_qty balance_qty,
+	  T1.custom_return_amount,
+	  T1.out_amount + T1.return_amount - T1.custom_return_amount balance_amount 
+	FROM
+	  (
+	  SELECT 
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name,
+		  brand_unit_no,
+		  brand_unit_name,
+		  category_no,
+		  category_name,
+		  SUM(out_amount) out_amount,
+		  SUM(entry_amount) entry_amount,
+		  SUM(return_amount) return_amount,
+		  SUM(out_qty) out_qty,
+		  SUM(entry_qty) entry_qty,
+		  SUM(return_qty) return_qty,
+		  SUM(custom_return_amount) custom_return_amount
+ 		 FROM (
+		SELECT 
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name,
+	      brand_unit_no,
+		  brand_unit_name,
+		  C1.`category_no` category_no,
+		  C1.`name` category_name,
+		  SUM(
+		    CASE
+		      WHEN bill_type in (1301,1371)
+		      THEN IFNULL(send_qty, 0) 
+		      ELSE 0 
+		    END
+		  ) out_qty,
+		  SUM(
+		    CASE
+		      WHEN bill_type in (1301,1371)
+		      THEN IFNULL(send_qty * cost, 0) 
+		      ELSE 0 
+		    END
+		  ) out_amount,
+		  SUM(
+		    CASE
+		      WHEN bill_type in (1301,1371)
+		      THEN IFNULL(receive_qty, 0) 
+		      ELSE 0 
+		    END
+		  ) entry_qty,
+		  SUM(
+		    CASE
+		      WHEN bill_type in (1301,1371)
+		      THEN IFNULL(receive_qty * cost, 0) 
+		      ELSE 0 
+		    END
+		  ) entry_amount,
+		  SUM(
+		    CASE
+		      WHEN bill_type = 1333 
+		      THEN IFNULL(send_qty, 0) 
+		      ELSE 0 
+		    END
+		  ) return_qty,
+		  SUM(
+		    CASE
+		      WHEN bill_type = 1333 
+		      THEN IFNULL(send_qty * cost, 0) 
+		      ELSE 0 
+		    END
+		  ) return_amount,
+		  0 custom_return_amount
+		FROM
+		  bill_sale_balance T
+	  	INNER JOIN category C1 
+	      ON LEFT(T.`category_no`, 2) = C1.`category_no`
+	    INNER JOIN category C2 
+		  ON LEFT(T.`category_no`, 4) = C2.`category_no`    
+		WHERE 1 = 1 
+		 -- AND @T.brand_no
+		 AND (balance_no IS NULL OR balance_no = '') 
+		 <include refid="BalanceCondition" />
+		  GROUP BY saler_no, buyer_no
+		   <if test="null!=params.splitBrandUnit and 'false'!=params.splitBrandUnit" >
+	         ,brand_unit_no
+	       </if>
+	       <if test="null!=params.splitCategory and 'false'!=params.splitCategory" >
+	       	 ,C1.category_no
+	  	   </if>
+		   
+		  UNION ALL
+		  SELECT 
+		    T.saler_no,
+		    T.saler_name,
+		    T.buyer_no,
+		    T.buyer_name,
+	        BU.brand_unit_no,
+		    BU.name brand_unit_name,
+		    C1.`category_no` category_no,
+		    C1.`name` category_name,
+		    0 out_qty,
+		    0 out_amount,
+		    0 entry_qty,
+		    0 entry_amount,
+		    0 return_qty,
+		    0 return_amount,
+		    SUM(DTL.amount) custom_return_amount
+		  FROM
+		    bill_purchase_adjust T 
+		    INNER JOIN bill_purchase_adjust_dtl DTL
+		    ON T.bill_no = DTL.bill_no
+		  	INNER JOIN category C1 
+		      ON LEFT(DTL.`category_no`, 2) = C1.`category_no`
+		    INNER JOIN category C2 
+			  ON LEFT(DTL.`category_no`, 4) = C2.`category_no` 
+			INNER JOIN brand B 
+		      ON B.brand_no = DTL.brand_no
+		    INNER JOIN brand_unit BU 
+		      ON B.sys_no = BU.brand_unit_no
+		  WHERE 1 = 1 
+		  	  <include refid="PurchaseAdjustCondition" />
+	  	  	  AND T.status = 1
+		      AND (DTL.area_balance_no IS NULL OR DTL.area_balance_no = '') 
+			  GROUP BY T.saler_no, T.buyer_no
+			   <if test="null!=params.splitBrandUnit and 'false'!=params.splitBrandUnit" >
+		         ,BU.brand_unit_no 
+		       </if>
+		       <if test="null!=params.splitCategory and 'false'!=params.splitCategory" >
+		       	 ,C1.category_no
+		  	   </if>) G 
+		  GROUP BY saler_no, buyer_no
+		   <if test="null!=params.splitBrandUnit and 'false'!=params.splitBrandUnit" >
+	         ,brand_unit_no
+	       </if>
+	      <if test="null!=params.splitCategory and 'false'!=params.splitCategory" >
+		     ,category_no
+		  </if>
+	  ) T1
+  </select>  
+    
+ <resultMap id="ExtendsResultMap" type="cn.wonhigh.retail.fas.common.model.BillBalance" >
+    <result column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_name" property="billName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="balance_date" property="balanceDate" jdbcType="DATE" />
+    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="out_amount" property="outAmount" jdbcType="DECIMAL" />
+    <result column="entry_amount" property="entryAmount" jdbcType="DECIMAL" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="supplier_amount" property="supplierAmount" jdbcType="DECIMAL" />
+    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+    <result column="invoice_amount" property="invoiceAmount" jdbcType="DECIMAL" />
+    <result column="has_balance_amount" property="hasBalanceAmount" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="out_qty" property="outQty" jdbcType="INTEGER" />
+    <result column="entry_qty" property="entryQty" jdbcType="INTEGER" />
+    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+    <result column="deduction_qty" property="deductionQty" jdbcType="INTEGER" />
+    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+    <result column="ask_payment_no" property="askPaymentNo" jdbcType="VARCHAR" />
+    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="VARCHAR" />
+    <result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+    <result column="is_user_defined" property="isUserDefined" jdbcType="INTEGER" />
+    <result column="extend_status" property="extendStatus" jdbcType="TINYINT" />
+    <result column="custom_return_qty" property="customReturnQty" jdbcType="INTEGER" />
+    <result column="custom_return_amount" property="customReturnAmount" jdbcType="DECIMAL" />
+    <result column="extend_category_no" property="extendCategoryNo" jdbcType="VARCHAR" />
+    <result column="extend_category_name" property="extendCategoryName" jdbcType="VARCHAR" />
+    <result column="currency_code" property="currencyCode" jdbcType="VARCHAR" />
+    <result column="currency_name" property="currencyName" jdbcType="VARCHAR" />
+    <result column="standard_currency_code" property="standardCurrencyCode" jdbcType="VARCHAR" />
+    <result column="standard_currency_name" property="standardCurrencyName" jdbcType="VARCHAR" />
+    <result column="standard_amount" property="standardAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  
+    <sql id="QueryCondition" >
+    <if test="null!=params" >
+      <if test="null!=params.balanceType and 1==params.balanceType" >
+     	  AND brand_unit_no in (SELECT sys_no FROM brand WHERE 1=1 -- AND @brand_no)
+      </if>
+      <if test="null!=params.balanceType and 2==params.balanceType" >
+         <if test="null!=params.isArea and 'true'==params.isArea" >
+         -- AND @company_no!buyer_no
+         </if>
+         <if test="null==params.isArea or ''==params.isArea" >
+         -- AND @company_no!saler_no
+         </if>
+      </if>
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceType and ''!=params.balanceType" >
+       AND balance_type = #{params.balanceType}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+       AND status = #{params.status}
+      </if>
+      <if test="null!=params.extendStatus and ''!=params.extendStatus" >
+       AND extend_status = #{params.extendStatus}
+      </if>
+      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+       AND buyer_no = #{params.buyerNo}
+      </if>
+      <if test="null!=params.salerNo and ''!=params.salerNo" >
+       AND saler_no = #{params.salerNo}
+      </if>
+      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+       AND brand_unit_no = #{params.brandUnitNo}
+      </if>
+      <if test="null!=params.createUser and ''!=params.createUser" >
+        AND create_user = #{params.createUser}
+      </if>  
+      <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+        AND balance_start_date &gt;= '${params.balanceStartDate} 00:00:00'
+      </if>  
+       <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+        AND balance_end_date &lt;= '${params.balanceEndDate} 23:59:59'
+      </if>  
+       <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+        AND create_time &gt;= '${params.createTimeStart} 00:00:00'
+      </if>  
+       <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+        AND create_time &lt;= '${params.createTimeEnd} 23:59:59'
+      </if>  
+      <if test="null!=params.auditor and ''!=params.auditor" >
+        AND auditor = #{params.auditor}
+      </if>  
+       <if test="null!=params.auditTimeStart and ''!=params.auditTimeStart" >
+        AND audit_time &gt;= '${params.auditTimeStart} 00:00:00'
+      </if>  
+       <if test="null!=params.auditTimeEnd and ''!=params.auditTimeEnd" >
+        AND audit_time &lt;= '${params.auditTimeEnd}  23:59:59'
+      </if>  
+      <if test="null!=params.askPaymentNo and ''!=params.askPaymentNo ">
+        AND ask_payment_no = #{params.askPaymentNo}
+      </if> 
+      <if test="null!=params.billNo and ''!=params.billNo ">
+        AND bill_no = #{params.billNo}
+      </if> 
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND saler_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no in ${params.multiBuyerNo}
+      </if>  
+      <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+        AND brand_unit_no in ${params.multiBrandUnitNo}
+      </if>    
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND category_no in ${params.multiCategoryNo}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectBalanceCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_balance WHERE 1=1 
+    <include refid="QueryCondition" />
+  </select>
+  <select id="selectBalanceByPage" resultMap="ExtendsResultMap" parameterType="map" >
+    SELECT 
+	    id, bill_no, bill_name, extend_status, status, balance_type, buyer_no, buyer_name, saler_no, saler_name, 
+	    brand_no, brand_name,brand_unit_no, brand_unit_name, category_no,category_name,
+	    balance_start_date, balance_date, balance_end_date, currency, out_amount, extend_category_no,extend_category_name,
+	    entry_amount, return_amount, custom_return_amount, deduction_amount, balance_amount, invoice_amount, has_balance_amount, 
+	    create_user, create_time, update_user, update_time, auditor, audit_time, remark, supplier_amount,
+	    out_qty, entry_qty, return_qty, custom_return_qty, deduction_qty, balance_qty, ask_payment_no, invoice_apply_no, invoice_no, is_user_defined
+     FROM bill_balance WHERE 1=1 
+    <include refid="QueryCondition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField" >
+      ORDER BY create_time DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectBalanceFooter" resultMap="ExtendsResultMap" parameterType="map" >
+	SELECT 
+	  '合计' brand_unit_name,
+	  SUM(out_amount) out_amount,
+	  SUM(entry_amount) entry_amount,
+	  SUM(return_amount) return_amount,
+	  SUM(custom_return_amount) custom_return_amount,
+	  SUM(deduction_amount) deduction_amount,
+	  SUM(balance_amount) balance_amount,
+	  SUM(out_qty) out_qty,
+	  SUM(entry_qty) entry_qty,
+	  SUM(return_qty) return_qty,
+	  SUM(custom_return_qty) custom_return_qty,
+	  SUM(deduction_qty) deduction_qty,
+	  SUM(balance_qty) balance_qty 
+	FROM
+	  bill_balance 
+	WHERE 1 = 1 
+    <include refid="QueryCondition" />
+  </select>
+  <resultMap id="ItemBuyGatherMap" type="cn.wonhigh.retail.fas.common.model.BillBuyBalance" >
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="years_name" property="years" jdbcType="CHAR" />
+    <result column="gender_name" property="genderName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="difference_qty" property="differenceQty" jdbcType="INTEGER" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="difference_amount" property="differenceAmount" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="CHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="CHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+  </resultMap>
+  <select id="selectBuyItemGatherCount" resultType="java.lang.Integer"  parameterType="map" >
+    SELECT 
+	  COUNT(1) 
+	FROM
+	  (SELECT 
+	    1 
+	  FROM
+	    bill_buy_balance 
+	  WHERE 1 = 1 
+	  AND balance_no = #{params.balanceNo}
+	  GROUP BY item_no,
+	    organ_no
+	    UNION
+		ALL 
+		SELECT 
+		 1
+		FROM
+		  other_deduction 
+		WHERE 1 = 1 
+	 	AND balance_no = #{params.balanceNo} 
+	 	UNION
+		ALL 
+		SELECT 
+		 1
+		FROM
+		  custom_imperfect 
+		WHERE 1 = 1 
+	 	AND balance_no = #{params.balanceNo} 
+	    ) T 
+  </select>
+  
+  <select id="selectBuyItemGatherList" resultMap="ItemBuyGatherMap"  parameterType="map" >
+    SELECT 
+	  organ_no,
+	  organ_name,
+	  supplier_no,
+	  supplier_name,
+	  item_no,
+	  item_code,
+	  item_name,
+	  brand_no,
+	  brand_name,
+	  t1.name years_name,
+	  t2.name gender_name,
+	  IFNULL(ROUND(AVG(cost), 2), 0) cost,
+	  IFNULL(SUM(send_qty), 0) send_qty,
+	  IFNULL(SUM(receive_qty), 0) receive_qty,
+	  IFNULL(SUM(send_qty), 0) - IFNULL(SUM(receive_qty), 0) difference_qty,
+	  ROUND(IFNULL(SUM(send_qty * cost), 0), 2) send_amount,
+	  ROUND(IFNULL(SUM(receive_qty * cost), 0), 2) receive_amount,
+	  ROUND(IFNULL(SUM(send_qty * cost), 0) - IFNULL(SUM(receive_qty * cost), 0), 2) difference_amount,
+	  C1.category_no one_level_category_no,
+	  C1.name one_level_category_name,
+	  C2.category_no two_level_category_no,
+	  C2.name two_level_category_name,
+	  bill_buy_balance.category_no,
+	  bill_buy_balance.category_name,
+	  '' remark 
+	FROM
+	  bill_buy_balance 
+	  LEFT JOIN category C1 ON LEFT(bill_buy_balance.`category_no`,2) = C1.`category_no`
+	  LEFT JOIN category C2 ON LEFT(bill_buy_balance.`category_no`,4) = C2.`category_no`
+	  LEFT JOIN lookup_entry t1 ON bill_buy_balance.`years` = t1.code 
+	  	AND t1.lookup_id = '5'
+	  LEFT JOIN lookup_entry t2 ON bill_buy_balance.gender = t2.`code` 
+		AND t2.lookup_id = '7' 
+	WHERE 1 = 1 
+	AND balance_no = #{params.balanceNo}
+	GROUP BY  item_no,
+	    organ_no 
+	UNION
+		ALL 
+		SELECT 
+		  '' organ_no,
+		  '客残明细' organ_name,
+		  '' supplier_no,
+		  '' supplier_name,
+		  item_no,
+		  item_code,
+		  item_name,
+		  brand_no,
+		  brand_name,
+		  years_name,
+	  	  gender_name,
+		  purchase_price cost,
+		  -1*qty send_qty,
+		  0 receive_qty,
+		  0 difference_qty,
+		  -1*amount send_amount,
+		  0 receive_amount,
+		  0 difference_amount,
+		  C1.category_no one_level_category_no,
+		  C1.name one_level_category_name,
+		  C2.category_no two_level_category_no,
+		  C2.name two_level_category_name,
+		  custom_imperfect.category_no,
+		  custom_imperfect.category_name,
+		  '' remark  
+		FROM
+		  custom_imperfect 
+		  	LEFT JOIN category C1 ON LEFT(custom_imperfect.`category_no`,2) = C1.`category_no`
+	  		LEFT JOIN category C2 ON LEFT(custom_imperfect.`category_no`,4) = C2.`category_no`
+		WHERE 1 = 1 
+	 	AND balance_no = #{params.balanceNo} 	     
+	    UNION
+		ALL 
+		SELECT 
+		  '' organ_no,
+		  '其他扣项' organ_name,
+		  '' supplier_no,
+		  '' supplier_name,
+		  '' item_no,
+		  '' item_code,
+		  '' item_name,
+		  brand_no,
+		  brand_name,
+		  '' years_name,
+	 	  '' gender_name,
+		  0 cost,
+		  -1*deduction_qty send_qty,
+		  0 receive_qty,
+		  0 difference_qty,
+		  -1*deduction_amount send_amount,
+		  0 receive_amount,
+		  0 difference_amount,
+		  category_no one_level_category_no,
+		  category_name one_level_category_name,
+		  '' two_level_category_no,
+		  '' two_level_category_name,
+		  '' category_no,
+		  '' category_name,
+		  remark 
+		FROM
+		  other_deduction 
+		WHERE 1 = 1 
+	 	AND balance_no = #{params.balanceNo} 
+	 	ORDER BY item_code
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectBuyItemGatherFooter" resultMap="ItemBuyGatherMap"  parameterType="map" >
+  	    SELECT '合计' brand_name, SUM(send_qty) send_qty, SUM(send_amount) send_amount FROM  (
+	  	    SELECT 
+			  organ_no,
+			  organ_name,
+			  supplier_no,
+			  supplier_name,
+			  item_no,
+			  item_code,
+			  item_name,
+			  brand_no,
+			  brand_name,
+			  IFNULL(ROUND(AVG(cost), 2), 0) cost,
+			  IFNULL(SUM(send_qty), 0) send_qty,
+			  IFNULL(SUM(receive_qty), 0) receive_qty,
+			  IFNULL(SUM(send_qty), 0) - IFNULL(SUM(receive_qty), 0) difference_qty,
+			  ROUND(IFNULL(SUM(send_qty * cost), 0), 2) send_amount,
+			  ROUND(IFNULL(SUM(receive_qty * cost), 0), 2) receive_amount,
+			  ROUND(IFNULL(SUM(send_qty * cost), 0) - IFNULL(SUM(receive_qty * cost), 0), 2) difference_amount,
+			  C1.category_no one_level_category_no,
+			  C1.name one_level_category_name,
+			  C2.category_no two_level_category_no,
+			  C2.name two_level_category_name,
+			  bill_buy_balance.category_no,
+			  bill_buy_balance.category_name,
+			  '' remark 
+			FROM
+			  bill_buy_balance 
+			  LEFT JOIN category C1 ON LEFT(bill_buy_balance.`category_no`,2) = C1.`category_no`
+			  LEFT JOIN category C2 ON LEFT(bill_buy_balance.`category_no`,4) = C2.`category_no`
+			WHERE 1 = 1 
+			AND balance_no = #{params.balanceNo}
+			GROUP BY  item_no,
+			    organ_no 
+			   UNION
+				ALL 
+				SELECT 
+				  '' organ_no,
+				  '客残明细' organ_name,
+				  '' supplier_no,
+				  '' supplier_name,
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  purchase_price cost,
+				  -1*qty send_qty,
+				  0 receive_qty,
+				  0 difference_qty,
+				  -1*amount send_amount,
+				  0 receive_amount,
+				  0 difference_amount,
+				  C1.category_no one_level_category_no,
+				  C1.name one_level_category_name,
+				  C2.category_no two_level_category_no,
+				  C2.name two_level_category_name,
+				  custom_imperfect.category_no,
+				  custom_imperfect.category_name,
+				  '' remark  
+				FROM
+				  custom_imperfect 
+				  	LEFT JOIN category C1 ON LEFT(custom_imperfect.`category_no`,2) = C1.`category_no`
+			  		LEFT JOIN category C2 ON LEFT(custom_imperfect.`category_no`,4) = C2.`category_no`
+				WHERE 1 = 1 
+			 	AND balance_no = #{params.balanceNo} 	     
+			    UNION
+				ALL 
+				SELECT 
+				  '' organ_no,
+				  '其他扣项' organ_name,
+				  '' supplier_no,
+				  '' supplier_name,
+				  '' item_no,
+				  '' item_code,
+				  '' item_name,
+				  brand_no,
+				  brand_name,
+				  0 cost,
+				  -1*deduction_qty send_qty,
+				  0 receive_qty,
+				  0 difference_qty,
+				  -1*deduction_amount send_amount,
+				  0 receive_amount,
+				  0 difference_amount,
+				  category_no one_level_category_no,
+				  category_name one_level_category_name,
+				  '' two_level_category_no,
+				  '' two_level_category_name,
+				  '' category_no,
+				  '' category_name,
+				  remark 
+				FROM
+				  other_deduction 
+				WHERE 1 = 1 
+			 	AND balance_no = #{params.balanceNo} 
+		) T
+  </select>
+  <resultMap id="ItemSaleGatherMap" type="cn.wonhigh.retail.fas.common.model.BillSaleBalance" >
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="years_name" property="years" jdbcType="CHAR" />
+    <result column="gender_name" property="genderName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="difference_qty" property="differenceQty" jdbcType="INTEGER" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="difference_amount" property="differenceAmount" jdbcType="DECIMAL" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="CHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="CHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+  </resultMap>
+  <select id="selectSaleItemGatherCount" resultType="java.lang.Integer"  parameterType="map" >
+    SELECT 
+	  COUNT(1) 
+	FROM
+	  (SELECT 
+	    1 
+	  FROM
+	    bill_sale_balance 
+	  WHERE 1 = 1 
+	  AND balance_no = #{params.balanceNo}
+	  GROUP BY brand_unit_no
+	  UNION 
+	  ALL  
+	  SELECT 
+	    1 
+	  FROM
+	    bill_sale_balance 
+	  WHERE 1 = 1 
+	  AND balance_no = #{params.balanceNo}
+	  GROUP BY   
+	    item_no,
+	    organ_no
+	  UNION
+		ALL 
+		SELECT 
+		 1
+		FROM
+		  other_deduction 
+		WHERE 1 = 1 
+	 	AND balance_no = #{params.balanceNo}  
+	 ) T 
+  </select>
+  
+  <select id="selectSaleItemGatherList" resultMap="ItemSaleGatherMap"  parameterType="map" >
+  	SELECT
+		  '' organ_no,
+		  '合计' organ_name,
+		  '' supplier_no,
+		  '' supplier_name,
+		  '' item_no,
+		  '' item_code,
+		  '' item_name,
+		  brand_no,
+		  brand_name,
+		  '' years_name,
+	  	  '' gender_name,
+		  '' cost,
+		  IFNULL(SUM(send_qty), 0) send_qty,
+		  IFNULL(SUM(receive_qty), 0) receive_qty,
+		  IFNULL(SUM(send_qty), 0) - IFNULL(SUM(receive_qty), 0) difference_qty,
+		  ROUND(IFNULL(SUM(send_qty * cost), 0), 2) send_amount,
+		  ROUND(IFNULL(SUM(receive_qty * cost), 0), 2) receive_amount,
+		  ROUND(
+		    IFNULL(SUM(send_qty * cost), 0) - IFNULL(SUM(receive_qty * cost), 0),
+		    2
+		  ) difference_amount,
+		  '' one_level_category_no,
+		  '' one_level_category_name,
+		  '' two_level_category_no,
+		  '' two_level_category_name,
+		  '' category_no,
+		  '' category_name,
+		  '' remark 
+		  FROM
+		  bill_sale_balance 
+		WHERE 1 = 1 
+		  AND balance_no = #{params.balanceNo}
+		GROUP BY brand_unit_no
+		UNION
+		ALL 
+    SELECT 
+	  organ_no,
+	  organ_name,
+	  supplier_no,
+	  supplier_name,
+	  item_no,
+	  item_code,
+	  item_name,
+	  brand_no,
+	  brand_name,
+	  t1.name years_name,
+	  t2.name gender_name,	  
+	  IFNULL(ROUND(AVG(cost), 2), 0) cost,
+	  IFNULL(SUM(send_qty), 0) send_qty,
+	  IFNULL(SUM(receive_qty), 0) receive_qty,
+	  IFNULL(SUM(send_qty), 0) - IFNULL(SUM(receive_qty), 0) difference_qty,
+	  ROUND(IFNULL(SUM(send_qty * cost), 0), 2) send_amount,
+	  ROUND(IFNULL(SUM(receive_qty * cost), 0), 2) receive_amount,
+	  ROUND(IFNULL(SUM(send_qty * cost), 0) - IFNULL(SUM(receive_qty * cost), 0), 2) difference_amount,
+	  C1.category_no one_level_category_no,
+	  C1.name one_level_category_name,
+	  C2.category_no two_level_category_no,
+	  C2.name two_level_category_name,
+	  bill_sale_balance.category_no,
+	  bill_sale_balance.category_name,
+	  '' remark
+	FROM
+	  bill_sale_balance 
+	  LEFT JOIN category C1 ON LEFT(bill_sale_balance.`category_no`,2) = C1.`category_no`
+	  LEFT JOIN category C2 ON LEFT(bill_sale_balance.`category_no`,4) = C2.`category_no`
+	  LEFT JOIN lookup_entry t1 ON bill_sale_balance.`years` = t1.code 
+	  	AND t1.lookup_id = '5'
+	  LEFT JOIN lookup_entry t2 ON bill_sale_balance.gender = t2.`code` 
+		AND t2.lookup_id = '7' 
+	WHERE 1 = 1 
+	  AND balance_no = #{params.balanceNo}
+	  GROUP BY item_no,
+	    organ_no
+	    UNION
+		ALL 
+		SELECT 
+		  '' organ_no,
+		  '' organ_name,
+		  '' supplier_no,
+		  '' supplier_name,
+		  '' item_no,
+		  '其他扣项' item_code,
+		  '' item_name,
+		  brand_no,
+		  brand_name,
+		  '' years_name,
+	  	  '' gender_name,
+		  0 cost,
+		  -1*deduction_qty send_qty,
+		  0 receive_qty,
+		  0 difference_qty,
+		  -1*deduction_amount send_amount,
+		  0 receive_amount,
+		  0 difference_amount,
+		  category_no one_level_category_no,
+		  category_name one_level_category_name,
+		  '' two_level_category_no,
+		  '' two_level_category_name,
+		  '' category_no,
+		  '' category_name,
+		  remark 
+		FROM
+		  other_deduction 
+		WHERE 1 = 1 
+	 	AND balance_no = #{params.balanceNo}  
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectSaleItemGatherFooter" resultMap="ItemSaleGatherMap"  parameterType="map" >
+   		SELECT '合计' brand_name, SUM(send_qty) send_qty, SUM(send_amount) send_amount FROM  (
+	  	    SELECT 
+			  organ_no,
+			  organ_name,
+			  supplier_no,
+			  supplier_name,
+			  item_no,
+			  item_code,
+			  item_name,
+			  brand_no,
+			  brand_name,
+			  IFNULL(ROUND(AVG(cost), 2), 0) cost,
+			  IFNULL(SUM(send_qty), 0) send_qty,
+			  IFNULL(SUM(receive_qty), 0) receive_qty,
+			  IFNULL(SUM(send_qty), 0) - IFNULL(SUM(receive_qty), 0) difference_qty,
+			  ROUND(IFNULL(SUM(send_qty * cost), 0), 2) send_amount,
+			  ROUND(IFNULL(SUM(receive_qty * cost), 0), 2) receive_amount,
+			  ROUND(IFNULL(SUM(send_qty * cost), 0) - IFNULL(SUM(receive_qty * cost), 0), 2) difference_amount,
+			  C1.category_no one_level_category_no,
+			  C1.name one_level_category_name,
+			  C2.category_no two_level_category_no,
+			  C2.name two_level_category_name,
+			  bill_sale_balance.category_no,
+			  bill_sale_balance.category_name,
+			  '' remark 
+			FROM
+			  bill_sale_balance 
+			  LEFT JOIN category C1 ON LEFT(bill_sale_balance.`category_no`,2) = C1.`category_no`
+			  LEFT JOIN category C2 ON LEFT(bill_sale_balance.`category_no`,4) = C2.`category_no`
+			WHERE 1 = 1 
+			AND balance_no = #{params.balanceNo}
+			GROUP BY  item_no,
+			    organ_no 
+			    UNION
+				ALL 
+				SELECT 
+				  '' organ_no,
+				  '' organ_name,
+				  '' supplier_no,
+				  '' supplier_name,
+				  '' item_no,
+				  '其他扣项' item_code,
+				  '' item_name,
+				  brand_no,
+				  brand_name,
+				  0 cost,
+				  -1*deduction_qty send_qty,
+				  0 receive_qty,
+				  0 difference_qty,
+				  -1*deduction_amount send_amount,
+				  0 receive_amount,
+				  0 difference_amount,
+				  category_no one_level_category_no,
+				  category_name one_level_category_name,
+				  '' two_level_category_no,
+				  '' two_level_category_name,
+				  '' category_no,
+				  '' category_name,
+				  remark 
+				FROM
+				  other_deduction 
+				WHERE 1 = 1 
+			 	AND balance_no = #{params.balanceNo} 
+		)T
+  </select>
+    <sql id="AreaEnterCondition" >
+    -- AND @B.brand_no 
+    -- AND @B.company_no!buyer_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+         AND B.bill_no = #{params.billNo}
+      </if> 
+      <if test="null!=params.originalBillNo and ''!=params.originalBillNo" >
+         AND B.original_bill_no = #{params.originalBillNo}
+      </if> 
+      <if test="null!=params.refBillNo and ''!=params.refBillNo" >
+         AND B.ref_bill_no = #{params.refBillNo}
+      </if> 
+      <if test="null!=params.balanceStatus and ''!=params.balanceStatus" >
+         AND B.balance_status = #{params.balanceStatus}
+      </if> 
+      <if test="null!=params.billType and ''!=params.billType" >
+        AND B.bill_type = #{params.billType}
+      </if>    
+      <if test="null!=params.receiveBillType and ''!=params.receiveBillType" >
+        AND B.bill_type = #{params.receiveBillType}
+      </if>    
+      <if test="null!=params.multiBillType and ''!=params.multiBillType" >
+        AND B.bill_type in ${params.multiBillType}
+      </if>  
+      <if test="null!=params.billNo and ''!=params.billNo" >
+        AND B.bill_no = #{params.billNo}
+      </if> 
+      <if test="null!=params.itemCode and ''!=params.itemCode" >
+        AND B.item_code = #{params.itemCode}
+      </if> 
+      <if test="null!=params.cost and ''!=params.cost" >
+        AND B.cost in ${params.cost}
+      </if> 
+      <if test="null!=params.salerNo and ''!=params.salerNo" >
+        AND B.saler_no = #{params.salerNo}
+      </if>    
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+        AND B.buyer_no = #{params.buyerNo}
+      </if>
+      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+        AND B.supplier_no in ${params.multiSupplierNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND B.brand_no = #{params.buyerNo}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+        AND C1.category_no = #{params.categoryNo}
+      </if>   
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND B.saler_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND B.buyer_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND B.brand_no in ${params.multiBrandNo}
+      </if>  
+      <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+        AND BU.brand_unit_no  IN ${params.multiBrandUnitNo}
+      </if>    
+      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND C1.`category_no` IN ${params.multiCategoryNo}
+      </if>    
+      <if test="null!=params.multiOrganNo and ''!=params.multiOrganNo" >
+        AND B.organ_no in ${params.multiOrganNo}
+      </if>    
+      <if test="null!=params.multiOrderUnitNo and ''!=params.multiOrderUnitNo" >
+        AND B.order_unit_no in ${params.multiOrderUnitNo}
+      </if>   
+      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+        AND B.item_code in ${params.multiItemCode}
+      </if>  
+      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+        AND B1.brand_unit_no = #{params.brandUnitNo}
+      </if>
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+        AND B.send_date &gt;= #{params.sendDateStart}
+      </if> 
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND B.send_date &lt;= #{params.sendDateEnd}
+      </if> 
+      <if test="null!=params.receiveDateStart and ''!=params.receiveDateStart" >
+        AND IF(B.bill_type = 1333 ,B.send_date,B.receive_date) &gt;= #{params.receiveDateStart} 
+      </if> 
+      <if test="null!=params.receiveDateEnd and ''!=params.receiveDateEnd" >
+        AND IF(B.bill_type = 1333 ,B.send_date,B.receive_date) &lt;= #{params.receiveDateEnd} 
+      </if> 
+    </if>
+  </sql>
+  <select id="selectHqCount" resultMap="ExtendsResultMap" >
+	SELECT COUNT(1) as balance_qty, balance_type as balance_type, status as status FROM bill_balance GROUP BY balance_type,status
+  </select>
+  
+  <sql id="update_condtion" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.extendCategoryCondition and ''!=params.extendCategoryCondition" >
+        ${params.extendCategoryCondition}
+      </if>
+	  <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+    	AND	send_date &gt;= '${params.balanceStartDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+  		AND	send_date &lt;= '${params.balanceEndDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.originalBillNo and ''!=params.originalBillNo" >
+ 		AND	original_bill_no = #{params.originalBillNo}
+	  </if>
+	  <if test="null!=params.salerNo and ''!=params.salerNo" >
+ 		AND	saler_no = #{params.salerNo}
+	  </if>
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+ 		AND	buyer_no = #{params.buyerNo}
+	  </if>
+	  <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+ 		AND	brand_unit_no = #{params.brandUnitNo}
+	  </if>
+	  <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+ 		AND	LEFT(category_no,2)  = #{params.categoryNo}
+	  </if>
+	  <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+ 		AND	saler_no in ${params.multiSalerNo}
+	  </if>
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+ 		AND	buyer_no in ${params.multiBuyerNo}
+	  </if>
+	  <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+ 		AND	brand_no in ${params.multiBrandNo}
+	  </if>
+	  <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+ 		AND	brand_unit_no in ${params.multiBrandUnitNo}
+	  </if>
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+ 		AND	LEFT(category_no,2)  in ${params.multiCategoryNo}
+	  </if>
+	  <if test="null!=params.twoLevelCategoryNo and ''!=params.twoLevelCategoryNo" >
+ 		AND	LEFT(category_no,4) IN ${params.twoLevelCategoryNo}
+	  </if>
+	  <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+ 		AND	supplier_no IN ${params.supplierNo}
+	  </if>
+	  <if test="null!=params.gender and ''!=params.gender" >
+ 		AND	gender IN ${params.gender}
+	  </if>
+	  <if test="null!=params.years and ''!=params.years" >
+ 		AND	years IN ${params.years}
+	  </if>
+	  <if test="null!=params.supplierGroupNo and ''!=params.supplierGroupNo" >
+        AND  EXISTS (SELECT 1 FROM supplier_group_rel sgr WHERE T.supplier_no = sgr.supplier_no AND sgr.group_no IN ${params.supplierGroupNo})
+      </if>  
+    </if>
+  </sql>
+  
+  <select id="queryBuyExcessPriceBillCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_buy_balance T 
+    WHERE 1=1 
+    AND balance_no IS NULL
+    <if test="null!=params.priceRangeCondition and ''!=params.priceRangeCondition">
+    	AND EXISTS 
+		  (SELECT 
+		    1 
+		  FROM
+		    item 
+		    INNER JOIN brand 
+		      ON brand.brand_no = item.brand_no 
+		    INNER JOIN brand_unit 
+		      ON brand_unit.brand_unit_no = brand.sys_no 
+		    INNER JOIN supplier_group_rel 
+		      ON supplier_group_rel.supplier_no = item.supplier_no 
+		  WHERE 1 = 1 
+		    ${params.priceRangeCondition}
+		    AND item.item_no = T.item_no
+		    AND (
+		      NOT EXISTS 
+		      (SELECT 
+		        1 
+		      FROM
+		        official_item OI 
+		      WHERE OI.item_code = item.code 
+		        AND OI.supplier_no = item.supplier_no 
+		        AND OI.brand_no = item.brand_no 
+		        AND OI.year_no = item.years 
+		        AND OI.season_no = item.purchase_season) 
+		      OR EXISTS 
+		      (SELECT 
+		        1 
+		      FROM
+		        official_item OI 
+		      WHERE OI.item_code = item.code 
+		        AND OI.supplier_no = item.supplier_no 
+		        AND OI.brand_no = item.brand_no 
+		        AND OI.year_no = item.years 
+		        AND OI.season_no = item.purchase_season
+		        AND OI.excess_status = '1')
+		    ) 
+	    )
+      </if>
+    <include refid="update_condtion" />
+  </select>
+  
+  <select id="queryBuyZeroPriceBillCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_buy_balance T 
+    WHERE 1=1 
+    AND balance_no IS NULL
+    AND (cost = 0 OR cost IS NULL)
+    <include refid="update_condtion" />
+  </select>
+  
+  <select id="querySaleZeroPriceBillCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_sale_balance T WHERE 1=1 
+    AND balance_no IS NULL
+    AND (cost = 0 OR cost IS NULL)
+    <include refid="update_condtion" />
+  </select>
+  
+  <select id="selectBuyBalanceExpricePrice" resultMap="ExpricePriceBuyMap">
+  		SELECT 
+  			id,
+  			IFNULL(IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE T.BUYER_NO = spd.company_no 
+		      AND T.path_no = spd.path_no ) = 'CGJ' OR (ISNULL(T.path_no)),
+		    (SELECT 
+		      pp.purchase_price 
+		    FROM
+		      purchase_price pp 
+		    WHERE pp.status=100
+		      AND T.SALER_NO = pp.supplier_no 
+		      AND T.send_date &gt;= pp.effective_date 
+		      AND T.item_no = pp.item_no 
+		    ORDER BY pp.effective_date DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE T.SEND_DATE &gt;= C.effective_time 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE T.BUYER_NO = spd.company_no 
+		        AND T.path_no = spd.path_no ) = C.ZONE_NO 
+		      AND T.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  ),0) cost
+  			FROM bill_buy_balance T
+  		WHERE 1 = 1
+  		  -- AND @brand_no
+		  <include refid="update_condtion" />
+		  AND T.balance_no IS NULL
+		  AND IFNULL(T.COST,0) &lt;&gt; IFNULL(IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE T.BUYER_NO = spd.company_no 
+		      AND T.path_no = spd.path_no ) = 'CGJ' OR (ISNULL(T.path_no)),
+		    (SELECT 
+		      pp.purchase_price 
+		    FROM
+		      purchase_price pp 
+		    WHERE pp.status=100
+		      AND T.SALER_NO = pp.supplier_no 
+		      AND T.send_date &gt;= pp.effective_date 
+		      AND T.item_no = pp.item_no 
+		    ORDER BY pp.effective_date DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE T.SEND_DATE &gt;= C.effective_time 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE T.BUYER_NO = spd.company_no 
+		        AND T.path_no = spd.path_no ) = C.ZONE_NO 
+		      AND T.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  ),0)
+  </select>
+  <select id="selectSaleBalanceExpricePrice" resultMap="ExpricePriceSaleMap">
+  		SELECT 
+  			T.id,
+  			IFNULL((SELECT 
+			  C.region_cost 
+			FROM
+			  region_cost_maintain C 
+			WHERE T.SEND_DATE &gt;= C.effective_time 
+			   AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE T.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE T.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND T.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1),0) cost
+		  FROM bill_sale_balance T
+		WHERE 1 = 1
+		  -- AND @brand_no
+		  <include refid="update_condtion" />
+		  AND T.balance_no IS NULL
+		  AND T.bill_type IN (1301,1333)
+		  AND IFNULL(T.COST,0) &lt;&gt;
+		    IFNULL((SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE T.SEND_DATE &gt;= C.effective_time 
+		     AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE T.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE T.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND T.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1),0) 
+  </select>
+  <select id="selectSaleBalancePriceForTransfer" resultMap="ExpricePriceSaleMap">
+  		SELECT 
+  		  T.id,
+  		  (
+		  SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE T.SEND_DATE >= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE T.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE T.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND T.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) cost
+		 FROM  bill_sale_balance T 
+		WHERE 1 = 1
+		  -- AND @brand_no
+		   <include refid="update_condtion" />
+		  AND T.balance_no IS NULL
+		  AND T.bill_type = 1371 
+		  AND T.COST &lt;&gt; 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE T.SEND_DATE >= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE T.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE T.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND T.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE T.SEND_DATE >= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE T.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE T.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND T.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+  </select>
+  <update id="updateBuyBalancePrice" >
+       UPDATE 
+		  bill_buy_balance T 
+		SET
+		  T.cost_checked = 1,
+		  T.cost = IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE T.BUYER_NO = spd.company_no 
+		      AND T.path_no = spd.path_no ) = 'CGJ' OR (ISNULL(T.path_no)),
+		    (SELECT 
+		      pp.purchase_price 
+		    FROM
+		      purchase_price pp 
+		    WHERE pp.status=100
+		      AND T.SALER_NO = pp.supplier_no 
+		      AND T.send_date &gt;= pp.effective_date 
+		      AND T.item_no = pp.item_no 
+		    ORDER BY pp.effective_date DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE T.SEND_DATE &gt;= C.effective_time 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE T.BUYER_NO = spd.company_no 
+		        AND T.path_no = spd.path_no ) = C.ZONE_NO 
+		      AND T.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  ) 
+		WHERE 1 = 1
+		  <include refid="update_condtion" />
+		  AND T.balance_no IS NULL
+		  AND T.COST &lt;&gt; IF(
+		    (SELECT 
+		      financial_basis 
+		    FROM
+		      settle_path_dtl spd 
+		    WHERE T.BUYER_NO = spd.company_no 
+		      AND T.path_no = spd.path_no ) = 'CGJ' OR (ISNULL(T.path_no)),
+		    (SELECT 
+		      pp.purchase_price 
+		    FROM
+		      purchase_price pp 
+		    WHERE pp.status=100
+		      AND T.SALER_NO = pp.supplier_no 
+		      AND T.send_date &gt;= pp.effective_date 
+		      AND T.item_no = pp.item_no 
+		    ORDER BY pp.effective_date DESC 
+		    LIMIT 0, 1),
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE T.SEND_DATE &gt;= C.effective_time 
+		      AND 
+		      (SELECT 
+		        financial_basis 
+		      FROM
+		        settle_path_dtl spd 
+		      WHERE T.BUYER_NO = spd.company_no 
+		        AND T.path_no = spd.path_no ) = C.ZONE_NO 
+		      AND T.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+   <update id="updateSaleBalancePrice" >
+       UPDATE 
+		  bill_sale_balance T 
+		SET
+		  T.cost_checked = 1,
+		  T.cost = 
+			(SELECT 
+			  C.region_cost 
+			FROM
+			  region_cost_maintain C 
+			WHERE T.SEND_DATE &gt;= C.effective_time 
+			   AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE T.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE T.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND T.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		WHERE 1 = 1
+		  <include refid="update_condtion" />
+		  AND T.balance_no IS NULL
+		  AND T.bill_type IN (1301,1333)
+		  AND T.COST &lt;&gt;
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE T.SEND_DATE &gt;= C.effective_time 
+		     AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE T.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE T.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND T.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+   </update>
+   <update id="updateSaleBalancePriceForTransfer" >
+       UPDATE
+   		 bill_sale_balance T 
+   		 SET 
+   		 	T.cost_checked = 1,
+		    T.cost = (
+		  SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE T.SEND_DATE >= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE T.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE T.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND T.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		WHERE 1 = 1
+		   <include refid="update_condtion" />
+		  AND T.balance_no IS NULL
+		  AND T.bill_type = 1371 
+		  AND T.COST &lt;&gt; 
+		  (SELECT 
+		    C.region_cost 
+		  FROM
+		    region_cost_maintain C 
+		  WHERE T.SEND_DATE >= C.effective_time 
+		    AND IF(
+		      ISNULL(
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ),
+		      (SELECT 
+		        ZONE_NO 
+		      FROM
+		        COMPANY CO 
+		      WHERE T.BUYER_NO = CO.COMPANY_NO),
+		      (SELECT 
+		        PRICE_ZONE 
+		      FROM
+		        financial_account F 
+		      WHERE T.BUYER_NO = F.COMPANY_NO)
+		    ) = C.ZONE_NO 
+		    AND T.ITEM_NO = C.ITEM_NO 
+		  ORDER BY C.effective_time DESC 
+		  LIMIT 0, 1) 
+		  AND NOT ISNULL(
+		    (SELECT 
+		      C.region_cost 
+		    FROM
+		      region_cost_maintain C 
+		    WHERE T.SEND_DATE >= C.effective_time 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE T.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE T.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE T.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND T.ITEM_NO = C.ITEM_NO 
+		    ORDER BY C.effective_time DESC 
+		    LIMIT 0, 1)
+		  )
+   </update>
+    <select id="selectBalanceForBaroque" resultMap="ExtendsResultMap" parameterType="map" >
+    SELECT
+		b.id,
+		b.bill_no,
+		b.bill_name,
+		b.extend_status,
+		b. STATUS,
+		b.balance_type,
+		b.buyer_no,
+		b.buyer_name,
+		b.saler_no,
+		b.saler_name,
+		b.brand_no,
+		b.brand_name,
+		b.brand_unit_no,
+		b.brand_unit_name,
+		b.category_no,
+		b.category_name,
+		b.balance_start_date,
+		b.balance_date,
+		b.balance_end_date,
+		b.currency,
+		b.out_amount,
+		b.extend_category_no,
+		b.extend_category_name,
+		b.entry_amount,
+		b.return_amount,
+		b.custom_return_amount,
+		b.deduction_amount,
+		b.balance_amount,
+		b.invoice_amount,
+		b.has_balance_amount,
+		b.create_user,
+		b.create_time,
+		b.update_user,
+		b.update_time,
+		b.auditor,
+		b.audit_time,
+		b.remark,
+		b.supplier_amount,
+		b.out_qty,
+		b.entry_qty,
+		b.return_qty,
+		b.custom_return_qty,
+		b.deduction_qty,
+		b.balance_qty,
+		b.ask_payment_no,
+		b.invoice_apply_no,
+		b.invoice_no,
+		b.is_user_defined,
+		bbb.currency_name,
+	    bbb.currency_code,
+	    bbb.standard_currency_code,
+		bbb.standard_currency_name,
+		bbb.standard_amount
+	FROM
+		bill_balance b
+	LEFT JOIN (
+		SELECT
+			bbb.balance_no,
+			adl.currency_name,
+			adl.currency_code,
+			adl.standard_currency_code,
+			adl.standard_currency_name,
+			sum(
+				round(bbb.purchase_price * adl.exchange_rate,2) * bbb.receive_qty
+			) standard_amount
+		FROM
+			bill_buy_balance_additional adl
+		LEFT JOIN bill_buy_balance bbb ON adl.original_bill_no = bbb.original_bill_no
+		AND adl.item_code = bbb.item_no
+		WHERE
+			1 = 1
+		GROUP BY
+			bbb.balance_no
+	) bbb ON b.bill_no = bbb.balance_no
+	WHERE
+		1 = 1
+    <include refid="BaroqueQueryCondition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField" >
+      ORDER BY create_time DESC
+    </if>
+    <if test="page != null" >
+          LIMIT #{page.startRowNum},#{page.pageSize} 
+    </if>
+  </select>
+  <sql id="BaroqueQueryCondition" >
+    <if test="null!=params" >
+      <if test="null!=params.balanceType and 1==params.balanceType" >
+     	  AND b.brand_unit_no in (SELECT sys_no FROM brand WHERE 1=1 -- AND @brand_no)
+      </if>
+      <if test="null!=params.balanceType and 2==params.balanceType" >
+         <if test="null!=params.isArea and 'true'==params.isArea" >
+         -- AND @company_no!buyer_no
+         </if>
+         <if test="null==params.isArea or ''==params.isArea" >
+         -- AND @company_no!saler_no
+         </if>
+      </if>
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceType and ''!=params.balanceType" >
+       AND b.balance_type = #{params.balanceType}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+       AND b.status = #{params.status}
+      </if>
+      <if test="null!=params.extendStatus and ''!=params.extendStatus" >
+       AND b.extend_status = #{params.extendStatus}
+      </if>
+      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+       AND b.buyer_no = #{params.buyerNo}
+      </if>
+      <if test="null!=params.salerNo and ''!=params.salerNo" >
+       AND b.saler_no = #{params.salerNo}
+      </if>
+      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+       AND b.brand_unit_no = #{params.brandUnitNo}
+      </if>
+      <if test="null!=params.createUser and ''!=params.createUser" >
+        AND b.create_user = #{params.createUser}
+      </if>  
+      <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+        AND b.balance_start_date &gt;= '${params.balanceStartDate} 00:00:00'
+      </if>  
+       <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+        AND b.balance_end_date &lt;= '${params.balanceEndDate} 23:59:59'
+      </if>  
+       <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+        AND b.create_time &gt;= '${params.createTimeStart} 00:00:00'
+      </if>  
+       <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+        AND b.create_time &lt;= '${params.createTimeEnd} 23:59:59'
+      </if>  
+      <if test="null!=params.auditor and ''!=params.auditor" >
+        AND b.auditor = #{params.auditor}
+      </if>  
+       <if test="null!=params.auditTimeStart and ''!=params.auditTimeStart" >
+        AND b.audit_time &gt;= '${params.auditTimeStart} 00:00:00'
+      </if>  
+       <if test="null!=params.auditTimeEnd and ''!=params.auditTimeEnd" >
+        AND b.audit_time &lt;= '${params.auditTimeEnd}  23:59:59'
+      </if>  
+      <if test="null!=params.askPaymentNo and ''!=params.askPaymentNo ">
+        AND b.ask_payment_no = #{params.askPaymentNo}
+      </if> 
+      <if test="null!=params.billNo and ''!=params.billNo ">
+        AND b.bill_no = #{params.billNo}
+      </if> 
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND b.saler_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND b.buyer_no in ${params.multiBuyerNo}
+      </if>  
+      <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+        AND b.brand_unit_no in ${params.multiBrandUnitNo}
+      </if>    
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND b.category_no in ${params.multiCategoryNo}
+      </if>
+    </if>
+  </sql>
+</mapper>

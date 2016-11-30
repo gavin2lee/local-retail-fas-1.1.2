@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ShopBalanceDateMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+    <result column="bsgroups_name" property="bsgroupsName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="retail_type" property="retailType" jdbcType="VARCHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+    <result column="balance_flag" property="balanceFlag" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="bill_already" property="billalready" jdbcType="TINYINT" />
+    <result column="should_bill_date" property="shouldBillDate" jdbcType="DATE" />
+    <result column="income_payments_date" property="incomePaymentsDate" jdbcType="DATE" />
+    <result column="invoice_should_send_date" property="invoiceShouldSendDate" jdbcType="DATE"/>
+    <result column="invoice_should_arrive_date" property="invoiceShouldArraiveDate" jdbcType="DATE"/>
+    
+    <result column="min_out_date" property="minOutDate" jdbcType="DATE"/>
+    <result column="max_out_date" property="maxOutDate" jdbcType="DATE"/>
+    <result column="part_days" property="partDays" jdbcType="INTEGER"/>
+    <result column="total_days" property="totalDays" jdbcType="INTEGER"/>
+    <result column="deduct_status" property="deductStatus" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, company_name, bsgroups_no, bsgroups_name, mall_no, mall_name, shop_no, 
+    short_name, full_name, retail_type, month, balance_start_date, balance_end_date, 
+    balance_flag, create_user, create_time, update_user, update_time, remark, bill_already, 
+    should_bill_date, income_payments_date,invoice_should_send_date ,invoice_should_arrive_date,deduct_status
+  </sql>
+  <sql id="condition" >
+  	 -- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.bsgroupsNo and ''!=params.bsgroupsNo" >
+        AND bsgroups_no = #{params.bsgroupsNo}
+      </if>
+      <if test="null!=params.mallNo and ''!=params.mallNo" >
+        AND mall_no = #{params.mallNo}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+        AND shop_no = #{params.shopNo}
+      </if>
+      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+        AND company_no in ${params.multiCompanyNo}
+      </if>
+       <if test="null!=params.multiBsgroupsNo and ''!=params.multiBsgroupsNo" >
+        AND bsgroups_no in ${params.multiBsgroupsNo}
+      </if>
+       <if test="null!=params.multiMallNo and ''!=params.multiMallNo" >
+        AND mall_no in ${params.multiMallNo}
+      </if>
+       <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND shop_no IN 
+         	<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+   				#{shopNos, jdbcType=CHAR}
+  			</foreach>
+      </if>
+      <if test="null!=params.balanceFlag and ''!=params.balanceFlag" >
+         AND balance_start_date = (
+         SELECT MIN(balance_start_date) FROM shop_balance_date WHERE shop_no = #{params.shopNo}  AND balance_flag = #{params.balanceFlag} AND month = #{params.month} ) 
+      </if>
+       <if test="null!=params.notEqualBalanceFlag and ''!=params.notEqualBalanceFlag" >
+         AND balance_start_date = (
+         SELECT MIN(balance_start_date) FROM shop_balance_date WHERE shop_no = #{params.shopNo}  AND balance_flag != #{params.notEqualBalanceFlag} AND month = #{params.month} ) 
+      </if>
+       <if test="null!=params.noBalanceFlag and ''!=params.noBalanceFlag" >
+         AND balance_flag = #{params.noBalanceFlag} 
+      </if>
+       <if test="null!=params.month and ''!=params.month" >
+        AND month = #{params.month}
+      </if>
+       <if test="null!=params.getBefMonth and ''!=params.getBefMonth" >
+        AND balance_end_date = (
+         SELECT MAX(balance_end_date)   FROM   `shop_balance_date` WHERE 
+          shop_no =  #{params.shopNo}   AND balance_flag =2 ) 
+       </if> 
+       
+        <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate">  
+       	AND (
+	    (#{params.balanceStartDate} BETWEEN balance_start_date AND balance_end_date) 
+	    OR 
+      </if>
+      <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate">
+       	(#{params.balanceEndDate} BETWEEN balance_start_date AND balance_end_date)
+	    OR 
+	    (<![CDATA[ balance_start_date > #{params.balanceStartDate} AND balance_end_date < #{params.balanceEndDate} ]]>)
+	    )
+      </if> 
+      <if test="null!=params.deductStatus and ''!=params.deductStatus" >
+        AND deduct_status = #{params.deductStatus}
+      </if>
+      <if test="null!=params.id and ''!=params.id" >
+        AND id != #{params.id}
+      </if>   
+    </if>
+  </sql>
+  
+  <select id="selectShopBalanceDatePartOfRightCount" resultType="java.lang.Integer" >
+  	SELECT COUNT(1) FROM (
+		SELECT shop_no,
+			company_no,
+			MIN(balance_start_date) start_date,
+			MAX(balance_end_date) end_date, 
+			SUM(TIMESTAMPDIFF(DAY, balance_start_date, balance_end_date) + 1) part_days 
+		FROM shop_balance_date GROUP BY shop_no) sd 
+	 WHERE sd.part_days &lt;&gt; TIMESTAMPDIFF(DAY, sd.start_date, sd.end_date) + 1 
+	 -- AND @company_no
+  </select>
+  
+  <select id="selectShopBalanceDatePartOfRightByPage" resultMap="BaseResultMap" parameterType="map">
+  	SELECT
+		 shop_no,
+		(SELECT short_name FROM shop s WHERE s.shop_no = sd.shop_no ) short_name,
+		 company_no,
+		 company_name,
+		 start_date balance_start_date,
+		 end_date balance_end_date,
+		 part_days,
+		 total_days 
+		FROM (SELECT
+		        shop_no,
+		        company_no,
+		        company_name,
+		        MIN(balance_start_date)    start_date,
+		        MAX(balance_end_date)    end_date,
+		        SUM(TIMESTAMPDIFF(DAY, balance_start_date, balance_end_date) + 1)  part_days,
+		        TIMESTAMPDIFF(DAY, MIN(balance_start_date), MAX(balance_end_date)) + 1 total_days
+		      FROM shop_balance_date 
+		      GROUP BY shop_no) sd
+		WHERE sd.part_days &lt;&gt; TIMESTAMPDIFF(DAY, sd.start_date, sd.end_date) + 1 
+			-- AND @company_no 
+	LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectNoSetShopBalanceDateCount" resultType="java.lang.Integer" >
+  	SELECT COUNT(1) FROM (
+		SELECT shop.company_no,om.shop_no 
+		FROM (SELECT om1.shop_no, om1.shop_name, om1.out_date FROM order_main om1 
+			   UNION ALL 
+			  SELECT om2.shop_no, om2.shop_name, om2.out_date FROM return_exchange_main om2) OM 
+		INNER JOIN shop ON om.shop_no = shop.shop_no 
+		INNER JOIN company co ON shop.company_no = co.company_no 
+		LEFT JOIN shop_balance_date sbd ON OM.shop_no = sbd.shop_no 
+		AND ( om.out_date BETWEEN balance_start_date AND balance_end_date) WHERE ISNULL(sbd.shop_no) 
+		-- AND @shop.company_no
+		 GROUP BY om.shop_no) T
+  </select>
+  
+  <select id="selectNoSetShopBalanceDateByPage" resultMap="BaseResultMap" parameterType="map">
+  	SELECT 
+	  shop.company_no,
+	  co.name company_name,
+	  om.shop_no,
+	  om.shop_name short_name,
+	  MIN(om.out_date) balance_start_date,
+	  MAX(om.out_date) balance_end_date
+	FROM
+	  (SELECT 
+	    om1.shop_no,
+	    om1.shop_name,
+	    om1.out_date 
+	  FROM
+	    order_main om1 
+	  UNION
+	  ALL 
+	  SELECT 
+	    om2.shop_no,
+	    om2.shop_name,
+	    om2.out_date 
+	  FROM
+	    return_exchange_main om2) OM 
+	  INNER JOIN shop 
+	    ON om.shop_no = shop.shop_no 
+	  INNER JOIN company co 
+	    ON shop.company_no = co.company_no 
+	  LEFT JOIN shop_balance_date sbd 
+	    ON OM.shop_no = sbd.shop_no 
+	    AND (
+	      om.out_date BETWEEN balance_start_date 
+	      AND balance_end_date
+	    ) 
+	WHERE ISNULL(sbd.shop_no) 
+	-- AND @shop.company_no
+	GROUP BY om.shop_no 
+	LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM shop_balance_date
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM shop_balance_date WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM shop_balance_date WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or  ''==orderByField " >
+      ORDER BY balance_start_date DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM shop_balance_date WHERE 1=1 
+    <include refid="condition" />
+      ORDER BY balance_end_date ASC
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM shop_balance_date
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" >
+    DELETE FROM shop_balance_date
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" >
+    INSERT INTO shop_balance_date (sharding_flag, id, company_no, company_name, 
+      bsgroups_no, bsgroups_name, mall_no, 
+      mall_name, shop_no, short_name, 
+      full_name, retail_type, month, 
+      balance_start_date, balance_end_date, balance_flag, 
+      create_user, create_time, update_user, 
+      update_time, remark, bill_already, 
+      should_bill_date, income_payments_date, invoice_should_send_date, invoice_should_arrive_date,deduct_status)
+    VALUES (#{shardingFlag,jdbcType=CHAR},#{id,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{bsgroupsNo,jdbcType=CHAR}, #{bsgroupsName,jdbcType=VARCHAR}, #{mallNo,jdbcType=CHAR}, 
+      #{mallName,jdbcType=VARCHAR}, #{shopNo,jdbcType=CHAR}, #{shortName,jdbcType=VARCHAR}, 
+      #{fullName,jdbcType=VARCHAR}, #{retailType,jdbcType=VARCHAR}, #{month,jdbcType=CHAR}, 
+      #{balanceStartDate,jdbcType=DATE}, #{balanceEndDate,jdbcType=DATE}, #{balanceFlag,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{billalready,jdbcType=TINYINT}, 
+      #{shouldBillDate,jdbcType=DATE}, #{incomePaymentsDate,jdbcType=DATE}, 
+      #{invoiceShouldSendDate,jdbcType=DATE}, #{invoiceShouldArraiveDate,jdbcType=DATE},#{deductStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" >
+    INSERT INTO shop_balance_date
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+      <if test="id != null and ''!=id" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no,
+      </if>
+      <if test="bsgroupsName != null" >
+        bsgroups_name,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="mallName != null" >
+        mall_name,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="fullName != null" >
+        full_name,
+      </if>
+      <if test="retailType != null" >
+        retail_type,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date,
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date,
+      </if>
+      <if test="balanceFlag != null" >
+        balance_flag,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="billalready != null" >
+        bill_already,
+      </if>
+      <if test="shouldBillDate != null" >
+        should_bill_date,
+      </if>
+      <if test="incomePaymentsDate != null" >
+        income_payments_date,
+      </if>
+      <if test="invoiceShouldSendDate != null">
+      	invoice_should_send_date,
+      </if>
+      <if test="invoiceShouldArraiveDate != null">
+      	invoice_should_arrive_date,
+      </if>
+      <if test="deductStatus != null" >
+        deduct_status
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+      <if test="id != null and ''!=id" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="bsgroupsName != null" >
+        #{bsgroupsName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="retailType != null" >
+        #{retailType,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="balanceFlag != null" >
+        #{balanceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="billalready != null" >
+        #{billalready,jdbcType=TINYINT},
+      </if>
+      <if test="shouldBillDate != null" >
+        #{shouldBillDate,jdbcType=DATE},
+      </if>
+      <if test="incomePaymentsDate != null" >
+        #{incomePaymentsDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceShouldSendDate != null">
+      	#{invoiceShouldSendDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceShouldArraiveDate != null">
+      	#{invoiceShouldArraiveDate,jdbcType=DATE},
+      </if>
+      <if test="deductStatus != null" >
+        #{deductStatus,jdbcType=TINYINT}  
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" >
+    UPDATE shop_balance_date
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="bsgroupsName != null" >
+        bsgroups_name = #{bsgroupsName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        mall_name = #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="retailType != null" >
+        retail_type = #{retailType,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="balanceFlag != null" >
+        balance_flag = #{balanceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="billalready != null" >
+        bill_already = #{billalready,jdbcType=TINYINT},
+      </if>
+      <if test="shouldBillDate != null" >
+        should_bill_date = #{shouldBillDate,jdbcType=DATE},
+      </if>
+      <if test="incomePaymentsDate != null" >
+        income_payments_date = #{incomePaymentsDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceShouldSendDate != null">
+      	invoice_should_send_date = #{invoiceShouldSendDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceShouldArraiveDate != null">
+      	invoice_should_arrive_date = #{invoiceShouldArraiveDate,jdbcType=DATE},
+      </if>
+      <if test="deductStatus != null" >
+        deduct_status = #{deductStatus,jdbcType=TINYINT}  
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" >
+    UPDATE shop_balance_date
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      bsgroups_name = #{bsgroupsName,jdbcType=VARCHAR},
+      mall_no = #{mallNo,jdbcType=CHAR},
+      mall_name = #{mallName,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      retail_type = #{retailType,jdbcType=VARCHAR},
+      month = #{month,jdbcType=CHAR},
+      balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      balance_flag = #{balanceFlag,jdbcType=TINYINT}, 
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      bill_already = #{billalready,jdbcType=TINYINT},
+      should_bill_date = #{shouldBillDate,jdbcType=DATE},
+      income_payments_date = #{incomePaymentsDate,jdbcType=DATE},
+      invoice_should_send_date = #{invoiceShouldSendDate,jdbcType=DATE},
+      invoice_should_arrive_date = #{invoiceShouldArraiveDate,jdbcType=DATE},
+      deduct_status = #{deductStatus,jdbcType=TINYINT}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <update id="updateBalanceDateSet" parameterType="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" >
+    UPDATE shop_balance_date
+    <set >
+      <if test="balanceFlag != null" >
+        balance_flag = #{balanceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="billalready != null" >
+        bill_already = #{billalready,jdbcType=TINYINT},
+      </if>
+     </set>
+    WHERE shop_no = #{shopNo,jdbcType=CHAR}
+    and  month = #{month,jdbcType=CHAR}
+    and  balance_start_date = #{balanceStartDate,jdbcType=DATE}
+    and  balance_end_date = #{balanceEndDate,jdbcType=DATE}  
+  </update>
+  
+  <update id="updateBalanceBillAlready" parameterType="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" >
+    UPDATE shop_balance_date
+    set
+       bill_already = null
+    WHERE shop_no = #{shopNo,jdbcType=CHAR}
+    and  month = #{month,jdbcType=CHAR}
+    and  balance_start_date = #{balanceStartDate,jdbcType=DATE}
+    and  balance_end_date = #{balanceEndDate,jdbcType=DATE}  
+  </update>
+  
+  <select id="selectNewShopDateCount" resultType="java.lang.Integer" >
+  SELECT count(1) from 
+  (SELECT A.* from shop_balance_date A where 1=1 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+        AND company_no in ${params.multiCompanyNo}
+      </if>
+       <if test="null!=params.multiBsgroupsNo and ''!=params.multiBsgroupsNo" >
+        AND bsgroups_no in ${params.multiBsgroupsNo}
+      </if>
+       <if test="null!=params.multiMallNo and ''!=params.multiMallNo" >
+        AND mall_no in ${params.multiMallNo}
+      </if>
+       <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND shop_no IN 
+         	<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+   				#{shopNos, jdbcType=CHAR}
+  			</foreach>
+      </if>
+      <if test="null!=params.month and ''!=params.month" >
+        AND month = #{params.month}
+      </if>
+    </if>
+  ) T WHERE NOT EXISTS
+  	(SELECT B.* from shop_balance_date B where B.shop_no = T.shop_no 
+  		AND B.month=DATE_FORMAT(DATE_ADD(DATE_FORMAT(CONCAT(T.month,'01'),'%Y%m%d'),interval -1 day),'%Y%m'))
+  </select>
+  
+  <select id="selectNewShopDateByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT T.* from 
+  	(SELECT A.* from shop_balance_date A where 1=1 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+        AND company_no in ${params.multiCompanyNo}
+      </if>
+       <if test="null!=params.multiBsgroupsNo and ''!=params.multiBsgroupsNo" >
+        AND bsgroups_no in ${params.multiBsgroupsNo}
+      </if>
+       <if test="null!=params.multiMallNo and ''!=params.multiMallNo" >
+        AND mall_no in ${params.multiMallNo}
+      </if>
+       <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND shop_no IN 
+         	<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+   				#{shopNos, jdbcType=CHAR}
+  			</foreach>
+      </if>
+      <if test="null!=params.month and ''!=params.month" >
+        AND month = #{params.month}
+      </if>
+    </if>
+  ) T WHERE NOT EXISTS
+  	(SELECT B.* from shop_balance_date B where B.shop_no = T.shop_no 
+		AND B.month=DATE_FORMAT(DATE_ADD(DATE_FORMAT(CONCAT(T.month,'01'),'%Y%m%d'),interval -1 day),'%Y%m'))
+    <if test="orderByField == null or  ''==orderByField " >
+      ORDER BY balance_start_date DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+</mapper>

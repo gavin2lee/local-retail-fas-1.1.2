@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BLKCompanyPeriodBalanceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CompanyPeriodBalance" >
+  	<id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="opening_qty" property="openingQty" jdbcType="INTEGER" />
+    <result column="opening_balance" property="openingBalance" jdbcType="DECIMAL" />
+    <result column="purchase_in_qty" property="purchaseInQty" jdbcType="INTEGER" />
+    <result column="purchase_in_amount" property="purchaseInAmount" jdbcType="DECIMAL" />
+    <result column="outer_transfer_in_qty" property="outerTransferInQty" jdbcType="INTEGER" />
+    <result column="outer_transfer_in_amount" property="outerTransferInAmount" jdbcType="DECIMAL" />
+    <result column="purchase_return_qty" property="purchaseReturnQty" jdbcType="INTEGER" />
+    <result column="purchase_return_amount" property="purchaseReturnAmount" jdbcType="DECIMAL" />
+    <result column="inv_surplus_qty" property="invSurplusQty" jdbcType="INTEGER" />
+    <result column="inv_surplus_amount" property="invSurplusAmount" jdbcType="DECIMAL" />
+    <result column="others_in_qty" property="othersInQty" jdbcType="INTEGER" />
+    <result column="others_in_amount" property="othersInAmount" jdbcType="DECIMAL" />
+    <result column="outer_way_qty" property="outerWayQty" jdbcType="INTEGER" />
+    <result column="outer_way_amount" property="outerWayAmount" jdbcType="DECIMAL" />
+    <result column="outer_diff_qty" property="outerDiffQty" jdbcType="INTEGER" />
+    <result column="outer_diff_amount" property="outerDiffAmount" jdbcType="DECIMAL" />
+    <result column="cost_adjustment_amount" property="costAdjustmentAmount" jdbcType="DECIMAL" />
+    <result column="sales_out_qty" property="salesOutQty" jdbcType="INTEGER" />
+    <result column="sales_out_amount" property="salesOutAmount" jdbcType="DECIMAL" />
+    <result column="outer_transfer_out_qty" property="outerTransferOutQty" jdbcType="INTEGER" />
+    <result column="outer_transfer_out_amount" property="outerTransferOutAmount" jdbcType="DECIMAL" />
+    <result column="inventory_loss_qty" property="inventoryLossQty" jdbcType="INTEGER" />
+    <result column="inventory_loss_amount" property="inventoryLossAmount" jdbcType="DECIMAL" />
+    <result column="others_out_qty" property="othersOutQty" jdbcType="INTEGER" />
+    <result column="others_out_amount" property="othersOutAmount" jdbcType="DECIMAL" />
+    <result column="during_net_qty" property="duringNetQty" jdbcType="INTEGER" />
+    <result column="during_net_amount" property="duringNetAmount" jdbcType="DECIMAL" />
+    <result column="closing_qty" property="closingQty" jdbcType="INTEGER" />
+    <result column="closing_balance" property="closingBalance" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    
+    <result column="during_net_inventory_qty" property="duringNetInventoryQty" jdbcType="INTEGER" />
+    <result column="during_net_inventory_amount" property="duringNetInventoryAmount" jdbcType="DECIMAL" />
+    
+    <result column="pre_sum_owe_qty" property="preSumOweQty" jdbcType="INTEGER" />
+    <result column="pre_accounting_qty" property="preAccountingQty" jdbcType="INTEGER" />
+    <result column="pre_sum_owe_amount" property="preSumOweAmount" jdbcType="DECIMAL" />
+    <result column="pre_accounting_amount" property="preAccountingAmount" jdbcType="DECIMAL" />
+    <result column="curr_sum_owe_qty" property="currSumOweQty" jdbcType="INTEGER" />
+    <result column="curr_accounting_qty" property="currAccountingQty" jdbcType="INTEGER" />
+    <result column="curr_sum_owe_amount" property="currSumOweAmount" jdbcType="DECIMAL" />
+    <result column="curr_accounting_amount" property="currAccountingAmount" jdbcType="DECIMAL" />
+    <result column="weighted_difference" property="weightedDifference" jdbcType="DECIMAL" />
+    <result column="closing_balance_reference" property="closingBalanceReference" jdbcType="DECIMAL" />
+    
+    <result column="sales_sum_qty" property="salesSumQty" jdbcType="INTEGER" />
+    <result column="sales_sum_amount" property="salesSumAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+  	id, company_no, year, month, item_no, item_code, item_name, brand_no, category_no, 
+    opening_qty, opening_balance, purchase_in_qty, purchase_in_amount, outer_transfer_in_qty, 
+    outer_transfer_in_amount, purchase_return_qty, purchase_return_amount, inv_surplus_qty, 
+    inv_surplus_amount, others_in_qty, others_in_amount, outer_way_qty, outer_way_amount, 
+    outer_diff_qty, outer_diff_amount, cost_adjustment_amount, sales_out_qty, sales_out_amount, 
+    outer_transfer_out_qty, outer_transfer_out_amount, inventory_loss_qty, inventory_loss_amount, 
+    others_out_qty, others_out_amount, during_net_qty, during_net_amount, closing_qty, 
+    closing_balance, unit_cost, region_cost, headquarter_cost, create_time, create_user, 
+    update_time, update_user, sharding_flag
+  </sql>
+  
+  <select id="selectTheFinalCostByPage" resultMap="BaseResultMap" parameterType="map" >
+	SELECT p.sharding_flag,p.id, p.company_no,p.brand_no,p.item_no, p.item_code, p.item_name, p.category_no, p.year, p.month,
+	 p.closing_qty, p.closing_balance, p.region_cost
+		FROM company_period_balance p
+		 WHERE p.company_no = #{params.companyNo} AND p.year = #{params.year} AND p.month = #{params.month} 
+			<if test="null != params.brandNos and '' != params.brandNos">
+			  	AND p.brand_no in 
+			 <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+			 	#{brandNo}
+			 </foreach>  
+			</if>
+			<if test="null != params.itemNos and '' != params.itemNos">
+			   AND p.item_no in 
+			   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+					#{itemNo}  
+			   </foreach>  
+		   </if>
+		   GROUP BY  p.item_no
+  </select>
+  
+  <delete id="deleteCompanyMonthPeriodBalance" parameterType="map" >
+    DELETE FROM company_period_balance
+    	WHERE company_no = #{params.companyNo} AND year = #{params.currentYear} AND month= #{params.currentMonth}
+    	<if test="null != params.brandNos and '' != params.brandNos">
+			AND brand_no in 
+			<foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+			</foreach>  
+		</if>
+    	<if test="null != params.itemNos and '' != params.itemNos">
+			AND item_no in 
+			<foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+				#{itemNo}  
+			</foreach>  
+		</if>
+  </delete>
+  
+    <!-- 从店铺结存汇总出公司结存 -->
+  <insert  id="shopSummaryToCompany" parameterType="map">
+  	insert into company_period_balance(
+		id, company_no, year, month, item_no, item_code, item_name, brand_no, category_no, 
+		opening_qty, opening_balance, 
+		purchase_in_qty, outer_transfer_in_qty, purchase_return_qty,
+		inv_surplus_qty,others_in_qty, outer_way_qty, outer_diff_qty,
+		sales_out_qty, outer_transfer_out_qty, inventory_loss_qty,
+	  others_out_qty, during_net_qty, closing_qty, sharding_flag
+	)select 
+		replace(uuid(), '-', ''), pb.company_no,pb.year,pb.month,
+		pb.item_no, pb.item_code,pb.item_name, pb.brand_no,pb.category_no,
+		SUM(pb.opening_qty) as opening_qty,SUM(pb.opening_qty * IFNULL(i.unit_cost,0)) as opening_balance, 
+		SUM(pb.purchase_in_qty) as purchase_in_qty,SUM(pb.outer_transfer_in_qty) as outer_transfer_in_qty,
+		SUM(pb.purchase_return_qty) as purchase_return_qty,SUM(pb.inv_surplus_qty) as inv_surplus_qty,
+		SUM(pb.others_in_qty) as others_in_qty, SUM(pb.outer_way_qty) as outer_way_qty,
+		SUM(pb.outer_diff_qty) as outer_diff_qty,SUM(pb.sales_out_qty) as sales_out_qty,
+		SUM(pb.outer_transfer_out_qty) as outer_transfer_out_qty,
+		SUM(pb.inventory_loss_qty) as inventory_loss_qty,
+		SUM(pb.others_out_qty) as others_out_qty,
+		SUM(pb.during_net_qty) during_net_qty,
+		SUM(pb.closing_qty) as closing_qty,
+		pb.sharding_flag
+	from period_balance pb 
+	LEFT JOIN (
+		SELECT T.company_no,T.year,T.`month`,i.item_no,i.style_no,T.unit_cost FROM item i INNER JOIN (
+			SELECT ic.company_no,ic.year,ic.`month`,i.style_no,ic.unit_cost 
+			FROM item_cost ic LEFT JOIN item i ON ic.item_no = i.item_no
+			WHERE 1=1
+			AND i.style_no IS NOT NULL
+			AND trim(i.style_no) != ''
+			AND ic.company_no = #{params.companyNo} 
+			AND ic.`year` = #{params.lastYear} 
+			AND ic.`month` = #{params.lastMonth}
+			<if test="null != params.brandNos and '' != params.brandNos">
+			 <foreach collection="params.brandNos" item="brandNo" separator="," open="AND ic.brand_no in (" close=")" index=""> 
+					#{brandNo}  
+			 </foreach>   
+			 </if>
+	 		<if test="null != params.itemNos and '' != params.itemNos">
+			 <foreach collection="params.itemNos" item="itemNo" separator="," open="AND ic.item_no in (" close=")" index=""> 
+					#{itemNo}  
+			 </foreach>  
+		 	</if>
+			GROUP BY ic.company_no,ic.year,ic.`month`,i.style_no
+		) T ON i.style_no = T.style_no
+		WHERE 1=1
+		AND i.style_no IS NOT NULL
+		AND trim(i.style_no) != ''
+		<if test="null != params.brandNos and '' != params.brandNos">
+		 <foreach collection="params.brandNos" item="brandNo" separator="," open="AND i.brand_no in (" close=")" index=""> 
+				#{brandNo}  
+		 </foreach>   
+		 </if>
+ 		<if test="null != params.itemNos and '' != params.itemNos">
+		 <foreach collection="params.itemNos" item="itemNo" separator="," open="AND i.item_no in (" close=")" index=""> 
+				#{itemNo}  
+		 </foreach>  
+	 	</if>
+	) i ON pb.company_no = i.company_no AND pb.item_no = i.item_no
+	where pb.company_no = #{params.companyNo} AND pb.year=#{params.currentYear} 
+       	AND pb.month=#{params.currentMonth} AND pb.sharding_flag = #{params.shardingFlag}
+       	<if test="null != params.brandNos and '' != params.brandNos">
+       		AND pb.brand_no in 
+	       <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+	        	#{brandNo}  
+	       </foreach>  
+       </if>
+ 	   <if test="null != params.itemNos and '' != params.itemNos">
+       		AND pb.item_no in 
+	       <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+	        	#{itemNo}  
+	       </foreach>  
+       </if>
+	group by pb.company_no, pb.year, pb.month, pb.item_no
+  </insert>
+  
+  <update  id="batchUpdateWriteBackAmount" parameterType="map">
+		update company_period_balance pb,(
+			SELECT A.buyer_no,A.item_no,A.cost,
+				SUM(A.purchase_in_qty*A.cost) purchase_in_amount,
+				SUM(A.outer_transfer_in_qty*A.cost) outer_transfer_in_amount,
+				SUM(A.purchase_return_qty*A.cost) purchase_return_amount
+			FROM (
+				SELECT
+					b.buyer_no, b.buyer_name, b.saler_no, b.saler_name, b.brand_no,
+					b.item_no, b.item_code, b.item_name, b.cost, b.receive_date, b.sharding_flag,
+					IF(b.bill_type = 1304,b.receive_qty,0) + IF(b.bill_type = 1372 AND b.fas_bill_code in ('FG13720401','FG13720501'),b.receive_qty,0) purchase_in_qty,
+					IF(b.bill_type = 1372 AND b.fas_bill_code NOT IN ('FG13720401','FG13720501','FG13720404','FG13720504'),b.receive_qty,0) outer_transfer_in_qty,
+					IF(#{params.isPE} ='true',0,IF(b.bill_type = 1333,b.send_qty,0)) 
+					+ IF(#{params.isPE} ='true',0,IF(b.bill_type = 1372 AND b.fas_bill_code in ('FG13720404','FG13720504'),b.send_qty,0)) purchase_return_qty
+				FROM
+					bill_buy_balance b
+				WHERE 1=1
+				AND YEAR(IFNULL(b.receive_date,b.send_date)) = #{params.currentYear}
+				AND MONTH(IFNULL(b.receive_date,b.send_date)) = #{params.currentMonth}
+				AND b.buyer_no = #{params.companyNo}
+				<if test="null != params.brandNos and '' != params.brandNos">
+					  	AND b.brand_no in 
+					 <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+					 	#{brandNo}
+					 </foreach>  
+				</if>
+				<if test="null != params.itemNos and '' != params.itemNos">
+				   AND b.item_no in 
+				   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+						#{itemNo}  
+				   </foreach>  
+			   	</if>
+			) A
+			GROUP BY A.buyer_no,A.item_no
+		)T1 set
+		pb.purchase_in_amount= T1.purchase_in_amount,
+		pb.purchase_return_amount= T1.purchase_return_amount,
+		pb.outer_transfer_in_amount= T1.outer_transfer_in_amount
+		WHERE   pb.company_no=T1.buyer_no 
+				AND pb.`year`=#{params.currentYear}
+				AND pb.`month`=#{params.currentMonth}
+				AND pb.sharding_flag = #{params.shardingFlag}
+				AND pb.item_no=T1.item_no
+  </update>
+  
+   <update id="batchHandleCostDjustmentAmount"  parameterType="map" >
+	UPDATE company_period_balance p,
+	 (
+		SELECT 
+			A.sharding_flag,A.company_no,A.`year`,A.`month`,
+			A.item_no,A.adjust_cost
+		FROM (
+			SELECT 
+				main.sharding_flag,main.company_no,main.`year`,main.`month`,dtl.item_no,
+				dtl.adjust_cost,dtl.update_time
+			FROM bill_inv_cost_adjust main 
+			LEFT JOIN bill_inv_cost_adjust_dtl dtl ON main.bill_no = dtl.bill_no
+			WHERE 1=1 AND main.`status` = 1 AND main.sharding_flag = #{params.shardingFlag} 
+			AND main.company_no = #{params.companyNo}
+			AND main.`year` = #{params.currentYear} AND main.`month`=#{params.currentMonth}
+			<if test="null != params.brandNos and '' != params.brandNos">
+				<foreach collection="params.brandNos" item="brandNo" separator="," open="AND dtl.brand_no in (" close=")" index=""> 
+					#{brandNo}  
+				</foreach>  
+			</if>
+	    	<if test="null != params.itemNos and '' != params.itemNos">
+				<foreach collection="params.itemNos" item="itemNo" separator="," open="AND dtl.item_no in  (" close=")" index=""> 
+					#{itemNo}  
+				</foreach>  
+			</if>
+		) A
+		WHERE EXISTS (
+			SELECT COUNT(*) FROM (
+				SELECT 
+				main.sharding_flag,main.company_no,main.`year`,main.`month`,dtl.item_no,
+				dtl.adjust_cost,dtl.update_time
+			FROM bill_inv_cost_adjust main 
+			LEFT JOIN bill_inv_cost_adjust_dtl dtl ON main.bill_no = dtl.bill_no
+			WHERE 1=1 AND main.`status` = 1 AND main.sharding_flag = #{params.shardingFlag} AND main.company_no = #{params.companyNo}
+			AND main.`year` = #{params.currentYear} AND main.`month`=#{params.currentMonth}
+			<if test="null != params.brandNos and '' != params.brandNos">
+				<foreach collection="params.brandNos" item="brandNo" separator="," open="AND dtl.brand_no in (" close=")" index=""> 
+					#{brandNo}  
+				</foreach>  
+			</if>
+	    	<if test="null != params.itemNos and '' != params.itemNos">
+				<foreach collection="params.itemNos" item="itemNo" separator="," open="AND dtl.item_no in  (" close=")" index=""> 
+					#{itemNo}  
+				</foreach>  
+			</if>
+			) B WHERE B.sharding_flag = A.sharding_flag AND B.company_no = A.company_no AND B.year = A.`year`
+			AND B.month=A.`month` AND B.item_no = A.item_no AND B.update_time &gt;= A.update_time HAVING COUNT(*) = 1
+		)
+		ORDER BY A.company_no,A.`year`,A.`month`,A.item_no,A.update_time
+	) T
+	SET p.cost_adjustment_amount = T.adjust_cost * (p.opening_qty + p.purchase_in_qty + p.purchase_return_qty + p.outer_transfer_in_qty)
+		- (ROUND(p.opening_balance,2) + p.purchase_in_amount + p.purchase_return_amount + p.outer_transfer_in_amount)
+	WHERE 1=1 AND p.sharding_flag = T.sharding_flag AND p.company_no=T.company_no AND p.`year`=T.`year` AND p.`month`=T.`month` AND p.item_no=T.item_no
+  </update>
+  
+   <!-- 上月已经存在结存而本月未发生结存的记录-->
+  <select id="queryPeriodBalanceJoinItemCostCount" resultType="java.lang.Integer" parameterType="map" >
+	SELECT COUNT(1) FROM
+		(SELECT pb.id, pb.company_no, pb.year, pb.month, pb.item_no,ic.unit_cost FROM company_period_balance pb 
+		LEFT JOIN 
+		(SELECT company_no, year, month, item_no,unit_cost FROM item_cost 
+			WHERE company_no = #{params.companyNo} AND year = #{params.currentYear} AND month = #{params.currentMonth}
+			<if test="null != params.brandNos and '' != params.brandNos">
+			   AND brand_no in 
+			   <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+					#{brandNo}  
+			   </foreach>  
+		   </if>
+		   <if test="null != params.itemNos and '' != params.itemNos">
+			   AND item_no in 
+			   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+					#{itemNo}  
+			   </foreach>  
+		   </if>
+		) ic ON pb.company_no = ic.company_no and pb.year = ic.year and pb.month = ic.month and pb.item_no = ic.item_no 
+		WHERE pb.company_no = #{params.companyNo} AND pb.year = #{params.currentYear} AND pb.month = #{params.currentMonth}
+			 <if test="null != params.brandNos and '' != params.brandNos">
+			   AND pb.brand_no in 
+			   <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+					#{brandNo}  
+			   </foreach>  
+		   </if>
+			<if test="null != params.itemNos and '' != params.itemNos">
+			   AND pb.item_no in 
+			   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+					#{itemNo}  
+			   </foreach>  
+		   </if>
+		 ) a
+  </select>
+  
+  
+    <!-- 回写成本到公司结存的出库类汇总金额-->
+  <update id="batchUpdateBalanceItemCostByPage" parameterType="map" >
+  	UPDATE company_period_balance p, (
+  		SELECT T1.id,T1.company_no,T1.`year`,T1.`month`,T1.item_no,T1.style_no,ROUND(T2.unit_cost,2) unit_cost FROM (
+			SELECT
+				p.id,p.company_no,p.`year`,p.`month`,p.item_no,i.style_no
+			FROM
+				company_period_balance p
+			LEFT JOIN item i ON p.item_no = i.item_no
+			WHERE 1=1
+			AND p.sharding_flag = #{params.shardingFlag}
+			AND p.company_no = #{params.companyNo}
+			AND p. YEAR = #{params.currentYear}
+			AND p. MONTH = #{params.currentMonth}
+			AND i.style_no IS NOT NULL
+			AND trim(i.style_no) != ''
+			<if test="null != params.brandNos and '' != params.brandNos">
+			   <foreach collection="params.brandNos" item="brandNo" separator="," open="AND p.brand_no in (" close=")" index=""> 
+					#{brandNo}  
+			   </foreach>  
+			</if>
+			<if test="null != params.itemNos and '' != params.itemNos">
+			   <foreach collection="params.itemNos" item="itemNo" separator="," open="AND p.item_no in (" close=")" index=""> 
+					#{itemNo}  
+			   </foreach>  
+			</if>
+			) T1 LEFT JOIN (
+			SELECT ic.company_no,ic.year,ic.`month`,i.style_no,ic.unit_cost FROM item_cost ic LEFT JOIN item i ON ic.item_no = i.item_no
+			WHERE 1=1
+			AND ic.company_no = #{params.companyNo}
+			AND ic. YEAR = #{params.currentYear}
+			AND ic. MONTH = #{params.currentMonth}
+			AND i.style_no IS NOT NULL
+			AND trim(i.style_no) != ''
+			<if test="null != params.brandNos and '' != params.brandNos">
+			   <foreach collection="params.brandNos" item="brandNo" separator="," open="AND ic.brand_no in (" close=")" index=""> 
+					#{brandNo}  
+			   </foreach>  
+			</if>
+			<if test="null != params.itemNos and '' != params.itemNos">
+			   <foreach collection="params.itemNos" item="itemNo" separator="," open="AND ic.item_no in (" close=")" index=""> 
+					#{itemNo}  
+			   </foreach>  
+			</if>
+			GROUP BY ic.company_no,ic.year,ic.`month`,i.style_no
+			) T2 ON T1.style_no = T2.style_no
+		LIMIT #{page.startRowNum} ,#{page.pageSize} ) T
+		SET
+		p.sales_out_amount=p.sales_out_qty * IFNULL(T.unit_cost, 0),
+		p.outer_transfer_out_amount=p.outer_transfer_out_qty * IFNULL(T.unit_cost, 0),
+		p.others_out_amount=p.others_out_qty * IFNULL(T.unit_cost, 0),
+		p.inventory_loss_amount=p.inventory_loss_qty * IFNULL(T.unit_cost, 0),
+		p.others_out_amount=p.others_out_qty * IFNULL(T.unit_cost, 0),
+		p.during_net_amount=p.purchase_in_amount+p.purchase_return_amount+p.outer_transfer_in_amount+(p.inv_surplus_qty+p.others_in_qty+p.sales_out_qty+p.outer_transfer_out_qty+p.inventory_loss_qty)* IFNULL(T.unit_cost, 0),
+		p.inv_surplus_amount=p.inv_surplus_qty * IFNULL(T.unit_cost, 0),
+		p.others_in_amount=p.others_in_qty * IFNULL(T.unit_cost, 0),
+		p.outer_way_amount=p.outer_way_qty * IFNULL(T.unit_cost, 0),
+		p.closing_balance=p.closing_qty*IFNULL(T.unit_cost, 0),
+		p.unit_cost=IFNULL(T.unit_cost, 0)
+		WHERE p.id=T.id
+  </update>
+  
+  <select id="selectCompanyPeriodBalanceGroupByStyleNo" resultMap="BaseResultMap" parameterType="map">
+	SELECT
+		pb.company_no,pb.year,pb.month,
+		i.style_no item_no,
+		ROUND(sum(pb.opening_balance + pb.purchase_in_amount + pb.outer_transfer_in_amount + pb.purchase_return_amount)
+		/sum(pb.opening_qty + pb.purchase_in_qty + pb.outer_transfer_in_qty + pb.purchase_return_qty),2) unit_cost
+	FROM
+		company_period_balance pb
+	LEFT JOIN item i ON pb.item_no = i.item_no
+	WHERE 1 = 1
+	AND pb.company_no = #{params.companyNo}
+	AND pb. YEAR = #{params.currentYear}
+	AND pb. MONTH = #{params.currentMonth}
+	AND i.style_no IS NOT NULL
+	AND trim(i.style_no) != ''
+	<if test="null != params.brandNos and '' != params.brandNos">
+	   <foreach collection="params.brandNos" item="brandNo" separator="," open="AND pb.brand_no in (" close=")" index=""> 
+			#{brandNo}  
+	   </foreach>  
+    </if>
+	<if test="null != itemNos and '' != itemNos">
+	   <foreach collection="itemNos" item="itemNo" separator="," open="AND pb.item_no in (" close=")" index=""> 
+			#{itemNo}  
+	   </foreach>  
+    </if>
+	GROUP BY pb.company_no, pb. YEAR, pb. MONTH, i.style_no
+  </select>
+  
+  <select id="findCompanyPeriodBalanceList" resultType="java.lang.String" parameterType="map">
+  	SELECT
+		item_no
+	FROM
+		company_period_balance
+	WHERE 1=1
+	AND	company_no = #{params.companyNo}
+	AND `year` = #{params.currentYear}
+	AND `month` = #{params.currentMonth}
+	<if test="null != params.brandNos and '' != params.brandNos">
+	   AND brand_no in 
+	   <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+			#{brandNo}  
+	   </foreach>  
+    </if>
+	<if test="null != params.itemNos and '' != params.itemNos">
+	   AND item_no in 
+	   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+			#{itemNo}  
+	   </foreach>  
+    </if>
+	GROUP BY item_no
+  </select>
+</mapper>

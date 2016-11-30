@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ReturnExchangeMainMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ReturnExchangeMain" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="out_date" property="outDate" jdbcType="DATE" />
+    <result column="old_out_date" property="oldOutDate" jdbcType="DATE" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="tag_price_amount" property="tagPriceAmount" jdbcType="DECIMAL" />
+    <result column="sale_price_amount" property="salePriceAmount" jdbcType="DECIMAL" />
+    <result column="disc_price_amount" property="discPriceAmount" jdbcType="DECIMAL" />
+    <result column="settle_amount" property="settleAmount" jdbcType="DECIMAL" />
+    <result column="reduce_amount" property="reduceAmount" jdbcType="DECIMAL" />
+    <result column="total_rebate_amount" property="totalRebateAmount" jdbcType="DECIMAL" />
+    <result column="pref_amount" property="prefAmount" jdbcType="DECIMAL" />
+    <result column="coupon_amount" property="couponAmount" jdbcType="DECIMAL" />
+    <result column="all_amount" property="allAmount" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="remain_amount" property="remainAmount" jdbcType="DECIMAL" />
+    <result column="assistant_name" property="assistantName" jdbcType="VARCHAR" />
+    <result column="assistant_id" property="assistantId" jdbcType="VARCHAR" />
+    <result column="assistant_no" property="assistantNo" jdbcType="VARCHAR" />
+    <result column="vip_no" property="vipNo" jdbcType="VARCHAR" />
+    <result column="vip_name" property="vipName" jdbcType="VARCHAR" />
+    <result column="wildcard_no" property="wildcardNo" jdbcType="VARCHAR" />
+    <result column="wildcard_name" property="wildcardName" jdbcType="VARCHAR" />
+    <result column="wildcard_discount" property="wildcardDiscount" jdbcType="DECIMAL" />
+    <result column="base_score" property="baseScore" jdbcType="INTEGER" />
+    <result column="pro_score" property="proScore" jdbcType="INTEGER" />
+    <result column="cost_score" property="costScore" jdbcType="INTEGER" />
+    <result column="business_mode" property="businessMode" jdbcType="BIT" />
+    <result column="business_type" property="businessType" jdbcType="BIT" />
+    <result column="order_source" property="orderSource" jdbcType="BIT" />
+    <result column="daily_flag" property="dailyFlag" jdbcType="BIT" />
+    <result column="daily_datetime" property="dailyDatetime" jdbcType="TIMESTAMP" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="monthly_flag" property="monthlyFlag" jdbcType="BIT" />
+    <result column="monthly_datetime" property="monthlyDatetime" jdbcType="TIMESTAMP" />
+    <result column="old_order_no" property="oldOrderNo" jdbcType="VARCHAR" />
+    <result column="new_order_no" property="newOrderNo" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="actual_postage" property="actualPostage" jdbcType="DECIMAL" />
+    <result column="express_no" property="expressNo" jdbcType="VARCHAR" />
+    <result column="take_mode" property="takeMode" jdbcType="BIT" />
+    <result column="market_ticket_no" property="marketTicketNo" jdbcType="VARCHAR" />
+    <result column="lock_flag" property="lockFlag" jdbcType="BIT" />
+    <result column="return_exchange_time" property="returnExchangeTime" jdbcType="TINYINT" />
+    <result column="shop_terminal_no" property="shopTerminalNo" jdbcType="VARCHAR" />
+    <result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+    <result column="invoice_amount" property="invoiceAmount" jdbcType="DECIMAL" />
+    <result column="invoice_date" property="invoiceDate" jdbcType="DATE" />
+    <result column="create_user_no" property="createUserNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_no" property="updateUserNo" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="adjust_flag" property="adjustFlag" jdbcType="BIT" />
+    <result column="adjust_user" property="adjustUser" jdbcType="VARCHAR" />
+    <result column="adjust_time" property="adjustTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ItemReturnResultMap" type="cn.wonhigh.retail.fas.common.model.ItemReturnRecord" >
+  	<result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="old_out_date" property="oldOutDate" jdbcType="DATE" />
+    <result column="out_date" property="outDate" jdbcType="DATE" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="old_order_no" property="oldOrderNo" jdbcType="CHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="all_amount" property="allAmount" jdbcType="DECIMAL" />
+    <result column="pay_code" property="payCode" jdbcType="CHAR" />
+    <result column="pay_name" property="payName" jdbcType="VARCHAR" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_no, shop_no, shop_name, out_date, old_out_date, qty, tag_price_amount, 
+    sale_price_amount, disc_price_amount, settle_amount, reduce_amount, total_rebate_amount, 
+    pref_amount, coupon_amount, all_amount, amount, remain_amount, assistant_name, assistant_id, 
+    assistant_no, vip_no, vip_name, wildcard_no, wildcard_name, wildcard_discount, base_score, 
+    pro_score, cost_score, business_mode, business_type, order_source, daily_flag, daily_datetime, 
+    balance_no, monthly_flag, monthly_datetime, old_order_no, new_order_no, remark, status, 
+    actual_postage, express_no, take_mode, market_ticket_no, lock_flag, return_exchange_time, 
+    shop_terminal_no, invoice_no, invoice_amount, invoice_date, create_user_no, create_user, 
+    create_time, update_user_no, update_user, update_time, adjust_flag, adjust_user, 
+    adjust_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.oldOrderNo and ''!=params.oldOrderNo" >
+        AND old_order_no = #{params.oldOrderNo}
+      </if>
+      <if test="null!=params.businessNo and ''!=params.businessNo" >
+        AND business_no = #{params.businessNo}
+      </if>
+      <if test="params.businessNoList!=null and params.businessNoList!=''">
+     		<foreach collection="params.businessNoList" item="businessNo" open="AND business_no in(" separator="," close=")">
+                '${businessNo}'
+            </foreach>
+      </if>
+          
+      <if test="params.statusList!=null and params.statusList!=''">
+          <foreach collection="params.statusList" item="status" open="AND status in(" separator="," close=")">
+              '${status}'
+          </foreach>
+      </if>
+      <if test="params.startOutDate != null and params.startOutDate!=''">  
+     		and  rem.out_date  &gt;= #{params.startOutDate}
+     	</if>
+     	<if test="params.endOutDate != null and params.endOutDate!=''">  
+     		and  rem.out_date  &lt;= #{params.endOutDate}
+     	</if>
+ 		<if test="null!=params.shopNoList and ''!=params.shopNoList" >
+		   <foreach collection="params.shopNoList" item="shopNo" open="AND rem.shop_no in(" separator="," close=")">
+		      '${shopNo}'
+		   </foreach>
+	  	</if>
+	  	 <if test="null!=params.businessTypeList and ''!=params.businessTypeList" >
+		   <foreach collection="params.businessTypeList" item="businessType" open="AND rem.business_type in(" separator="," close=")">
+		      '${businessType}'
+		    </foreach>
+	  	</if>
+	    <if test="params.payCode!=null and params.payCode!=''">
+			AND opay.pay_code = #{params.payCode}
+		</if>
+	     <if test="null!=params.payCodeList and ''!=params.payCodeList" >
+		   <foreach collection="params.payCodeList" item="payCode" open="AND opay.pay_code in(" separator="," close=")">
+		      '${payCode}'
+		    </foreach>
+	  	</if>
+    </if>
+  </sql>
+  
+  <!-- 根据查询条件去更新return_exchange_main发票时间和发票号-->
+  <update id="updateOrderForInvoiceNoAndDate" parameterType="java.util.Map" >
+    update return_exchange_main rem 
+        <set>
+         rem.invoice_no = #{params.paramInvoiceNo,jdbcType=VARCHAR},
+         rem.invoice_date = #{params.paramInvoiceDate,jdbcType=DATE}
+         </set>
+     where 1=1
+       <include refid="condition"/>
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM return_exchange_main
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM return_exchange_main WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM return_exchange_main WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM return_exchange_main WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM return_exchange_main
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeMain" >
+    DELETE FROM return_exchange_main
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeMain" >
+    INSERT INTO return_exchange_main (id, business_no, shop_no, 
+      shop_name, out_date, old_out_date, 
+      qty, tag_price_amount, sale_price_amount, 
+      disc_price_amount, settle_amount, reduce_amount, 
+      total_rebate_amount, pref_amount, coupon_amount, 
+      all_amount, amount, remain_amount, 
+      assistant_name, assistant_id, assistant_no, 
+      vip_no, vip_name, wildcard_no, 
+      wildcard_name, wildcard_discount, base_score, 
+      pro_score, cost_score, business_mode, 
+      business_type, order_source, daily_flag, 
+      daily_datetime, balance_no, monthly_flag, 
+      monthly_datetime, old_order_no, new_order_no, 
+      remark, status, actual_postage, 
+      express_no, take_mode, market_ticket_no, 
+      lock_flag, return_exchange_time, shop_terminal_no, 
+      invoice_no, invoice_amount, invoice_date, 
+      create_user_no, create_user, create_time, 
+      update_user_no, update_user, update_time, 
+      adjust_flag, adjust_user, adjust_time
+      )
+    VALUES (#{id,jdbcType=CHAR}, #{businessNo,jdbcType=VARCHAR}, #{shopNo,jdbcType=CHAR}, 
+      #{shopName,jdbcType=VARCHAR}, #{outDate,jdbcType=DATE}, #{oldOutDate,jdbcType=DATE}, 
+      #{qty,jdbcType=INTEGER}, #{tagPriceAmount,jdbcType=DECIMAL}, #{salePriceAmount,jdbcType=DECIMAL}, 
+      #{discPriceAmount,jdbcType=DECIMAL}, #{settleAmount,jdbcType=DECIMAL}, #{reduceAmount,jdbcType=DECIMAL}, 
+      #{totalRebateAmount,jdbcType=DECIMAL}, #{prefAmount,jdbcType=DECIMAL}, #{couponAmount,jdbcType=DECIMAL}, 
+      #{allAmount,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{remainAmount,jdbcType=DECIMAL}, 
+      #{assistantName,jdbcType=VARCHAR}, #{assistantId,jdbcType=VARCHAR}, #{assistantNo,jdbcType=VARCHAR}, 
+      #{vipNo,jdbcType=VARCHAR}, #{vipName,jdbcType=VARCHAR}, #{wildcardNo,jdbcType=VARCHAR}, 
+      #{wildcardName,jdbcType=VARCHAR}, #{wildcardDiscount,jdbcType=DECIMAL}, #{baseScore,jdbcType=INTEGER}, 
+      #{proScore,jdbcType=INTEGER}, #{costScore,jdbcType=INTEGER}, #{businessMode,jdbcType=BIT}, 
+      #{businessType,jdbcType=BIT}, #{orderSource,jdbcType=BIT}, #{dailyFlag,jdbcType=BIT}, 
+      #{dailyDatetime,jdbcType=TIMESTAMP}, #{balanceNo,jdbcType=CHAR}, #{monthlyFlag,jdbcType=BIT}, 
+      #{monthlyDatetime,jdbcType=TIMESTAMP}, #{oldOrderNo,jdbcType=VARCHAR}, #{newOrderNo,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{actualPostage,jdbcType=DECIMAL}, 
+      #{expressNo,jdbcType=VARCHAR}, #{takeMode,jdbcType=BIT}, #{marketTicketNo,jdbcType=VARCHAR}, 
+      #{lockFlag,jdbcType=BIT}, #{returnExchangeTime,jdbcType=TINYINT}, #{shopTerminalNo,jdbcType=VARCHAR}, 
+      #{invoiceNo,jdbcType=VARCHAR}, #{invoiceAmount,jdbcType=DECIMAL}, #{invoiceDate,jdbcType=DATE}, 
+      #{createUserNo,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUserNo,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{adjustFlag,jdbcType=BIT}, #{adjustUser,jdbcType=VARCHAR}, #{adjustTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeMain" >
+    INSERT INTO return_exchange_main
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="businessNo != null" >
+        business_no,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="outDate != null" >
+        out_date,
+      </if>
+      <if test="oldOutDate != null" >
+        old_out_date,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="tagPriceAmount != null" >
+        tag_price_amount,
+      </if>
+      <if test="salePriceAmount != null" >
+        sale_price_amount,
+      </if>
+      <if test="discPriceAmount != null" >
+        disc_price_amount,
+      </if>
+      <if test="settleAmount != null" >
+        settle_amount,
+      </if>
+      <if test="reduceAmount != null" >
+        reduce_amount,
+      </if>
+      <if test="totalRebateAmount != null" >
+        total_rebate_amount,
+      </if>
+      <if test="prefAmount != null" >
+        pref_amount,
+      </if>
+      <if test="couponAmount != null" >
+        coupon_amount,
+      </if>
+      <if test="allAmount != null" >
+        all_amount,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="remainAmount != null" >
+        remain_amount,
+      </if>
+      <if test="assistantName != null" >
+        assistant_name,
+      </if>
+      <if test="assistantId != null" >
+        assistant_id,
+      </if>
+      <if test="assistantNo != null" >
+        assistant_no,
+      </if>
+      <if test="vipNo != null" >
+        vip_no,
+      </if>
+      <if test="vipName != null" >
+        vip_name,
+      </if>
+      <if test="wildcardNo != null" >
+        wildcard_no,
+      </if>
+      <if test="wildcardName != null" >
+        wildcard_name,
+      </if>
+      <if test="wildcardDiscount != null" >
+        wildcard_discount,
+      </if>
+      <if test="baseScore != null" >
+        base_score,
+      </if>
+      <if test="proScore != null" >
+        pro_score,
+      </if>
+      <if test="costScore != null" >
+        cost_score,
+      </if>
+      <if test="businessMode != null" >
+        business_mode,
+      </if>
+      <if test="businessType != null" >
+        business_type,
+      </if>
+      <if test="orderSource != null" >
+        order_source,
+      </if>
+      <if test="dailyFlag != null" >
+        daily_flag,
+      </if>
+      <if test="dailyDatetime != null" >
+        daily_datetime,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="monthlyFlag != null" >
+        monthly_flag,
+      </if>
+      <if test="monthlyDatetime != null" >
+        monthly_datetime,
+      </if>
+      <if test="oldOrderNo != null" >
+        old_order_no,
+      </if>
+      <if test="newOrderNo != null" >
+        new_order_no,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="actualPostage != null" >
+        actual_postage,
+      </if>
+      <if test="expressNo != null" >
+        express_no,
+      </if>
+      <if test="takeMode != null" >
+        take_mode,
+      </if>
+      <if test="marketTicketNo != null" >
+        market_ticket_no,
+      </if>
+      <if test="lockFlag != null" >
+        lock_flag,
+      </if>
+      <if test="returnExchangeTime != null" >
+        return_exchange_time,
+      </if>
+      <if test="shopTerminalNo != null" >
+        shop_terminal_no,
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no,
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount,
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date,
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUserNo != null" >
+        update_user_no,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="adjustFlag != null" >
+        adjust_flag,
+      </if>
+      <if test="adjustUser != null" >
+        adjust_user,
+      </if>
+      <if test="adjustTime != null" >
+        adjust_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="businessNo != null" >
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="outDate != null" >
+        #{outDate,jdbcType=DATE},
+      </if>
+      <if test="oldOutDate != null" >
+        #{oldOutDate,jdbcType=DATE},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="tagPriceAmount != null" >
+        #{tagPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="salePriceAmount != null" >
+        #{salePriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="discPriceAmount != null" >
+        #{discPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settleAmount != null" >
+        #{settleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reduceAmount != null" >
+        #{reduceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRebateAmount != null" >
+        #{totalRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prefAmount != null" >
+        #{prefAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="couponAmount != null" >
+        #{couponAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="allAmount != null" >
+        #{allAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remainAmount != null" >
+        #{remainAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="assistantName != null" >
+        #{assistantName,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantId != null" >
+        #{assistantId,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantNo != null" >
+        #{assistantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vipNo != null" >
+        #{vipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vipName != null" >
+        #{vipName,jdbcType=VARCHAR},
+      </if>
+      <if test="wildcardNo != null" >
+        #{wildcardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wildcardName != null" >
+        #{wildcardName,jdbcType=VARCHAR},
+      </if>
+      <if test="wildcardDiscount != null" >
+        #{wildcardDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="baseScore != null" >
+        #{baseScore,jdbcType=INTEGER},
+      </if>
+      <if test="proScore != null" >
+        #{proScore,jdbcType=INTEGER},
+      </if>
+      <if test="costScore != null" >
+        #{costScore,jdbcType=INTEGER},
+      </if>
+      <if test="businessMode != null" >
+        #{businessMode,jdbcType=BIT},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=BIT},
+      </if>
+      <if test="orderSource != null" >
+        #{orderSource,jdbcType=BIT},
+      </if>
+      <if test="dailyFlag != null" >
+        #{dailyFlag,jdbcType=BIT},
+      </if>
+      <if test="dailyDatetime != null" >
+        #{dailyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="monthlyFlag != null" >
+        #{monthlyFlag,jdbcType=BIT},
+      </if>
+      <if test="monthlyDatetime != null" >
+        #{monthlyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oldOrderNo != null" >
+        #{oldOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="newOrderNo != null" >
+        #{newOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="actualPostage != null" >
+        #{actualPostage,jdbcType=DECIMAL},
+      </if>
+      <if test="expressNo != null" >
+        #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="takeMode != null" >
+        #{takeMode,jdbcType=BIT},
+      </if>
+      <if test="marketTicketNo != null" >
+        #{marketTicketNo,jdbcType=VARCHAR},
+      </if>
+      <if test="lockFlag != null" >
+        #{lockFlag,jdbcType=BIT},
+      </if>
+      <if test="returnExchangeTime != null" >
+        #{returnExchangeTime,jdbcType=TINYINT},
+      </if>
+      <if test="shopTerminalNo != null" >
+        #{shopTerminalNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        #{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceAmount != null" >
+        #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceDate != null" >
+        #{invoiceDate,jdbcType=DATE},
+      </if>
+      <if test="createUserNo != null" >
+        #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserNo != null" >
+        #{updateUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adjustFlag != null" >
+        #{adjustFlag,jdbcType=BIT},
+      </if>
+      <if test="adjustUser != null" >
+        #{adjustUser,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustTime != null" >
+        #{adjustTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeMain" >
+    UPDATE return_exchange_main
+    <set >
+      <if test="businessNo != null" >
+        business_no = #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="outDate != null" >
+        out_date = #{outDate,jdbcType=DATE},
+      </if>
+      <if test="oldOutDate != null" >
+        old_out_date = #{oldOutDate,jdbcType=DATE},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="tagPriceAmount != null" >
+        tag_price_amount = #{tagPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="salePriceAmount != null" >
+        sale_price_amount = #{salePriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="discPriceAmount != null" >
+        disc_price_amount = #{discPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settleAmount != null" >
+        settle_amount = #{settleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reduceAmount != null" >
+        reduce_amount = #{reduceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRebateAmount != null" >
+        total_rebate_amount = #{totalRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prefAmount != null" >
+        pref_amount = #{prefAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="couponAmount != null" >
+        coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="allAmount != null" >
+        all_amount = #{allAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remainAmount != null" >
+        remain_amount = #{remainAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="assistantName != null" >
+        assistant_name = #{assistantName,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantId != null" >
+        assistant_id = #{assistantId,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantNo != null" >
+        assistant_no = #{assistantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vipNo != null" >
+        vip_no = #{vipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vipName != null" >
+        vip_name = #{vipName,jdbcType=VARCHAR},
+      </if>
+      <if test="wildcardNo != null" >
+        wildcard_no = #{wildcardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wildcardName != null" >
+        wildcard_name = #{wildcardName,jdbcType=VARCHAR},
+      </if>
+      <if test="wildcardDiscount != null" >
+        wildcard_discount = #{wildcardDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="baseScore != null" >
+        base_score = #{baseScore,jdbcType=INTEGER},
+      </if>
+      <if test="proScore != null" >
+        pro_score = #{proScore,jdbcType=INTEGER},
+      </if>
+      <if test="costScore != null" >
+        cost_score = #{costScore,jdbcType=INTEGER},
+      </if>
+      <if test="businessMode != null" >
+        business_mode = #{businessMode,jdbcType=BIT},
+      </if>
+      <if test="businessType != null" >
+        business_type = #{businessType,jdbcType=BIT},
+      </if>
+      <if test="orderSource != null" >
+        order_source = #{orderSource,jdbcType=BIT},
+      </if>
+      <if test="dailyFlag != null" >
+        daily_flag = #{dailyFlag,jdbcType=BIT},
+      </if>
+      <if test="dailyDatetime != null" >
+        daily_datetime = #{dailyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="monthlyFlag != null" >
+        monthly_flag = #{monthlyFlag,jdbcType=BIT},
+      </if>
+      <if test="monthlyDatetime != null" >
+        monthly_datetime = #{monthlyDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oldOrderNo != null" >
+        old_order_no = #{oldOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="newOrderNo != null" >
+        new_order_no = #{newOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="actualPostage != null" >
+        actual_postage = #{actualPostage,jdbcType=DECIMAL},
+      </if>
+      <if test="expressNo != null" >
+        express_no = #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="takeMode != null" >
+        take_mode = #{takeMode,jdbcType=BIT},
+      </if>
+      <if test="marketTicketNo != null" >
+        market_ticket_no = #{marketTicketNo,jdbcType=VARCHAR},
+      </if>
+      <if test="lockFlag != null" >
+        lock_flag = #{lockFlag,jdbcType=BIT},
+      </if>
+      <if test="returnExchangeTime != null" >
+        return_exchange_time = #{returnExchangeTime,jdbcType=TINYINT},
+      </if>
+      <if test="shopTerminalNo != null" >
+        shop_terminal_no = #{shopTerminalNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date = #{invoiceDate,jdbcType=DATE},
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserNo != null" >
+        update_user_no = #{updateUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adjustFlag != null" >
+        adjust_flag = #{adjustFlag,jdbcType=BIT},
+      </if>
+      <if test="adjustUser != null" >
+        adjust_user = #{adjustUser,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustTime != null" >
+        adjust_time = #{adjustTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ReturnExchangeMain" >
+    UPDATE return_exchange_main
+    SET business_no = #{businessNo,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      out_date = #{outDate,jdbcType=DATE},
+      old_out_date = #{oldOutDate,jdbcType=DATE},
+      qty = #{qty,jdbcType=INTEGER},
+      tag_price_amount = #{tagPriceAmount,jdbcType=DECIMAL},
+      sale_price_amount = #{salePriceAmount,jdbcType=DECIMAL},
+      disc_price_amount = #{discPriceAmount,jdbcType=DECIMAL},
+      settle_amount = #{settleAmount,jdbcType=DECIMAL},
+      reduce_amount = #{reduceAmount,jdbcType=DECIMAL},
+      total_rebate_amount = #{totalRebateAmount,jdbcType=DECIMAL},
+      pref_amount = #{prefAmount,jdbcType=DECIMAL},
+      coupon_amount = #{couponAmount,jdbcType=DECIMAL},
+      all_amount = #{allAmount,jdbcType=DECIMAL},
+      amount = #{amount,jdbcType=DECIMAL},
+      remain_amount = #{remainAmount,jdbcType=DECIMAL},
+      assistant_name = #{assistantName,jdbcType=VARCHAR},
+      assistant_id = #{assistantId,jdbcType=VARCHAR},
+      assistant_no = #{assistantNo,jdbcType=VARCHAR},
+      vip_no = #{vipNo,jdbcType=VARCHAR},
+      vip_name = #{vipName,jdbcType=VARCHAR},
+      wildcard_no = #{wildcardNo,jdbcType=VARCHAR},
+      wildcard_name = #{wildcardName,jdbcType=VARCHAR},
+      wildcard_discount = #{wildcardDiscount,jdbcType=DECIMAL},
+      base_score = #{baseScore,jdbcType=INTEGER},
+      pro_score = #{proScore,jdbcType=INTEGER},
+      cost_score = #{costScore,jdbcType=INTEGER},
+      business_mode = #{businessMode,jdbcType=BIT},
+      business_type = #{businessType,jdbcType=BIT},
+      order_source = #{orderSource,jdbcType=BIT},
+      daily_flag = #{dailyFlag,jdbcType=BIT},
+      daily_datetime = #{dailyDatetime,jdbcType=TIMESTAMP},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      monthly_flag = #{monthlyFlag,jdbcType=BIT},
+      monthly_datetime = #{monthlyDatetime,jdbcType=TIMESTAMP},
+      old_order_no = #{oldOrderNo,jdbcType=VARCHAR},
+      new_order_no = #{newOrderNo,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      actual_postage = #{actualPostage,jdbcType=DECIMAL},
+      express_no = #{expressNo,jdbcType=VARCHAR},
+      take_mode = #{takeMode,jdbcType=BIT},
+      market_ticket_no = #{marketTicketNo,jdbcType=VARCHAR},
+      lock_flag = #{lockFlag,jdbcType=BIT},
+      return_exchange_time = #{returnExchangeTime,jdbcType=TINYINT},
+      shop_terminal_no = #{shopTerminalNo,jdbcType=VARCHAR},
+      invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      invoice_date = #{invoiceDate,jdbcType=DATE},
+      create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user_no = #{updateUserNo,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      adjust_flag = #{adjustFlag,jdbcType=BIT},
+      adjust_user = #{adjustUser,jdbcType=VARCHAR},
+      adjust_time = #{adjustTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <select id="findItemReturnCount" resultMap="ItemReturnResultMap" parameterType="map">
+  	SELECT
+		COUNT(1) as total
+	FROM
+		return_exchange_main rem
+	LEFT JOIN return_exchange_dtl dtl ON rem.business_no = dtl.business_no
+	LEFT JOIN order_payway op ON rem.business_no = op.order_no
+	WHERE 1 = 1
+	-- AND @rem.company_no
+	AND rem.all_amount &lt; 0
+	AND rem.`status` IN (30,41)
+	AND rem.`business_type` IN (0, 1, 2, 6)
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+      	AND rem.company_no = #{params.companyNo,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.startOutDate and ''!=params.startOutDate" >
+      	AND rem.out_date &gt;= '${params.startOutDate} 00:00:00'
+      </if>
+      <if test="null!=params.endOutDate and ''!=params.endOutDate" >
+      	AND rem.out_date &lt;= '${params.endOutDate} 23:59:59'
+      </if>
+    </if>
+  </select>
+  	
+  <select id="findItemReturnList" resultMap="ItemReturnResultMap" parameterType="map">
+  	SELECT
+		rem.shop_no,rem.shop_name,
+		dtl.brand_unit_no,dtl.brand_unit_name,
+		rem.old_out_date,rem.out_date,
+		rem.old_order_no,
+		(SELECT GROUP_CONCAT(credit_card_account) FROM self_shop_terminal_account WHERE status = 0 AND shop_no = rem.shop_no) credit_card_account,
+		rem.amount,rem.all_amount,
+		op.pay_code,op.pay_name
+	FROM
+		return_exchange_main rem
+	LEFT JOIN return_exchange_dtl dtl ON rem.business_no = dtl.business_no
+	LEFT JOIN order_payway op ON rem.business_no = op.order_no
+	WHERE 1 = 1
+	-- AND @rem.company_no
+	AND rem.all_amount &lt; 0
+	AND rem.`status` IN (30,41)
+	AND rem.`business_type` IN (0, 1, 2, 6)
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+      	AND rem.company_no = #{params.companyNo,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.startOutDate and ''!=params.startOutDate" >
+      	AND rem.out_date &gt;= '${params.startOutDate} 00:00:00'
+      </if>
+      <if test="null!=params.endOutDate and ''!=params.endOutDate" >
+      	AND rem.out_date &lt;= '${params.endOutDate} 23:59:59'
+      </if>
+    </if>
+    <if test="orderByField != null and ''!=orderByField">
+		,${orderByField}
+		<if test="orderByField">
+			${orderBy}
+		</if>
+	</if>
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+</mapper>

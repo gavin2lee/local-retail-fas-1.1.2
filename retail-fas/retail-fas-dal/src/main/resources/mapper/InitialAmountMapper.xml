@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.InitialAmountMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.InitialAmount" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="customer_no" property="customerNo" jdbcType="CHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="initial_date" property="initialDate" jdbcType="DATE" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="currency" property="currency" jdbcType="CHAR" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="pay_date" property="payDate" jdbcType="DATE" />
+    <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+    <result column="due_date" property="dueDate" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, company_name, supplier_no, supplier_name, customer_no, customer_name, 
+    initial_date, item_no, item_code, item_name, currency, qty, cost, amount, remark, 
+    balance_type, pay_date, pay_status, due_date, create_time, create_user, update_time, 
+    update_user
+  </sql>
+  <sql id="condition" >
+  		-- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+        AND supplier_no = #{params.supplierNo}
+      </if>
+      <if test="null!=params.customerNo and ''!=params.customerNo" >
+        AND customer_no = #{params.customerNo}
+      </if>
+      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+        AND company_no in ${params.multiCompanyNo}
+      </if>
+      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+        AND supplier_no in ${params.multiSupplierNo}
+      </if>
+      <if test="null!=params.multiCustomerNo and ''!=params.multiCustomerNo" >
+        AND customer_no in ${params.multiCustomerNo}
+      </if>
+      <if test="null!=params.initialDateStart and ''!=params.initialDateStart" >
+        AND initial_date &gt;= '${params.initialDateStart} 00:00:00'
+      </if>
+      <if test="null!=params.initialDateEnd and ''!=params.initialDateEnd" >
+        AND initial_date &lt;= '${params.initialDateEnd} 23:59:59'
+      </if>
+      <if test="null!=params.balanceType and ''!=params.balanceType" >
+        AND balance_type = #{params.balanceType}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM initial_amount
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM initial_amount WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM initial_amount WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM initial_amount WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM initial_amount
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.InitialAmount" >
+    DELETE FROM initial_amount
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.InitialAmount" >
+    INSERT INTO initial_amount (id, company_no, company_name, 
+      supplier_no, supplier_name, customer_no, 
+      customer_name, initial_date, item_no, 
+      item_code, item_name, currency, 
+      qty, cost, amount, 
+      remark, balance_type, pay_date, 
+      pay_status, due_date, create_time, 
+      create_user, update_time, update_user
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{supplierNo,jdbcType=CHAR}, #{supplierName,jdbcType=VARCHAR}, #{customerNo,jdbcType=CHAR}, 
+      #{customerName,jdbcType=VARCHAR}, #{initialDate,jdbcType=DATE}, #{itemNo,jdbcType=CHAR}, 
+      #{itemCode,jdbcType=CHAR}, #{itemName,jdbcType=VARCHAR}, #{currency,jdbcType=CHAR}, 
+      #{qty,jdbcType=INTEGER}, #{cost,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{balanceType,jdbcType=TINYINT}, #{payDate,jdbcType=DATE}, 
+      #{payStatus,jdbcType=TINYINT}, #{dueDate,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.InitialAmount" >
+    INSERT INTO initial_amount
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="customerNo != null" >
+        customer_no,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="initialDate != null" >
+        initial_date,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="payDate != null" >
+        pay_date,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="dueDate != null" >
+        due_date,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="initialDate != null" >
+        #{initialDate,jdbcType=DATE},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="payDate != null" >
+        #{payDate,jdbcType=DATE},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="dueDate != null" >
+        #{dueDate,jdbcType=DATE},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.InitialAmount" >
+    UPDATE initial_amount
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="initialDate != null" >
+        initial_date = #{initialDate,jdbcType=DATE},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=DATE},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="dueDate != null" >
+        due_date = #{dueDate,jdbcType=DATE},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.InitialAmount" >
+    UPDATE initial_amount
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=CHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      initial_date = #{initialDate,jdbcType=DATE},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=CHAR},
+      qty = #{qty,jdbcType=INTEGER},
+      cost = #{cost,jdbcType=DECIMAL},
+      amount = #{amount,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      balance_type = #{balanceType,jdbcType=TINYINT},
+      pay_date = #{payDate,jdbcType=DATE},
+      pay_status = #{payStatus,jdbcType=TINYINT},
+      due_date = #{dueDate,jdbcType=DATE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

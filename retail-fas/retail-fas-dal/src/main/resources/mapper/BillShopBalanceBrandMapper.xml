@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillShopBalanceBrandMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillShopBalanceBrand" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+    <result column="deduct_diff_amount" property="deductDiffAmount" jdbcType="DECIMAL" />
+    <result column="report_diff_amount" property="reportDiffAmount" jdbcType="DECIMAL" />
+    <result column="mall_number" property="mallNumber" jdbcType="DECIMAL" />
+    <result column="sales_amount" property="salesAmount" jdbcType="DECIMAL" />
+    <result column="sales_diffamount" property="salesDiffamount" jdbcType="DECIMAL" />
+    <result column="diff_amount" property="diffAmount" jdbcType="DECIMAL" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="diff_reason" property="diffReason" jdbcType="VARCHAR" />
+    <result column="actual_amount" property="actualAmount" jdbcType="DECIMAL" />
+    <result column="deduct_allamount" property="deductAllamount" jdbcType="DECIMAL" />
+    <result column="billing_amount" property="billingAmount" jdbcType="DECIMAL" />
+    <result column="mall_billing_amount" property="mallBillingAmount" jdbcType="DECIMAL" />
+    <result column="system_billing_amount" property="systemBillingAmount" jdbcType="DECIMAL" />
+    <result column="balance_diff_amount" property="balanceDiffAmount" jdbcType="DECIMAL" />
+    <result column="balance_deduct_amount" property="balanceDeductAmount" jdbcType="DECIMAL" />
+    <result column="prepayment_amount" property="prepaymentAmount" jdbcType="DECIMAL" />
+    <result column="used_prepayment_amount" property="usedPrepaymentAmount" jdbcType="DECIMAL" />
+    <result column="sys_deduct_amount" property="sysDeductAmount" jdbcType="DECIMAL" />
+    <result column="change_amount" property="changeAmount" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, balance_no, company_no, company_name, zone_no, zone_name, organ_no, 
+    organ_name, shop_no, short_name, brand_no, brand_name, month, balance_start_date, 
+    balance_end_date, deduct_diff_amount, report_diff_amount, mall_number, sales_amount, 
+    sales_diffamount, diff_amount, reason, diff_reason, actual_amount, deduct_allamount, 
+    billing_amount, mall_billing_amount, system_billing_amount, balance_diff_amount, 
+    balance_deduct_amount, prepayment_amount, used_prepayment_amount, sys_deduct_amount, 
+    change_amount, status, remark, create_user, create_time, update_user, update_time, 
+    auditor, audit_time, sharding_flag
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >    
+        AND company_no = #{params.companyNo}
+      </if>
+        <if test="null!=params.shopNo and ''!=params.shopNo" >    
+        AND shop_no = #{params.shopNo}
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+        AND shop_no IN 
+         	<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+   				#{shopNos, jdbcType=CHAR}
+  			</foreach>
+      </if>
+       <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if>
+      
+        <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND balance_no = #{params.balanceNo}
+      </if> 
+       <if test="null!=params.month and ''!=params.month" >
+          AND  month = #{params.month}  
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+         AND  brand_no = #{params.brandNo}  
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_shop_balance_brand
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_shop_balance_brand WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_brand WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_brand WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_shop_balance_brand
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceBrand" >
+    DELETE FROM bill_shop_balance_brand
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+     <delete id="deleteBalanceNoForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceBrand" >
+    DELETE FROM bill_shop_balance_brand
+    WHERE balance_no = #{balanceNo,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceBrand" >
+    INSERT INTO bill_shop_balance_brand (id, bill_no, balance_no, 
+      company_no, company_name, zone_no, 
+      zone_name, organ_no, organ_name, 
+      shop_no, short_name, brand_no, 
+      brand_name, month, balance_start_date, 
+      balance_end_date, deduct_diff_amount, report_diff_amount, 
+      mall_number, sales_amount, sales_diffamount, 
+      diff_amount, reason, diff_reason, 
+      actual_amount, deduct_allamount, billing_amount, 
+      mall_billing_amount, system_billing_amount, 
+      balance_diff_amount, balance_deduct_amount, 
+      prepayment_amount, used_prepayment_amount, 
+      sys_deduct_amount, change_amount, status, 
+      remark, create_user, create_time, 
+      update_user, update_time, auditor, 
+      audit_time, sharding_flag)
+    VALUES (#{id,jdbcType=CHAR}, #{billNo,jdbcType=CHAR}, #{balanceNo,jdbcType=CHAR}, 
+      #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{zoneNo,jdbcType=CHAR}, 
+      #{zoneName,jdbcType=VARCHAR}, #{organNo,jdbcType=CHAR}, #{organName,jdbcType=VARCHAR}, 
+      #{shopNo,jdbcType=CHAR}, #{shortName,jdbcType=VARCHAR}, #{brandNo,jdbcType=CHAR}, 
+      #{brandName,jdbcType=VARCHAR}, #{month,jdbcType=CHAR}, #{balanceStartDate,jdbcType=DATE}, 
+      #{balanceEndDate,jdbcType=DATE}, #{deductDiffAmount,jdbcType=DECIMAL}, #{reportDiffAmount,jdbcType=DECIMAL}, 
+      #{mallNumber,jdbcType=DECIMAL}, #{salesAmount,jdbcType=DECIMAL}, #{salesDiffamount,jdbcType=DECIMAL}, 
+      #{diffAmount,jdbcType=DECIMAL}, #{reason,jdbcType=VARCHAR}, #{diffReason,jdbcType=VARCHAR}, 
+      #{actualAmount,jdbcType=DECIMAL}, #{deductAllamount,jdbcType=DECIMAL}, #{billingAmount,jdbcType=DECIMAL}, 
+      #{mallBillingAmount,jdbcType=DECIMAL}, #{systemBillingAmount,jdbcType=DECIMAL}, 
+      #{balanceDiffAmount,jdbcType=DECIMAL}, #{balanceDeductAmount,jdbcType=DECIMAL}, 
+      #{prepaymentAmount,jdbcType=DECIMAL}, #{usedPrepaymentAmount,jdbcType=DECIMAL}, 
+      #{sysDeductAmount,jdbcType=DECIMAL}, #{changeAmount,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+      #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{auditor,jdbcType=VARCHAR}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{shardingFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceBrand" >
+    INSERT INTO bill_shop_balance_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="zoneName != null" >
+        zone_name,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+      <if test="organName != null" >
+        organ_name,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date,
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date,
+      </if>
+      <if test="deductDiffAmount != null" >
+        deduct_diff_amount,
+      </if>
+      <if test="reportDiffAmount != null" >
+        report_diff_amount,
+      </if>
+      <if test="mallNumber != null" >
+        mall_number,
+      </if>
+      <if test="salesAmount != null" >
+        sales_amount,
+      </if>
+      <if test="salesDiffamount != null" >
+        sales_diffamount,
+      </if>
+      <if test="diffAmount != null" >
+        diff_amount,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="diffReason != null" >
+        diff_reason,
+      </if>
+      <if test="actualAmount != null" >
+        actual_amount,
+      </if>
+      <if test="deductAllamount != null" >
+        deduct_allamount,
+      </if>
+      <if test="billingAmount != null" >
+        billing_amount,
+      </if>
+      <if test="mallBillingAmount != null" >
+        mall_billing_amount,
+      </if>
+      <if test="systemBillingAmount != null" >
+        system_billing_amount,
+      </if>
+      <if test="balanceDiffAmount != null" >
+        balance_diff_amount,
+      </if>
+      <if test="balanceDeductAmount != null" >
+        balance_deduct_amount,
+      </if>
+      <if test="prepaymentAmount != null" >
+        prepayment_amount,
+      </if>
+      <if test="usedPrepaymentAmount != null" >
+        used_prepayment_amount,
+      </if>
+      <if test="sysDeductAmount != null" >
+        sys_deduct_amount,
+      </if>
+      <if test="changeAmount != null" >
+        change_amount,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="deductDiffAmount != null" >
+        #{deductDiffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reportDiffAmount != null" >
+        #{reportDiffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="mallNumber != null" >
+        #{mallNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="salesAmount != null" >
+        #{salesAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="salesDiffamount != null" >
+        #{salesDiffamount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffAmount != null" >
+        #{diffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="diffReason != null" >
+        #{diffReason,jdbcType=VARCHAR},
+      </if>
+      <if test="actualAmount != null" >
+        #{actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductAllamount != null" >
+        #{deductAllamount,jdbcType=DECIMAL},
+      </if>
+      <if test="billingAmount != null" >
+        #{billingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="mallBillingAmount != null" >
+        #{mallBillingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="systemBillingAmount != null" >
+        #{systemBillingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceDiffAmount != null" >
+        #{balanceDiffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceDeductAmount != null" >
+        #{balanceDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prepaymentAmount != null" >
+        #{prepaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="usedPrepaymentAmount != null" >
+        #{usedPrepaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sysDeductAmount != null" >
+        #{sysDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="changeAmount != null" >
+        #{changeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceBrand" >
+    UPDATE bill_shop_balance_brand
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="organName != null" >
+        organ_name = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="deductDiffAmount != null" >
+        deduct_diff_amount = #{deductDiffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reportDiffAmount != null" >
+        report_diff_amount = #{reportDiffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="mallNumber != null" >
+        mall_number = #{mallNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="salesAmount != null" >
+        sales_amount = #{salesAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="salesDiffamount != null" >
+        sales_diffamount = #{salesDiffamount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffAmount != null" >
+        diff_amount = #{diffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="diffReason != null" >
+        diff_reason = #{diffReason,jdbcType=VARCHAR},
+      </if>
+      <if test="actualAmount != null" >
+        actual_amount = #{actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductAllamount != null" >
+        deduct_allamount = #{deductAllamount,jdbcType=DECIMAL},
+      </if>
+      <if test="billingAmount != null" >
+        billing_amount = #{billingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="mallBillingAmount != null" >
+        mall_billing_amount = #{mallBillingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="systemBillingAmount != null" >
+        system_billing_amount = #{systemBillingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceDiffAmount != null" >
+        balance_diff_amount = #{balanceDiffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceDeductAmount != null" >
+        balance_deduct_amount = #{balanceDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prepaymentAmount != null" >
+        prepayment_amount = #{prepaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="usedPrepaymentAmount != null" >
+        used_prepayment_amount = #{usedPrepaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sysDeductAmount != null" >
+        sys_deduct_amount = #{sysDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="changeAmount != null" >
+        change_amount = #{changeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>     
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceBrand" >
+    UPDATE bill_shop_balance_brand
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      organ_no = #{organNo,jdbcType=CHAR},
+      organ_name = #{organName,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      month = #{month,jdbcType=CHAR},
+      balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      deduct_diff_amount = #{deductDiffAmount,jdbcType=DECIMAL},
+      report_diff_amount = #{reportDiffAmount,jdbcType=DECIMAL},
+      mall_number = #{mallNumber,jdbcType=DECIMAL},
+      sales_amount = #{salesAmount,jdbcType=DECIMAL},
+      sales_diffamount = #{salesDiffamount,jdbcType=DECIMAL},
+      diff_amount = #{diffAmount,jdbcType=DECIMAL},
+      reason = #{reason,jdbcType=VARCHAR},
+      diff_reason = #{diffReason,jdbcType=VARCHAR},
+      actual_amount = #{actualAmount,jdbcType=DECIMAL},
+      deduct_allamount = #{deductAllamount,jdbcType=DECIMAL},
+      billing_amount = #{billingAmount,jdbcType=DECIMAL},
+      mall_billing_amount = #{mallBillingAmount,jdbcType=DECIMAL},
+      system_billing_amount = #{systemBillingAmount,jdbcType=DECIMAL},
+      balance_diff_amount = #{balanceDiffAmount,jdbcType=DECIMAL},
+      balance_deduct_amount = #{balanceDeductAmount,jdbcType=DECIMAL},
+      prepayment_amount = #{prepaymentAmount,jdbcType=DECIMAL},
+      used_prepayment_amount = #{usedPrepaymentAmount,jdbcType=DECIMAL},
+      sys_deduct_amount = #{sysDeductAmount,jdbcType=DECIMAL},
+      change_amount = #{changeAmount,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP}    
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <!-- 根据参数分页查询销售订单和退换货单 -->
+  <select id="getSumBalanceBrand" resultMap="BaseResultMap" parameterType="java.util.Map" >
+     SELECT sum(a.mall_number) as mallNumber ,
+     sum(a.sales_amount) as salesAmount ,sum(a.sales_diffamount) as salesDiffamount,sum(a.diff_amount) as diffAmount,
+     sum(a.actual_amount) as actualAmount,sum(a.deduct_allamount) deductAllamount,sum(a.billing_amount) billing_amount,
+     sum(a.system_billing_amount) systemBillingAmount,sum(a.balance_diff_amount) balanceDiffAmount,
+     sum(a.mall_billing_amount) mallBillingAmount,sum(a.balance_deduct_amount) balanceDeductAmount,
+     sum(a.prepayment_amount) prepaymentAmount,sum(a.used_prepayment_amount) usedPrepaymentAmount,
+      sum(a.deduct_diff_amount) deductDiffAmount
+     FROM 
+     bill_shop_balance_brand a 
+      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        where a.balance_no = #{params.balanceNo}
+      </if> 
+  </select>
+  
+</mapper>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.OperateLogMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.OperateLog" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="data_no" property="dataNo" jdbcType="CHAR" />
+    <result column="module_no" property="moduleNo" jdbcType="TINYINT" />
+    <result column="operate_no" property="operateNo" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="status_name" property="statusName" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="operate_status" property="operateStatus" jdbcType="TINYINT" />
+    <result column="operate_status_name" property="operateStatusName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, data_no, module_no, operate_no, status, status_name, operate_status, operate_status_name, create_user, create_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.dataNo and ''!=params.dataNo">
+	      AND data_no = #{params.dataNo,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.moduleNo and ''!=params.moduleNo">
+	      AND module_no = #{params.moduleNo}
+      </if>
+      <if test="null!=params.operateNo and ''!=params.operateNo">
+	      AND operate_no = #{params.operateNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM operate_log
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM operate_log WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM operate_log WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField" >
+    	ORDER BY create_time ASC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM operate_log WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM operate_log
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.OperateLog" >
+    DELETE FROM operate_log
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.OperateLog" >
+    INSERT INTO operate_log (id, data_no, module_no, 
+      operate_no, status, status_name, create_user, 
+      create_time,operate_status, operate_status_name)
+    VALUES (#{id,jdbcType=CHAR}, #{dataNo,jdbcType=CHAR}, #{moduleNo,jdbcType=TINYINT}, 
+      #{operateNo,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{statusName,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP},#{operateStatus,jdbcType=TINYINT}, #{operateStatusName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.OperateLog" >
+    INSERT INTO operate_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="dataNo != null" >
+        data_no,
+      </if>
+      <if test="moduleNo != null" >
+        module_no,
+      </if>
+      <if test="operateNo != null" >
+        operate_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="statusName != null" >
+        status_name,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="operateStatus != null" >
+        operate_status,
+      </if>
+      <if test="operateStatusName != null" >
+        operate_status_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="dataNo != null" >
+        #{dataNo,jdbcType=CHAR},
+      </if>
+      <if test="moduleNo != null" >
+        #{moduleNo,jdbcType=TINYINT},
+      </if>
+      <if test="operateNo != null" >
+        #{operateNo,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="statusName != null" >
+        #{statusName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateStatus != null" >
+        #{operateStatus,jdbcType=TINYINT},
+      </if>
+      <if test="operateStatusName != null" >
+        #{operateStatusName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.OperateLog" >
+    UPDATE operate_log
+    <set >
+      <if test="dataNo != null" >
+        data_no = #{dataNo,jdbcType=CHAR},
+      </if>
+      <if test="moduleNo != null" >
+        module_no = #{moduleNo,jdbcType=TINYINT},
+      </if>
+      <if test="operateNo != null" >
+        operate_no = #{operateNo,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="statusName != null" >
+        status_name = #{statusName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateStatus != null" >
+        operate_status = #{operateStatus,jdbcType=TINYINT},
+      </if>
+      <if test="operateStatusName != null" >
+        operate_status_name = #{operateStatusName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.OperateLog" >
+    UPDATE operate_log
+    SET data_no = #{dataNo,jdbcType=CHAR},
+      module_no = #{moduleNo,jdbcType=TINYINT},
+      operate_no = #{operateNo,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status_name = #{statusName,jdbcType=VARCHAR},
+      operate_status = #{operateStatus,jdbcType=TINYINT},
+      operate_status_name = #{operateStatusName,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <delete id="deleteByDataAndModuleNo" parameterType="map">
+  	DELETE FROM operate_log WHERE data_no = #{params.dataNo} AND module_no = #{params.moduleNo}
+  </delete>
+  
+  <!-- Oracle下该语句有问题 -->
+  <select id="selectProcessData" parameterType="map" resultMap="BaseResultMap">
+  	SELECT 
+  		<include refid="Base_Column_List" /> 
+  		FROM operate_log WHERE 1 = 1
+  		<if test="params.dataNo != null param.dataNo !=''">
+  			AND data_no = #{params.dataNo} 
+  		</if>
+  		<if test="params.moduleNo != null param.moduleNo !=''">
+  			AND module_no = #{params.moduleNo} 
+  		</if>
+  		GROUP BY data_no, module_no, status ORDER BY create_time DESC 
+  </select>
+</mapper>

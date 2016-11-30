@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.HeadquarterPeriodMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.HeadquarterPeriod" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="supplier_settle_time" property="supplierSettleTime" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, company_name, brand_unit_no, brand_unit_name, supplier_settle_time, 
+    create_user, update_user, create_time, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+       <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no =#{params.companyNo}
+      </if>
+       <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+        AND brand_unit_no =#{params.brandUnitNo}
+      </if>
+		 <if test="null!=params.supplierSettleTimes and ''!=params.supplierSettleTimes" >
+			AND supplier_settle_time &gt;= #{params.supplierSettleTimes}
+		</if>
+       <if test="null!=params.accountSettleTime and ''!=params.accountSettleTime" >
+			AND supplier_settle_time &gt;= #{params.accountSettleTime}
+		</if>
+        <if test="null!=params.saleSettleTime and ''!=params.saleSettleTime" >
+			AND supplier_settle_time &gt;= #{params.saleSettleTime}
+		</if>
+        <if test="null!=params.transferSettleTime and ''!=params.transferSettleTime" >
+			AND supplier_settle_time &gt;= #{params.transferSettleTime}
+		</if>
+		 <if test="null!=params.supplierSettleTimes1 and ''!=params.supplierSettleTimes1" >
+			OR supplier_settle_time &gt;= #{params.supplierSettleTimes1}
+		</if>
+       <if test="null!=params.accountSettleTime1 and ''!=params.accountSettleTime1" >
+			OR supplier_settle_time &gt;= #{params.accountSettleTime1}
+		</if>
+        <if test="null!=params.saleSettleTime1 and ''!=params.saleSettleTime1" >
+			OR supplier_settle_time &gt;= #{params.saleSettleTime1}
+		</if>
+        <if test="null!=params.transferSettleTime1 and ''!=params.transferSettleTime1" >
+			OR supplier_settle_time &gt;= #{params.transferSettleTime1}
+		</if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from headquarter_period
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from headquarter_period where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     from headquarter_period   WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField">
+		ORDER BY create_time DESC
+	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from headquarter_period where 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from headquarter_period
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.String" >
+    delete from headquarter_period
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.HeadquarterPeriod" >
+    insert into headquarter_period (id, company_no, company_name, 
+      brand_unit_no, brand_unit_name, supplier_settle_time, 
+      create_user, update_user, create_time, 
+      update_time)
+    values (#{id,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{brandUnitNo,jdbcType=CHAR}, #{brandUnitName,jdbcType=VARCHAR}, #{supplierSettleTime,jdbcType=DATE}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.HeadquarterPeriod" >
+    insert into headquarter_period
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="supplierSettleTime != null" >
+        supplier_settle_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierSettleTime != null" >
+        #{supplierSettleTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.HeadquarterPeriod" >
+    update headquarter_period
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierSettleTime != null" >
+        supplier_settle_time = #{supplierSettleTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.HeadquarterPeriod" >
+    update headquarter_period
+    set company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      supplier_settle_time = #{supplierSettleTime,jdbcType=DATE},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

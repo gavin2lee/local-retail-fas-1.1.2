@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.SupplierRateSetMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.SupplierRateSetDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="tariff_rate" property="tariffRate" jdbcType="DECIMAL" />
+    <result column="vat_rate" property="vatRate" jdbcType="DECIMAL" />
+    <result column="currency_code" property="currencyCode" jdbcType="CHAR" />
+    <result column="currency_name" property="currencyName" jdbcType="CHAR" />
+    <result column="create_user" property="createUser" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="CHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, supplier_no, supplier_name, tariff_rate, vat_rate, currency_code, currency_name,create_user, 
+    create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM supplier_rate_set
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM supplier_rate_set WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM supplier_rate_set WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM supplier_rate_set WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM supplier_rate_set
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.api.vo.SupplierRateSet" >
+    DELETE FROM supplier_rate_set
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.api.vo.SupplierRateSet" >
+    INSERT INTO supplier_rate_set (id, supplier_no, supplier_name, 
+      tariff_rate, vat_rate, currency_code, 
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{id,jdbcType=CHAR}, #{supplierNo,jdbcType=CHAR}, #{supplierName,jdbcType=CHAR}, 
+      #{tariffRate,jdbcType=DECIMAL}, #{vatRate,jdbcType=DECIMAL}, #{currencyCode,jdbcType=CHAR}, 
+      #{createUser,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=CHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.api.vo.SupplierRateSet" >
+    INSERT INTO supplier_rate_set
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="tariffRate != null" >
+        tariff_rate,
+      </if>
+      <if test="vatRate != null" >
+        vat_rate,
+      </if>
+      <if test="currencyCode != null" >
+        currency_code,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=CHAR},
+      </if>
+      <if test="tariffRate != null" >
+        #{tariffRate,jdbcType=DECIMAL},
+      </if>
+      <if test="vatRate != null" >
+        #{vatRate,jdbcType=DECIMAL},
+      </if>
+      <if test="currencyCode != null" >
+        #{currencyCode,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.api.vo.SupplierRateSet" >
+    UPDATE supplier_rate_set
+    <set >
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=CHAR},
+      </if>
+      <if test="tariffRate != null" >
+        tariff_rate = #{tariffRate,jdbcType=DECIMAL},
+      </if>
+      <if test="vatRate != null" >
+        vat_rate = #{vatRate,jdbcType=DECIMAL},
+      </if>
+      <if test="currencyCode != null" >
+        currency_code = #{currencyCode,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.api.vo.SupplierRateSet" >
+    UPDATE supplier_rate_set
+    SET supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_name = #{supplierName,jdbcType=CHAR},
+      tariff_rate = #{tariffRate,jdbcType=DECIMAL},
+      vat_rate = #{vatRate,jdbcType=DECIMAL},
+      currency_code = #{currencyCode,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=CHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+   <!-- 根据供应商编码获取供应商信息 -->
+   <select id="getSupplierRateSetBySupplierNo" resultMap="BaseResultMap" parameterType="map" >
+	SELECT a.create_time,
+		   a.create_user,
+	       a.currency_code,
+	       b.currency_name,
+	       a.id,
+	       a.supplier_name,
+	       a.supplier_no,
+	       a.tariff_rate,
+	       a.update_time,
+	       a.update_user,
+	       a.vat_rate
+	FROM supplier_rate_set a,
+	     currency_management b
+	where a.currency_code = b.currency_code AND 1=1  
+     <if test="null!=params.supplierNos and ''!=params.supplierNos" >
+      AND a.supplier_no IN 
+       	<foreach collection="params.supplierNos" index="index" item="supplierNo" open="(" separator="," close=")">
+ 				#{supplierNo, jdbcType=CHAR}
+		</foreach>
+    </if>
+  </select>
+</mapper>

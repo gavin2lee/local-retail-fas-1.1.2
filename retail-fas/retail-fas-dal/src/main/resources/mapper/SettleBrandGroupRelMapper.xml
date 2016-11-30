@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SettleBrandGroupRelMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SettleBrandGroupRel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="group_no" property="groupNo" jdbcType="CHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    T.id, T.group_no, T.brand_unit_no, brand_unit.name brand_unit_name, T.create_user, T.create_time,
+     T.update_user, T.update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.groupNo and ''!=params.groupNo" >
+        and T.group_no = #{params.groupNo,jdbcType=INTEGER}
+      </if>
+      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+        and T.brand_unit_no like '%${params.brandUnitNo,jdbcType=VARCHAR}%'
+      </if>
+      <if test="null!=params.brandUnitName and ''!=params.brandUnitName" >
+        and brand_unit.name like '%${params.brandUnitName,jdbcType=VARCHAR}%'
+      </if>
+      <!-- 模糊查询，数据格式如',111,222,'  -->
+       <if test="null!=params.mulitGroupNo and ''!=params.mulitGroupNo" >
+        and #{params.mulitGroupNo,jdbcType=VARCHAR} LIKE CONCAT(',%', T.group_no, '%,');
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM settle_brand_group_rel T LEFT JOIN brand_unit ON T.brand_unit_no = brand_unit.brand_unit_no
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM settle_brand_group_rel T WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_brand_group_rel T LEFT JOIN brand_unit ON T.brand_unit_no = brand_unit.brand_unit_no
+     WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_brand_group_rel T LEFT JOIN brand_unit ON T.brand_unit_no = brand_unit.brand_unit_no 
+     WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM settle_brand_group_rel
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.SettleBrandGroupRel" >
+    DELETE FROM settle_brand_group_rel
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByGroupNo" parameterType="java.lang.String" >
+    DELETE FROM settle_brand_group_rel
+    WHERE group_no = #{groupNO,jdbcType=CHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SettleBrandGroupRel" >
+    INSERT INTO settle_brand_group_rel (id, group_no, brand_unit_no, create_user, create_time, 
+      update_user, update_time)
+    	VALUES (#{id,jdbcType=INTEGER}, #{groupNo,jdbcType=CHAR}, #{brandUnitNo,jdbcType=CHAR},
+    	#{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+        #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SettleBrandGroupRel" >
+    INSERT INTO settle_brand_group_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="groupNo != null" >
+        group_no,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="groupNo != null" >
+        #{groupNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+       <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SettleBrandGroupRel" >
+    UPDATE settle_brand_group_rel
+    <set >
+      <if test="groupNo != null" >
+        group_no = #{groupNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SettleBrandGroupRel" >
+    UPDATE settle_brand_group_rel
+    SET group_no = #{groupNo,jdbcType=CHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

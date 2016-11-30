@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ContractDiscountMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ContractDiscount" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="contract_discount_no" property="contractDiscountNo" jdbcType="CHAR" />
+    <result column="contract_discount_type" property="contractDiscountType" jdbcType="TINYINT" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="order_type" property="orderType" jdbcType="TINYINT" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="years" property="years" jdbcType="CHAR" />
+    <result column="season" property="season" jdbcType="CHAR" />
+    <result column="price_basis" property="priceBasis" jdbcType="TINYINT" />
+    <result column="discount1" property="discount1" jdbcType="DECIMAL" />
+    <result column="discount2" property="discount2" jdbcType="DECIMAL" />
+    <result column="refer_discount1" property="referDiscount1" jdbcType="DECIMAL" />
+    <result column="refer_discount2" property="referDiscount2" jdbcType="DECIMAL" />    
+    <result column="add_price" property="addPrice" jdbcType="DECIMAL" />
+    <result column="algorithm" property="algorithm" jdbcType="CHAR" />
+    <result column="not_tax_algorithm" property="notTaxAlgorithm" jdbcType="CHAR" />
+    <result column="effective_date" property="effectiveDate" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, contract_discount_no, contract_discount_type, saler_no, saler_name, buyer_no, 
+    buyer_name, order_type, brand_no, brand_name, category_no, category_name, item_no, 
+    item_code, item_name, purchase_price, years, season, price_basis, discount1, discount2,refer_discount1,refer_discount2, 
+    add_price, algorithm,not_tax_algorithm, effective_date, create_user, create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    -- AND @brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.contractDiscountType and ''!=params.contractDiscountType" >
+        AND contract_discount_type = #{params.contractDiscountType}
+      </if>
+      <if test="null!=params.contractDiscountNo and ''!=params.contractDiscountNo" >
+        AND contract_discount_no = #{params.contractDiscountNo}
+      </if>
+      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+        AND item_code IN ${params.multiItemCode}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND saler_no IN ${params.multiSalerNo}
+      </if>
+      <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no IN ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND category_no IN ${params.multiCategoryNo}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND brand_no IN ${params.multiBrandNo}
+      </if>
+      <if test="null!=params.salerNo and ''!=params.salerNo" >
+        AND saler_no = #{params.salerNo}
+      </if>
+      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+        AND buyer_no = #{params.buyerNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND brand_no = #{params.brandNo}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+        AND category_no = #{params.categoryNo}
+      </if>
+      <if test="null!=params.effectiveDateStart and ''!=params.effectiveDateStart" >
+        AND effective_date &gt;= '${params.effectiveDate} 00:00:00'
+      </if>  
+      <if test="null!=params.effectiveDateEnd and ''!=params.effectiveDateEnd" >
+        AND effective_date &lt;= '${params.effectiveDate} 23:59:59'
+      </if>  
+      <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+        AND create_time &gt;= '${params.createTimeStart} 00:00:00'
+      </if>  
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+        AND create_time &lt;= '${params.createTimeEnd} 23:59:59'
+      </if>  
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM contract_discount
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM contract_discount WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM contract_discount WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField" >
+    ORDER BY create_time DESC
+    </if>
+    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM contract_discount WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM contract_discount
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.ContractDiscount" >
+    DELETE FROM contract_discount
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ContractDiscount" >
+    INSERT INTO contract_discount (id, contract_discount_no, contract_discount_type, 
+      saler_no, saler_name, buyer_no, 
+      buyer_name, order_type, brand_no, 
+      brand_name, category_no, category_name, 
+      item_no, item_code, item_name, 
+      purchase_price, years, season, 
+      price_basis, discount1, discount2, refer_discount1, refer_discount2, 
+      add_price, algorithm, not_tax_algorithm, effective_date, 
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{id,jdbcType=CHAR}, #{contractDiscountNo,jdbcType=CHAR}, #{contractDiscountType,jdbcType=TINYINT}, 
+      #{salerNo,jdbcType=CHAR}, #{salerName,jdbcType=VARCHAR}, #{buyerNo,jdbcType=CHAR}, 
+      #{buyerName,jdbcType=VARCHAR}, #{orderType,jdbcType=TINYINT}, #{brandNo,jdbcType=CHAR}, 
+      #{brandName,jdbcType=VARCHAR}, #{categoryNo,jdbcType=CHAR}, #{categoryName,jdbcType=VARCHAR}, 
+      #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=CHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{purchasePrice,jdbcType=DECIMAL}, #{years,jdbcType=CHAR}, #{season,jdbcType=CHAR}, 
+      #{priceBasis,jdbcType=TINYINT}, #{discount1,jdbcType=DECIMAL}, #{discount2,jdbcType=DECIMAL}, #{referDiscount1,jdbcType=DECIMAL}, #{referDiscount2,jdbcType=DECIMAL}, 
+      #{addPrice,jdbcType=DECIMAL}, #{algorithm,jdbcType=CHAR},#{notTaxAlgorithm,jdbcType=CHAR}, #{effectiveDate,jdbcType=DATE}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ContractDiscount" >
+    INSERT INTO contract_discount
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="contractDiscountNo != null" >
+        contract_discount_no,
+      </if>
+      <if test="contractDiscountType != null" >
+        contract_discount_type,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="salerName != null" >
+        saler_name,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="years != null" >
+        years,
+      </if>
+      <if test="season != null" >
+        season,
+      </if>
+      <if test="priceBasis != null" >
+        price_basis,
+      </if>
+      <if test="discount1 != null" >
+        discount1,
+      </if>
+      <if test="discount2 != null" >
+        discount2,
+      </if>
+      <if test="referDiscount1 != null" >
+        refer_discount1,
+      </if>
+      <if test="referDiscount2 != null" >
+        refer_discount2,
+      </if>
+      <if test="addPrice != null" >
+        add_price,
+      </if>
+      <if test="algorithm != null" >
+        algorithm,
+      </if>
+      <if test="notTaxAlgorithm != null" >
+        not_tax_algorithm,
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="contractDiscountNo != null" >
+        #{contractDiscountNo,jdbcType=CHAR},
+      </if>
+      <if test="contractDiscountType != null" >
+        #{contractDiscountType,jdbcType=TINYINT},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=TINYINT},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="years != null" >
+        #{years,jdbcType=CHAR},
+      </if>
+      <if test="season != null" >
+        #{season,jdbcType=CHAR},
+      </if>
+      <if test="priceBasis != null" >
+        #{priceBasis,jdbcType=TINYINT},
+      </if>
+      <if test="discount1 != null" >
+        #{discount1,jdbcType=DECIMAL},
+      </if>
+      <if test="discount2 != null" >
+        #{discount2,jdbcType=DECIMAL},
+      </if>
+      <if test="referDiscount1 != null" >
+        #{referDiscount1,jdbcType=DECIMAL},
+      </if>
+      <if test="referDiscount2 != null" >
+        #{referDiscount2,jdbcType=DECIMAL},
+      </if>
+      <if test="addPrice != null" >
+        #{addPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="algorithm != null" >
+        #{algorithm,jdbcType=CHAR},
+      </if>
+      <if test="notTaxAlgorithm != null" >
+        #{notTaxAlgorithm,jdbcType=CHAR},
+      </if>
+      <if test="effectiveDate != null" >
+        #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ContractDiscount" >
+    UPDATE contract_discount
+    <set >
+      <if test="contractDiscountNo != null" >
+        contract_discount_no = #{contractDiscountNo,jdbcType=CHAR},
+      </if>
+      <if test="contractDiscountType != null" >
+        contract_discount_type = #{contractDiscountType,jdbcType=TINYINT},
+      </if>
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        saler_name = #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        order_type = #{orderType,jdbcType=TINYINT},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="years != null" >
+        years = #{years,jdbcType=CHAR},
+      </if>
+      <if test="season != null" >
+        season = #{season,jdbcType=CHAR},
+      </if>
+      <if test="priceBasis != null" >
+        price_basis = #{priceBasis,jdbcType=TINYINT},
+      </if>
+        discount1 = #{discount1,jdbcType=DECIMAL},
+        discount2 = #{discount2,jdbcType=DECIMAL},
+        refer_discount1 = #{referDiscount1,jdbcType=DECIMAL},
+        refer_discount2 = #{referDiscount2,jdbcType=DECIMAL},
+        add_price = #{addPrice,jdbcType=DECIMAL},
+      <if test="algorithm != null" >
+        algorithm = #{algorithm,jdbcType=CHAR},
+      </if>
+      <if test="notTaxAlgorithm != null" >
+        not_tax_algorithm = #{notTaxAlgorithm,jdbcType=CHAR},
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date = #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ContractDiscount" >
+    UPDATE contract_discount
+    SET contract_discount_no = #{contractDiscountNo,jdbcType=CHAR},
+      contract_discount_type = #{contractDiscountType,jdbcType=TINYINT},
+      saler_no = #{salerNo,jdbcType=CHAR},
+      saler_name = #{salerName,jdbcType=VARCHAR},
+      buyer_no = #{buyerNo,jdbcType=CHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=TINYINT},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      years = #{years,jdbcType=CHAR},
+      season = #{season,jdbcType=CHAR},
+      price_basis = #{priceBasis,jdbcType=TINYINT},
+      discount1 = #{discount1,jdbcType=DECIMAL},
+      discount2 = #{discount2,jdbcType=DECIMAL},
+      refer_discount1 = #{referDiscount1,jdbcType=DECIMAL},
+      refer_discount2 = #{referDiscount2,jdbcType=DECIMAL},
+      add_price = #{addPrice,jdbcType=DECIMAL},
+      algorithm = #{algorithm,jdbcType=CHAR},
+      not_tax_algorithm = #{notTaxAlgorithm,jdbcType=CHAR},
+      effective_date = #{effectiveDate,jdbcType=DATE},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

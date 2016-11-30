@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.OrderInfoMapper" >
+  
+  <select id="getStatus" parameterType="cn.wonhigh.retail.fas.api.dto.OrderInfoDto" resultType="java.lang.Integer" >
+	SELECT
+		bs.status
+	FROM
+		bill_status bs
+	WHERE
+		1 = 1
+	AND bs.bill_no = #{orderInfoDto.billNo}
+	AND bs.bill_type = #{orderInfoDto.billType}
+  </select>
+  
+  <!-- 根据订单号查询POS内购订单是否已做了财务确认 wang.yj -->
+  <select id="findInnerBuyConfrigStatus" parameterType="cn.wonhigh.retail.fas.api.dto.OrderInfoDto" resultType="java.lang.Integer">
+  	select DISTINCT status from invoice_apply_confirm_dtl where order_no  = #{orderInfoDto.billNo} and `status` = 1
+  </select>
+</mapper>

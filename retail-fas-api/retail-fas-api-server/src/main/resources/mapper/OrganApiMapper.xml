@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.OrganApiMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.OrganDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_code" property="organCode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_no" property="parentNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="organ_level" property="organLevel" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="INTEGER" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, organ_no, organ_code, name, parent_no, status, organ_level, order_no, path, zone_no, 
+    (select name from zone_info where zone_info.zone_no = T.zone_no) zone_name,
+    create_user, create_time, update_user, update_time, remark
+  </sql>
+  
+  <select id="selectByOrderUnitNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM organ T WHERE 1=1
+     	AND organ_no = (SELECT organ_no FROM order_unit WHERE order_unit_no = #{orderUnitNo,jdbcType=VARCHAR})
+  </select>
+  
+  <resultMap id="ZoneInfoResultMap" type="cn.wonhigh.retail.fas.common.model.ZoneInfo" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+	    <result column="zone_code" property="zoneCode" jdbcType="CHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="status" property="status" jdbcType="TINYINT" />
+	    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+	    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="getZoneInfoByCompanyNo" resultMap="ZoneInfoResultMap" parameterType="java.lang.String">
+  		SELECT
+		  zone_info.id,
+		  zone_info.zone_no,
+		  zone_info.zone_code,
+		  zone_info.name,
+		  zone_info.status,
+		  zone_info.sys_no,
+		  zone_info.create_user,
+		  zone_info.create_time,
+		  zone_info.update_user,
+		  zone_info.update_time,
+		  zone_info.remark
+		FROM zone_info
+		  INNER JOIN company
+		    ON zone_info.zone_no = company.zone_no
+		      AND company.company_no =#{companyNo,jdbcType=VARCHAR} 
+  </select>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.cost.ItemCostMapperExt">
+
+	<sql id="update_flag">
+		<if test="null !=params.shardingFlag">
+			/*#mycat:sql=select 1 from bill_shop_balance where
+			sharding_flag='${params.shardingFlag}' */
+		</if>
+		<if test="null ==params.shardingFlag">
+			/*sharding_flag*/
+		</if>
+	</sql>
+
+
+	<sql id="findOrderBillNoSelect">
+		Select DISTINCT
+			om.`order_no`
+		FROM order_main om
+		<if	test="null != params.multiBrandUnitNo and '' != params.multiBrandUnitNo">
+			inner join order_dtl od ON om.`order_no` = od.`order_no`
+		</if>
+		WHERE om.COMPANY_NO = #{params.companyNo}
+			AND om.`out_date` BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d')	AND	DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+		<if test="null != params.multiBrandUnitNo and '' != params.multiBrandUnitNo">
+			AND od.brand_unit_no IN ${params.multiBrandUnitNo}
+		</if>
+	</sql>
+
+	<select id="findOrderBillNoCount" parameterType="map"
+		resultType="java.lang.Integer">
+		<include refid="update_flag" />
+		Select count(*) FROM
+		(
+		<include refid="findOrderBillNoSelect" />
+		) as t;
+	</select>
+
+	<select id="findOrderBillNo" parameterType="map" resultType="java.lang.String">
+		<include refid="update_flag" />
+		<include refid="findOrderBillNoSelect" />
+		order by om.`order_no`
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+
+	<update id="updateOrderItemCost" parameterType="map">
+		<include refid="update_flag" />
+		UPDATE order_dtl od, item_cost
+		SET od.`unit_cost`=item_cost.`unit_cost`
+		WHERE od.ITEM_NO =
+		ITEM_COST.ITEM_NO
+		AND ITEM_COST.COMPANY_NO =	#{params.companyNo}
+		AND ITEM_COST.YEAR = #{params.year}	AND	ITEM_COST.MONTH = #{params.month}
+		AND od.order_no in ( ${params.billNos} )
+	</update> 
+
+	<sql id="findExchangeBillNoSelect">
+		Select DISTINCT
+			om.`business_no`
+		FROM return_exchange_main om
+		<if test="null != params.multiBrandUnitNo and '' != params.multiBrandUnitNo">
+			inner join return_exchange_dtl od ON om.`business_no` = od.`business_no`
+		</if>
+		WHERE om.COMPANY_NO = #{params.companyNo}
+		AND om.`out_date` BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+		<if	test="null != params.multiBrandUnitNo and '' != params.multiBrandUnitNo">
+			AND od.brand_unit_no IN ${params.multiBrandUnitNo}
+		</if>
+	</sql>
+
+	<select id="findExchangeBillNoCount" parameterType="map"
+		resultType="java.lang.Integer">
+		<include refid="update_flag" />
+		Select count(*) FROM
+		(
+		<include refid="findExchangeBillNoSelect" />
+		) as t;
+	</select>
+
+	<select id="findExchangeBillNo" parameterType="map" resultType="java.lang.String">
+		<include refid="update_flag" />
+		<include refid="findExchangeBillNoSelect" />
+		order by om.`business_no`
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+
+	<update id="updateExchangeItemCost" parameterType="map">
+		<include refid="update_flag" />
+		UPDATE return_exchange_dtl od, item_cost
+			SET od.`unit_cost`=item_cost.`unit_cost`
+		WHERE od.ITEM_NO = 	ITEM_COST.ITEM_NO
+		AND ITEM_COST.COMPANY_NO = 	#{params.companyNo}
+		AND ITEM_COST.YEAR = #{params.year}
+		AND	ITEM_COST.MONTH = #{params.month}
+		AND od.business_no in (
+		${params.billNos} )
+	</update>
+
+</mapper>

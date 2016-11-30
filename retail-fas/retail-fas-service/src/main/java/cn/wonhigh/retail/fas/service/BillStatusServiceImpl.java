@@ -1,0 +1,38 @@
+package cn.wonhigh.retail.fas.service;
+
+import cn.wonhigh.retail.fas.common.model.BillStatus;
+import cn.wonhigh.retail.fas.dal.database.BillStatusMapper;
+import com.yougou.logistics.base.dal.database.BaseCrudMapper;
+import com.yougou.logistics.base.service.BaseCrudServiceImpl;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+/**
+ * 请写出类的用途 
+ * @author user
+ * @date  2015-10-26 17:45:45
+ * @version 1.0.0
+ * @copyright (C) 2013 WonHigh Information Technology Co.,Ltd 
+ * All Rights Reserved. 
+ * 
+ * The software for the WonHigh technology development, without the 
+ * company's written consent, and any other individuals and 
+ * organizations shall not be used, Copying, Modify or distribute 
+ * the software.
+ * 
+ */
+@Service("billStatusService")
+class BillStatusServiceImpl extends BaseCrudServiceImpl implements BillStatusService {
+    @Resource
+    private BillStatusMapper billStatusMapper;
+
+    @Override
+    public BaseCrudMapper init() {
+        return billStatusMapper;
+    }
+
+	@Override
+	public BillStatus findByBillNo(String billNo,String payName) {
+		return billStatusMapper.findByBillNo(billNo,payName);
+	}
+}

@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.WholesaleCustomerRemainingSumMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingSum" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="customer_no" property="customerNo" jdbcType="CHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="remaining_amount" property="remainingAmount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="frozen_customer_amount" property="frozenCustomerAmount" jdbcType="DECIMAL" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <resultMap id="FindResultMap" type="cn.wonhigh.retail.fas.common.dto.WholesaleCustomerRemainingSumDto" extends="BaseResultMap">
+    <result column="book_remaining_amount" property="bookRemainingAmount" jdbcType="DECIMAL" />   
+    <result column="margin_amount" property="marginAmount" jdbcType="DECIMAL" />
+    <result column="margin_remainder_amount" property="marginRemainderAmount" jdbcType="DECIMAL" />
+    <result column="used_credit_count" property="usedCreditCount" jdbcType="TINYINT" />
+    <result column="brand_unit_names" property="brandUnitNames" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="OccurResultMap" type="cn.wonhigh.retail.fas.common.dto.WholesaleCustomerRemainingOccurDto" extends="BaseResultMap">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="period_first_frozen" property="periodFirstFrozen" jdbcType="DECIMAL" />
+    <result column="period_first_amount" property="periodFirstAmount" jdbcType="DECIMAL" />   
+    <result column="period_in_amount" property="periodInAmount" jdbcType="DECIMAL" />
+    <result column="period_out_amount" property="periodOutAmount" jdbcType="DECIMAL" />
+    <result column="period_frozen_amount" property="periodFrozenAmount" jdbcType="DECIMAL" /> 
+    <result column="period_unfrozen_amount" property="periodUnfrozenAmount" jdbcType="DECIMAL" /> 
+    <result column="period_rebate_amount" property="periodRebateAmount" jdbcType="DECIMAL" /> 
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="period_deduction" property="periodDeduction" jdbcType="DECIMAL" /> 
+    <result column="period_other_price" property="periodOtherPrice" jdbcType="DECIMAL" /> 
+    <result column="period_credit" property="periodCredit" jdbcType="TINYINT" />    
+    <result column="period_last_frozen" property="periodLastFrozen" jdbcType="DECIMAL" />
+    <result column="period_last_amount" property="periodLastAmount" jdbcType="DECIMAL" />
+    <result column="total_credit_counts" property="totalCreditCounts" jdbcType="TINYINT" /> 
+    <result column="period_last_marginAmount" property="periodLastMarginAmount" jdbcType="DECIMAL" /> 
+  </resultMap>
+  
+  <resultMap id="SendaResultMap" type="cn.wonhigh.retail.fas.common.dto.WholesaleCustomerRemainingSendaDto" >
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="customer_no" property="customerNo" jdbcType="CHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+	<result column="biz_type" property="bizType" jdbcType="INTEGER" />
+	<result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+	<result column="first_remaining"  property="firstRemaining" jdbcType="DECIMAL" />
+	<result column="first_uninvoiced" property="firstUninvoiced" jdbcType="DECIMAL" />
+	<result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+	<result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+	<result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+	<result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+	<result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+	<result column="remaining_amount" property="remainingAmount" jdbcType="DECIMAL" />
+	<result column="invoiced_amount" property="invoicedAmount" jdbcType="DECIMAL" />
+	<result column="total_uninvoiced" property="totalUninvoiced" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, company_no, company_name, customer_no, customer_name, remaining_amount, create_time, 
+    update_time, frozen_customer_amount
+  </sql>
+  <sql id="condition" >
+  -- AND @company_no 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+       <if test="null!=params.customerNo and ''!=params.customerNo" >
+        AND customer_no = #{params.customerNo}
+      </if>
+      <if test="null!=params.isArrears and params.isArrears=='true' ">
+        AND remaining_amount &lt; 0 
+      </if>
+      <if test="null!=params.customerNoArray and ''!=params.customerNoArray" >
+      	AND customer_no in 
+      	<foreach collection="params.customerNoArray" item="tempCustomerNo" open="(" separator="," close=")">
+      		#{tempCustomerNo}
+      	</foreach>
+      </if>
+    </if>
+  </sql>
+  
+  <select id="findBrandsByCustomerNos" resultMap="FindResultMap" parameterType="java.util.List">
+	SELECT
+			c.customer_no,
+			GROUP_CONCAT(DISTINCT u.`name` SEPARATOR ",") brand_unit_names
+		FROM
+			customer c
+		JOIN org_unit_brand_rel o ON o.order_unit_no = c.order_unit_no
+		JOIN order_unit a ON a.order_unit_no = c.order_unit_no
+		JOIN brand b ON b.brand_no = o.brand_no
+		JOIN brand_unit u ON u.brand_unit_no = b.sys_no
+		where c.order_unit_no is not null and c.order_unit_no !=''
+		and c.customer_no in
+		<foreach collection="list" item="customerNo" index="index" open="(" separator="," close=")" >  
+		        #{customerNo}  
+		</foreach>  
+		GROUP BY c.customer_no
+  </select>
+  
+  
+  <select id="findCustomerRemainningByPage" resultMap="FindResultMap" parameterType="map">
+	select * from (
+		SELECT w.id,w.company_no,w.company_name,w.customer_no,w.customer_name,
+		       IFNULL(c.margin_amount, 0) margin_amount,
+		       IFNULL(c.margin_remainder_amount, 0) margin_remainder_amount,
+		       SUM(IF(d.biz_type = 6 ,0,d.money)) book_remaining_amount,	     
+			   SUM(if(d.type=88 AND d.bill_type=1335 and d.biz_type in(21,29) AND d.bill_date LIKE CONCAT(LEFT(NOW(), 4), '%'),1,0)) used_credit_count,
+			   SUM(IF(d.biz_type in (30,43) and d.bill_date &gt;='2016-07-01',0,d.money)) remaining_amount,
+			   SUM(IF(d.biz_type = 6 ,- 1, 1) * IF(d.biz_type in (30,43,6) and d.bill_date &gt;='2016-07-01',d.money,0)) frozen_customer_amount   
+			   FROM wholesale_customer_remaining_sum w 
+			   LEFT JOIN customer_rece_rel c ON w.company_no = c.company_no AND w.customer_no = c.customer_no         	
+			   LEFT JOIN wholesale_customer_remaining_dtl d ON d.main_id=w.id 
+			   where 1=1
+			   <if test="null!=params.billDate and ''!=params.billDate" >
+		         AND d.bill_date &lt;= #{params.billDate}
+		       </if>
+			   group by w.id
+			   ) w
+  		WHERE 1=1 
+  		   -- AND @w.company_no 
+  		   <if test="null!=params" >
+  		   	  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+		        ${params.queryCondition}
+		      </if>
+		      <if test="null!=params.companyNo and ''!=params.companyNo" >
+		        AND w.company_no = #{params.companyNo}
+		      </if>
+		      <if test="null!=params.customerNo and ''!=params.customerNo" >
+		        AND w.customer_no = #{params.customerNo}
+		      </if>
+		      <if test="null!=params.isArrears and params.isArrears=='true' ">
+		        AND w.remaining_amount &lt; 0 
+		      </if>
+		      <if test="null!=params.customerNoArray and ''!=params.customerNoArray" >
+	      		AND w.customer_no in 
+	      		<foreach collection="params.customerNoArray" item="tempCustomerNo" open="(" separator="," close=")">
+	      			#{tempCustomerNo}
+	      		</foreach>
+     		  </if>
+		   </if>
+		   <if test="orderByField != null and ''!=orderByField" >
+		      order by ${orderByField} 
+		      <if test="orderByField" >
+		        ${orderBy} 
+		      </if>
+		   </if>
+    	   LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <sql id="sendaCondition">
+     -- AND @a.company_no 
+     <if test="null!=params" >
+        <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	    </if>
+	  	<if test="null!=params.companyNo and ''!=params.companyNo" >
+		  	AND a.company_no = #{params.companyNo}
+		</if>
+		<if test="null!=params.customerNoArray and ''!=params.customerNoArray" >
+			AND a.customer_no in 
+			<foreach collection="params.customerNoArray" item="tempCustomerNo" open="(" separator="," close=")">
+				#{tempCustomerNo}
+			</foreach>
+		</if>
+		
+	 </if>
+  </sql>
+  
+   <select id="findSendaListByPage" resultMap="SendaResultMap" parameterType="map">
+   
+		SELECT
+			ws.*, 
+		  IF (ws.biz_type IN ( 21,29),ws.money,0) send_amount,
+		  IF (ws.biz_type IN ( 22,30,43),ws.money,0) return_amount,
+		  IF (ws.biz_type IN ( 5),ws.money,0) deduction_amount,
+		  IF (ws.biz_type IN ( 2),ws.money,0) receive_amount,
+		  IF (ws.biz_type IN ( 68),ws.money,0) invoiced_amount,
+		  SUM(IF(wd.biz_type IN (68),0,wd.money)*IF(wd.biz_type IN (21,29),-1,1))-IF(ws.biz_type IN ( 68),0,ws.money)*IF(ws.biz_type IN (21,29),-1,1) first_remaining,
+		  SUM(IF(wd.biz_type NOT IN (2),wd.money,0)*IF(wd.biz_type IN (21,29),1,-1))-IF(ws.biz_type not IN (2),ws.money,0)*IF(ws.biz_type IN (21,29),1,-1) first_uninvoiced,
+		  SUM(IF(wd.biz_type IN (68),0,wd.money)*IF(wd.biz_type IN (21,29),-1,1)) remaining_amount,
+		  SUM(IF(wd.biz_type NOT IN (2),wd.money,0)*IF(wd.biz_type IN (21,29),1,-1)) total_uninvoiced
+		FROM
+			(
+				SELECT a.* FROM
+					(
+				  SELECT
+						CONVERT(d.id,CHAR) id,s.company_no,s.company_name,s.customer_no,s.customer_name,
+			            d.bill_no,d.bill_date,d.biz_type,SUM(b.send_qty) send_qty,
+			            IF(d.biz_type IN (21,29),-1,1)*d.money money
+					FROM
+						  wholesale_customer_remaining_sum s
+					LEFT JOIN wholesale_customer_remaining_dtl d ON d.main_id = s.id
+					LEFT JOIN bill_sale_balance b ON b.bill_no = d.bill_no
+					WHERE  d.biz_type != 6 
+					GROUP BY d.id
+					UNION ALL
+					SELECT
+				        b.id, b.saler_no company_no, b.saler_name company_name, b.buyer_no customer_no, b.buyer_name customer_name,
+				        b.bill_no, b.invoice_apply_date bill_date,68 biz_type,0 send_qty, b.amount money
+					FROM
+						bill_balance_invoice_apply b
+		                JOIN bill_balance_invoice_source s on s.bill_no=b.bill_no
+		                WHERE s.balance_type=7 and b.status=3
+					) a where 1=1
+					  <include refid="sendaCondition" />
+				      <if test="null!=params.startDate and ''!=params.startDate">
+					     AND a.bill_date &gt;= #{params.startDate} 
+				      </if>
+				      <if test="null!=params.endDate and ''!=params.endDate">
+				    	 AND a.bill_date &lt;= #{params.endDate} 
+				      </if>
+				GROUP BY a.id
+				ORDER BY a.customer_no, a.bill_date DESC, a.id DESC
+		        LIMIT #{page.startRowNum} ,#{page.pageSize}
+			) ws
+		LEFT JOIN (
+			SELECT a.* FROM
+						(
+				SELECT
+						CONVERT(d.id,CHAR) id,s.company_no,s.company_name,s.customer_no,s.customer_name,
+	                    d.bill_no,d.bill_date,d.biz_type,SUM(b.send_qty) send_qty,
+	                    IF(d.biz_type IN (21,29),-1,1)*d.money money
+				FROM
+					  wholesale_customer_remaining_sum s
+				LEFT JOIN wholesale_customer_remaining_dtl d ON d.main_id = s.id
+				LEFT JOIN bill_sale_balance b ON b.bill_no = d.bill_no
+				WHERE  d.biz_type != 6 
+				GROUP BY d.id
+				UNION ALL
+				SELECT
+				    b.id, b.saler_no company_no, b.saler_name company_name, b.buyer_no customer_no, b.buyer_name customer_name,
+				    b.bill_no, b.invoice_apply_date bill_date,68 biz_type,0 send_qty, b.amount money
+				FROM
+					bill_balance_invoice_apply b
+	                JOIN bill_balance_invoice_source s on s.bill_no=b.bill_no
+	                WHERE s.balance_type=7 and b.status=3
+				) a  where 1=1
+				<include refid="sendaCondition" />
+		) wd ON wd.customer_no = ws.customer_no
+		WHERE
+			1 = 1
+		AND (
+			wd.bill_date &lt; ws.bill_date
+			OR (
+				wd.bill_date = ws.bill_date
+				AND wd.id &lt;= ws.id
+			)
+		)							                                                                                                                                                                   
+	   GROUP BY ws.id
+	   ORDER BY ws.customer_no, ws.bill_date DESC, ws.id DESC 		
+  </select>
+  
+  <select id="findSendaCount" resultType="java.lang.Integer" parameterType="map">
+    
+    SELECT count(0) FROM
+			(
+		  SELECT
+			 CONVERT(d.id,CHAR) id,s.company_no,s.company_name,s.customer_no,s.customer_name,
+	         d.bill_no,d.money,d.bill_date,d.biz_type,SUM(b.send_qty) send_qty
+			FROM
+				  wholesale_customer_remaining_sum s
+			LEFT JOIN wholesale_customer_remaining_dtl d ON d.main_id = s.id
+			LEFT JOIN bill_sale_balance b ON b.bill_no = d.bill_no
+			WHERE 1 = 1 AND d.biz_type != 6 	                 
+			GROUP BY d.id
+			UNION ALL
+			SELECT
+				b.id, b.saler_no company_no, b.saler_name company_name, b.buyer_no customer_no, b.buyer_name customer_name,
+				b.bill_no, b.amount money, b.invoice_apply_date bill_date,68 biz_type,0 send_qty
+			FROM
+				bill_balance_invoice_apply b
+                JOIN bill_balance_invoice_source s on s.bill_no=b.bill_no
+                WHERE s.balance_type=7 and b.status=3 
+			) a where 1=1
+			  <include refid="sendaCondition" />
+		      <if test="null!=params.startDate and ''!=params.startDate">
+			     AND a.bill_date &gt;= #{params.startDate} 
+		      </if>
+		      <if test="null!=params.endDate and ''!=params.endDate">
+		    	 AND a.bill_date &lt;= #{params.endDate} 
+		      </if>
+  </select>
+  
+  <select id="findCustomerRemainningOccurByPage" resultMap="OccurResultMap" parameterType="map">
+    
+	select ws.id, ws.company_no, ws.company_name, ws.customer_no, ws.customer_name, c.full_name
+	    ,ifnull((SELECT count(1) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (21, 29) and type=88 AND bill_date BETWEEN #{params.startDate} AND #{params.endDate}),0)  period_credit                     
+	    ,ifnull((SELECT count(1) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (21, 29) and type=88 AND bill_date &gt;= LEFT(#{params.endDate},4)) ,0)                   total_credit_counts               
+	    ,ifnull((SELECT sum(if(biz_type in (30,43) and bill_date &gt;='2016-07-01',0,money))  FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND bill_date &lt; #{params.startDate}),0)   period_first_amount               
+	    ,ifnull((SELECT sum(IF(biz_type = 6 ,- 1, 1) * money) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (30,6,43) AND bill_date &gt;='2016-07-01' AND bill_date &lt; #{params.startDate}),0)     period_first_frozen               
+	    ,ifnull((SELECT sum(ifnull(-money+rebate_amount-other_price, 0)) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (21,22,29) AND  bill_date BETWEEN #{params.startDate} AND #{params.endDate}),0) period_out_amount
+	    ,ifnull((SELECT sum(ifnull(money, 0)) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (22, 30, 43) AND  bill_date BETWEEN #{params.startDate} AND #{params.endDate}),0)      return_amount
+	    ,ifnull((SELECT sum(ifnull(money, 0)) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (2) AND bill_date  BETWEEN #{params.startDate} AND #{params.endDate}) ,0)              period_in_amount                 
+	    ,ifnull((SELECT sum(money) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type=5 AND bill_date BETWEEN #{params.startDate} AND #{params.endDate}),0)     period_deduction                     
+        ,ifnull((SELECT sum(rebate_amount) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND bill_date BETWEEN #{params.startDate} AND #{params.endDate}),0)            period_rebate_amount               
+        ,ifnull((SELECT sum(other_price) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND bill_date BETWEEN #{params.startDate} AND #{params.endDate}),0)              period_other_price                
+	    ,ifnull((SELECT sum(ifnull(money, 0)) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (30,43) AND bill_date BETWEEN #{params.startDate} AND #{params.endDate} and bill_date &gt;='2016-07-01' ) ,0)  period_frozen_amount                 
+	    ,ifnull((SELECT sum(ifnull(money, 0)) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (6) AND bill_date BETWEEN #{params.startDate} AND #{params.endDate}) ,0)                 period_unfrozen_amount                 
+	    ,ifnull((SELECT sum(if(biz_type in (30,43) and bill_date &gt;='2016-07-01',0,money))  FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND bill_date &lt;= #{params.endDate}) ,0)               period_last_amount               
+	    ,ifnull((SELECT sum(IF(biz_type = 6 ,- 1, 1) * money) FROM wholesale_customer_remaining_dtl WHERE main_id = ws.id AND biz_type IN (30,6,43) AND bill_date BETWEEN '2016-07-01' AND #{params.endDate}) ,0)  period_last_frozen                
+	    ,ifnull((SELECT sum(ifnull(margin_remainder_amount,0)) from customer_rece_rel where customer_no = ws.customer_no ) ,0) period_last_marginAmount
+	from wholesale_customer_remaining_sum ws
+	left join customer c on c.customer_no=ws.customer_no					                                                                                                                                                                   
+    where 1=1 
+		-- AND @ws.company_no 
+		<if test="null!=params" >
+			    <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+			        ${params.queryCondition}
+			    </if>
+			    <if test="null!=params.companyNo and ''!=params.companyNo" >
+				  	AND ws.company_no = #{params.companyNo}
+				</if>
+				<if test="null!=params.customerNo and ''!=params.customerNo" >
+				  	AND ws.customer_no = #{params.customerNo}
+				</if>
+				<if test="null!=params.customerNoArray and ''!=params.customerNoArray" >
+					AND ws.customer_no in 
+					<foreach collection="params.customerNoArray" item="tempCustomerNo" open="(" separator="," close=")">
+						#{tempCustomerNo}
+					</foreach>
+				</if>
+		</if>
+	    LIMIT #{page.startRowNum} ,#{page.pageSize}
+ 
+  </select>
+  
+ 
+  
+  
+  <select id="selectCalcPaidAmountByParams" resultMap="FindResultMap" parameterType="map">
+  	SELECT IFNULL(SUM(paid_amount),0) paid_amount 
+  	FROM bill_pre_payment_nt 
+  	WHERE customer_no = #{params.buyerNo} AND company_no = #{params.companyNo} 
+  		AND paid_type IN ('0','2') AND audit_status = '1' 
+  </select>
+  
+  <select id="selectCalcSendAmountByParams" resultMap="FindResultMap" parameterType="map">
+  	SELECT buyer_no, buyer_name, saler_no, saler_name, original_bill_no, 
+  			IFNULL(SUM(cost * send_qty),0) send_amount  
+  	FROM bill_sale_balance 
+  	WHERE buyer_no = #{params.buyerNo} AND saler_no = #{params.companyNo} 
+  		AND bill_type='1335' AND biz_type IN ('21','22','29','30') 	
+  </select>
+ 
+  <update id="updateByCustomerNo" parameterType="map">
+  UPDATE wholesale_customer_remaining_sum
+      set
+      <if test="params.remainingAmount != null" >
+        remaining_amount = remaining_amount + #{params.remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="params.frozenCustomerAmount != null" >
+        frozen_customer_amount = frozen_customer_amount + #{params.frozenCustomerAmount,jdbcType=DECIMAL},
+      </if>
+      update_time=now()
+    WHERE customer_no = #{params.customerNo,jdbcType=CHAR}  
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM wholesale_customer_remaining_sum
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM wholesale_customer_remaining_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM wholesale_customer_remaining_sum WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM wholesale_customer_remaining_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM wholesale_customer_remaining_sum
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingSum" >
+    DELETE FROM wholesale_customer_remaining_sum
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingSum" >
+    INSERT INTO wholesale_customer_remaining_sum (id, company_no, company_name, 
+      customer_no, customer_name, remaining_amount, 
+      create_time, update_time, frozen_customer_amount
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{customerNo,jdbcType=CHAR}, #{customerName,jdbcType=VARCHAR}, #{remainingAmount,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{frozenCustomerAmount,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingSum" >
+    INSERT INTO wholesale_customer_remaining_sum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="customerNo != null" >
+        customer_no,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="frozenCustomerAmount != null" >
+        frozen_customer_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="remainingAmount != null" >
+        #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frozenCustomerAmount != null" >
+        #{frozenCustomerAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingSum" >
+    UPDATE wholesale_customer_remaining_sum
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=CHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frozenCustomerAmount != null" >
+        frozen_customer_amount = #{frozenCustomerAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingSum" >
+	UPDATE wholesale_customer_remaining_sum
+	SET company_no = #{companyNo,jdbcType=CHAR},
+	company_name = #{companyName,jdbcType=VARCHAR},
+	customer_no = #{customerNo,jdbcType=CHAR},
+	customer_name = #{customerName,jdbcType=VARCHAR},
+	remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+	create_time = #{createTime,jdbcType=TIMESTAMP},
+	update_time = #{updateTime,jdbcType=TIMESTAMP},
+	frozen_customer_amount = #{frozenCustomerAmount,jdbcType=DECIMAL}
+	WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+
+</mapper>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.LeisureBrandMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.LeisureBrandDto" >
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="send_store_no" property="sendStoreNo" jdbcType="CHAR" />
+    <result column="send_store_name" property="sendStoreName" jdbcType="CHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="exclusive_cost" property="exclusiveCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="is_split" property="isSplit" jdbcType="INTEGER" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+   
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="CHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="CHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="difference_Qty" property="differenceQty" jdbcType="INTEGER" />
+    <result column="difference_amount" property="differenceAmount" jdbcType="DECIMAL" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL"/>
+    <result column="purchase_amount" property="purchaseAmount" jdbcType="DECIMAL"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    BUYER_NO, BUYER_NAME, SALER_NO, SALER_NAME, SEND_DATE, RECEIVE_DATE, SEND_STORE_NO, 
+    SEND_STORE_NAME, RECEIVE_STORE_NO, RECEIVE_STORE_NAME, SUPPLIER_NO, 
+    SUPPLIER_NAME, ITEM_NO, ITEM_CODE, ITEM_NAME, BRAND_NO, BRAND_NAME, CATEGORY_NO, 
+    CATEGORY_NAME, COST, TAX_RATE, EXCLUSIVE_COST, 
+    HEADQUARTER_COST, REGION_COST, UNIT_COST, SEND_QTY, RECEIVE_QTY, 
+    BALANCE_NO, IS_SPLIT, PATH_NO, ORDER_UNIT_NO, BRAND_UNIT_NAME,
+    ORDER_UNIT_NAME, ORGAN_NO, ORGAN_NAME, ORDER_UNIT_NO_FROM, ORDER_UNIT_NAME_FROM, 
+    ORGAN_NO_FROM, ORGAN_NAME_FROM, ZONE_NO, ZONE_NAME, ZONE_NO_FROM, ZONE_NAME_FROM 
+  </sql>
+  
+  <sql id="sale_condition" >
+    -- AND @BS.brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      	<if test="null!=params.sendDateStart and ''!=params.sendDateStart">
+			AND BS.send_date &gt;= #{params.sendDateStart}
+		</if>
+		<if test="null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND BS.send_date &lt;= #{params.sendDateEnd}
+		</if>
+		<if test="null!=params.itemCode and ''!=params.itemCode">
+			AND BS.item_code = #{params.itemCode}
+		</if>
+		<!-- 总部公司作为买方 -->
+		<if test="null!=params.buyerNo and ''!=params.buyerNo">
+			AND BS.saler_no = #{params.buyerNo}
+		</if>
+		<if test="null!=params.orderUnitNo and ''!=params.orderUnitNo">
+			AND BS.order_unit_no = #{params.orderUnitNo}
+		</if>
+		<if test="null!=params.supplierNo and ''!=params.supplierNo">
+			AND BS.supplier_No = #{params.supplierNo}
+		</if>
+		<if test="null!=params.brandNoLike and ''!=params.brandNoLike">
+			AND BS.brand_no in ${params.brandNoLike}
+		</if>
+		<if test="null!=params.organNo and ''!=params.organNo">
+			AND BS.organ_No = #{params.organNo}
+		</if>
+    </if>
+  </sql>
+  
+  <sql id="buy_condition" >
+    -- AND @BB.brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      	<if test="null!=params.sendDateStart and ''!=params.sendDateStart">
+			AND BB.send_date &gt;= #{params.sendDateStart}
+		</if>
+		<if test="null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND BB.send_date &lt;= #{params.sendDateEnd}
+		</if>
+		<if test="null!=params.itemCode and ''!=params.itemCode">
+			AND BB.item_code = #{params.itemCode}
+		</if>
+		<if test="null!=params.buyerNo and ''!=params.buyerNo">
+			AND BB.buyer_no = #{params.buyerNo}
+		</if>
+		<if test="null!=params.orderUnitNo and ''!=params.orderUnitNo">
+			AND BB.order_unit_no = #{params.orderUnitNo}
+		</if>
+		<if test="null!=params.supplierNo and ''!=params.supplierNo">
+			AND BB.supplier_No = #{params.supplierNo}
+		</if>
+		<if test="null!=params.brandNoLike and ''!=params.brandNoLike">
+			AND BB.brand_no in ${params.brandNoLike}
+		</if>
+		<if test="null!=params.organNo and ''!=params.organNo">
+			AND BB.organ_No = #{params.organNo}
+		</if>
+    </if>
+  </sql>
+  
+   <!-- 总部职能结算公司 -->
+  <sql id ="headquaters_company_data">
+    <if test="null!=params" >
+   		<if test="null!=params.hqCompanyData and ''!=params.hqCompanyData" >
+       		  (${params.hqCompanyData})
+     	 </if>
+     </if>
+  </sql>
+  
+  <!-- buy关联取采购价 物料价 -->
+  <sql id="getBuyPrice">
+  LEFT JOIN (
+  SELECT 
+    ITEM_NO,SUPPLIER_NO,MATERIAL_PRICE,PURCHASE_PRICE, FACTORY_PRICE 
+  FROM
+    (SELECT 
+      PP.ITEM_NO,PP.SUPPLIER_NO,PP.MATERIAL_PRICE,PP.PURCHASE_PRICE,PP.FACTORY_PRICE 
+    FROM
+      PURCHASE_PRICE PP 
+    WHERE 1 = 1 
+      AND PP.EFFECTIVE_DATE &lt;= #{params.sendDateEnd} 
+    ORDER BY 
+      ITEM_NO DESC,SUPPLIER_NO DESC,STATUS DESC,EFFECTIVE_DATE DESC,CREATE_TIME DESC) G 
+  GROUP BY 
+  	  ITEM_NO,SUPPLIER_NO) P
+    ON BB.ITEM_NO = P.ITEM_NO
+    AND BB.SUPPLIER_NO = P.SUPPLIER_NO
+  </sql>
+  
+  <!-- sale关联取采购价 物料价 -->
+  <sql id="getSalePrice">
+  LEFT JOIN (
+  SELECT 
+    ITEM_NO,SUPPLIER_NO,MATERIAL_PRICE,PURCHASE_PRICE, FACTORY_PRICE 
+  FROM
+    (SELECT 
+      PP.ITEM_NO,PP.SUPPLIER_NO,PP.MATERIAL_PRICE,PP.PURCHASE_PRICE,PP.FACTORY_PRICE 
+    FROM
+      PURCHASE_PRICE PP 
+    WHERE 1 = 1 
+      AND PP.EFFECTIVE_DATE &lt;= #{params.sendDateEnd} 
+    ORDER BY 
+      ITEM_NO DESC,SUPPLIER_NO DESC,STATUS DESC,EFFECTIVE_DATE DESC,CREATE_TIME DESC) G 
+  GROUP BY 
+  	  ITEM_NO,SUPPLIER_NO) P
+    ON BS.ITEM_NO = P.ITEM_NO
+    AND BS.SUPPLIER_NO = P.SUPPLIER_NO
+  </sql>
+  
+ <sql id="sum_result">
+	SELECT 
+		BB.BILL_TYPE BILL_TYPE,
+	    BB.BUYER_NO HQ_NO,
+	    BB.BUYER_NAME HQ_NAME,
+	    BB.ITEM_NO ITEM_NO,
+	    BB.BRAND_UNIT_NAME BRAND_UNIT_NAME,
+	    BB.BRAND_NO BRAND_NO,
+	    BB.BRAND_NAME BRAND_NAME,
+	    BB.SUPPLIER_NO SUPPLIER_NO,
+	    BB.SUPPLIER_NAME SUPPLIER_NAME,
+	    BB.ORDER_UNIT_NO ORDER_UNIT_NO,
+	    BB.ITEM_CODE ITEM_CODE,
+	    BB.ITEM_NAME ITEM_NAME,
+	    BB.ORGAN_NO ORGAN_NO,
+	    BB.SEND_QTY SEND_QTY,
+	    BB.SEND_QTY * P.PURCHASE_PRICE AS AMOUNT,
+	    P.MATERIAL_PRICE,
+	    P.PURCHASE_PRICE 
+	FROM  bill_buy_balance BB
+		<include refid="getBuyPrice"/>
+	WHERE 1=1 
+		AND BB.bill_type IN ('1301','1333')
+		AND BB.IS_SPLIT IS NULL
+		AND BB.buyer_no IN <include refid="headquaters_company_data"/>
+		<include refid="buy_condition"/>
+	UNION ALL
+	SELECT 
+		BS.BILL_TYPE BILL_TYPE,
+	    BS.SALER_NO HQ_NO,
+	    BS.SALER_NAME HQ_NAME,
+	    BS.ITEM_NO ITEM_NO,
+	    BS.BRAND_UNIT_NAME BRAND_UNIT_NAME,
+	    BS.BRAND_NO BRAND_NO,
+	    BS.BRAND_NAME BRAND_NAME,
+	    BS.SUPPLIER_NO SUPPLIER_NO,
+	    BS.SUPPLIER_NAME SUPPLIER_NAME,
+	    BS.ORDER_UNIT_NO ORDER_UNIT_NO,
+	    BS.ITEM_CODE ITEM_CODE,
+	    BS.ITEM_NAME ITEM_NAME,
+	    BS.ORGAN_NO ORGAN_NO,
+	    BS.SEND_QTY SEND_QTY,
+	    0 AS AMOUNT,
+	    P.MATERIAL_PRICE MATERIAL_PRICE,
+	    P.PURCHASE_PRICE PURCHASE_PRICE 	  	
+	FROM  bill_sale_balance BS
+		<include refid="getSalePrice"/>
+	WHERE 1=1 
+		AND BS.bill_type='1371' 
+		AND BS.saler_no  IN <include refid="headquaters_company_data"/>
+		AND BS.buyer_no NOT IN <include refid="headquaters_company_data"/>
+		<include refid="sale_condition"/>
+ </sql>
+  
+  <!-- 查询总条数 -->
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) FROM 
+    (SELECT 
+		t.*
+	FROM ( 
+		<include refid="sum_result"/>
+	) AS t
+	GROUP BY T.HQ_NO,T.ITEM_NO ) temp
+  </select>
+  
+  <!-- 分页查询 -->
+  <select id="selectSumByPage" resultType="java.util.HashMap" parameterType="map" >
+    SELECT 
+		T.ITEM_CODE,T.ITEM_NAME,T.HQ_NO BUYER_NO,T.HQ_NAME BUYER_NAME,
+		T.BRAND_UNIT_NAME,T.BRAND_NAME,T.SUPPLIER_NO,T.SUPPLIER_NAME,
+		SUM(CASE WHEN T.BILL_TYPE IN ('1301','1333') THEN T.SEND_QTY ELSE 0 END ) AS RECEIVE_QTY,
+		SUM(CASE WHEN T.BILL_TYPE IN ('1371') THEN T.SEND_QTY ELSE 0 END ) AS SEND_QTY,
+		SUM(CASE WHEN T.BILL_TYPE IN ('1301','1333') THEN T.SEND_QTY ELSE 0 END ) -
+		SUM(CASE WHEN T.BILL_TYPE IN ('1371') THEN T.SEND_QTY ELSE 0 END ) AS DIFFERENCE_QTY,
+		SUM(T.AMOUNT) AS PURCHASE_AMOUNT,
+		T.PURCHASE_PRICE PURCHASE_PRICE,
+ 		T.MATERIAL_PRICE MATERIAL_PRICE
+		<if test="null!=params.columns and ''!=params.columns" >
+       		 ,${params.columns}
+     	 </if>
+	FROM ( 
+		<include refid="sum_result"/>
+	) AS t
+	GROUP BY T.HQ_NO,T.ITEM_NO 
+	<if test="orderByField != null and '' != orderByField" >
+		order by ${orderByField}
+		<if test="orderByField" >
+			${orderBy}
+		</if>
+	</if>
+	<if test="page != null and '' != page" >
+		limit #{page.startRowNum} ,#{page.pageSize}
+	</if>
+  </select>
+
+  <!-- 查询动态列 -->
+  <select id="selectDynColumns" resultType="java.util.HashMap" parameterType="map">
+  	SELECT 
+	 	DISTINCT BS.ORDER_UNIT_NO ORDER_UNIT_NO,BS.ORDER_UNIT_NAME ORDER_UNIT_NAME
+	FROM  
+		BILL_SALE_BALANCE BS
+	WHERE 1=1 
+		AND BS.BILL_TYPE='1371' 
+		AND BS.SALER_NO  IN <include refid="headquaters_company_data"/>
+		AND BS.BUYER_NO NOT IN <include refid="headquaters_company_data"/>
+		<include refid="sale_condition"/>
+	ORDER BY BS.ORDER_UNIT_NO DESC
+  </select>
+  
+  <!-- 查询合计行 -->
+  <select id="selectTotalRow" resultType="java.util.HashMap" parameterType="map">
+ SELECT 
+ 	'合计' ITEM_CODE,
+	SUM(RECEIVE_QTY) RECEIVE_QTY,
+	SUM(SEND_QTY) SEND_QTY,
+	SUM(DIFFERENCE_QTY) DIFFERENCE_QTY,
+	SUM(PURCHASE_AMOUNT) PURCHASE_AMOUNT
+	<if test="null!=params.sumColumns and ''!=params.sumColumns" >
+   		 ,${params.sumColumns}
+    </if>
+ FROM (SELECT 
+		T.ITEM_CODE,T.ITEM_NAME,T.HQ_NO BUYER_NO,T.HQ_NAME BUYER_NAME,
+		T.BRAND_UNIT_NAME,T.BRAND_NAME,T.SUPPLIER_NO,T.SUPPLIER_NAME,
+		SUM(CASE WHEN T.BILL_TYPE IN ('1301','1333') THEN T.SEND_QTY ELSE 0 END ) AS RECEIVE_QTY,
+		SUM(CASE WHEN T.BILL_TYPE IN ('1371') THEN T.SEND_QTY ELSE 0 END ) AS SEND_QTY,
+		SUM(CASE WHEN T.BILL_TYPE IN ('1301','1333') THEN T.SEND_QTY ELSE 0 END ) -
+		SUM(CASE WHEN T.BILL_TYPE IN ('1371') THEN T.SEND_QTY ELSE 0 END ) AS DIFFERENCE_QTY,
+		SUM(T.AMOUNT) AS PURCHASE_AMOUNT,
+		T.PURCHASE_PRICE PURCHASE_PRICE,
+ 		T.MATERIAL_PRICE MATERIAL_PRICE
+		<if test="null!=params.columns and ''!=params.columns" >
+       		 ,${params.columns}
+     	 </if>
+	FROM ( 
+		<include refid="sum_result"/>
+	) AS t
+	GROUP BY T.HQ_NO,T.ITEM_NO ) temp
+  </select>
+  
+</mapper>

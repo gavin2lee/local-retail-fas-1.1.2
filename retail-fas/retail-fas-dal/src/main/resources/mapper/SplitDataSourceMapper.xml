@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SplitDataSourceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SplitDataSource" >
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="send_out_date" property="sendOutDate" jdbcType="DATE" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="bill_basis" property="billBasis" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.startDate and ''!=params.startDate" >
+         and send_out_date &gt;= #{params.startDate} 
+      </if>
+      <if test="null!=params.endDate and ''!=params.endDate" >
+        and send_out_date &lt;= #{params.endDate} 
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+        and t.bill_no = #{params.billNo} 
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        and exists(select 'X' from bill_split_log l where t1.bill_no = l.ref_bill_no and l.status = #{params.status})
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s from bill_asn_dtl t
+	  left join  bill_asn t1
+	on t.bill_no = t1.bill_no
+	where 1 = 1
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select
+	  t1.bill_no,
+	  t1.bill_type   bill_basis,
+	  t1.supplier_no,
+	  t1.order_unit_no company_no,
+	  t1.send_out_date,
+	  t1.tax_rate,
+	  t.item_no,
+	  t.brand_no,
+	  (select name from brand where t.brand_no = brand.brand_no) brand_name,
+	  (select category_no from item where t.item_no = item.item_no) category_no,
+	  (select years from item where t.item_no = item.item_no) years,
+	  (select sell_season from item where t.item_no = item.item_no) season
+	from bill_asn_dtl t
+	  left join bill_asn t1
+	on t.bill_no = t1.bill_no
+	where 1 = 1
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+</mapper>

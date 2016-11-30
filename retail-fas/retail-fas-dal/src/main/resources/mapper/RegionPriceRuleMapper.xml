@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.RegionPriceRuleMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.RegionPriceRule" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="add_rule_no" property="addRuleNo" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="supplier_group_no" property="supplierGroupNo" jdbcType="VARCHAR" />
+    <result column="supplier_group_name" property="supplierGroupName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="VARCHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="new_style_flag" property="newStyleFlag" jdbcType="TINYINT" />
+    <result column="style_type" property="styleType" jdbcType="CHAR" />
+    <result column="year_code" property="yearCode" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="season" property="season" jdbcType="CHAR" />
+    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+    <result column="effective_time" property="effectiveTime" jdbcType="DATE" />
+    <result column="add_basis" property="addBasis" jdbcType="CHAR" />
+    <result column="add_price" property="addPrice" jdbcType="DECIMAL" />
+    <result column="add_discount" property="addDiscount" jdbcType="DECIMAL" />
+    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  	<result column="style_type_name" property="styleTypeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, add_rule_no, zone_no, zone_name, supplier_group_no, supplier_group_name, brand_unit_no, 
+    brand_unit_name, category_no, category_name, new_style_flag, style_type, year_code, two_level_category_no,two_level_category_name,
+    year, season, season_name, effective_time, add_basis, add_price, add_discount, discount_rate, 
+    create_user, create_time, update_user, update_time,
+    (SELECT name FROM settle_new_style WHERE region_price_rule.style_type = settle_new_style.style_no) style_type_name
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.addRuleNo and ''!=params.addRuleNo">
+       	   and add_rule_no = #{params.addRuleNo,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.zoneNo and ''!=params.zoneNo">
+       	   and zone_no = #{params.zoneNo,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.supplierGroupNo and ''!=params.supplierGroupNo">
+       	   and supplier_group_no = #{params.supplierGroupNo,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.supplierGroupNoAlial and ''!=params.supplierGroupNoAlial">
+       	   AND FIND_IN_SET(#{params.supplierGroupNoAlial}, supplier_group_no)
+      </if>
+      <if test="null!=params.newStyleFlag and ''!=params.newStyleFlag">
+       	   and new_style_flag = #{params.newStyleFlag,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.styleType and ''!=params.styleType">
+       	   and style_type = #{params.styleType,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.effectiveTimeStart and ''!=params.effectiveTimeStart">
+       	   and effective_time &gt;= #{params.effectiveTimeStart}
+      </if>
+      <if test="null!=params.effectiveTimeEnd and ''!=params.effectiveTimeEnd">
+       	   and effective_time &lt;= #{params.effectiveTimeEnd}
+      </if>
+      <if test="null!=params.addBasis and ''!=params.addBasis">
+       	   and add_basis = #{params.addBasis,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo">
+       	   and category_no = #{params.categoryNo,jdbcType=CHAR} 
+      </if>
+      <if test="null!=params.categoryNoAlial and ''!=params.categoryNoAlial">
+       	   AND FIND_IN_SET(#{params.categoryNoAlial}, category_no)
+      </if>
+      <if test="null!=params.brandUnitNoAlial and ''!=params.brandUnitNoAlial">
+       	   AND FIND_IN_SET(#{params.brandUnitNoAlial}, brand_unit_no)
+      </if>
+      <if test="null!=params.yearCode and ''!=params.yearCode">
+           AND FIND_IN_SET(#{params.yearCode}, year_code)
+      </if>
+      <if test="null!=params.season and ''!=params.season">
+       	   and (season = #{params.season,jdbcType=CHAR} or season = 'ALL')
+      </if>
+      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+       	   and brand_unit_no = #{params.brandUnitNo} 
+      </if>
+      <if test="null!=params.effectiveTime and ''!=params.effectiveTime">
+       	   and effective_time = #{params.effectiveTime}
+      </if>
+      <if test="null!=params.currentTime and ''!=params.currentTime">
+       	   and effective_time &lt;= DATE_FORMAT(#{params.currentTime},'%Y-%m-%d')
+      </if>
+      <if test="null!=params.zoneNoAlial and ''!=params.zoneNoAlial">
+       	   AND FIND_IN_SET(#{params.zoneNoAlial}, zone_no)
+      </if>
+      <if test="null!=params.isNotUsed and 'true'==params.isNotUsed">
+       	   AND NOT EXISTS (SELECT 1 FROM region_cost_maintain rcm WHERE rcm.add_rule_no = region_price_rule.add_rule_no)
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM region_price_rule
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM region_price_rule WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM region_price_rule WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField">
+		ORDER BY create_time DESC
+	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM region_price_rule WHERE 1=1 
+    <include refid="condition" />
+    ORDER BY effective_time DESC
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM region_price_rule
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.RegionPriceRule" >
+    DELETE FROM region_price_rule
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.RegionPriceRule" >
+    INSERT INTO region_price_rule (two_level_category_no,two_level_category_name,id, add_rule_no, zone_no, 
+      zone_name, supplier_group_no, supplier_group_name, 
+      brand_unit_no, brand_unit_name, category_no, 
+      category_name, new_style_flag, style_type, 
+      year_code, year, season, season_name, 
+      effective_time, add_basis, add_price, 
+      add_discount, discount_rate, create_user, 
+      create_time, update_user, update_time
+      )
+    VALUES (#{twoLevelCategoryNo,jdbcType=VARCHAR}, #{twoLevelCategoryName,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, #{addRuleNo,jdbcType=VARCHAR}, #{zoneNo,jdbcType=CHAR}, 
+      #{zoneName,jdbcType=VARCHAR}, #{supplierGroupNo,jdbcType=VARCHAR}, #{supplierGroupName,jdbcType=VARCHAR}, 
+      #{brandUnitNo,jdbcType=VARCHAR}, #{brandUnitName,jdbcType=VARCHAR}, #{categoryNo,jdbcType=VARCHAR}, 
+      #{categoryName,jdbcType=VARCHAR}, #{newStyleFlag,jdbcType=TINYINT}, #{styleType,jdbcType=CHAR}, 
+      #{yearCode,jdbcType=VARCHAR}, #{year,jdbcType=CHAR}, #{season,jdbcType=CHAR}, #{seasonName,jdbcType=VARCHAR}, 
+      #{effectiveTime,jdbcType=DATE}, #{addBasis,jdbcType=CHAR}, #{addPrice,jdbcType=DECIMAL}, 
+      #{addDiscount,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.RegionPriceRule" >
+    INSERT INTO region_price_rule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="twoLevelCategoryNo != null" >
+        two_level_category_no,
+      </if>
+      <if test="twoLevelCategoryName != null" >
+        two_level_category_name,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="addRuleNo != null" >
+        add_rule_no,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="zoneName != null" >
+        zone_name,
+      </if>
+      <if test="supplierGroupNo != null" >
+        supplier_group_no,
+      </if>
+      <if test="supplierGroupName != null" >
+        supplier_group_name,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="newStyleFlag != null" >
+        new_style_flag,
+      </if>
+      <if test="styleType != null" >
+        style_type,
+      </if>
+      <if test="yearCode != null" >
+        year_code,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="season != null" >
+        season,
+      </if>
+      <if test="seasonName != null" >
+        season_name,
+      </if>
+      <if test="effectiveTime != null" >
+        effective_time,
+      </if>
+      <if test="addBasis != null" >
+        add_basis,
+      </if>
+      <if test="addPrice != null" >
+        add_price,
+      </if>
+      <if test="addDiscount != null" >
+        add_discount,
+      </if>
+      <if test="discountRate != null" >
+        discount_rate,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="twoLevelCategoryNo != null" >
+        #{twoLevelCategoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="twoLevelCategoryName != null" >
+        #{twoLevelCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="addRuleNo != null" >
+        #{addRuleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierGroupNo != null" >
+        #{supplierGroupNo,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierGroupName != null" >
+        #{supplierGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="newStyleFlag != null" >
+        #{newStyleFlag,jdbcType=TINYINT},
+      </if>
+      <if test="styleType != null" >
+        #{styleType,jdbcType=CHAR},
+      </if>
+      <if test="yearCode != null" >
+        #{yearCode,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=CHAR},
+      </if>
+      <if test="season != null" >
+        #{season,jdbcType=CHAR},
+      </if>
+      <if test="seasonName != null" >
+        #{seasonName,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveTime != null" >
+        #{effectiveTime,jdbcType=DATE},
+      </if>
+      <if test="addBasis != null" >
+        #{addBasis,jdbcType=CHAR},
+      </if>
+      <if test="addPrice != null" >
+        #{addPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="addDiscount != null" >
+        #{addDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate != null" >
+        #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.RegionPriceRule" >
+    UPDATE region_price_rule
+    <set >
+      <if test="twoLevelCategoryNo != null" >
+        two_level_category_no = #{twoLevelCategoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="twoLevelCategoryName != null" >
+        two_level_category_name = #{twoLevelCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="addRuleNo != null" >
+        add_rule_no = #{addRuleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierGroupNo != null" >
+        supplier_group_no = #{supplierGroupNo,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierGroupName != null" >
+        supplier_group_name = #{supplierGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="newStyleFlag != null" >
+        new_style_flag = #{newStyleFlag,jdbcType=TINYINT},
+      </if>
+      <if test="styleType != null" >
+        style_type = #{styleType,jdbcType=CHAR},
+      </if>
+      <if test="styleType == null or styleType == ''" >
+        style_type = '',
+      </if>
+      <if test="yearCode != null" >
+        year_code = #{yearCode,jdbcType=VARCHAR},
+      </if>
+      <if test="yearCode == null or yearCode == ''" >
+        year_code = '',
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=CHAR},
+      </if>
+      <if test="year == null or year == ''" >
+        year = '',
+      </if>
+      <if test="season != null" >
+        season = #{season,jdbcType=CHAR},
+      </if>
+      <if test="season == null or season == ''" >
+        season = '',
+      </if>
+      <if test="seasonName != null" >
+        season_name = #{seasonName,jdbcType=VARCHAR},
+      </if>
+      <if test="seasonName == null or seasonName == ''" >
+        season_name = '',
+      </if>
+      <if test="effectiveTime != null" >
+        effective_time = #{effectiveTime,jdbcType=DATE},
+      </if>
+      <if test="addBasis != null" >
+        add_basis = #{addBasis,jdbcType=CHAR},
+      </if>
+      <if test="addPrice != null" >
+        add_price = #{addPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="addPrice == null" >
+        add_price = #{addPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="addDiscount != null" >
+        add_discount = #{addDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="addDiscount == null" >
+        add_discount = #{addDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate != null" >
+        discount_rate = #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="discountRate == null" >
+        discount_rate = #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.RegionPriceRule" >
+    UPDATE region_price_rule
+    SET add_rule_no = #{addRuleNo,jdbcType=VARCHAR},
+      two_level_category_no = #{twoLevelCategoryNo,jdbcType=VARCHAR},
+      two_level_category_name = #{twoLevelCategoryName,jdbcType=VARCHAR},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      supplier_group_no = #{supplierGroupNo,jdbcType=VARCHAR},
+      supplier_group_name = #{supplierGroupName,jdbcType=VARCHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=VARCHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      new_style_flag = #{newStyleFlag,jdbcType=TINYINT},
+      style_type = #{styleType,jdbcType=CHAR},
+      year_code = #{yearCode,jdbcType=VARCHAR},
+      year = #{year,jdbcType=CHAR},
+      season = #{season,jdbcType=CHAR},
+      season_name = #{seasonName,jdbcType=VARCHAR},
+      effective_time = #{effectiveTime,jdbcType=DATE},
+      add_basis = #{addBasis,jdbcType=CHAR},
+      add_price = #{addPrice,jdbcType=DECIMAL},
+      add_discount = #{addDiscount,jdbcType=DECIMAL},
+      discount_rate = #{discountRate,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+    
+  <select id="checkIsRuleRefered" resultType="java.lang.Integer" parameterType="map" >
+    SELECT COUNT(1) as s FROM region_cost_maintain WHERE add_rule_no = #{params.addRuleNo} 
+  </select>
+  
+  <select id="findRuleByItemNoAndZoneNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+	  hpr.* 
+	FROM
+	  item it 
+	  INNER JOIN supplier_group_rel sgr 
+	    ON it.supplier_no = sgr.supplier_no 
+	  INNER JOIN settle_category_dtl scd 
+	    ON it.root_category_no = scd.category_no 
+	  INNER JOIN brand b 
+	    ON it.brand_no = b.brand_no 
+	  INNER JOIN region_price_rule hpr 
+	    ON FIND_IN_SET(
+	      sgr.group_no,
+	      hpr.supplier_group_no
+	    ) 
+	    AND FIND_IN_SET(
+	      scd.settle_category_no,
+	      hpr.category_no
+	    ) 
+	    AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+	  LEFT JOIN `settle_new_style_dtl` snsd 
+	    ON it.`years` = snsd.`year_code` 
+	    AND (
+	      it.`sell_season` = snsd.`season_no` 
+	      OR snsd.season_no = 'ALL'
+	    )  
+	WHERE it.item_no = #{itemNo}
+	  AND (
+	    (
+	      hpr.style_type = snsd.style_no 
+	      AND hpr.new_style_flag = 1
+	    ) 
+	    OR (
+	      hpr.new_style_flag = 0 
+	      AND FIND_IN_SET(it.years, hpr.year_code)
+	      AND (hpr.season = it.sell_season OR hpr.season ='ALL')
+	    )
+	  ) 
+	  AND (
+	    FIND_IN_SET(
+	      LEFT(it.category_no, 4),
+	      hpr.two_level_category_no
+	    ) 
+	    OR (
+	      hpr.two_level_category_no = '' 
+	      OR hpr.two_level_category_no IS NULL
+	    )
+	  ) 
+	  AND FIND_IN_SET(#{zoneNo}, hpr.zone_no)
+	ORDER BY hpr.effective_time DESC
+</select>
+  
+  <select id="findRuleByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+	  hpr.* 
+	FROM
+	  item it 
+	  INNER JOIN supplier_group_rel sgr 
+	    ON it.supplier_no = sgr.supplier_no 
+	  INNER JOIN settle_category_dtl scd 
+	    ON it.root_category_no = scd.category_no 
+	  INNER JOIN brand b 
+	    ON it.brand_no = b.brand_no 
+	  INNER JOIN region_price_rule hpr 
+	    ON FIND_IN_SET(
+	      sgr.group_no,
+	      hpr.supplier_group_no
+	    ) 
+	    AND FIND_IN_SET(
+	      scd.settle_category_no,
+	      hpr.category_no
+	    ) 
+	    AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+	  LEFT JOIN `settle_new_style_dtl` snsd 
+	    ON it.`years` = snsd.`year_code` 
+	    AND (
+	      it.`sell_season` = snsd.`season_no` 
+	      OR snsd.season_no = 'ALL'
+	    )  
+	WHERE 1 = 1 
+	 <if test="params.zoneNo != null and ''!= params.zoneNo" >
+           AND FIND_IN_SET(#{params.zoneNo}, hpr.zone_no)
+     </if>
+	 <if test="null!=params.itemNo and ''!=params.itemNo">
+       	   AND it.item_no = #{params.itemNo}
+      </if>
+      <if test="null!=params.addBasis and ''!=params.addBasis">
+       	   AND hpr.add_basis = #{params.addBasis}
+      </if>  	
+	  AND (
+	    (
+	      hpr.style_type = snsd.style_no 
+	      AND hpr.new_style_flag = 1
+	    ) 
+	    OR (
+	      hpr.new_style_flag = 0 
+	      AND FIND_IN_SET(it.years, hpr.year_code)
+	      AND (hpr.season = it.sell_season OR hpr.season ='ALL')
+	    )
+	  ) 
+	  AND (
+	    FIND_IN_SET(
+	      LEFT(it.category_no, 4),
+	      hpr.two_level_category_no
+	    ) 
+	    OR (
+	      hpr.two_level_category_no = '' 
+	      OR hpr.two_level_category_no IS NULL
+	    )
+	  ) 
+	ORDER BY hpr.effective_time DESC  
+</select>
+  
+</mapper>

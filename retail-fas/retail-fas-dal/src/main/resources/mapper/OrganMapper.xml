@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.OrganMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Organ" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_code" property="organCode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_no" property="parentNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="organ_level" property="organLevel" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="INTEGER" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, organ_no, organ_code, name, parent_no, status, organ_level, order_no, path, zone_no, 
+    create_user, create_time, update_user, update_time, remark
+  </sql>
+  <sql id="condition" >
+  	/*organ_type_no*/
+     --AND @organ_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.organCode and ''!=params.organCode" >
+        AND organ_code = #{params.organCode}
+      </if>  
+      <if test="null!=params.organLevel and ''!=params.organLevel" >
+        AND organ_level = #{params.organLevel}
+      </if>  
+      <if test="null!=params.name and ''!=params.name" >
+        AND name = #{params.name}
+      </if> 
+      <if test="null!=params.nameLike and ''!=params.nameLike" >
+        AND name LIKE CONCAT('%', #{params.nameLike}, '%')
+      </if> 
+      <if test="null!=params.parentNo and ''!=params.parentNo" >
+        AND parent_no = #{params.parentNo}
+      </if> 
+      <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+      <if test="null!=params.zoneNo and ''!=params.zoneNo" >
+        AND zone_no = #{params.zoneNo}
+      </if>
+      <if test="null!=params.organTypeNo and ''!=params.organTypeNo" >
+        AND organ_type_no = #{params.organTypeNo}
+      </if>
+       <if test="null!=params.zoneNos and ''!=params.zoneNos" >
+        AND zone_no IN ${params.zoneNos}
+      </if>
+      <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (UPPER(organ_no) LIKE UPPER(CONCAT('%', #{params.q},'%')) OR UPPER(name) LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+	  <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(organ_no) IN ${params.multiq} OR UPPER(name) IN ${params.multiq} ) 
+	  </if>
+	  <if test="null!=params.multiParentNo and ''!=params.multiParentNo">
+        AND parent_no IN
+        <foreach collection="params.multiParentNo" item="item" index="index" open="(" separator="," close=")">  
+        	#{item}
+        </foreach>
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM organ
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM organ WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM organ WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM organ WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM organ
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.Organ" >
+    DELETE FROM organ
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.Organ" >
+    INSERT INTO organ (id, organ_no, organ_code, 
+      name, parent_no, status, 
+      organ_level, order_no, path, 
+      zone_no, create_user, create_time, 
+      update_user, update_time, remark
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{organNo,jdbcType=CHAR}, #{organCode,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{parentNo,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
+      #{organLevel,jdbcType=INTEGER}, #{orderNo,jdbcType=INTEGER}, #{path,jdbcType=VARCHAR}, 
+      #{zoneNo,jdbcType=CHAR}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.Organ" >
+    INSERT INTO organ
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+      <if test="organCode != null" >
+        organ_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentNo != null" >
+        parent_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="organLevel != null" >
+        organ_level,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="organCode != null" >
+        #{organCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentNo != null" >
+        #{parentNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="organLevel != null" >
+        #{organLevel,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.Organ" >
+    UPDATE organ
+    <set >
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="organCode != null" >
+        organ_code = #{organCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentNo != null" >
+        parent_no = #{parentNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="organLevel != null" >
+        organ_level = #{organLevel,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.Organ" >
+    UPDATE organ
+    SET organ_no = #{organNo,jdbcType=CHAR},
+      organ_code = #{organCode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      parent_no = #{parentNo,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      organ_level = #{organLevel,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=INTEGER},
+      path = #{path,jdbcType=VARCHAR},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getOrganByShopNo" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		SELECT
+			t.id,
+			t.organ_no,
+			t.organ_code,
+			t. NAME,
+			t.parent_no,
+			t. STATUS,
+			t.organ_level,
+			t.order_no,
+			t.path,
+			t.zone_no,
+			t.create_user,
+			t.create_time,
+			t.update_user,
+			t.update_time,
+			t.remark
+		FROM
+			organ t
+		INNER JOIN (
+			SELECT
+				organ_no
+			FROM
+				shop
+			WHERE 1=1
+	      <if test="null!=params.shopNo and ''!=params.shopNo" >
+	        AND shop_no = #{params.shopNo}
+	      </if>
+		) t1 ON t.organ_no = t1.organ_no
+		WHERE
+			1 = 1
+		AND t.organ_level = 1
+  </select>
+  
+  <select id="getOrganInfoByShopNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	SELECT
+		t.id,
+		t.organ_no,
+		t.organ_code,
+		t.name,
+		t.parent_no,
+		t.status,
+		t.organ_level,
+		t.order_no,
+		t.path,
+		t.zone_no,
+		t.create_user,
+		t.create_time,
+		t.update_user,
+		t.update_time,
+		t.remark
+	FROM
+		organ t
+	INNER JOIN (
+		SELECT
+			tt.organ_no
+		FROM
+			order_unit tt
+		INNER JOIN shop_brand t1 ON tt.order_unit_no = t1.order_unit_no
+		AND t1.shop_no = #{params.shopNo}
+	) t2 ON t.organ_no = t2.organ_no
+	AND t.organ_level = '1'
+  </select>
+  
+</mapper>

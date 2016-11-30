@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.OrgUnitBrandRelMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.OrgUnitBrandRel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="store_no" property="storeNo" jdbcType="CHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="org_search_code" property="orgSearchCode" jdbcType="VARCHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_code" property="orderUnitCode" jdbcType="VARCHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="order_search_code" property="orderSearchCode" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="shop_store_no" property="shopStoreNo" jdbcType="VARCHAR" />
+    <result column="shop_store_code" property="shopStoreCode" jdbcType="VARCHAR" />
+    <result column="shop_store_name" property="shopStoreName" jdbcType="VARCHAR" />
+    <result column="store_search_code" property="storeSearchCode" jdbcType="VARCHAR" />
+    <result column="org_type" property="orgType" jdbcType="BIGINT" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="store_type" property="storeType" jdbcType="TINYINT" />
+    <result column="rel_status" property="relStatus" jdbcType="TINYINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, store_no, store_code, store_name, org_search_code, order_unit_no, order_unit_code, 
+    order_unit_name, order_search_code, company_no, shop_store_no, shop_store_code, shop_store_name, 
+    store_search_code, org_type, zone_no, zone_name, brand_no, status, store_type, rel_status, 
+    update_time, organ_no
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo">
+		   AND company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null != params.brandNos and '' != params.brandNos">
+			AND brand_no in 
+			<foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+			</foreach>  
+		</if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from org_unit_brand_rel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from org_unit_brand_rel where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select B.* from (select A.*,rownum rn from( select 
+    <include refid="Base_Column_List" />
+     from org_unit_brand_rel where 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      order by ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    ) A where rownum &lt; #{page.endRowNum}) B where rn &gt; #{page.startRowNum}
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from org_unit_brand_rel where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByOrderUnitNoParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+	    DISTINCT order_unit_no
+     from org_unit_brand_rel where 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from org_unit_brand_rel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.Integer" >
+    delete from org_unit_brand_rel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.OrgUnitBrandRel" >
+    insert into org_unit_brand_rel (id, store_no, store_code, 
+      store_name, org_search_code, order_unit_no, 
+      order_unit_code, order_unit_name, order_search_code, 
+      company_no, shop_store_no, shop_store_code, 
+      shop_store_name, store_search_code, org_type, 
+      zone_no, zone_name, brand_no, 
+      status, store_type, rel_status, 
+      update_time, organ_no)
+    values (#{id,jdbcType=INTEGER}, #{storeNo,jdbcType=CHAR}, #{storeCode,jdbcType=VARCHAR}, 
+      #{storeName,jdbcType=VARCHAR}, #{orgSearchCode,jdbcType=VARCHAR}, #{orderUnitNo,jdbcType=CHAR}, 
+      #{orderUnitCode,jdbcType=VARCHAR}, #{orderUnitName,jdbcType=VARCHAR}, #{orderSearchCode,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=CHAR}, #{shopStoreNo,jdbcType=VARCHAR}, #{shopStoreCode,jdbcType=VARCHAR}, 
+      #{shopStoreName,jdbcType=VARCHAR}, #{storeSearchCode,jdbcType=VARCHAR}, #{orgType,jdbcType=BIGINT}, 
+      #{zoneNo,jdbcType=CHAR}, #{zoneName,jdbcType=VARCHAR}, #{brandNo,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{storeType,jdbcType=TINYINT}, #{relStatus,jdbcType=TINYINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{organNo,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.OrgUnitBrandRel" >
+    insert into org_unit_brand_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="storeNo != null" >
+        store_no,
+      </if>
+      <if test="storeCode != null" >
+        store_code,
+      </if>
+      <if test="storeName != null" >
+        store_name,
+      </if>
+      <if test="orgSearchCode != null" >
+        org_search_code,
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no,
+      </if>
+      <if test="orderUnitCode != null" >
+        order_unit_code,
+      </if>
+      <if test="orderUnitName != null" >
+        order_unit_name,
+      </if>
+      <if test="orderSearchCode != null" >
+        order_search_code,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="shopStoreNo != null" >
+        shop_store_no,
+      </if>
+      <if test="shopStoreCode != null" >
+        shop_store_code,
+      </if>
+      <if test="shopStoreName != null" >
+        shop_store_name,
+      </if>
+      <if test="storeSearchCode != null" >
+        store_search_code,
+      </if>
+      <if test="orgType != null" >
+        org_type,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="zoneName != null" >
+        zone_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="storeType != null" >
+        store_type,
+      </if>
+      <if test="relStatus != null" >
+        rel_status,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="storeNo != null" >
+        #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="storeCode != null" >
+        #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgSearchCode != null" >
+        #{orgSearchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNo != null" >
+        #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitCode != null" >
+        #{orderUnitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitName != null" >
+        #{orderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSearchCode != null" >
+        #{orderSearchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="shopStoreNo != null" >
+        #{shopStoreNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopStoreCode != null" >
+        #{shopStoreCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopStoreName != null" >
+        #{shopStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeSearchCode != null" >
+        #{storeSearchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgType != null" >
+        #{orgType,jdbcType=BIGINT},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="storeType != null" >
+        #{storeType,jdbcType=TINYINT},
+      </if>
+      <if test="relStatus != null" >
+        #{relStatus,jdbcType=TINYINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.OrgUnitBrandRel" >
+    update org_unit_brand_rel
+    <set >
+      <if test="storeNo != null" >
+        store_no = #{storeNo,jdbcType=CHAR},
+      </if>
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgSearchCode != null" >
+        org_search_code = #{orgSearchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitCode != null" >
+        order_unit_code = #{orderUnitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitName != null" >
+        order_unit_name = #{orderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSearchCode != null" >
+        order_search_code = #{orderSearchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="shopStoreNo != null" >
+        shop_store_no = #{shopStoreNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopStoreCode != null" >
+        shop_store_code = #{shopStoreCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopStoreName != null" >
+        shop_store_name = #{shopStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeSearchCode != null" >
+        store_search_code = #{storeSearchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgType != null" >
+        org_type = #{orgType,jdbcType=BIGINT},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="storeType != null" >
+        store_type = #{storeType,jdbcType=TINYINT},
+      </if>
+      <if test="relStatus != null" >
+        rel_status = #{relStatus,jdbcType=TINYINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.OrgUnitBrandRel" >
+    update org_unit_brand_rel
+    set store_no = #{storeNo,jdbcType=CHAR},
+      store_code = #{storeCode,jdbcType=VARCHAR},
+      store_name = #{storeName,jdbcType=VARCHAR},
+      org_search_code = #{orgSearchCode,jdbcType=VARCHAR},
+      order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      order_unit_code = #{orderUnitCode,jdbcType=VARCHAR},
+      order_unit_name = #{orderUnitName,jdbcType=VARCHAR},
+      order_search_code = #{orderSearchCode,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      shop_store_no = #{shopStoreNo,jdbcType=VARCHAR},
+      shop_store_code = #{shopStoreCode,jdbcType=VARCHAR},
+      shop_store_name = #{shopStoreName,jdbcType=VARCHAR},
+      store_search_code = #{storeSearchCode,jdbcType=VARCHAR},
+      org_type = #{orgType,jdbcType=BIGINT},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      store_type = #{storeType,jdbcType=TINYINT},
+      rel_status = #{relStatus,jdbcType=TINYINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      organ_no = #{organNo,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

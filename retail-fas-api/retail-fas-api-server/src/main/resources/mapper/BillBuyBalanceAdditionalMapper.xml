@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.BillBuyBalanceAdditionalMapper">
+	<resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.vo.BillBuyBalanceAdditional">
+		<id column="id" property="id" jdbcType="CHAR" />
+		<result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+		<result column="currency_code" property="currencyCode" jdbcType="CHAR" />
+		<result column="currency_name" property="currencyName" jdbcType="CHAR" />
+		<result column="item_code" property="itemCode" jdbcType="CHAR" />
+		<result column="item_name" property="itemName" jdbcType="CHAR" />
+		<result column="exchange_rate" property="exchangeRate" jdbcType="DECIMAL" />
+		<result column="tariff_rate" property="tariffRate" jdbcType="DECIMAL" />
+		<result column="vat_rate" property="vatRate" jdbcType="DECIMAL" />
+		<result column="purchase_fee" property="purchaseFee" jdbcType="DECIMAL" />
+		<result column="standard_currency_code" property="standardCurrencyCode" jdbcType="CHAR" />
+		<result column="standard_currency_name" property="standardCurrencyName" jdbcType="CHAR" />
+		<result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+		<result column="region_price_gap" property="regionPriceGap" jdbcType="DECIMAL" />
+		<result column="region_amount" property="regionAmount" jdbcType="DECIMAL" />
+		<result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+		<result column="category_secondary" property="categorySecondary" jdbcType="CHAR" />
+		<result column="category_tertiary" property="categoryTertiary" jdbcType="CHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="CHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="TaxRateDtoMap" type="cn.wonhigh.retail.fas.common.dto.TaxRateDto">
+		<result column="currency_code" property="currencyCode" jdbcType="CHAR" />
+		<result column="currency_name" property="currencyName" jdbcType="CHAR" />
+		<result column="supplier_code" property="supplierCode" jdbcType="CHAR" />
+		<result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+		<result column="standard_currency_code" property="standardCurrencyCode" jdbcType="CHAR" />
+		<result column="standard_currency_name" property="standardCurrencyName" jdbcType="CHAR" />
+		<result column="item_no" property="itemNo" jdbcType="CHAR" />
+		<result column="style_no" property="styleNo" jdbcType="CHAR" />
+		<result column="tariff_rate" property="tariffRate" jdbcType="DECIMAL" />
+		<result column="vat_rate" property="vatRate" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<resultMap id="RegionCostCaculatorDtoMap" type="cn.wonhigh.retail.fas.common.dto.RegionCostCaculatorDto">
+		<id column="id" property="id" jdbcType="CHAR" />
+		<result column="bill_no" property="billNo" jdbcType="CHAR" />
+		<result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+		<result column="exchange_rate" property="exchangeRate" jdbcType="DECIMAL" />
+		<result column="tariff_rate" property="tariffRate" jdbcType="DECIMAL" />
+		<result column="vat_rate" property="vatRate" jdbcType="DECIMAL" />
+		<result column="purchase_fee" property="purchaseFee" jdbcType="DECIMAL" />
+		<result column="standard_currency_code" property="standardCurrencyCode" jdbcType="CHAR" />
+		<result column="standard_currency_name" property="standardCurrencyName" jdbcType="CHAR" />
+		<result column="contract_discount" property="contractDiscount" jdbcType="DECIMAL" />
+		<result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+		<result column="region_amount" property="regionAmount" jdbcType="DECIMAL" />
+		<result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+		<result column="currency_code" property="currencyCode" jdbcType="CHAR" />
+		<result column="item_no" property="itemNo" jdbcType="CHAR" />
+		<result column="brand_no" property="brandNo" jdbcType="CHAR" />
+		<result column="category_no" property="categoryNo" jdbcType="CHAR" />
+		<result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+		<result column="saler_no" property="salerNo" jdbcType="CHAR" />
+		<result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+		<result column="receive_qty" property="qty" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, original_bill_no, currency_code, currency_name,
+		item_code, item_name,
+		exchange_rate,
+		tariff_rate,
+		vat_rate,
+		purchase_fee, standard_currency_code,
+		standard_currency_name,
+		total_amount, region_price_gap, region_amount,
+		region_cost,
+		category_secondary,
+		category_tertiary,
+		create_time, update_user,
+		update_time
+	</sql>
+	<sql id="condition">
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+		</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bill_buy_balance_additional
+		WHERE id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) as s FROM bill_buy_balance_additional WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<select id="selectByPage" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bill_buy_balance_additional WHERE 1=1
+		<include refid="condition" />
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	<select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bill_buy_balance_additional WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		DELETE FROM
+		bill_buy_balance_additional
+		WHERE id =
+		#{id,jdbcType=CHAR}
+	</delete>
+	<delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.api.vo.BillBuyBalanceAdditional">
+		DELETE FROM bill_buy_balance_additional
+		WHERE id =
+		#{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="cn.wonhigh.retail.fas.api.vo.BillBuyBalanceAdditional">
+		INSERT INTO bill_buy_balance_additional (id,
+		original_bill_no,
+		currency_code,
+		currency_name, item_code, item_name,
+		exchange_rate, tariff_rate, vat_rate,
+		purchase_fee,
+		standard_currency_code,
+		standard_currency_name,
+		total_amount,
+		region_price_gap, region_amount,
+		region_cost, category_secondary,
+		category_tertiary,
+		create_time, update_user, update_time
+		)
+		VALUES
+		(#{id,jdbcType=CHAR}, #{originalBillNo,jdbcType=CHAR},
+		#{currencyCode,jdbcType=CHAR},
+		#{currencyName,jdbcType=CHAR},
+		#{itemCode,jdbcType=CHAR}, #{itemName,jdbcType=CHAR},
+		#{exchangeRate,jdbcType=DECIMAL}, #{tariffRate,jdbcType=DECIMAL},
+		#{vatRate,jdbcType=DECIMAL},
+		#{purchaseFee,jdbcType=DECIMAL},
+		#{standardCurrencyCode,jdbcType=CHAR},
+		#{standardCurrencyName,jdbcType=CHAR},
+		#{totalAmount,jdbcType=DECIMAL}, #{regionPriceGap,jdbcType=DECIMAL},
+		#{regionAmount,jdbcType=DECIMAL},
+		#{regionCost,jdbcType=DECIMAL},
+		#{categorySecondary,jdbcType=CHAR},
+		#{categoryTertiary,jdbcType=CHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=CHAR},
+		#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.api.vo.BillBuyBalanceAdditional">
+		INSERT INTO bill_buy_balance_additional
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="originalBillNo != null">
+				original_bill_no,
+			</if>
+			<if test="currencyCode != null">
+				currency_code,
+			</if>
+			<if test="currencyName != null">
+				currency_name,
+			</if>
+			<if test="itemCode != null">
+				item_code,
+			</if>
+			<if test="itemName != null">
+				item_name,
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate,
+			</if>
+			<if test="tariffRate != null">
+				tariff_rate,
+			</if>
+			<if test="vatRate != null">
+				vat_rate,
+			</if>
+			<if test="purchaseFee != null">
+				purchase_fee,
+			</if>
+			<if test="standardCurrencyCode != null">
+				standard_currency_code,
+			</if>
+			<if test="standardCurrencyName != null">
+				standard_currency_name,
+			</if>
+			<if test="totalAmount != null">
+				total_amount,
+			</if>
+			<if test="regionPriceGap != null">
+				region_price_gap,
+			</if>
+			<if test="regionAmount != null">
+				region_amount,
+			</if>
+			<if test="regionCost != null">
+				region_cost,
+			</if>
+			<if test="categorySecondary != null">
+				category_secondary,
+			</if>
+			<if test="categoryTertiary != null">
+				category_tertiary,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateUser != null">
+				update_user,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=CHAR},
+			</if>
+			<if test="originalBillNo != null">
+				#{originalBillNo,jdbcType=CHAR},
+			</if>
+			<if test="currencyCode != null">
+				#{currencyCode,jdbcType=CHAR},
+			</if>
+			<if test="currencyName != null">
+				#{currencyName,jdbcType=CHAR},
+			</if>
+			<if test="itemCode != null">
+				#{itemCode,jdbcType=CHAR},
+			</if>
+			<if test="itemName != null">
+				#{itemName,jdbcType=CHAR},
+			</if>
+			<if test="exchangeRate != null">
+				#{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="tariffRate != null">
+				#{tariffRate,jdbcType=DECIMAL},
+			</if>
+			<if test="vatRate != null">
+				#{vatRate,jdbcType=DECIMAL},
+			</if>
+			<if test="purchaseFee != null">
+				#{purchaseFee,jdbcType=DECIMAL},
+			</if>
+			<if test="standardCurrencyCode != null">
+				#{standardCurrencyCode,jdbcType=CHAR},
+			</if>
+			<if test="standardCurrencyName != null">
+				#{standardCurrencyName,jdbcType=CHAR},
+			</if>
+			<if test="totalAmount != null">
+				#{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="regionPriceGap != null">
+				#{regionPriceGap,jdbcType=DECIMAL},
+			</if>
+			<if test="regionAmount != null">
+				#{regionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="regionCost != null">
+				#{regionCost,jdbcType=DECIMAL},
+			</if>
+			<if test="categorySecondary != null">
+				#{categorySecondary,jdbcType=CHAR},
+			</if>
+			<if test="categoryTertiary != null">
+				#{categoryTertiary,jdbcType=CHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser,jdbcType=CHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.api.vo.BillBuyBalanceAdditional">
+		UPDATE bill_buy_balance_additional
+		<set>
+			<if test="originalBillNo != null">
+				original_bill_no = #{originalBillNo,jdbcType=CHAR},
+			</if>
+			<if test="currencyCode != null">
+				currency_code = #{currencyCode,jdbcType=CHAR},
+			</if>
+			<if test="currencyName != null">
+				currency_name = #{currencyName,jdbcType=CHAR},
+			</if>
+			<if test="itemCode != null">
+				item_code = #{itemCode,jdbcType=CHAR},
+			</if>
+			<if test="itemName != null">
+				item_name = #{itemName,jdbcType=CHAR},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="tariffRate != null">
+				tariff_rate = #{tariffRate,jdbcType=DECIMAL},
+			</if>
+			<if test="vatRate != null">
+				vat_rate = #{vatRate,jdbcType=DECIMAL},
+			</if>
+			<if test="purchaseFee != null">
+				purchase_fee = #{purchaseFee,jdbcType=DECIMAL},
+			</if>
+			<if test="standardCurrencyCode != null">
+				standard_currency_code =
+				#{standardCurrencyCode,jdbcType=CHAR},
+			</if>
+			<if test="standardCurrencyName != null">
+				standard_currency_name =
+				#{standardCurrencyName,jdbcType=CHAR},
+			</if>
+			<if test="totalAmount != null">
+				total_amount = #{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="regionPriceGap != null">
+				region_price_gap = #{regionPriceGap,jdbcType=DECIMAL},
+			</if>
+			<if test="regionAmount != null">
+				region_amount = #{regionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="regionCost != null">
+				region_cost = #{regionCost,jdbcType=DECIMAL},
+			</if>
+			<if test="categorySecondary != null">
+				category_secondary = #{categorySecondary,jdbcType=CHAR},
+			</if>
+			<if test="categoryTertiary != null">
+				category_tertiary = #{categoryTertiary,jdbcType=CHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser,jdbcType=CHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=CHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.api.vo.BillBuyBalanceAdditional">
+		UPDATE bill_buy_balance_additional
+		SET original_bill_no = #{originalBillNo,jdbcType=CHAR},
+		currency_code = #{currencyCode,jdbcType=CHAR},
+		currency_name = #{currencyName,jdbcType=CHAR},
+		item_code = #{itemCode,jdbcType=CHAR},
+		item_name = #{itemName,jdbcType=CHAR},
+		exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+		tariff_rate = #{tariffRate,jdbcType=DECIMAL},
+		vat_rate = #{vatRate,jdbcType=DECIMAL},
+		purchase_fee = #{purchaseFee,jdbcType=DECIMAL},
+		standard_currency_code = #{standardCurrencyCode,jdbcType=CHAR},
+		standard_currency_name = #{standardCurrencyName,jdbcType=CHAR},
+		total_amount = #{totalAmount,jdbcType=DECIMAL},
+		region_price_gap = #{regionPriceGap,jdbcType=DECIMAL},
+		region_amount = #{regionAmount,jdbcType=DECIMAL},
+		region_cost = #{regionCost,jdbcType=DECIMAL},
+		category_secondary = #{categorySecondary,jdbcType=CHAR},
+		category_tertiary = #{categoryTertiary,jdbcType=CHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_user = #{updateUser,jdbcType=CHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP}
+		WHERE
+			id = #{id,jdbcType=CHAR}
+	</update>
+	<select id="getExchangeRate" resultType="java.math.BigDecimal" parameterType="Map">
+		SELECT
+			conversion_factor
+		FROM
+			exchange_rate_setup e
+		WHERE
+			target_currency in (SELECT
+					currency_code
+				FROM
+					currency_management
+				WHERE
+					standard_money = 1)
+		AND source_currency = #{params.currencyCode}
+		AND effective_date &lt;= #{params.effectiveDate}  and e.status = '1'
+		order by effective_date DESC
+		limit 1
+	</select>
+
+	<select id="getContractDiscount" resultType="java.math.BigDecimal" parameterType="Map">
+		SELECT
+			discount1
+		FROM
+			contract_discount
+		WHERE
+			buyer_no = #{params.buyerNo}
+		AND saler_no = #{params.salerNo}
+		AND brand_no = #{params.brandNo}
+		AND category_no = #{params.categoryNo}
+		AND order_type = 2
+		and effective_date &lt;= #{params.effectiveDate}
+		ORDER BY
+			create_time DESC
+		LIMIT 1
+	</select>
+	<select id="getPurchasePrice" resultType="java.math.BigDecimal" parameterType="Map">
+		SELECT
+			purchase_price
+		FROM
+			purchase_price
+		WHERE
+			item_no = #{params.itemNo}
+		AND supplier_no = #{params.supplierNo} and effective_date &lt;= #{params.effectiveDate} and status = '100'
+		ORDER BY
+			effective_date DESC
+		LIMIT 1
+	</select>
+	<select id="getTaxRate" resultMap="TaxRateDtoMap" parameterType="Map">
+		SELECT
+			s.supplier_no,
+			s.supplier_name,
+			s.vat_rate,
+			s.currency_code,
+			c.currency_name,
+			sc.currency_code AS standard_currency_code,
+			sc.currency_name AS standard_currency_name
+		FROM
+			supplier_rate_set s,
+			currency_management c,
+			(
+				SELECT
+					currency_code,
+					currency_name
+				FROM
+					currency_management
+				WHERE
+					standard_money = 1
+			) sc
+		WHERE
+			supplier_no = #{params.supplierNo} and
+			s.currency_code = c.currency_code
+		limit 1
+	</select>
+	<select id="getTariffRate" resultMap="TaxRateDtoMap" parameterType="Map">
+		SELECT
+			s.tariff_rate,
+			i.item_no,
+			i.style_no
+		FROM
+			supplier_tariff_set s
+		INNER JOIN item i ON s.style_no = i.style_no
+		WHERE
+			s.effective_date &lt;= #{params.effectiveDate} 
+			and i.item_no = #{params.itemNo}
+		    and s.supplier_no = #{params.supplierNo}
+		ORDER BY
+			s.effective_date DESC
+		LIMIT 1
+	</select>
+	<select id="isBaroqueBill" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT
+			count(*)
+		FROM
+			item i
+		WHERE
+			brand_no IN (
+				SELECT
+					brand_no
+				FROM
+					brand
+				WHERE
+					sys_no = 'BA' or sys_no = 'RE'
+			)
+		AND CODE = #{itemCode}
+	</select>
+	<select id="getLatestTaxRate" resultType="Map" parameterType="cn.wonhigh.retail.fas.common.dto.RegionCostCaculatorDto">
+		SELECT
+			s.tariff_rate AS tariffRate,
+			s.vat_rate AS vatRate
+		FROM
+			bill_buy_balance b
+		LEFT JOIN bill_buy_balance_additional a ON a.original_bill_no = b.original_bill_no
+		LEFT JOIN supplier_rate_set s ON b.supplier_no = s.supplier_no 
+		WHERE
+			1 = 1
+		AND a.original_bill_no = #{originalBillNo}
+		AND a.item_code = #{itemNo}
+		LIMIT 1
+	</select>
+
+	<select id="getLatestContractDiscount" resultType="java.math.BigDecimal" parameterType="cn.wonhigh.retail.fas.common.dto.RegionCostCaculatorDto">
+		SELECT
+			*
+		FROM
+			contract_discount c,
+			(
+				SELECT
+					b.buyer_no AS buyer_no,
+					b.saler_no AS saler_no,
+					b.brand_no AS brand_no,
+					b.category_no AS category_no
+				FROM
+					bill_buy_balance b LEFT JOIN
+					bill_buy_balance_additional a on b.original_bill_no = a.original_bill_no
+				WHERE
+					1=1
+				AND b.original_bill_no = #{originalBillNo} AND a.item_code = #{itemNo}
+			) t
+		WHERE
+			c.buyer_no = t.buyer_no
+		AND c.saler_no = c.saler_no
+		AND c.brand_no = c.brand_no
+		AND c.category_no = c.category_no
+		AND c.order_type = 2
+		LIMIT 1
+	</select>
+
+	<select id="getLatestExchangeRate" resultType="java.math.BigDecimal" parameterType="cn.wonhigh.retail.fas.common.dto.RegionCostCaculatorDto">
+		SELECT
+			e.conversion_factor AS conversionFactor
+		FROM
+			bill_buy_balance_additional a
+		LEFT JOIN exchange_rate_setup e ON a.standard_currency_code = e.target_currency
+		AND a.currency_code = e.source_currency
+		WHERE
+			1 = 1
+		AND a.original_bill_no = #{originalBillNo}
+		AND a.item_code = #{itemNo}
+		ORDER BY
+			e.effective_date DESC
+		LIMIT 1
+	</select>
+	<select id="selectByOriginalBillNo" resultMap="RegionCostCaculatorDtoMap" parameterType="cn.wonhigh.retail.fas.common.dto.RegionCostCaculatorDto">
+		SELECT
+			a.id,
+			b.bill_no,
+			a.original_bill_no,
+			a.exchange_rate,
+			a.tariff_rate,
+			a.vat_rate,
+			a.purchase_fee,
+			a.standard_currency_code,
+			a.standard_currency_name,
+			a.region_price_gap AS contract_discount,
+			a.total_amount,
+			a.region_amount,
+			a.region_cost,
+			a.currency_code,
+			b.item_no,
+			b.brand_no,
+			b.category_no,
+			b.buyer_no,
+			b.saler_no,
+			b.purchase_price,
+			b.receive_qty
+		FROM
+			bill_buy_balance_additional a
+		LEFT JOIN bill_sale_balance b on a.original_bill_no = b.original_bill_no
+		WHERE
+			1 = 1
+		AND a.original_bill_no = #{originalBillNo} AND a.item_code = #{itemNo} limit 1
+	</select>
+	<select id="selectRegionCostCaculatorDtoList" resultMap="RegionCostCaculatorDtoMap" parameterType="java.lang.String">
+		SELECT
+			a.id,
+			b.bill_no,
+			a.original_bill_no,
+			a.exchange_rate,
+			a.tariff_rate,
+			a.vat_rate,
+			a.purchase_fee,
+			a.standard_currency_code,
+			a.standard_currency_name,
+			a.region_price_gap AS contract_discount,
+			a.total_amount,
+			a.region_amount,
+			a.region_cost,
+			a.currency_code,
+			b.item_no,
+			b.brand_no,
+			b.category_no,
+			b.buyer_no,
+			b.saler_no,
+			b.purchase_price,
+			b.receive_qty
+		FROM
+			bill_buy_balance_additional a
+		left JOIN bill_buy_balance b ON a.original_bill_no = b.original_bill_no
+		left JOIN bill_sale_balance s ON b.bill_no = s.bill_no
+		WHERE 1 = 1 AND a.original_bill_no in #{originalIds,jdbcType=CHAR}
+	</select>
+	<update id="updateRegionCost" parameterType="cn.wonhigh.retail.fas.common.dto.RegionCostCaculatorDto">
+		UPDATE bill_buy_balance_additional
+		SET
+		exchange_rate =
+		#{exchangeRate,jdbcType=DECIMAL},
+		tariff_rate =
+		#{tariffRate,jdbcType=DECIMAL},
+		vat_rate = #{vatRate,jdbcType=DECIMAL},
+		purchase_fee = #{purchaseFee,jdbcType=DECIMAL},
+		total_amount =
+		#{totalAmount,jdbcType=DECIMAL},
+		region_price_gap =
+		#{contractDiscount,jdbcType=DECIMAL},
+		region_amount =
+		#{regionAmount,jdbcType=DECIMAL},
+		region_cost =
+		#{regionCost,jdbcType=DECIMAL}
+		WHERE original_bill_no =
+		#{originalBillNo} AND item_code = #{itemNo}
+	</update>
+	<delete id="deleteByOriginalBillNoAndItemNo" parameterType="Map">
+		DELETE
+		FROM
+			bill_buy_balance_additional
+		WHERE
+			original_bill_no = #{params.originalBillNo}
+		AND item_code = #{params.itemNo}
+	</delete>
+</mapper>

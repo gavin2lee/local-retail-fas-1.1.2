@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CardReturnCheckMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CardReturnCheck" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="terminal_number" property="terminalNumber" jdbcType="VARCHAR" />
+    <result column="payway_time" property="paywayTime" jdbcType="TIMESTAMP" />
+    <result column="return_time" property="returnTime" jdbcType="TIMESTAMP" />
+    <result column="return_pay_type" property="returnPayType" jdbcType="VARCHAR" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="credit_card_rate" property="creditCardRate" jdbcType="DECIMAL" />
+    <result column="paidin_amount" property="paidinAmount" jdbcType="DECIMAL" />
+    <result column="sale_order_no" property="saleOrderNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="actual_return_time" property="actualReturnTime" jdbcType="TIMESTAMP" />
+    <result column="merchants_no" property="merchantsNo" jdbcType="CHAR" />
+    <result column="credit_card_account" property="creditCardAccount" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CardReturnCheckReturnMap" type="cn.wonhigh.retail.fas.common.model.CardReturnCheck" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="terminal_number" property="terminalNumber" jdbcType="VARCHAR" />
+    <result column="old_out_date" property="oldOutDate" jdbcType="TIMESTAMP" />
+    <result column="out_date" property="outDate" jdbcType="TIMESTAMP" />
+    <result column="pay_name" property="payName" jdbcType="TIMESTAMP" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="credit_card_rate" property="creditCardRate" jdbcType="TIMESTAMP" />
+    <result column="poundage" property="poundage" jdbcType="DECIMAL" />
+    <result column="paidin_amount" property="paidinAmount" jdbcType="DECIMAL" />
+    <result column="business_no" property="businessNo" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="actual_return_time" property="actualReturnTime" jdbcType="TIMESTAMP" />
+    <result column="merchants_no" property="merchantsNo" jdbcType="CHAR" />
+    <result column="credit_card_account" property="creditCardAccount" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_no, shop_name, terminal_number, payway_time, return_time, return_pay_type, 
+    return_amount,paidin_amount,sale_order_no, status, actual_return_time, merchants_no, credit_card_account, 
+    create_user, create_time
+  </sql>
+  <sql id="condition" >
+  	-- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo">
+		and shop_no = #{params.shopNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.returnPayType and ''!=params.returnPayType">
+		and return_pay_type = #{params.returnPayType,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.status and ''!=params.status">
+		and status = #{params.status}
+	  </if>
+	  <if test="null!=params.terminalNumber and ''!=params.terminalNumber">
+		and terminal_number = #{params.terminalNumber,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.creditCardAccount and ''!=params.creditCardAccount">
+		and status = #{params.creditCardAccount,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.merchantsNo and ''!=params.merchantsNo">
+		and merchants_no = #{params.merchantsNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.startOutDate and ''!=params.startOutDate">
+		and return_time &gt;= '${params.startOutDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.endOutDate and ''!=params.endOutDate">
+		and return_time &lt;= '${params.endOutDate} 23:59:59'
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from card_return_check
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from card_return_check where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM card_return_check WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from card_return_check where 1=1 
+    <include refid="condition" />
+  </select>
+  <!-- 根据查询条件，查询银行卡退款核对总记录数 -->
+  <select id="findCardReturnCheckCount" parameterType="map" resultMap="CardReturnCheckReturnMap">
+	SELECT
+		COUNT(1) total,SUM(P.amount) amount, SUM(P.poundage) poundage,SUM(P.paidin_amount) paidin_amount
+	FROM
+		(
+		SELECT DISTINCT
+		op.id,
+		rem.shop_no,
+		rem.shop_name,
+		rem.company_no,
+		rem.company_name,
+		m.mall_no,
+		m.`name` mall_name,
+		IF(ssta.status=0,GROUP_CONCAT(DISTINCT ssta.terminal_number ORDER BY ssta.terminal_number SEPARATOR ','),NULL) terminal_number,
+		op.out_date,
+		op.pay_name,
+		op.amount,
+		IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+		IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+		(op.amount - IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage)))) paidin_amount,
+		rem.business_no,
+		bs. STATUS,
+		IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+		IF(bs. STATUS=1,bs.update_time,NULL) actual_return_time,
+		ssta.merchants_no,
+		ssta.credit_card_account,
+		rem.create_user,
+		rem.create_time
+	FROM
+		return_exchange_main rem
+	LEFT JOIN return_exchange_dtl red ON rem.business_no = red.business_no
+	LEFT JOIN order_payway op ON rem.business_no = op.order_no
+	LEFT JOIN shop s on rem.shop_no = s.shop_no
+	LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+				)
+	) ssta ON rem.shop_no = ssta.shop_no
+	LEFT JOIN mall m ON m.mall_no = s.mall_no
+	LEFT JOIN bill_status bs ON rem.business_no = bs.bill_no
+	where 1=1
+	AND op.pay_code = '04'
+	AND op.amount &lt; 0
+	AND (rem.old_out_date IS NULL OR rem.old_out_date &lt;&gt; rem.out_date)
+	-- AND @rem.company_no
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+       	and rem.shop_no in ${params.shopNoLists} 
+   	  </if>
+     <if test="params.shopNoList!=null and params.shopNoList!=''" >
+	    <foreach collection="params.shopNoList" item="shopNo" open="AND rem.shop_no in(" separator="," close=")">
+	      '${shopNo}'
+	    </foreach>
+  	  </if>
+  	  <if test="params.companyNo != null and params.companyNo!=''">  
+	     and rem.company_no = #{params.companyNo}
+	  </if>
+	  <if test="params.mallNo != null and params.mallNo!=''">  
+	     and m.mall_no = #{params.mallNo}
+	  </if>
+	  <if test="null!=params.businessNo and ''!=params.businessNo">
+		and rem.business_no = #{params.businessNo}
+	  </if>
+	  <if test="null!=params.status and ''!=params.status">
+		and bs.status = #{params.status}
+	  </if>
+	  <if test="null!=params.terminalNumber and ''!=params.terminalNumber">
+		and ssta.terminal_number = #{params.terminalNumber,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.creditCardAccount and ''!=params.creditCardAccount">
+		and ssta.credit_card_account = #{params.creditCardAccount,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.merchantsNo and ''!=params.merchantsNo">
+		and ssta.merchants_no = #{params.merchantsNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.startOutDate and ''!=params.startOutDate">
+		and rem.out_date &gt;= '${params.startOutDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.endOutDate and ''!=params.endOutDate">
+		and rem.out_date &lt;= '${params.endOutDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.isCashRegister and 'true' ==params.isCashRegister">
+		AND EXISTS
+	    (
+			SELECT 1 FROM shop_extension e WHERE e.shop_no = rem.shop_no AND e.attribute_detail_no = '20160420000019'      
+	    )
+	  </if>
+	</if>
+	GROUP BY op.id, op.amount DESC
+	) P
+   </select>
+   <!-- 根据查询条件，查询银行卡退款核对明细 -->
+   <select id="findCardReturnCheckList" parameterType="map" resultMap="CardReturnCheckReturnMap">
+   	SELECT DISTINCT
+		op.id,
+		rem.shop_no,
+		rem.shop_name,
+		rem.company_no,
+		rem.company_name,
+		m.mall_no,
+		m.`name` mall_name,
+		IF(ssta.status=0,GROUP_CONCAT(DISTINCT ssta.terminal_number ORDER BY ssta.terminal_number SEPARATOR ','),NULL) terminal_number,
+		op.out_date,
+		op.pay_name,
+		op.amount,
+		IF(ISNULL(bs.`status`)=1,IF(ssta.status = 0,ssta.credit_card_rate, 0),IF(bs.`status`=0,IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.rate)=1,0,op.rate))) credit_card_rate,
+		IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage))) poundage,
+		(op.amount - IF(ISNULL(bs.`status`)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(bs.`status`=0,IF(ISNULL(op.poundage)=1,op.amount*IF(ssta.`status`=0,ssta.credit_card_rate,0),IF(ISNULL(op.poundage)=1,0,op.poundage)),IF(ISNULL(op.poundage)=1,0,op.poundage)))) paidin_amount,
+		rem.business_no,
+		bs. STATUS,
+		IF(bs. STATUS=1,bs.update_user,NULL) auditor,
+		IF(bs. STATUS=1,bs.update_time,NULL) actual_return_time,
+		ssta.merchants_no,
+		ssta.credit_card_account,
+		rem.create_user,
+		rem.create_time
+	FROM
+		return_exchange_main rem
+	LEFT JOIN return_exchange_dtl red ON rem.business_no = red.business_no
+	LEFT JOIN order_payway op ON rem.business_no = op.order_no
+	LEFT JOIN shop s on rem.shop_no = s.shop_no
+	LEFT JOIN (
+			SELECT
+				*
+			FROM
+				self_shop_terminal_account a
+			WHERE
+				create_time = (
+					SELECT
+						MAX(create_time)
+					FROM
+						self_shop_terminal_account
+					WHERE
+						shop_no = a.shop_no
+				)
+	) ssta ON rem.shop_no = ssta.shop_no
+	LEFT JOIN mall m ON m.mall_no = s.mall_no
+	LEFT JOIN bill_status bs ON rem.business_no = bs.bill_no
+	where 1=1
+	AND op.amount &lt; 0
+	AND op.pay_code = '04'
+	AND (rem.old_out_date IS NULL OR rem.old_out_date &lt;&gt; rem.out_date)
+	-- AND @rem.company_no
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+       	and rem.shop_no in ${params.shopNoLists} 
+   	  </if>
+     <if test="params.shopNoList!=null and params.shopNoList!=''" >
+	    <foreach collection="params.shopNoList" item="shopNo" open="AND rem.shop_no in(" separator="," close=")">
+	      '${shopNo}'
+	    </foreach>
+  	  </if>
+  	  <if test="params.companyNo != null and params.companyNo!=''">  
+	     and rem.company_no = #{params.companyNo}
+	  </if>
+	  <if test="params.mallNo != null and params.mallNo!=''">  
+	     and m.mall_no = #{params.mallNo}
+	  </if>
+	  <if test="null!=params.businessNo and ''!=params.businessNo">
+		and rem.business_no = #{params.businessNo}
+	  </if>
+	  <if test="null!=params.status and ''!=params.status">
+		and bs.status = #{params.status}
+	  </if>
+	  <if test="null!=params.terminalNumber and ''!=params.terminalNumber">
+		and ssta.terminal_number = #{params.terminalNumber,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.creditCardAccount and ''!=params.creditCardAccount">
+		and ssta.credit_card_account = #{params.creditCardAccount,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.merchantsNo and ''!=params.merchantsNo">
+		and ssta.merchants_no = #{params.merchantsNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.startOutDate and ''!=params.startOutDate">
+		and rem.out_date &gt;= '${params.startOutDate} 00:00:00'
+	  </if>
+	  <if test="null!=params.endOutDate and ''!=params.endOutDate">
+		and rem.out_date &lt;= '${params.endOutDate} 23:59:59'
+	  </if>
+	  <if test="null!=params.isCashRegister and 'true' ==params.isCashRegister">
+		AND EXISTS
+	    (
+			SELECT 1 FROM shop_extension e WHERE e.shop_no = rem.shop_no AND e.attribute_detail_no = '20160420000019'      
+	    )
+	  </if>
+	</if>
+	GROUP BY op.id, op.amount DESC
+	ORDER BY rem.shop_no,rem.out_date desc
+   	<if test="orderByField != null and ''!=orderByField">
+		,${orderByField}
+		<if test="orderByField">
+			${orderBy}
+		</if>
+	</if>
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+   </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from card_return_check
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.Integer" >
+    delete from card_return_check
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.CardReturnCheck" >
+    insert into card_return_check (id, shop_no, shop_name, 
+      terminal_number, payway_time, return_time, 
+      return_pay_type, return_amount,paidin_amount, sale_order_no, 
+      status, actual_return_time, merchants_no, 
+      credit_card_account, create_user, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{shopNo,jdbcType=CHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{terminalNumber,jdbcType=VARCHAR}, #{paywayTime,jdbcType=TIMESTAMP}, #{returnTime,jdbcType=TIMESTAMP}, 
+      #{returnPayType,jdbcType=VARCHAR}, #{returnAmount,jdbcType=DECIMAL},#{paidinAmount,jdbcType=DECIMAL}, #{saleOrderNo,jdbcType=CHAR}, 
+      #{status,jdbcType=INTEGER}, #{actualReturnTime,jdbcType=TIMESTAMP}, #{merchantsNo,jdbcType=CHAR}, 
+      #{creditCardAccount,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.CardReturnCheck" >
+    insert into card_return_check
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="terminalNumber != null" >
+        terminal_number,
+      </if>
+      <if test="paywayTime != null" >
+        payway_time,
+      </if>
+      <if test="returnTime != null" >
+        return_time,
+      </if>
+      <if test="returnPayType != null" >
+        return_pay_type,
+      </if>
+      <if test="returnAmount != null" >
+        return_amount,
+      </if>
+      <if test="paidinAmount !=null" >
+      	paidin_amount,
+      </if>
+      <if test="saleOrderNo != null" >
+        sale_order_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="actualReturnTime != null" >
+        actual_return_time,
+      </if>
+      <if test="merchantsNo != null" >
+        merchants_no,
+      </if>
+      <if test="creditCardAccount != null" >
+        credit_card_account,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalNumber != null" >
+        #{terminalNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="paywayTime != null" >
+        #{paywayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnTime != null" >
+        #{returnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnPayType != null" >
+        #{returnPayType,jdbcType=VARCHAR},
+      </if>
+      <if test="returnAmount != null" >
+        #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paidinAmount != null" >
+        #{paidinAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="saleOrderNo != null" >
+        #{saleOrderNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="actualReturnTime != null" >
+        #{actualReturnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="merchantsNo != null" >
+        #{merchantsNo,jdbcType=CHAR},
+      </if>
+      <if test="creditCardAccount != null" >
+        #{creditCardAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.CardReturnCheck" >
+    update card_return_check
+    <set >
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalNumber != null" >
+        terminal_number = #{terminalNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="paywayTime != null" >
+        payway_time = #{paywayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnTime != null" >
+        return_time = #{returnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnPayType != null" >
+        return_pay_type = #{returnPayType,jdbcType=VARCHAR},
+      </if>
+      <if test="returnAmount != null" >
+        return_amount = #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paidinAmount != null" >
+        paidin_amount = #{paidinAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="saleOrderNo != null" >
+        sale_order_no = #{saleOrderNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="actualReturnTime != null" >
+        actual_return_time = #{actualReturnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="merchantsNo != null" >
+        merchants_no = #{merchantsNo,jdbcType=CHAR},
+      </if>
+      <if test="creditCardAccount != null" >
+        credit_card_account = #{creditCardAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.CardReturnCheck" >
+    update card_return_check
+    set shop_no = #{shopNo,jdbcType=CHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      terminal_number = #{terminalNumber,jdbcType=VARCHAR},
+      payway_time = #{paywayTime,jdbcType=TIMESTAMP},
+      return_time = #{returnTime,jdbcType=TIMESTAMP},
+      return_pay_type = #{returnPayType,jdbcType=VARCHAR},
+      return_amount = #{returnAmount,jdbcType=DECIMAL},
+      paidin_amount = #{paidinAmount,jdbcType=DECIMAL},
+      sale_order_no = #{saleOrderNo,jdbcType=CHAR},
+      status = #{status,jdbcType=INTEGER},
+      actual_return_time = #{actualReturnTime,jdbcType=TIMESTAMP},
+      merchants_no = #{merchantsNo,jdbcType=CHAR},
+      credit_card_account = #{creditCardAccount,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updatePoundage" parameterType="cn.wonhigh.retail.fas.common.model.CardReturnCheck">
+  	/*sharding_flag*/
+  	 UPDATE order_payway op
+	<set>
+  		op.poundage=#{cardReturnCheck.poundage,jdbcType=DECIMAL},
+  		op.rate=#{cardReturnCheck.creditCardRate,jdbcType=DECIMAL}
+ 	</set>
+	WHERE
+		op.id=#{cardReturnCheck.id,jdbcType=CHAR}
+  </update>
+</mapper>

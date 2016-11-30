@@ -1,0 +1,2702 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ReportFinanceMapper" >
+
+	<resultMap id="ReportTransferMap" type="cn.wonhigh.retail.fas.common.dto.ReportTransferDto" >
+	
+	    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+	    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+	    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+	    
+	    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+	    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+	    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+	    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+	    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+	    <result column="zone_no" property="zoneNo" jdbcType="VARCHAR" />
+	    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+	    <result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+	    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+	    <result column="order_unit_no" property="orderUnitNo" jdbcType="VARCHAR" />
+	    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+	    <result column="zone_no_from" property="zoneNoFrom" jdbcType="VARCHAR" />
+	    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+	    <result column="organ_no_from" property="organNoFrom" jdbcType="VARCHAR" />
+	    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+	    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="VARCHAR" />
+	    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+	    
+	    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+	    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+	    <result column="currSendQty" property="currSendQty" jdbcType="INTEGER" />
+	    <result column="currReQty" property="currReQty" jdbcType="INTEGER" />
+		<result column="currDiffQty" property="currDiffQty" jdbcType="INTEGER" />
+	    <result column="preSendCurrReQty" property="preSendCurrReQty" jdbcType="INTEGER" />    
+	    <result column="preSendNoReQty" property="preSendNoReQty" jdbcType="INTEGER" /> 
+	    <result column="preDiffQty" property="preDiffQty" jdbcType="INTEGER" />  	    
+	    
+	    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+	    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+	    <result column="currSendAmount" property="currSendAmount" jdbcType="DECIMAL" />
+	    <result column="currReAmount" property="currReAmount" jdbcType="DECIMAL" />
+		<result column="currDiffAmount" property="currDiffAmount" jdbcType="DECIMAL" />
+	    <result column="preSendCurrReAmount" property="preSendCurrReAmount" jdbcType="DECIMAL" />    
+	    <result column="preSendNoReAmount" property="preSendNoReAmount" jdbcType="DECIMAL" /> 
+	    <result column="preDiffAmount" property="preDiffAmount" jdbcType="DECIMAL" />  
+	    
+    </resultMap>
+    
+	<resultMap id="ReportFinanceMap" type="cn.wonhigh.retail.fas.common.dto.ReportFinanceDto" >
+	    <result column="supplier_no" property="supplierNo" jdbcType="VARCHAR" />
+	    <result column="item_supplier_name" property="itemSupplierName" jdbcType="VARCHAR" />
+	    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+	    <result column="hq_company_no" property="hqCompanyNo" jdbcType="VARCHAR" />
+	    <result column="hq_company_name" property="hqCompanyName" jdbcType="VARCHAR" />
+	    <result column="area_company_no" property="areaCompanyNo" jdbcType="VARCHAR" />
+	    <result column="area_company_name" property="areaCompanyName" jdbcType="VARCHAR" />
+	    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+	    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+	    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+	    <result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+	    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+	    <result column="years_name" property="yearsName" jdbcType="VARCHAR" />
+	    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+	    <result column="gender_name" property="genderName" jdbcType="VARCHAR" />
+	    <result column="supplier_group_name" property="supplierGroupName" jdbcType="VARCHAR" />
+	    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+	    <result column="purchase_cost" property="purchaseCost" jdbcType="DECIMAL" />
+	    <result column="purchase_qty" property="purchaseQty" jdbcType="INTEGER" />
+	    <result column="sales_cost" property="salesCost" jdbcType="DECIMAL" />
+	    <result column="sales_qty" property="salesQty" jdbcType="INTEGER" />
+	    <result column="purchase_balance_amount" property="purchaseBalanceAmount" jdbcType="DECIMAL" />
+	    <result column="sales_balance_amount" property="salesBalanceAmount" jdbcType="DECIMAL" />	    
+	    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+	    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+	    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+	    <result column="material_amount" property="materialAmount" jdbcType="DECIMAL" />
+	    <result column="purchase_amount" property="purchaseAmount" jdbcType="DECIMAL" />
+	    <result column="factory_amount" property="factoryAmount" jdbcType="DECIMAL" />   
+	    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+	    <result column="region_cost_from" property="regionCostFrom" jdbcType="DECIMAL" />
+	    <result column="headquarter_amount" property="headquarterAmount" jdbcType="DECIMAL" />
+	    <result column="region_amount" property="regionAmount" jdbcType="DECIMAL" />
+	    <result column="region_from_amount" property="regionFromAmount" jdbcType="DECIMAL" />
+	    <result column="discount_tag_amount" property="discountTagAmount" jdbcType="DECIMAL" />
+	    <result column="round_tag_amount" property="roundTagAmount" jdbcType="DECIMAL" />
+	    <result column="difference_amount1" property="differenceAmount1" jdbcType="DECIMAL" />
+	    <result column="difference_amount2" property="differenceAmount2" jdbcType="DECIMAL" />
+	    <result column="add_price" property="addPrice" jdbcType="DECIMAL" />
+	    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+	    <result column="tag_discount_rate" property="tagDiscountRate" jdbcType="DECIMAL" />
+	    
+	    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+	    <result column="pp_add_price" property="ppAddPrice" jdbcType="DECIMAL" /> 
+	    <result column="pp_add_discount" property="ppAddDiscount" jdbcType="DECIMAL" />    
+	    <result column="hcm_add_discount" property="hcmAddDiscount" jdbcType="DECIMAL" />     
+	    <result column="diff_amount" property="diffAmount" jdbcType="DECIMAL" />
+	    
+	    <result column="discount_tag_price" property="discountTagPrice" jdbcType="DECIMAL" />
+	    <result column="round_tag_price" property="roundTagPrice" jdbcType="DECIMAL" />
+	    <result column="order_flag" property="orderFlag" jdbcType="VARCHAR" />
+	    <result column="order_flag_name" property="orderFlagName" jdbcType="VARCHAR" />
+	    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+	    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+	    <result column="three_level_category_no" property="threeLevelCategoryNo" jdbcType="VARCHAR" />
+	    <result column="three_level_category_name" property="threeLevelCategoryName" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="transfer_condtion" >
+	 		--	AND @brand_no 
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+	      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+	        AND  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no IN ${params.multiSalerNo},saler_no IN ${params.multiSalerNo}) 
+	      </if>    
+	      <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+	     	AND  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no IN ${params.multiBuyerNo},buyer_no IN ${params.multiBuyerNo}) 
+	      </if>    
+	      <if test="null!=params.multiOrganNo and ''!=params.multiOrganNo" >
+	        AND  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from IN ${params.multiOrganNo},organ_no IN ${params.multiOrganNo}) 
+	      </if>   
+	      <if test="null!=params.multiOrganNoFrom and ''!=params.multiOrganNoFrom" >
+	        AND  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no IN ${params.multiOrganNoFrom},organ_no_from IN ${params.multiOrganNoFrom}) 
+	      </if> 
+	      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+	        AND supplier_no  IN ${params.multiSupplierNo}
+	      </if>    
+	      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+	        AND brand_no  IN ${params.multiBrandNo}
+	      </if>    
+	      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+	        AND C1.category_no IN ${params.multiCategoryNo}
+	      </if>   
+	      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+	        AND item_code  IN ${params.multiItemCode}
+	      </if>    
+	</sql>
+	 <sql id="query_condtion" >
+	 	--	AND @brand_no 
+	 	  <if test="null!=params.multiSupplierGroupNo and ''!=params.multiSupplierGroupNo" >
+	        AND  EXISTS (SELECT 1 FROM supplier_group_rel rel WHERE rel.supplier_no = B.supplier_no AND rel.group_no IN ${params.multiSupplierGroupNo})
+	      </if> 
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+	      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+	        AND brand_no  IN ${params.multiBrandNo}
+	      </if>    
+	      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+	        AND C1.category_no IN ${params.multiCategoryNo}
+	      </if>   
+	      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+	        AND item_code  IN ${params.multiItemCode}
+	      </if>    
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	      	AND IF(bill_type = 1372,receive_date,send_date) &gt;= #{params.sendDateStart}
+	      </if>
+	      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	     	AND IF(bill_type = 1372,receive_date,send_date) &lt;= #{params.sendDateEnd}
+	      </if>
+	</sql>
+	  <!-- 总部统采条件过滤 -->
+	  <sql id="purchaseCondition" >
+		  	 (
+		  	  ((bill_type IN (1301,1333,1341,1350)) AND buyer_no IN (${params.zoneCompanyNo})) OR (bill_type = 1372 AND saler_no IN (${params.zoneCompanyNo}) AND LEFT(original_bill_no,1) != LEFT(saler_no,1))  
+		    )
+	  </sql>
+	  <!-- 总部地区条件过滤 -->
+	  <sql id="salesCondition" >
+	 	  (
+	 	  	   ( ((bill_type = 1301 AND biz_type IN (0,1)) OR bill_type IN (1333,1341)) OR (bill_type = 1371  AND LEFT(original_bill_no,1) = LEFT(saler_no,1)) ) 
+			  AND saler_no  IN (${params.zoneCompanyNo})
+		  )
+	  </sql>
+	  <!-- 总部批发销售条件 -->
+	  <sql id="wholesaleSalesCondition" >
+	 	  (
+		 	  bill_type = 1335 AND biz_type IN (13,21,22,30)
+			  AND saler_no  IN (${params.zoneCompanyNo})
+		   )
+	  </sql>
+  	<select id="findReportAllFinanceCount" resultType="java.lang.Integer" >
+  		/*balance*/
+		<include refid="finace_count_sql" /> 
+		<!-- SELECT 
+		  SUM(S) 
+		FROM
+		  (SELECT 
+		    COUNT(1) S 
+		  FROM
+		    (SELECT 
+		      1
+		    FROM
+		      bill_sale_balance B 
+		      LEFT JOIN category C1 
+		        ON LEFT(B.category_no, 2) = C1.category_no 
+		    WHERE 1 = 1 
+		    <include refid="sale_balance_condtion" />  
+		    GROUP BY item_no,
+		      organ_no,
+		      is_split) T0 
+		  UNION
+		  ALL 
+		  SELECT 
+		    COUNT(1) 
+		  FROM
+		    (SELECT 
+		      1
+		    FROM
+		      bill_buy_balance B 
+		      LEFT JOIN category C1 
+		        ON LEFT(B.category_no, 2) = C1.category_no 
+		    WHERE 1 = 1 
+		    <include refid="buy_balance_condtion" />
+		    GROUP BY item_no,
+		      organ_no,
+		      is_split) T0) T0  -->
+ 	</select>
+ 	
+ 	
+ 	<select id="findReportAllFinanceByPage" resultMap="ReportFinanceMap" parameterType="map">
+		/*balance*/
+		<include refid="finace_list_sql" /> 
+		<!-- SELECT T0.*,
+		    T0.region_cost - T1.factory_price add_price,
+		    T1.material_price,
+		    T1.purchase_price,
+		    T1.factory_price,
+		    T1.purchase_price * T0.send_qty purchase_amount,
+		    T1.factory_price * T0.send_qty factory_amount,
+		    T0.region_cost_from * T0.send_qty region_from_amount,
+		    T0.region_cost * T0.send_qty region_amount,
+		    T2.tag_price,
+		    T2.tag_price * discount discount_tag_price,
+		    T2.tag_price * discount * send_qty discount_tag_amount,
+		    T2.tag_price * discount * send_qty - T1.factory_price * T0.send_qty difference_amount1,
+		    ROUND(T2.tag_price * discount) round_tag_price,
+		    ROUND(T2.tag_price * discount) * send_qty round_tag_amount,
+		    ROUND(T2.tag_price * discount) * send_qty - T1.factory_price * T0.send_qty difference_amount2,
+		    T4.group_name supplier_group_name,
+		    lookup1.name years_name,
+		    lookup2.name season_name,
+		    lookup3.name gender_name
+ 		FROM (<include refid="sale_balance_sql" />
+ 			UNION ALL <include refid="buy_balance_sql" />
+ 			order by order_flag
+ 			LIMIT #{page.startRowNum} ,#{page.pageSize}
+ 		) T0
+ 		LEFT JOIN (SELECT 
+			  item_no,
+			  supplier_no,
+			  material_price,
+			  purchase_price,
+			  factory_price 
+		FROM
+			  (SELECT 
+			    PP.item_no,
+			    pp.supplier_no,
+			    pp.material_price,
+			  	pp.purchase_price,
+			    pp.factory_price 
+			  FROM
+			    purchase_price PP 
+			  WHERE 1 = 1
+			    AND PP.status = 100
+			    AND PP.effective_date &lt;= #{params.sendDateEnd}
+			  ORDER BY item_no DESC,
+			    supplier_no DESC,
+			    effective_date DESC) G 
+			GROUP BY item_no,
+			  supplier_no ) T1
+			ON T0.item_no = T1.item_no
+			AND T0.supplier_no = T1.supplier_no  
+		  LEFT JOIN (
+		  	SELECT 
+			  pql.item_no ,
+			  pql.tag_price 
+			FROM
+			  price_quotation_list pql 
+			WHERE 1 = 1
+			  AND pql.organ_id = '0000' 
+			  AND pql.quotation_tactics = 0 
+			  GROUP BY item_no
+		  ) T2 ON T0.item_no = T2.item_no
+		  LEFT JOIN supplier_group_rel T3 ON T0.supplier_no = T3.supplier_no
+		  LEFT JOIN supplier_group T4 ON T3.group_no = T4.group_no	 
+		  LEFT JOIN lookup_entry lookup1 
+		    ON lookup1.`code` = T0.`years` 
+		    AND lookup1.`lookup_id` = '5' 
+		  LEFT JOIN lookup_entry lookup2 
+		    ON lookup2.`code` = T0.`season` 
+		    AND lookup2.`lookup_id` = '72' 
+		  LEFT JOIN lookup_entry lookup3 
+			ON lookup3.`code` = T0.gender 
+			AND lookup3.lookup_id = '7'  -->
+	</select>		
+	
+	<select id="findReportAllFinanceFooter" resultMap="ReportFinanceMap" parameterType="map">
+		/*balance*/
+		 SELECT 
+		  '合计' supplier_group_name,
+		  SUM(send_qty) send_qty,
+		  SUM(purchase_amount) purchase_amount,
+		  SUM(factory_amount) factory_amount,
+		  SUM(region_from_amount) region_from_amount,
+		  SUM(region_amount) region_amount,
+		  SUM(discount_tag_amount) discount_tag_amount,
+		  SUM(difference_amount1) difference_amount1,
+		  SUM(round_tag_amount) round_tag_amount,
+		  SUM(difference_amount2) difference_amount2
+		FROM
+		  (SELECT 
+		    T0.discount,
+		    T0.send_qty,
+		    T0.region_cost - T1.factory_price add_price,
+		    T1.material_price,
+		    T1.purchase_price,
+		    T1.factory_price,
+		    T1.purchase_price * T0.send_qty purchase_amount,
+		    T1.factory_price * T0.send_qty factory_amount,
+		    T0.region_cost_from * T0.send_qty region_from_amount,
+		    T0.region_cost * T0.send_qty region_amount,
+		    T2.tag_price,
+		    T2.tag_price * discount discount_tag_price,
+		    T2.tag_price * discount * send_qty discount_tag_amount,
+		    T2.tag_price * discount * send_qty - T1.factory_price * T0.send_qty difference_amount1,
+		    ROUND(T2.tag_price * discount) round_tag_price,
+		    ROUND(T2.tag_price * discount) * send_qty round_tag_amount,
+		    ROUND(T2.tag_price * discount) * send_qty - T1.factory_price * T0.send_qty difference_amount2
+ 		FROM (<include refid="sale_balance_sql" />
+ 			UNION ALL <include refid="buy_balance_sql" />
+ 		) T0
+ 		LEFT JOIN (SELECT 
+		    item_no,
+		    supplier_no,
+		    material_price,
+		    purchase_price,
+		    factory_price 
+		  FROM
+		    (SELECT 
+		      PP.item_no,
+		      pp.supplier_no,
+		      pp.material_price,
+		      pp.purchase_price,
+		      pp.factory_price 
+		    FROM
+		      purchase_price PP 
+		    WHERE 1 = 1 
+		      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+		    ORDER BY item_no DESC,
+		      supplier_no DESC,
+		      STATUS DESC,
+		      effective_date DESC,
+		      create_time DESC) G 
+		  GROUP BY item_no,
+		    supplier_no) T1
+			ON T0.item_no = T1.item_no
+			AND T0.supplier_no = T1.supplier_no  
+		  LEFT JOIN (
+		  	SELECT 
+			  pql.item_no ,
+			  pql.tag_price 
+			FROM
+			  price_quotation_list pql 
+			WHERE 1 = 1
+			  AND pql.organ_id = '0000' 
+			  AND pql.quotation_tactics = 0 
+			  GROUP BY item_no
+		  ) T2 ON T0.item_no = T2.item_no
+		  LEFT JOIN supplier_group_rel T3 ON T0.supplier_no = T3.supplier_no
+		  LEFT JOIN supplier_group T4 ON T3.group_no = T4.group_no	 
+		  ) T0 
+	</select>
+	
+	<resultMap id="ReportInventoryMap" type="cn.wonhigh.retail.fas.common.dto.ReportInventoryDto" >
+	    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+	    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+	    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+	    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+	    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+	    <result column="store_no" property="storeNo" jdbcType="VARCHAR" />
+	    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+	    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+	    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+	    <result column="supplier_no" property="supplierNo" jdbcType="VARCHAR" />
+	    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+	    <result column="supplier_group_name" property="supplierGroupName" jdbcType="VARCHAR" />
+	    <result column="start_receive_qty" property="startReceiveQty" jdbcType="INTEGER" />
+	    <result column="start_receive_amount" property="startReceiveAmount" jdbcType="DECIMAL" />
+	    <result column="start_send_qty" property="startSendQty" jdbcType="INTEGER" />
+	    <result column="start_send_amount" property="startSendAmount" jdbcType="DECIMAL" />
+	    <result column="start_diff_qty" property="startDiffQty" jdbcType="INTEGER" />
+	    <result column="start_diff_amount" property="startDiffAmount" jdbcType="DECIMAL" />
+	    <result column="current_receive_qty" property="currentReceiveQty" jdbcType="INTEGER" />
+	    <result column="current_receive_amount" property="currentReceiveAmount" jdbcType="DECIMAL" />
+	    <result column="current_send_qty" property="currentSendQty" jdbcType="INTEGER" />
+	    <result column="current_send_amount" property="currentSendAmount" jdbcType="DECIMAL" />
+	    <result column="current_diff_qty" property="currentDiffQty" jdbcType="INTEGER" />
+	    <result column="current_diff_amount" property="currentDiffAmount" jdbcType="DECIMAL" />
+	    <result column="end_diff_qty" property="endDiffQty" jdbcType="INTEGER" />
+	    <result column="end_diff_amount" property="endDiffAmount" jdbcType="DECIMAL" />
+	    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+	    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+	    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+  	</resultMap>
+		<sql id="InventoryCondition" >
+		  	--	AND @brand_no 
+		    <if test="null!=params" >
+		   	  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+		        ${params.queryCondition}
+		      </if>
+		      <if test="null!=params.multiSupplierGroupNo and ''!=params.multiSupplierGroupNo" >
+		        AND  EXISTS (SELECT 1 FROM supplier_group_rel rel WHERE rel.supplier_no = B.supplier_no AND rel.group_no IN ${params.multiSupplierGroupNo})
+		      </if>
+		      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+		        AND brand_no  IN ${params.multiBrandNo}
+		      </if>    
+		      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+		        AND C1.category_no IN ${params.multiCategoryNo}
+		      </if> 
+		      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+		        AND supplier_no  IN ${params.multiSupplierNo}
+		      </if> 
+		      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+		        AND item_code  IN ${params.multiItemCode}
+		      </if>      
+		    </if>
+	  </sql>
+	<select id="findReportInventoryCount" resultType="java.lang.Integer" >
+	/*balance*/ 
+		SELECT COUNT(1) FROM (
+			SELECT 
+			  1
+			FROM (
+			SELECT   
+			  item_no,
+			  item_code,
+			  item_name,
+			  brand_no,
+			  brand_name,
+			  category_no,
+			  category_name,
+			  company_no,
+			  company_name,
+			  supplier_no,
+			  supplier_name,
+			  SUM(start_receive_qty) start_receive_qty,
+			  SUM(start_send_qty) start_send_qty,
+			  SUM(start_receive_qty) - SUM(start_send_qty) start_diff_qty,
+			  SUM(current_receive_qty) current_receive_qty,
+			  SUM(current_send_qty) current_send_qty,
+			  SUM(current_receive_qty) - SUM(current_send_qty) current_diff_qty,
+			  SUM(start_receive_qty) - SUM(start_send_qty) + (SUM(current_receive_qty) - SUM(current_send_qty)) end_diff_qty
+			FROM (
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  IF(bill_type = 1372,saler_no,buyer_no) company_no,
+				  IF(bill_type = 1372,saler_name,buyer_name) company_name,
+				  supplier_no,
+				  supplier_name,
+				  SUM(IF(bill_type = 1372,0,send_qty)) start_receive_qty,
+				  SUM(IF(bill_type = 1372,0,send_qty*cost)) start_receive_amount,
+				  SUM(IF(bill_type = 1372,receive_qty,0)) start_send_qty,
+				  SUM(IF(bill_type = 1372,receive_qty*cost,0)) start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  0 current_send_qty,
+				  0 current_send_amount,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_no,receive_store_no)) store_no,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_name,receive_store_name)) store_name
+				FROM
+				  bill_buy_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND buyer_no  IN ${params.multiCompanyNo}
+			      </if>  
+				  <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			        AND is_split IS NULL
+			      </if> 
+				  AND IF(bill_type = 1372,receive_date,send_date) &lt; #{params.sendDateStart}
+				  GROUP BY item_no, IF(bill_type = 1372,saler_no,buyer_no),IF(bill_type = 1372,send_store_no,receive_store_no), is_split
+				  
+				  UNION ALL
+				  
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  saler_no company_no,
+				  saler_name company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  SUM(send_qty) start_send_qty,
+				  SUM(send_qty*cost) start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  0 current_send_qty,
+				  0 current_send_amount,
+				  IF(is_split = 1,NULL,send_store_no) store_no,
+				  IF(is_split = 1,NULL,send_store_name) store_name 
+				FROM
+				  bill_sale_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND saler_no  IN ${params.multiCompanyNo}
+			      </if>  
+			      <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			        AND is_split IS NULL
+			      </if> 
+				  AND send_date &lt; #{params.sendDateStart}
+				  GROUP BY item_no, saler_no, send_store_no, is_split
+				  
+				  UNION ALL
+				  
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  IF(bill_type = 1372,saler_no,buyer_no) company_no,
+				  IF(bill_type = 1372,saler_name,buyer_name) company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  0 start_send_qty,
+				  0 start_send_amount,
+				  SUM(IF(bill_type = 1372,0,send_qty)) current_receive_qty,
+				  SUM(IF(bill_type = 1372,0,send_qty*cost)) current_receive_amount,
+				  SUM(IF(bill_type = 1372,receive_qty,0)) current_send_qty,
+				  SUM(IF(bill_type = 1372,receive_qty*cost,0)) current_send_amount,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_no,receive_store_no)) store_no,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_name,receive_store_name)) store_name
+				FROM
+				  bill_buy_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND buyer_no  IN ${params.multiCompanyNo}
+			      </if>  
+				  <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			        AND is_split IS NULL
+			      </if> 
+				  AND IF(bill_type = 1372,receive_date,send_date) &gt;= #{params.sendDateStart}
+				  AND IF(bill_type = 1372,receive_date,send_date) &lt;= #{params.sendDateEnd}
+				  GROUP BY item_no, IF(bill_type = 1372,saler_no,buyer_no),IF(bill_type = 1372,send_store_no,receive_store_no), is_split
+				  
+				    UNION ALL
+				    
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  saler_no company_no,
+				  saler_name company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  0 start_send_qty,
+				  0 start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  SUM(send_qty) current_send_qty,
+				  SUM(send_qty*cost) current_send_amount,
+				  IF(is_split = 1,NULL,send_store_no) store_no,
+				  IF(is_split = 1,NULL,send_store_name) store_name 
+				FROM
+				  bill_sale_balance B
+				  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND saler_no  IN ${params.multiCompanyNo}
+			      </if>  
+			      <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			        AND is_split IS NULL
+			      </if> 
+				  AND send_date &gt;= #{params.sendDateStart}
+				  AND send_date &lt;= #{params.sendDateEnd}
+				  GROUP BY item_no, saler_no, send_store_no, is_split) G
+				  GROUP BY item_no,store_no ) T
+				) T0
+	</select>
+	<select id="findReportInventoryByPage" resultMap="ReportInventoryMap" parameterType="map" >
+	/*balance*/
+		SELECT T0.*,
+		    T1.factory_price,
+		    T1.material_price,
+			T1.purchase_price,
+			T1.purchase_price*T0.start_receive_qty start_receive_amount,  
+			T1.purchase_price*T0.start_send_qty start_send_amount,
+			T1.purchase_price*T0.start_diff_qty start_diff_amount,
+			T1.purchase_price*T0.current_receive_qty current_receive_amount,
+			T1.purchase_price*T0.current_send_qty current_send_amount,
+			T1.purchase_price*T0.current_diff_qty current_diff_amount,
+			T1.purchase_price*T0.end_diff_qty end_diff_amount,
+			T4.group_name supplier_group_name
+			FROM (
+			SELECT   
+			  item_no,
+			  item_code,
+			  item_name,
+			  brand_no,
+			  brand_name,
+			  category_no,
+			  category_name,
+			  company_no,
+			  company_name,
+			  supplier_no,
+			  supplier_name,
+			  store_no,
+			  store_name,
+			  SUM(start_receive_qty) start_receive_qty,
+			  SUM(start_send_qty) start_send_qty,
+			  SUM(start_receive_qty) - SUM(start_send_qty) start_diff_qty,
+			  SUM(current_receive_qty) current_receive_qty,
+			  SUM(current_send_qty) current_send_qty,
+			  SUM(current_receive_qty) - SUM(current_send_qty) current_diff_qty,
+			  SUM(start_receive_qty) - SUM(start_send_qty) + (SUM(current_receive_qty) - SUM(current_send_qty)) end_diff_qty
+			FROM (
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  IF(bill_type = 1372,saler_no,buyer_no) company_no,
+				  IF(bill_type = 1372,saler_name,buyer_name) company_name,
+				  supplier_no,
+				  supplier_name,
+				  SUM(IF(bill_type = 1372,0,send_qty)) start_receive_qty,
+				  SUM(IF(bill_type = 1372,0,send_qty*cost)) start_receive_amount,
+				  SUM(IF(bill_type = 1372,receive_qty,0)) start_send_qty,
+				  SUM(IF(bill_type = 1372,receive_qty*cost,0)) start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  0 current_send_qty,
+				  0 current_send_amount,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_no,receive_store_no)) store_no,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_name,receive_store_name)) store_name
+				FROM
+				  bill_buy_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND buyer_no  IN ${params.multiCompanyNo}
+			      </if>  
+				  <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			        AND is_split IS NULL
+			      </if> 
+				  AND IF(bill_type = 1372,receive_date,send_date) &lt; #{params.sendDateStart}
+				  GROUP BY item_no, IF(bill_type = 1372,saler_no,buyer_no),IF(bill_type = 1372,send_store_no,receive_store_no), is_split
+				  
+				  UNION ALL
+				  
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  saler_no company_no,
+				  saler_name company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  SUM(send_qty) start_send_qty,
+				  SUM(send_qty*cost) start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  0 current_send_qty,
+				  0 current_send_amount,
+				  IF(is_split = 1,NULL,send_store_no) store_no,
+				  IF(is_split = 1,NULL,send_store_name) store_name 
+				FROM
+				  bill_sale_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND saler_no  IN ${params.multiCompanyNo}
+			      </if>  
+			      <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			        AND is_split IS NULL
+			      </if> 
+				  AND send_date &lt; #{params.sendDateStart}
+				  GROUP BY item_no, saler_no, send_store_no, is_split
+				  
+				  UNION ALL
+				  
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  IF(bill_type = 1372,saler_no,buyer_no) company_no,
+				  IF(bill_type = 1372,saler_name,buyer_name) company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  0 start_send_qty,
+				  0 start_send_amount,
+				  SUM(IF(bill_type = 1372,0,send_qty)) current_receive_qty,
+				  SUM(IF(bill_type = 1372,0,send_qty*cost)) current_receive_amount,
+				  SUM(IF(bill_type = 1372,receive_qty,0)) current_send_qty,
+				  SUM(IF(bill_type = 1372,receive_qty*cost,0))  current_send_amount,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_no,receive_store_no)) store_no ,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_name,receive_store_name)) store_name
+				FROM
+				  bill_buy_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND buyer_no  IN ${params.multiCompanyNo}
+			      </if>  
+				  <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			        AND is_split IS NULL
+			      </if> 
+				  AND IF(bill_type = 1372,receive_date,send_date) &gt;= #{params.sendDateStart}
+				  AND IF(bill_type = 1372,receive_date,send_date) &lt;= #{params.sendDateEnd}
+				  GROUP BY item_no, IF(bill_type = 1372,saler_no,buyer_no),IF(bill_type = 1372,send_store_no,receive_store_no), is_split
+				  
+				    UNION ALL
+				    
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  saler_no company_no,
+				  saler_name company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  0 start_send_qty,
+				  0 start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  SUM(send_qty) current_send_qty,
+				  SUM(send_qty*cost) current_send_amount,
+				  IF(is_split = 1,NULL,send_store_no) store_no,
+				  IF(is_split = 1,NULL,send_store_name) store_name 
+				FROM
+				  bill_sale_balance B
+				  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND saler_no  IN ${params.multiCompanyNo}
+			      </if>  
+			      <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			        AND is_split IS NULL
+			      </if> 
+				  AND send_date &gt;= #{params.sendDateStart}
+				  AND send_date &lt;= #{params.sendDateEnd}
+				  GROUP BY item_no, saler_no, send_store_no, is_split) G
+				  GROUP BY item_no,store_no 
+				  LIMIT #{page.startRowNum} ,#{page.pageSize}) T0
+				LEFT JOIN (SELECT 
+				    item_no,
+				    supplier_no,
+				    material_price,
+				    purchase_price,
+				    factory_price 
+				  FROM
+				    (SELECT 
+				      PP.item_no,
+				      pp.supplier_no,
+				      pp.material_price,
+				      pp.purchase_price,
+				      pp.factory_price 
+				    FROM
+				      purchase_price PP 
+				    WHERE 1 = 1 
+				      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+				    ORDER BY item_no DESC,
+				      supplier_no DESC,
+				      STATUS DESC,
+				      effective_date DESC,
+				      create_time DESC) G 
+				  GROUP BY item_no,
+				    supplier_no) T1
+				ON T0.item_no = T1.item_no
+				AND T0.supplier_no = T1.supplier_no
+				LEFT JOIN supplier_group_rel T3 ON T0.supplier_no = T3.supplier_no
+		  		LEFT JOIN supplier_group T4 ON T3.group_no = T4.group_no
+	</select>
+	<select id="findReportInventoryFooter" resultMap="ReportInventoryMap" parameterType="map" >
+	/*balance*/
+		SELECT 
+		 '合计' brand_name, 
+		  SUM(start_receive_qty) start_receive_qty,
+		  SUM(start_receive_amount) start_receive_amount,
+		  SUM(start_send_qty) start_send_qty,
+		  SUM(start_send_amount) start_send_amount,
+		  SUM(start_receive_qty) - SUM(start_send_qty) start_diff_qty,
+		  SUM(start_receive_amount) - SUM(start_send_amount) start_diff_amount, 
+		  SUM(current_receive_qty) current_receive_qty,
+		  SUM(current_receive_amount) current_receive_amount,
+		  SUM(current_send_qty) current_send_qty,
+		  SUM(current_send_amount) current_send_amount,
+		  SUM(current_receive_qty) - SUM(current_send_qty) current_diff_qty,
+		  SUM(current_receive_amount) - SUM(current_send_amount) current_diff_amount,
+		  SUM(start_receive_qty) - SUM(start_send_qty) + (SUM(current_receive_qty) - SUM(current_send_qty)) end_diff_qty,
+		  SUM(start_receive_amount) - SUM(start_send_amount) + (SUM(current_receive_amount) - SUM(current_send_amount)) end_diff_amount
+		  FROM (
+		SELECT T0.*,
+		    T1.purchase_price,
+			T1.purchase_price*T0.start_receive_qty start_receive_amount,  
+			T1.purchase_price*T0.start_send_qty start_send_amount,
+			T1.purchase_price*T0.start_diff_qty start_diff_amount,
+			T1.purchase_price*T0.current_receive_qty current_receive_amount,
+			T1.purchase_price*T0.current_send_qty current_send_amount,
+			T1.purchase_price*T0.current_diff_qty current_diff_amount,
+			T1.purchase_price*T0.end_diff_qty end_diff_amount
+			FROM (
+			SELECT   
+			  item_no,
+			  item_code,
+			  item_name,
+			  brand_no,
+			  brand_name,
+			  category_no,
+			  category_name,
+			  company_no,
+			  company_name,
+			  supplier_no,
+			  supplier_name,
+			  store_no,
+			  store_name,
+			  SUM(start_receive_qty) start_receive_qty,
+			  SUM(start_send_qty) start_send_qty,
+			  SUM(start_receive_qty) - SUM(start_send_qty) start_diff_qty,
+			  SUM(current_receive_qty) current_receive_qty,
+			  SUM(current_send_qty) current_send_qty,
+			  SUM(current_receive_qty) - SUM(current_send_qty) current_diff_qty,
+			  SUM(start_receive_qty) - SUM(start_send_qty) + (SUM(current_receive_qty) - SUM(current_send_qty)) end_diff_qty
+			FROM (
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  IF(bill_type = 1372,saler_no,buyer_no) company_no,
+				  IF(bill_type = 1372,saler_name,buyer_name) company_name,
+				  supplier_no,
+				  supplier_name,
+				  SUM(IF(bill_type = 1372,0,send_qty)) start_receive_qty,
+				  SUM(IF(bill_type = 1372,0,send_qty*cost)) start_receive_amount,
+				  SUM(IF(bill_type = 1372,receive_qty,0)) start_send_qty,
+				  SUM(IF(bill_type = 1372,receive_qty*cost,0)) start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  0 current_send_qty,
+				  0 current_send_amount,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_no,receive_store_no)) store_no,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_name,receive_store_name)) store_name
+				FROM
+				  bill_buy_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND buyer_no  IN ${params.multiCompanyNo}
+			      </if>  
+				  <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			        AND is_split IS NULL
+			      </if> 
+				  AND IF(bill_type = 1372,receive_date,send_date) &lt; #{params.sendDateStart}
+				  GROUP BY item_no, IF(bill_type = 1372,saler_no,buyer_no),IF(bill_type = 1372,send_store_no,receive_store_no), is_split
+				  
+				  UNION ALL
+				  
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  saler_no company_no,
+				  saler_name company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  SUM(send_qty) start_send_qty,
+				  SUM(send_qty*cost) start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  0 current_send_qty,
+				  0 current_send_amount,
+				  IF(is_split = 1,NULL,send_store_no) store_no,
+				  IF(is_split = 1,NULL,send_store_name) store_name 
+				FROM
+				  bill_sale_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND saler_no  IN ${params.multiCompanyNo}
+			      </if>  
+			      <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			        AND is_split IS NULL
+			      </if> 
+				  AND send_date &lt; #{params.sendDateStart}
+				  GROUP BY item_no, saler_no, send_store_no, is_split
+				  
+				  UNION ALL
+				  
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  IF(bill_type = 1372,saler_no,buyer_no) company_no,
+				  IF(bill_type = 1372,saler_name,buyer_name) company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  0 start_send_qty,
+				  0 start_send_amount,
+				  SUM(IF(bill_type = 1372,0,send_qty)) current_receive_qty,
+				  SUM(IF(bill_type = 1372,0,send_qty*cost)) current_receive_amount,
+				  SUM(IF(bill_type = 1372,receive_qty,0)) current_send_qty,
+				  SUM(IF(bill_type = 1372,receive_qty*cost,0)) current_send_amount,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_no,receive_store_no)) store_no,
+				  IF(is_split = 1,NULL,IF(bill_type = 1372,send_store_name,receive_store_name)) store_name
+				FROM
+				  bill_buy_balance B LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND buyer_no  IN ${params.multiCompanyNo}
+			      </if>  
+				  <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND <include refid="purchaseCondition" />
+			        AND is_split IS NULL
+			      </if> 
+				  AND IF(bill_type = 1372,receive_date,send_date) &gt;= #{params.sendDateStart}
+				  AND IF(bill_type = 1372,receive_date,send_date) &lt;= #{params.sendDateEnd}
+				  GROUP BY item_no, IF(bill_type = 1372,saler_no,buyer_no),IF(bill_type = 1372,send_store_no,receive_store_no), is_split
+				  
+				    UNION ALL
+				    
+				SELECT 
+				  item_no,
+				  item_code,
+				  item_name,
+				  brand_no,
+				  brand_name,
+				  C1.category_no,
+				  C1.name category_name,
+				  saler_no company_no,
+				  saler_name company_name,
+				  supplier_no,
+				  supplier_name,
+				  0 start_receive_qty,
+				  0 start_receive_amount,
+				  0 start_send_qty,
+				  0 start_send_amount,
+				  0 current_receive_qty,
+				  0 current_receive_amount,
+				  SUM(send_qty) current_send_qty,
+				  SUM(send_qty *cost) current_send_amount,
+				  IF(is_split = 1,NULL,send_store_no) store_no,
+				  IF(is_split = 1,NULL,send_store_name) store_name 
+				FROM
+				  bill_sale_balance B
+				  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.category_no 
+				WHERE 1 = 1 
+				  <include refid="InventoryCondition" />
+				  <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+			        AND saler_no  IN ${params.multiCompanyNo}
+			      </if>  
+			      <if test="null!=params.isSplit and 'true'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			      </if> 
+			      <if test="null==params.isSplit or 'false'==params.isSplit" >
+			        AND (<include refid="salesCondition" /> OR <include refid="wholesaleSalesCondition" />)
+			        AND is_split IS NULL
+			      </if> 
+				  AND send_date &gt;= #{params.sendDateStart}
+				  AND send_date &lt;= #{params.sendDateEnd}
+				  GROUP BY item_no, saler_no, send_store_no, is_split) G
+				  GROUP BY item_no,store_no ) T0
+				LEFT JOIN (SELECT 
+				    item_no,
+				    supplier_no,
+				    material_price,
+				    purchase_price,
+				    factory_price 
+				  FROM
+				    (SELECT 
+				      PP.item_no,
+				      pp.supplier_no,
+				      pp.material_price,
+				      pp.purchase_price,
+				      pp.factory_price 
+				    FROM
+				      purchase_price PP 
+				    WHERE 1 = 1 
+				      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+				    ORDER BY item_no DESC,
+				      supplier_no DESC,
+				      STATUS DESC,
+				      effective_date DESC,
+				      create_time DESC) G 
+				  GROUP BY item_no,
+				    supplier_no) T1
+				ON T0.item_no = T1.item_no
+				AND T0.supplier_no = T1.supplier_no
+	 ) T
+	</select>
+	
+	<sql id="buy_balance_condtion" >
+		AND is_split IS NULL 
+		AND ( ((bill_type = 1301 AND biz_type IN (0,1)) OR bill_type = 1333) OR (bill_type = 1372 AND saler_no IN (${params.zoneCompanyNo}) AND receive_qty &lt; 0) ) 
+		<if test="null!=params" >
+	      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+	        AND B.supplier_no in ${params.multiSupplierNo}
+	      </if>   
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND B.buyer_no  IN ${params.multiHqCompanyNo}
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND B.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+	      <if test="null!=params.businessType and ''!=params.businessType" >
+	        	<if test="1==params.businessType" >
+	        		AND bill_type IN (1301,1333) AND buyer_no IN (${params.zoneCompanyNo})
+	        	</if>
+	        	<if test="2==params.businessType" >
+	        		AND bill_type IN (1371,1372)
+	        	</if>
+	        	<if test="3==params.businessType" >
+	        		AND bill_type IN (1301,1333) AND is_split != 1 AND buyer_no NOT IN (${params.zoneCompanyNo})
+	        	</if>
+	      </if>   
+	      <include refid="query_condtion" />
+	    </if>  
+	</sql>
+	
+	<sql id="sale_balance_condtion" >
+		AND ( ((bill_type = 1301 AND biz_type IN (0,1)) OR bill_type = 1333) OR (bill_type = 1371  AND send_qty &gt; 0)) 
+	    AND saler_no IN (${params.zoneCompanyNo}) 
+		<if test="null!=params" >
+	      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+	        AND IF(B.is_split IS NULL,  1 != 1 ,  B.supplier_no in ${params.multiSupplierNo})
+	      </if>   
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND B.saler_no  IN ${params.multiHqCompanyNo}
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND B.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>    
+	      <if test="null!=params.businessType and ''!=params.businessType" >
+	        	<if test="1==params.businessType" >
+	        		AND bill_type IN (1301,1333)
+	        	</if>
+	        	<if test="2==params.businessType" >
+	        		AND bill_type IN (1371,1372)
+	        	</if>
+	        	<if test="3==params.businessType" >
+	        		AND bill_type IN (1301,1333) AND is_split != 1 AND buyer_no NOT IN (${params.zoneCompanyNo})
+	        	</if>
+	      </if>   
+	      <include refid="query_condtion" />
+	    </if> 
+	</sql>
+	
+	<sql id="sale_balance_sql" >
+		SELECT 
+		  T0.item_no,
+		  T0.item_code,
+		  T0.item_name,
+		  T0.years,
+		  T0.season,
+		  T0.gender,
+		  T0.organ_no,
+		  T0.organ_name,
+		  T0.supplier_no,
+		  T0.supplier_name,
+		  T0.hq_company_no,
+		  T0.hq_company_name,
+		  T0.area_company_no,
+		  T0.area_company_name,
+		  T0.brand_no,
+		  T0.brand_name,
+		  T0.category_no,
+		  T0.category_name,
+		  T0.two_level_category_no,
+		  T0.two_level_category_name,
+		  T0.three_level_category_no,
+		  T0.three_level_category_name,
+		  T0.purchase_qty,
+		  T0.cost,
+		  T0.region_cost,
+		  ROUND(IFNULL(T0.region_cost_from,0),2) region_cost_from,
+		  ROUND(IFNULL(T0.sales_qty,0)) sales_qty,
+		  T0.send_qty,
+		  (SELECT 
+			  hpr.discount_rate 
+			FROM
+			  item it 
+			  INNER JOIN supplier_group_rel sgr 
+			    ON it.supplier_no = sgr.supplier_no 
+			  INNER JOIN settle_category_dtl scd 
+			    ON it.root_category_no = scd.category_no 
+			  INNER JOIN brand b 
+			    ON it.brand_no = b.brand_no 
+			  LEFT JOIN `settle_new_style_dtl` snsd 
+			    ON it.`years` = snsd.`year_code` 
+			    AND (
+			      it.`sell_season` = snsd.`season_no` 
+			      OR snsd.season_no = 'ALL'
+			    ) 
+			  INNER JOIN headquarter_price_rule hpr 
+			    ON FIND_IN_SET(
+			      sgr.group_no,
+			      hpr.supplier_group_no
+			    ) 
+			    AND FIND_IN_SET(
+			      scd.settle_category_no,
+			      hpr.category_no
+			    ) 
+			    AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+			WHERE it.item_no = T0.item_no
+			  AND (
+			    (
+			      hpr.style_type = snsd.style_no 
+			      AND hpr.new_style_flag = 1
+			    ) 
+			    OR (
+			      hpr.new_style_flag = 0 
+			      AND (hpr.year_code = it.years OR hpr.year_code ='ALL')
+			      AND (hpr.season = it.sell_season OR hpr.season ='ALL')
+			    )
+			  ) 
+			  AND (
+			    FIND_IN_SET(
+			      LEFT(it.category_no, 4),
+			      hpr.two_level_category_no
+			    ) 
+			    OR (
+			      hpr.two_level_category_no = '' 
+			      OR hpr.two_level_category_no IS NULL
+			    )
+			  ) 
+			  AND hpr.add_basis = 2 
+			  LIMIT 1) discount,
+		  IF(is_split = 1, 1, 3) order_flag
+		FROM
+		  (SELECT 
+		    item_no,
+		    item_code,
+		    item_name,
+		    years,
+		    season,
+		    gender,
+		    organ_no,
+		    organ_name,
+		    supplier_no,
+		    supplier_name,
+		    saler_no hq_company_no,
+		    saler_name hq_company_name,
+		    buyer_no area_company_no,
+		    buyer_name area_company_name,
+		    brand_no,
+		    brand_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    C3.category_no three_level_category_no,
+		    C3.name three_level_category_name,
+		    SUM(IF(is_split IS NULL, NULL, send_qty)) purchase_qty,
+		    SUM(send_qty) sales_qty,
+		    cost,
+		    (SELECT 
+			      region_cost 
+			    FROM
+			      region_cost_maintain C
+			    WHERE 1 = 1 
+			      AND C.item_no = B.item_no 
+			      AND IF(
+			        ISNULL(
+			          (SELECT 
+			            PRICE_ZONE 
+			          FROM
+			            financial_account F 
+			          WHERE B.BUYER_NO = F.COMPANY_NO)
+			        ),
+			        (SELECT 
+			          ZONE_NO 
+			        FROM
+			          COMPANY CO 
+			        WHERE B.BUYER_NO = CO.COMPANY_NO),
+			        (SELECT 
+			          PRICE_ZONE 
+			        FROM
+			          financial_account F 
+			        WHERE B.BUYER_NO = F.COMPANY_NO)
+			      ) = C.ZONE_NO 
+			      AND effective_time &lt;= #{params.sendDateEnd}
+			    ORDER BY effective_time DESC 
+			    LIMIT 0, 1) region_cost,
+		    IF(LEFT(saler_no,1) = 'I',
+			    (SELECT 
+			      region_cost 
+			    FROM
+			      region_cost_maintain C
+			    WHERE 1 = 1 
+			      AND C.item_no = B.item_no 
+			      AND C.ZONE_NO = 'I' 
+			      AND effective_time &lt;= #{params.sendDateEnd}
+			    ORDER BY effective_time DESC 
+			    LIMIT 0, 1),NULL) region_cost_from, 
+		    SUM(send_qty) send_qty,
+		    is_split
+		  FROM
+		    bill_sale_balance B 
+		    LEFT JOIN category C1 
+		      ON LEFT(B.category_no, 2) = C1.category_no 
+		    LEFT JOIN category C2 
+		      ON LEFT(B.category_no, 4) = C2.category_no 
+		    LEFT JOIN category C3 
+		      ON LEFT(B.category_no, 6) = C3.category_no 
+		  WHERE 1 = 1 
+		  <include refid="sale_balance_condtion" />
+		  GROUP BY item_no,
+		    organ_no,
+		    is_split) T0 
+	</sql>
+	
+	
+	<sql id="buy_balance_sql" >
+		SELECT 
+		  T0.item_no,
+		  T0.item_code,
+		  T0.item_name,
+		  T0.years,
+		  T0.season,
+		  T0.gender,
+		  T0.organ_no,
+		  T0.organ_name,
+		  T0.supplier_no,
+		  T0.supplier_name,
+		  T0.hq_company_no,
+		  T0.hq_company_name,
+		  T0.area_company_no,
+		  T0.area_company_name,
+		  T0.brand_no,
+		  T0.brand_name,
+		  T0.category_no,
+		  T0.category_name,
+		  T0.two_level_category_no,
+		  T0.two_level_category_name,
+		  T0.three_level_category_no,
+		  T0.three_level_category_name,
+		  T0.purchase_qty,
+		  T0.cost,
+		  T0.region_cost,
+		  NULL region_cost_from,
+		  NULL sales_qty,
+		  T0.send_qty,
+		  (SELECT 
+			  hpr.discount_rate 
+			FROM
+			  item it 
+			  INNER JOIN supplier_group_rel sgr 
+			    ON it.supplier_no = sgr.supplier_no 
+			  INNER JOIN settle_category_dtl scd 
+			    ON it.root_category_no = scd.category_no 
+			  INNER JOIN brand b 
+			    ON it.brand_no = b.brand_no 
+			  LEFT JOIN `settle_new_style_dtl` snsd 
+			    ON it.`years` = snsd.`year_code` 
+			    AND (
+			      it.`sell_season` = snsd.`season_no` 
+			      OR snsd.season_no = 'ALL'
+			    ) 
+			  INNER JOIN headquarter_price_rule hpr 
+			    ON FIND_IN_SET(
+			      sgr.group_no,
+			      hpr.supplier_group_no
+			    ) 
+			    AND FIND_IN_SET(
+			      scd.settle_category_no,
+			      hpr.category_no
+			    ) 
+			    AND FIND_IN_SET(b.sys_no, hpr.brand_unit_no) 
+			WHERE it.item_no = T0.item_no
+			  AND (
+			    (
+			      hpr.style_type = snsd.style_no 
+			      AND hpr.new_style_flag = 1
+			    ) 
+			    OR (
+			      hpr.new_style_flag = 0 
+			      AND hpr.year_code = it.years 
+			      AND hpr.season = it.sell_season
+			    )
+			  ) 
+			  AND (
+			    FIND_IN_SET(
+			      LEFT(it.category_no, 4),
+			      hpr.two_level_category_no
+			    ) 
+			    OR (
+			      hpr.two_level_category_no = '' 
+			      OR hpr.two_level_category_no IS NULL
+			    )
+			  ) 
+			  AND hpr.add_basis = 2  
+			  LIMIT 1) discount,
+		  IF(hq_company_no = area_company_no,2,IF(hq_company_no IS NULL,5,4)) order_flag 
+		FROM
+		  (SELECT 
+		  item_no,
+		  item_code,
+		  item_name,
+		  years,
+		  season,
+		  gender,
+		  organ_no,
+		  organ_name,
+		  supplier_no,
+		  supplier_name,
+		  IF(buyer_no IN (${params.zoneCompanyNo}) , buyer_no , IF(saler_no IN (${params.zoneCompanyNo}), saler_no, NULL)) hq_company_no,
+		  IF(buyer_no IN (${params.zoneCompanyNo}) , buyer_name , IF(saler_no IN (${params.zoneCompanyNo}), saler_name, NULL)) hq_company_name,
+		  buyer_no area_company_no,
+		  buyer_name area_company_name,
+		  brand_no,
+		  brand_name,
+		  C1.category_no,
+		  C1.name category_name,
+		  C2.category_no two_level_category_no,
+		  C2.name two_level_category_name,
+		  C3.category_no three_level_category_no,
+		  C3.name three_level_category_name,
+		  SUM(send_qty) purchase_qty,
+		  NULL sales_qty,
+		  cost,
+		  IF(buyer_no IN (${params.zoneCompanyNo}) , NULL , 
+		  (SELECT 
+		      region_cost 
+		    FROM
+		      region_cost_maintain C
+		    WHERE 1 = 1 
+		      AND C.item_no = B.item_no 
+		      AND IF(
+		        ISNULL(
+		          (SELECT 
+		            PRICE_ZONE 
+		          FROM
+		            financial_account F 
+		          WHERE B.BUYER_NO = F.COMPANY_NO)
+		        ),
+		        (SELECT 
+		          ZONE_NO 
+		        FROM
+		          COMPANY CO 
+		        WHERE B.BUYER_NO = CO.COMPANY_NO),
+		        (SELECT 
+		          PRICE_ZONE 
+		        FROM
+		          financial_account F 
+		        WHERE B.BUYER_NO = F.COMPANY_NO)
+		      ) = C.ZONE_NO 
+		      AND effective_time &lt;= #{params.sendDateEnd}
+		    ORDER BY effective_time DESC 
+		  LIMIT 0, 1)) region_cost,
+		  NULL region_cost_from,
+		  SUM(IF(bill_type = 1372,receive_qty,send_qty)) send_qty,
+		  is_split
+		FROM
+		  bill_buy_balance B
+		  LEFT JOIN category C1 
+		    ON LEFT(B.category_no, 2) = C1.category_no 
+		  LEFT JOIN category C2 
+		    ON LEFT(B.category_no, 4) = C2.category_no 
+		  LEFT JOIN category C3 
+		    ON LEFT(B.category_no, 6) = C3.category_no 
+		WHERE 1 = 1 
+		  <include refid="buy_balance_condtion" />
+		GROUP BY item_no,
+		  organ_no,
+		  is_split )T0
+	</sql>
+	
+	
+	<select id="findReportTransferCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM (
+		SELECT 
+		    1
+		  FROM (
+		SELECT 
+		  item_no,
+		  order_unit_no_from,
+		  order_unit_no
+		  FROM 
+		(
+		SELECT 
+		  item_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*send_qty,send_qty) send_qty,
+		  0 currReQty,
+		  0 receive_qty,
+		  cost
+		FROM
+		  bill_sale_balance 
+		  LEFT JOIN category C1 ON LEFT(bill_sale_balance.category_no, 2) = C1.category_no
+		  WHERE 1 = 1 
+		  <include refid="transfer_condtion" />
+		  AND bill_type = 1371 
+		  AND saler_no IN (${params.zoneCompanyNo})
+		  AND send_date BETWEEN #{params.sendDateStart}  AND #{params.sendDateEnd}
+		UNION ALL
+		SELECT 
+		  item_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+		  0 send_qty,
+		  IF(send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}, IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty),0) currReQty,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty) receive_qty,
+		  cost 
+		FROM
+		  bill_buy_balance 
+		  LEFT JOIN category C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.category_no
+		  WHERE 1 = 1 
+		   <include refid="transfer_condtion" />
+		  AND bill_type = 1372 
+		  AND saler_no IN (${params.zoneCompanyNo})
+		  AND receive_date BETWEEN #{params.sendDateStart}  AND #{params.sendDateEnd}  ) G
+		  GROUP BY item_no,order_unit_no_from,order_unit_no
+		  UNION ALL 
+		  SELECT 
+		  item_no,
+		  order_unit_no_from,
+		  order_unit_no
+		  FROM 
+		(
+		SELECT 
+		  item_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*send_qty,send_qty) send_qty,
+		  0 receive_qty,
+		  cost
+		FROM
+		  bill_sale_balance 
+		  LEFT JOIN category C1 ON LEFT(bill_sale_balance.category_no, 2) = C1.category_no
+		  WHERE 1 = 1 
+		   <include refid="transfer_condtion" />
+		  AND bill_type = 1371 
+		  AND saler_no IN (${params.zoneCompanyNo})
+		  AND send_date &lt; #{params.sendDateStart} 
+		UNION ALL
+		SELECT 
+		  item_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+		  0 send_qty,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty) receive_qty,
+		  cost 
+		FROM
+		  bill_buy_balance 
+		  LEFT JOIN category C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.category_no
+		  WHERE 1 = 1 
+		   <include refid="transfer_condtion" />
+		  AND bill_type = 1372 
+		  AND saler_no IN (${params.zoneCompanyNo})
+		  AND receive_date &lt; #{params.sendDateStart}  ) G
+		  GROUP BY item_no,order_unit_no_from,order_unit_no
+		  HAVING SUM(send_qty) &gt; SUM(receive_qty)
+		  ) G
+		  GROUP BY item_no,order_unit_no_from,order_unit_no) T
+	</select>
+	
+	<select id="findReportTransferByPage" resultMap="ReportTransferMap" parameterType="map">
+		SELECT 
+		  supplier_name,
+		  item_no,
+		  item_code,
+		  item_name,
+		  brand_no,
+		  brand_name,
+		  brand_unit_name,
+		  category_no,
+		  category_name,
+		  saler_no,
+		  buyer_no,
+		  zone_no_from,
+		  zone_no,
+		  organ_no_from,	
+		  organ_no,
+		  order_unit_no_from,
+		  order_unit_no,
+		  saler_name,
+		  buyer_name,
+		  zone_name_from,
+		  zone_name,
+		  organ_name_from,
+		  organ_name,
+		  order_unit_name_from,
+		  order_unit_name,
+		  SUM(send_qty) send_qty,
+		  SUM(receive_qty) receive_qty,
+		  SUM(send_qty) currSendQty,
+		  SUM(receive_qty - preSendCurrReQty) currReQty,
+		  SUM(send_qty) - (SUM(receive_qty - preSendCurrReQty)) currDiffQty,
+		  SUM(preSendCurrReQty) preSendCurrReQty,
+		  SUM(preSendNoReQty) preSendNoReQty,
+		  SUM(preSendNoReQty) - SUM(preSendCurrReQty) preDiffQty,
+		  SUM(send_amount) send_amount,
+		  SUM(receive_amount) receive_amount,
+		  SUM(send_amount) currSendAmount,
+		  SUM(receive_amount - preSendCurrReAmount) currReAmount,
+		  SUM(send_amount) - (SUM(receive_amount - preSendCurrReAmount)) currDiffAmount,
+		  SUM(preSendCurrReAmount) preSendCurrReAmount,
+		  SUM(preSendNoReAmount) preSendNoReAmount,
+		  SUM(preSendNoReAmount) - SUM(preSendCurrReAmount) preDiffAmount  
+		  FROM (
+		SELECT 
+		  supplier_name,
+		  item_no,
+		  item_code,
+		  item_name,
+		  brand_no,
+		  brand_name,
+		  brand_unit_name,
+		  category_no,
+		  category_name,
+		  saler_no,
+		  buyer_no,
+		  zone_no_from,
+		  zone_no,
+		  organ_no_from,	
+		  organ_no,
+		  order_unit_no_from,
+		  order_unit_no,
+		  saler_name,
+		  buyer_name,
+		  zone_name_from,
+		  zone_name,
+		  organ_name_from,
+		  organ_name,
+		  order_unit_name_from,
+		  order_unit_name,
+		  SUM(send_qty) send_qty,
+		  SUM(receive_qty) receive_qty,
+		  SUM(receive_qty) - SUM(currReQty) preSendCurrReQty,
+		  0  preSendNoReQty,
+		  SUM(send_qty*cost) send_amount,
+		  SUM(receive_qty*cost) receive_amount,
+		  SUM(receive_qty*cost) - SUM(currReQty*cost) preSendCurrReAmount,
+		  0  preSendNoReAmount
+		  FROM 
+		(
+		SELECT 
+		  supplier_name,
+		  item_no,
+		  item_code,
+		  item_name,
+		  brand_no,
+		  brand_name,
+		  brand_unit_name,
+		  C1.category_no,
+		  C1.name category_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no,saler_no) saler_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no,buyer_no) buyer_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no_from,zone_no) zone_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no,zone_no_from) zone_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from,organ_no) organ_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no,organ_no_from) organ_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_name,saler_name) saler_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_name,buyer_name) buyer_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name_from,zone_name) zone_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name,zone_name_from) zone_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name_from,organ_name) organ_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name,organ_name_from) organ_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name_from,order_unit_name) order_unit_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name,order_unit_name_from) order_unit_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*send_qty,send_qty) send_qty,
+		  0 currReQty,
+		  0 receive_qty,
+		  cost
+		FROM
+		  bill_sale_balance 
+		  LEFT JOIN category C1 ON LEFT(bill_sale_balance.category_no, 2) = C1.category_no
+		  WHERE 1 = 1 
+		  <include refid="transfer_condtion" />
+		  AND bill_type = 1371 
+		  AND saler_no IN (${params.zoneCompanyNo})
+		  AND send_date BETWEEN #{params.sendDateStart}  AND #{params.sendDateEnd}
+		UNION ALL
+		SELECT 
+		  supplier_name,
+		  item_no,
+		  item_code,
+		  item_name,
+		  brand_no,
+		  brand_name,
+		  brand_unit_name,
+		  C1.category_no,
+		  C1.name category_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no,saler_no) saler_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no,buyer_no) buyer_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no_from,zone_no) zone_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no,zone_no_from) zone_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from,organ_no) organ_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no,organ_no_from) organ_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_name,saler_name) saler_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_name,buyer_name) buyer_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name_from,zone_name) zone_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name,zone_name_from) zone_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name_from,organ_name) organ_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name,organ_name_from) organ_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name_from,order_unit_name) order_unit_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name,order_unit_name_from) order_unit_name_from,
+		  0 send_qty,
+		  IF(send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}, IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty),0) currReQty,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty) receive_qty,
+		  cost 
+		FROM
+		  bill_buy_balance 
+		  LEFT JOIN category C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.category_no
+		  WHERE 1 = 1 
+		   <include refid="transfer_condtion" />
+		  AND bill_type = 1372 
+		  AND saler_no IN (${params.zoneCompanyNo})
+		  AND receive_date BETWEEN #{params.sendDateStart}  AND #{params.sendDateEnd}  ) G
+		  GROUP BY item_no,order_unit_no_from,order_unit_no
+		  UNION ALL 
+		  SELECT 
+		  supplier_name,
+		  item_no,
+		  item_code,
+		  item_name,
+		  brand_no,
+		  brand_name,
+		  brand_unit_name,
+		  category_no,
+		  category_name,
+		  saler_no,
+		  buyer_no,
+		  zone_no_from,
+		  zone_no,
+		  organ_no_from,	
+		  organ_no,
+		  order_unit_no_from,
+		  order_unit_no,
+		  saler_name,
+		  buyer_name,
+		  zone_name_from,
+		  zone_name,
+		  organ_name_from,
+		  organ_name,
+		  order_unit_name_from,
+		  order_unit_name,
+		  0 send_qty,
+		  0 receive_qty,
+		  0 preSendCurrReQty,
+		  SUM(send_qty) - SUM(receive_qty) preSendNoReQty,
+		  0 send_amount,
+		  0 receive_amount,
+		  0 preSendCurrReAmount,
+		  SUM(send_qty*cost) - SUM(receive_qty*cost)  preSendNoReAmount
+		  FROM 
+		(
+		SELECT 
+		  supplier_name,
+		  item_no,
+		  item_code,
+		  item_name,
+		  brand_no,
+		  brand_name,
+		  brand_unit_name,
+		  C1.category_no,
+		  C1.name category_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no,saler_no) saler_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no,buyer_no) buyer_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no_from,zone_no) zone_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no,zone_no_from) zone_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from,organ_no) organ_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no,organ_no_from) organ_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_name,saler_name) saler_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_name,buyer_name) buyer_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name_from,zone_name) zone_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name,zone_name_from) zone_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name_from,organ_name) organ_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name,organ_name_from) organ_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name_from,order_unit_name) order_unit_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name,order_unit_name_from) order_unit_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*send_qty,send_qty) send_qty,
+		  0 receive_qty,
+		  cost
+		FROM
+		  bill_sale_balance 
+		  LEFT JOIN category C1 ON LEFT(bill_sale_balance.category_no, 2) = C1.category_no
+		  WHERE 1 = 1 
+		   <include refid="transfer_condtion" />
+		  AND bill_type = 1371 
+		  AND saler_no IN (${params.zoneCompanyNo})
+		  AND send_date &lt; #{params.sendDateStart} 
+		UNION ALL
+		SELECT 
+		  supplier_name,
+		  item_no,
+		  item_code,
+		  item_name,
+		  brand_no,
+		  brand_name,
+		  brand_unit_name,
+		  C1.category_no,
+		  C1.name category_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no,saler_no) saler_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no,buyer_no) buyer_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no_from,zone_no) zone_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no,zone_no_from) zone_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from,organ_no) organ_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no,organ_no_from) organ_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_name,saler_name) saler_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_name,buyer_name) buyer_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name_from,zone_name) zone_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name,zone_name_from) zone_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name_from,organ_name) organ_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name,organ_name_from) organ_name_from,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name_from,order_unit_name) order_unit_name,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name,order_unit_name_from) order_unit_name_from,
+		  0 send_qty,
+		  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty) receive_qty,
+		  cost 
+		FROM
+		  bill_buy_balance 
+		  LEFT JOIN category C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.category_no
+		  WHERE 1 = 1 
+		   <include refid="transfer_condtion" />
+		  AND bill_type = 1372 
+		  AND saler_no IN (${params.zoneCompanyNo})
+		  AND receive_date &lt; #{params.sendDateStart}  ) G
+		  GROUP BY item_no,order_unit_no_from,order_unit_no
+		  HAVING SUM(send_qty) &gt; SUM(receive_qty)
+		  ) G
+		  GROUP BY item_no,order_unit_no_from,order_unit_no
+		  ORDER BY send_qty desc,item_no,order_unit_no_from,order_unit_no
+		  LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	<select id="findReportTransferFooter" resultMap="ReportTransferMap" parameterType="map">
+		SELECT '合计' zone_name_from,
+			SUM(currSendQty)currSendQty,
+			SUM(currReQty) currReQty,
+			SUM(currDiffQty) currDiffQty,
+			SUM(preSendCurrReQty) preSendCurrReQty,
+			SUM(preSendNoReQty) preSendNoReQty,
+			SUM(preDiffQty) preDiffQty,
+			SUM(currSendAmount)currSendAmount,
+			SUM(currReAmount) currReAmount,
+			SUM(currDiffAmount) currDiffAmount,
+			SUM(preSendCurrReAmount) preSendCurrReAmount,
+			SUM(preSendNoReAmount) preSendNoReAmount,
+			SUM(preDiffAmount) preDiffAmount
+			FROM(
+			SELECT 
+			  original_bill_no,
+			  send_date,
+			  receive_date,
+			  item_no,
+			  item_code,
+			  saler_no,
+			  buyer_no,
+			  zone_no_from,
+			  zone_no,
+			  organ_no_from,	
+			  organ_no,
+			  order_unit_no_from,
+			  order_unit_no,
+			  saler_name,
+			  buyer_name,
+			  zone_name_from,
+			  zone_name,
+			  organ_name_from,
+			  organ_name,
+			  order_unit_name_from,
+			  order_unit_name,
+			  SUM(send_qty) send_qty,
+			  SUM(receive_qty) receive_qty,
+			  SUM(send_qty) currSendQty,
+			  SUM(receive_qty - preSendCurrReQty) currReQty,
+			  SUM(send_qty) - (SUM(receive_qty - preSendCurrReQty)) currDiffQty,
+			  SUM(preSendCurrReQty) preSendCurrReQty,
+			  SUM(preSendNoReQty) preSendNoReQty,
+			  SUM(preSendNoReQty) - SUM(preSendCurrReQty) preDiffQty,
+			  SUM(send_amount) send_amount,
+			  SUM(receive_amount) receive_amount,
+			  SUM(send_amount) currSendAmount,
+			  SUM(receive_amount - preSendCurrReAmount) currReAmount,
+			  SUM(send_amount) - (SUM(receive_amount - preSendCurrReAmount)) currDiffAmount,
+			  SUM(preSendCurrReAmount) preSendCurrReAmount,
+			  SUM(preSendNoReAmount) preSendNoReAmount,
+			  SUM(preSendNoReAmount) - SUM(preSendCurrReAmount) preDiffAmount  
+			  FROM (
+			SELECT 
+			  original_bill_no,
+			  send_date,
+			  receive_date,
+			  item_no,
+			  item_code,
+			  saler_no,
+			  buyer_no,
+			  zone_no_from,
+			  zone_no,
+			  organ_no_from,	
+			  organ_no,
+			  order_unit_no_from,
+			  order_unit_no,
+			  saler_name,
+			  buyer_name,
+			  zone_name_from,
+			  zone_name,
+			  organ_name_from,
+			  organ_name,
+			  order_unit_name_from,
+			  order_unit_name,
+			  SUM(send_qty) send_qty,
+			  SUM(receive_qty) receive_qty,
+			  SUM(receive_qty) - SUM(currReQty) preSendCurrReQty,
+			  0  preSendNoReQty,
+			  SUM(send_qty*cost) send_amount,
+			  SUM(receive_qty*cost) receive_amount,
+			  SUM(receive_qty*cost) - SUM(currReQty*cost) preSendCurrReAmount,
+			  0  preSendNoReAmount
+			  FROM 
+			(
+			SELECT 
+			  original_bill_no,
+			  send_date,
+			  receive_date,
+			  item_no,
+			  item_code,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no,saler_no) saler_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no,buyer_no) buyer_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no_from,zone_no) zone_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no,zone_no_from) zone_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from,organ_no) organ_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no,organ_no_from) organ_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_name,saler_name) saler_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_name,buyer_name) buyer_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name_from,zone_name) zone_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name,zone_name_from) zone_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name_from,organ_name) organ_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name,organ_name_from) organ_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name_from,order_unit_name) order_unit_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name,order_unit_name_from) order_unit_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*send_qty,send_qty) send_qty,
+			  0 currReQty,
+			  0 receive_qty,
+			  cost
+			FROM
+			  bill_sale_balance 
+			  LEFT JOIN category C1 ON LEFT(bill_sale_balance.category_no, 2) = C1.category_no
+			  WHERE 1 = 1 
+			  <include refid="transfer_condtion" />
+			  AND bill_type = 1371 
+			  AND saler_no IN (${params.zoneCompanyNo})
+			  AND send_date BETWEEN #{params.sendDateStart}  AND #{params.sendDateEnd}
+			UNION ALL
+			SELECT 
+			  original_bill_no,
+			  send_date,
+			  receive_date,
+			  item_no,
+			  item_code,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no,saler_no) saler_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no,buyer_no) buyer_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no_from,zone_no) zone_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no,zone_no_from) zone_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from,organ_no) organ_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no,organ_no_from) organ_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_name,saler_name) saler_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_name,buyer_name) buyer_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name_from,zone_name) zone_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name,zone_name_from) zone_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name_from,organ_name) organ_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name,organ_name_from) organ_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name_from,order_unit_name) order_unit_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name,order_unit_name_from) order_unit_name_from,
+			  0 send_qty,
+			  IF(send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}, IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty),0) currReQty,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty) receive_qty,
+			  cost 
+			FROM
+			  bill_buy_balance 
+			  LEFT JOIN category C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.category_no
+			  WHERE 1 = 1 
+			   <include refid="transfer_condtion" />
+			  AND bill_type = 1372 
+			  AND saler_no IN (${params.zoneCompanyNo})
+			  AND receive_date BETWEEN #{params.sendDateStart}  AND #{params.sendDateEnd}  ) G
+			  GROUP BY item_no,order_unit_no_from,order_unit_no
+			  UNION ALL 
+			  SELECT 
+			  original_bill_no,
+			  send_date,
+			  receive_date,
+			  item_no,
+			  item_code,
+			  saler_no,
+			  buyer_no,
+			  zone_no_from,
+			  zone_no,
+			  organ_no_from,	
+			  organ_no,
+			  order_unit_no_from,
+			  order_unit_no,
+			  saler_name,
+			  buyer_name,
+			  zone_name_from,
+			  zone_name,
+			  organ_name_from,
+			  organ_name,
+			  order_unit_name_from,
+			  order_unit_name,
+			  0 send_qty,
+			  0 receive_qty,
+			  0 preSendCurrReQty,
+			  SUM(send_qty) - SUM(receive_qty) preSendNoReQty,
+			  0 send_amount,
+			  0 receive_amount,
+			  0 preSendCurrReAmount,
+			  SUM(send_qty*cost) - SUM(receive_qty*cost)  preSendNoReAmount
+			  FROM 
+			(
+			SELECT 
+			  original_bill_no,
+			  send_date,
+			  receive_date,
+			  item_no,
+			  item_code,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no,saler_no) saler_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no,buyer_no) buyer_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no_from,zone_no) zone_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no,zone_no_from) zone_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from,organ_no) organ_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no,organ_no_from) organ_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_name,saler_name) saler_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_name,buyer_name) buyer_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name_from,zone_name) zone_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name,zone_name_from) zone_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name_from,organ_name) organ_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name,organ_name_from) organ_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name_from,order_unit_name) order_unit_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name,order_unit_name_from) order_unit_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*send_qty,send_qty) send_qty,
+			  0 receive_qty,
+			  cost
+			FROM
+			  bill_sale_balance 
+			  LEFT JOIN category C1 ON LEFT(bill_sale_balance.category_no, 2) = C1.category_no 
+			  WHERE 1 = 1 
+			   <include refid="transfer_condtion" />
+			  AND bill_type = 1371 
+			  AND saler_no IN (${params.zoneCompanyNo})
+			  AND send_date &lt; #{params.sendDateStart} 
+			UNION ALL
+			SELECT 
+			  original_bill_no,
+			  send_date,
+			  receive_date,
+			  item_no,
+			  item_code,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_no,saler_no) saler_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_no,buyer_no) buyer_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no_from,zone_no) zone_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_no,zone_no_from) zone_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no_from,organ_no) organ_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_no,organ_no_from) organ_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no_from,order_unit_no) order_unit_no,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_no,order_unit_no_from) order_unit_no_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,buyer_name,saler_name) saler_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,saler_name,buyer_name) buyer_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name_from,zone_name) zone_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,zone_name,zone_name_from) zone_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name_from,organ_name) organ_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,organ_name,organ_name_from) organ_name_from,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name_from,order_unit_name) order_unit_name,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,order_unit_name,order_unit_name_from) order_unit_name_from,
+			  0 send_qty,
+			  IF(LEFT(original_bill_no,1) != LEFT(saler_no,1) ,-1*receive_qty,receive_qty) receive_qty,
+			  cost 
+			FROM
+			  bill_buy_balance 
+			  LEFT JOIN category C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.category_no
+			  WHERE 1 = 1 
+			   <include refid="transfer_condtion" />
+			  AND bill_type = 1372 
+			  AND saler_no IN (${params.zoneCompanyNo})
+			  AND receive_date &lt; #{params.sendDateStart}  ) G
+			  GROUP BY item_no,order_unit_no_from,order_unit_no
+			  HAVING SUM(send_qty) &gt; SUM(receive_qty)
+			  ) G
+			  GROUP BY item_no,order_unit_no_from,order_unit_no
+		  ) T
+	</select>
+	<sql id="hq_unify_split_sql" >
+	  SELECT 
+	    gender,
+        item_no,
+        item_code,
+        item_name,
+        brand_no,
+        brand_name,
+        brand_unit_name,
+        C1.name category_name,
+        C2.name two_level_category_name,
+        years,
+        season,
+        organ_no,
+        organ_name,
+        buyer_no area_company_no,
+        buyer_name area_company_name,
+        saler_no hq_company_no,
+        saler_name hq_company_name,
+        supplier_no,
+        supplier_name,
+        supplier_name item_supplier_name,
+        SUM(send_qty) send_qty,
+        1 order_flag,
+        '统采' order_flag_name
+      FROM
+        bill_sale_balance T 
+        LEFT JOIN category C1 
+          ON LEFT(T.category_no, 2) = C1.category_no 
+        LEFT JOIN category C2 
+          ON LEFT(T.category_no, 4) = C2.category_no 
+      WHERE 1 = 1 
+          <include refid="finance_condtion" />
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND T.saler_no  IN ${params.multiHqCompanyNo}
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+        AND is_split = 1 
+        AND send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}
+        AND (
+          (bill_type = 1301 
+            AND biz_type IN (0, 1)) 
+          OR bill_type = 1333
+        ) 
+        AND saler_no IN (${params.zoneCompanyNo})
+      GROUP BY item_no,
+        saler_no,
+        buyer_no,
+        organ_no
+	</sql>
+	<sql id="unify_no_split_sql" >
+	  SELECT 
+	    gender,
+        item_no,
+        item_code,
+        item_name,
+        brand_no,
+        brand_name,
+        brand_unit_name,
+        C1.name category_name,
+        C2.name two_level_category_name,
+        years,
+        season,
+        organ_no,
+        organ_name,
+        buyer_no area_company_no,
+        IF(buyer_no ='Z0002','百丽鞋业（宿州）有限公司仓库',buyer_name) area_company_name,
+        buyer_no hq_company_no,
+        buyer_name hq_company_name,
+        supplier_no,
+        supplier_name,
+        supplier_name item_supplier_name,
+        SUM(send_qty) send_qty,
+        2 order_flag,
+        '统采' order_flag_name 
+      FROM
+        bill_buy_balance T 
+        LEFT JOIN category C1 
+          ON LEFT(T.category_no, 2) = C1.category_no 
+        LEFT JOIN category C2 
+          ON LEFT(T.category_no, 4) = C2.category_no 
+      WHERE 1 = 1 
+      	  <include refid="finance_condtion" />
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiHqCompanyNo}
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+        AND is_split IS NULL 
+        AND send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}
+        AND (
+          (bill_type = 1301 
+            AND biz_type IN (0, 1)) 
+          OR bill_type = 1333
+        ) 
+        AND buyer_no IN (${params.zoneCompanyNo})
+      GROUP BY item_no,
+        saler_no,
+        buyer_no,
+        organ_no 
+	</sql>
+	<sql id="hq_transfer_out_sql" >
+	  SELECT 
+	    gender,
+        item_no,
+        item_code,
+        item_name,
+        brand_no,
+        brand_name,
+        brand_unit_name,
+        C1.name category_name,
+        C2.name two_level_category_name,
+        years,
+        season,
+        organ_no,
+        organ_name,
+        buyer_no area_company_no,
+        buyer_name area_company_name,
+        saler_no hq_company_no,
+        saler_name hq_company_name,
+        supplier_no,
+        IF(saler_no = 'Z0002','宿州百丽仓库', supplier_name) supplier_name,
+        supplier_name item_supplier_name,
+        SUM(send_qty) send_qty,
+        IF(LEFT(original_bill_no,1) = LEFT(saler_no,1),3,4) order_flag,
+        IF(LEFT(original_bill_no,1) = LEFT(saler_no,1),'总部调给地区','地区调给总部') order_flag_name
+      FROM
+        bill_sale_balance T 
+        LEFT JOIN category C1 
+          ON LEFT(T.category_no, 2) = C1.category_no 
+        LEFT JOIN category C2 
+          ON LEFT(T.category_no, 4) = C2.category_no 
+      WHERE 1 = 1 
+          <include refid="finance_condtion" />
+          <if test="null!=params.businessType and 2==params.businessType" >
+	        AND LEFT(original_bill_no,1) = LEFT(saler_no,1)
+	      </if>
+	      <if test="null!=params.businessType and 3==params.businessType" >
+	        AND LEFT(original_bill_no,1) != LEFT(saler_no,1)
+	      </if>
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND T.saler_no  IN ${params.multiHqCompanyNo}
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+        AND send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}
+        AND bill_type = 1371 
+        AND saler_no IN (${params.zoneCompanyNo})
+      GROUP BY item_no,
+        saler_no,
+        buyer_no,
+        organ_no,
+        IF(LEFT(original_bill_no,1) = LEFT(saler_no,1),1,0) 
+	</sql>
+	<sql id="hq_instead_sql" >
+	  SELECT 
+	    gender,
+        item_no,
+        item_code,
+        item_name,
+        brand_no,
+        brand_name,
+        brand_unit_name,
+        C1.name category_name,
+        C2.name two_level_category_name,
+        years,
+        season,
+        organ_no,
+        organ_name,
+        buyer_no area_company_no,
+        buyer_name area_company_name,
+        NULL hq_company_no,
+        NULL hq_company_name,
+        supplier_no,
+        supplier_name,
+        supplier_name item_supplier_name,
+        SUM(send_qty) send_qty,
+        5 order_flag,
+        '代采' order_flag_name 
+      FROM
+        bill_buy_balance T 
+        LEFT JOIN category C1 
+          ON LEFT(T.category_no, 2) = C1.category_no 
+        LEFT JOIN category C2 
+          ON LEFT(T.category_no, 4) = C2.category_no 
+      WHERE 1 = 1 
+          <include refid="finance_condtion" />
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND  1 != 1
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+        AND send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}
+        AND (
+          (bill_type = 1301 
+            AND biz_type IN (0, 1)) 
+          OR bill_type = 1333
+        ) 
+        AND is_split IS NULL 
+        AND buyer_no NOT IN (${params.zoneCompanyNo})
+      GROUP BY item_no,
+        saler_no,
+        buyer_no,
+        organ_no 
+	</sql>
+	<sql id="finance_condtion" >
+	 	--	AND @brand_no 
+	 	  <if test="null!=params.multiSupplierGroupNo and ''!=params.multiSupplierGroupNo" >
+	        AND  EXISTS (SELECT 1 FROM supplier_group_rel rel WHERE rel.supplier_no = T.supplier_no AND rel.group_no IN ${params.multiSupplierGroupNo})
+	      </if> 
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+	      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+	        AND T.supplier_no in ${params.multiSupplierNo}
+	      </if>  
+	      <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+	        AND brand_unit_no  IN ${params.multiBrandUnitNo}
+	      </if>  
+	      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+	        AND brand_no  IN ${params.multiBrandNo}
+	      </if>    
+	      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+	        AND C1.category_no IN ${params.multiCategoryNo}
+	      </if>   
+	      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+	        AND item_code  IN ${params.multiItemCode}
+	      </if>    
+	</sql>
+	
+	<sql id="finace_count_sql">
+		SELECT 
+		  COUNT(1) 
+		FROM
+		  (SELECT 
+		    1 
+		  FROM
+		    bill_sale_balance T 
+		    LEFT JOIN category C1 
+		      ON LEFT(T.category_no, 2) = C1.category_no 
+		    LEFT JOIN category C2 
+		      ON LEFT(T.category_no, 4) = C2.category_no 
+		  WHERE 1 = 1 
+		  <choose>
+			<when test="(null==params.businessType or ''==params.businessType) or (null!=params.businessType and 1==params.businessType)">
+			    AND 1 = 1
+			</when> 
+			<otherwise>
+				AND 1 != 1
+			</otherwise> 
+		 </choose>	
+		  <include refid="finance_condtion" />
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND T.saler_no  IN ${params.multiHqCompanyNo}
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+	        AND is_split = 1 
+	        AND send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}
+	        AND (
+	          (bill_type = 1301 
+	            AND biz_type IN (0, 1)) 
+	          OR bill_type = 1333
+	        ) 
+       		 AND saler_no IN (${params.zoneCompanyNo})
+		  GROUP BY item_no,
+		    buyer_no,
+		    organ_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    1 
+		  FROM
+		    bill_buy_balance T 
+		    LEFT JOIN category C1 
+		      ON LEFT(T.category_no, 2) = C1.category_no 
+		    LEFT JOIN category C2 
+		      ON LEFT(T.category_no, 4) = C2.category_no 
+		  WHERE 1 = 1 
+		  <choose>
+			<when test="(null==params.businessType or ''==params.businessType) or (null!=params.businessType and 1==params.businessType)">
+			    AND 1 = 1
+			</when> 
+			<otherwise>
+				AND 1 != 1
+			</otherwise> 
+		 </choose>	
+      	  <include refid="finance_condtion" />
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiHqCompanyNo}
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+	        AND is_split IS NULL 
+	        AND send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}
+	        AND (
+	          (bill_type = 1301 
+	            AND biz_type IN (0, 1)) 
+	          OR bill_type = 1333
+	        ) 
+	        AND buyer_no IN (${params.zoneCompanyNo})
+		  GROUP BY item_no,
+		  buyer_no,
+		    organ_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    1 
+		  FROM
+		    bill_sale_balance T 
+		    LEFT JOIN category C1 
+		      ON LEFT(T.category_no, 2) = C1.category_no 
+		    LEFT JOIN category C2 
+		      ON LEFT(T.category_no, 4) = C2.category_no 
+		  WHERE 1 = 1 
+		  <choose>
+			<when test="(null==params.businessType or ''==params.businessType) or (null!=params.businessType and 2==params.businessType)">
+			    AND 1 = 1
+			    AND LEFT(original_bill_no,1) = LEFT(saler_no,1)
+			</when>
+			<when test="(null==params.businessType or ''==params.businessType) or (null!=params.businessType and 3==params.businessType)">
+			    AND 1 = 1
+			    AND LEFT(original_bill_no,1) != LEFT(saler_no,1)
+			</when> 
+			<otherwise>
+				AND 1 != 1
+			</otherwise> 
+		 </choose>	
+		  <include refid="finance_condtion" />
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND T.saler_no  IN ${params.multiHqCompanyNo}
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+	        AND send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}
+	        AND bill_type = 1371 
+	        AND saler_no IN (${params.zoneCompanyNo})
+		  GROUP BY item_no,
+		  buyer_no,
+		  organ_no,
+          IF(LEFT(original_bill_no,1) = LEFT(saler_no,1),1,0)  
+		  UNION
+		  ALL 
+		  SELECT 
+		    1 
+		  FROM
+		    bill_buy_balance T 
+		    LEFT JOIN category C1 
+		      ON LEFT(T.category_no, 2) = C1.category_no 
+		    LEFT JOIN category C2 
+		      ON LEFT(T.category_no, 4) = C2.category_no 
+		  WHERE 1 = 1 
+		  <choose>
+			<when test="(null==params.businessType or ''==params.businessType) or (null!=params.businessType and 4==params.businessType)">
+			    AND 1 = 1
+			</when> 
+			<otherwise>
+				AND 1 != 1
+			</otherwise> 
+		  </choose>	
+		    <include refid="finance_condtion" />
+	      <if test="null!=params.multiHqCompanyNo and ''!=params.multiHqCompanyNo" >
+	        AND  1 != 1
+	      </if>    
+	      <if test="null!=params.multiAreaCompanyNo and ''!=params.multiAreaCompanyNo" >
+	        AND T.buyer_no  IN ${params.multiAreaCompanyNo}
+	      </if>  
+        AND send_date BETWEEN #{params.sendDateStart} AND #{params.sendDateEnd}
+        AND (
+          (bill_type = 1301 
+            AND biz_type IN (0, 1)) 
+          OR bill_type = 1333
+        ) 
+        AND is_split IS NULL 
+        AND buyer_no NOT IN (${params.zoneCompanyNo})
+		  GROUP BY item_no,
+		    buyer_no,
+		    organ_no) G 
+	</sql>
+	<sql id="finace_list_sql">
+		SELECT 
+			  rcm.region_cost - pp.factory_price add_price,
+			  G.send_qty * pp.factory_price factory_amount,
+			  G.send_qty * pp.purchase_price purchase_amount,
+			  G.send_qty * G.tag_price tag_amount,
+			  G.tag_price * hcm.discount_rate discount_tag_price,
+			  G.tag_price * hcm.discount_rate * G.send_qty discount_tag_amount,
+			  ROUND(G.tag_price * hcm.discount_rate) round_tag_price,
+			  ROUND(G.tag_price * hcm.discount_rate) * G.send_qty round_tag_amount,
+			  G.tag_price * hcm.discount_rate * G.send_qty - G.send_qty * pp.factory_price difference_amount1,
+			  ROUND(G.tag_price * hcm.discount_rate) * G.send_qty - G.send_qty * pp.factory_price difference_amount2,
+			  G.send_qty * rcm.region_cost region_amount,
+			  G.send_qty * G.region_cost_from region_from_amount,
+			  pp.purchase_price,
+			  pp.factory_price,
+			  pp.material_price,
+			  hcm.headquarter_cost,
+			  hcm.add_price pp_add_price,
+			  hcm.add_discount pp_add_discount,
+			  hcm.discount_rate tag_discount_rate,
+			  rcm.region_cost region_cost,
+			  rcm.add_discount hcm_add_discount,
+			  rcm.region_cost*G.send_qty - G.region_cost_from*G.send_qty diff_amount,
+			  G.* 
+		  FROM
+		    (SELECT 
+		      T0.*,
+		      T4.group_name supplier_group_name,
+		      lookup0.name gender_name,
+		      lookup1.name years_name,
+		      lookup2.name season_name,
+		      IF(
+		        LEFT(T0.hq_company_no, 1) = 'I',
+		        (SELECT 
+		          region_cost 
+		        FROM
+		          region_cost_maintain C 
+		        WHERE 1 = 1 
+		          AND C.item_no = T0.item_no 
+		          AND IF(
+		            ISNULL(
+		              (SELECT 
+		                PRICE_ZONE 
+		              FROM
+		                financial_account F 
+		              WHERE T0.hq_company_no = F.COMPANY_NO)
+		            ),
+		            (SELECT 
+		              ZONE_NO 
+		            FROM
+		              COMPANY CO 
+		            WHERE T0.hq_company_no = CO.COMPANY_NO),
+		            (SELECT 
+		              PRICE_ZONE 
+		            FROM
+		              financial_account F 
+		            WHERE T0.hq_company_no = F.COMPANY_NO)
+		          ) = C.ZONE_NO 
+		          AND effective_time &lt;= #{params.sendDateStart}
+		        ORDER BY effective_time DESC 
+		        LIMIT 0, 1),
+		        (SELECT 
+		          region_cost 
+		        FROM
+		          region_cost_maintain C 
+		        WHERE 1 = 1 
+		          AND C.item_no = T0.item_no 
+		          AND IF(
+		            ISNULL(
+		              (SELECT 
+		                PRICE_ZONE 
+		              FROM
+		                financial_account F 
+		              WHERE T0.area_company_no = F.COMPANY_NO)
+		            ),
+		            (SELECT 
+		              ZONE_NO 
+		            FROM
+		              COMPANY CO 
+		            WHERE T0.area_company_no = CO.COMPANY_NO),
+		            (SELECT 
+		              PRICE_ZONE 
+		            FROM
+		              financial_account F 
+		            WHERE T0.area_company_no = F.COMPANY_NO)
+		          ) = C.ZONE_NO 
+		          AND effective_time &lt;= #{params.sendDateStart}
+		        ORDER BY effective_time DESC 
+		        LIMIT 0, 1)
+		      ) region_cost_from,
+		    (SELECT 
+			  pp.id 
+			FROM
+			  purchase_price PP 
+			WHERE 1 = 1 
+			  AND PP.effective_date &lt;= #{params.sendDateStart}
+			  AND PP.item_no = T0.item_no 
+			  AND PP.supplier_no = T0.supplier_no 
+			ORDER BY item_no DESC,
+			  STATUS DESC,
+			  effective_date DESC,
+			  create_time DESC 
+			LIMIT 1) pp_id,
+			(SELECT 
+			  hcm.id 
+			FROM
+			  headquarter_cost_maintain hcm 
+			WHERE 1 = 1 
+			  AND hcm.effective_time &lt;= #{params.sendDateStart}
+			  AND hcm.item_no = T0.item_no 
+			ORDER BY hcm.item_no DESC,
+			  hcm.effective_time DESC,
+			  hcm.create_time DESC 
+			LIMIT 1) hcm_id,
+			(SELECT 
+			  C.id 
+			FROM
+			  region_cost_maintain C 
+			WHERE 1 = 1 
+			  AND C.item_no = T0.item_no 
+			  AND IF(
+			    ISNULL(
+			      (SELECT 
+				PRICE_ZONE 
+			      FROM
+				financial_account F 
+			      WHERE T0.area_company_no = F.COMPANY_NO)
+			    ),
+			    (SELECT 
+			      ZONE_NO 
+			    FROM
+			      COMPANY CO 
+			    WHERE T0.area_company_no = CO.COMPANY_NO),
+			    (SELECT 
+			      PRICE_ZONE 
+			    FROM
+			      financial_account F 
+			    WHERE T0.area_company_no = F.COMPANY_NO)
+			  ) = C.ZONE_NO 
+			  AND effective_time &lt;= #{params.sendDateStart}
+			ORDER BY effective_time DESC 
+			LIMIT 1) rcm_id,
+			(SELECT 
+			  pql.tag_price 
+			FROM
+			  price_quotation_list pql 
+			WHERE pql.item_no = T0.item_no 
+			  AND pql.organ_id = '0000' 
+			  AND pql.quotation_tactics = 0 
+			LIMIT 1) tag_price 
+		       
+		    FROM
+		      (
+		      <if test="null!=params.businessType and ''!=params.businessType" >
+	        	<if test="1==params.businessType" >
+	        		 <include refid="hq_unify_split_sql" />
+		      			UNION ALL
+		      		 <include refid="unify_no_split_sql" />
+	        	</if>
+	        	<if test="2==params.businessType or 3==params.businessType" >
+	        		<include refid="hq_transfer_out_sql" />
+	        	</if>
+	        	<if test="4==params.businessType" >
+	        		<include refid="hq_instead_sql" />
+	        	</if>
+	      	</if>  
+	      	<if test="null==params.businessType or ''==params.businessType" >
+			      <include refid="hq_unify_split_sql" />
+			      UNION ALL
+			      <include refid="unify_no_split_sql" />
+			      UNION ALL
+			      <include refid="hq_transfer_out_sql" />
+			      UNION ALL
+			      <include refid="hq_instead_sql" />
+		    </if>  
+		      LIMIT #{page.startRowNum} ,#{page.pageSize}
+		      ) T0 
+      LEFT JOIN supplier_group_rel T3 
+        ON T0.supplier_no = T3.supplier_no 
+      LEFT JOIN supplier_group T4 
+        ON T3.group_no = T4.group_no 
+      LEFT JOIN lookup_entry lookup0 
+        ON lookup0.`code` = T0.`gender`  
+        AND lookup0.`lookup_id` = '7'    
+      LEFT JOIN lookup_entry lookup1 
+        ON lookup1.`code` = T0.`years` 
+        AND lookup1.`lookup_id` = '5' 
+      LEFT JOIN lookup_entry lookup2 
+        ON lookup2.`code` = T0.`season` 
+        AND lookup2.`lookup_id` = '72') G
+      LEFT JOIN purchase_price pp
+    	ON pp.id = G.pp_id
+      LEFT JOIN headquarter_cost_maintain hcm
+    	ON hcm.id = G.hcm_id
+      LEFT JOIN region_cost_maintain rcm
+    	ON rcm.id = G.rcm_id
+	</sql>
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.FinancialAccountApiMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.FinancialAccount" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="group_lead_role" property="groupLeadRole" jdbcType="TINYINT" />
+    <result column="nc_id" property="ncId" jdbcType="CHAR" />
+    <result column="parent_company" property="parentCompany" jdbcType="CHAR" />
+    <result column="child_company" property="childCompany" jdbcType="TINYINT" />
+    <result column="revenue_journal_type" property="revenueJournalType" jdbcType="CHAR" />
+    <result column="cost_journal_type" property="costJournalType" jdbcType="CHAR" />
+    <result column="liabilities_journal_type" property="liabilitiesJournalType" jdbcType="CHAR" />
+    <result column="internal_journal_type" property="internalJournalType" jdbcType="CHAR" />
+    <result column="assist_project_01" property="assistProject01" jdbcType="CHAR" />
+    <result column="assist_project_02" property="assistProject02" jdbcType="CHAR" />
+    <result column="assist_project_03" property="assistProject03" jdbcType="CHAR" />
+    <result column="assist_project_04" property="assistProject04" jdbcType="CHAR" />
+    <result column="assist_project_05" property="assistProject05" jdbcType="CHAR" />
+    <result column="assist_project_06" property="assistProject06" jdbcType="CHAR" />
+    <result column="assist_project_07" property="assistProject07" jdbcType="CHAR" />
+    <result column="assist_project_08" property="assistProject08" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    
+    <result column="price_zone" property="priceZone" jdbcType="CHAR" />
+  </resultMap>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+      	 and company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+       	 and status = #{params.status}
+      </if>
+      <if test="null!=params.groupLeadRole and ''!=params.groupLeadRole" >
+       	 and group_lead_role = #{params.groupLeadRole}
+      </if>
+    </if>
+  </sql>
+  
+  <sql id="Base_Column_List" >
+    id, company_no, group_lead_role, nc_id, parent_company, child_company, revenue_journal_type, 
+    cost_journal_type, liabilities_journal_type, internal_journal_type, assist_project_01, 
+    assist_project_02, assist_project_03, assist_project_04, assist_project_05, assist_project_06, 
+    assist_project_07, assist_project_08, status, create_user, create_time, update_user, 
+    update_time, remark, price_zone
+  </sql>
+  
+  <select id="findByCompanyNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM financial_account
+    WHERE company_no = #{companyNo,jdbcType=CHAR}
+    	AND parent_company IS NOT NULL
+  </select>
+  
+  <!-- 查询承担总部职能的公司 -->
+  <select id="selectLeadRoleCompanyNos" resultType="java.lang.String">
+		SELECT
+		CONCAT("'",GROUP_CONCAT(company_no SEPARATOR "','"),"'")
+		FROM
+		financial_account
+		WHERE financial_account.`group_lead_role` = '1'
+		AND financial_account.`status`='1'
+  </select>
+	
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM financial_account WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+	
+</mapper>

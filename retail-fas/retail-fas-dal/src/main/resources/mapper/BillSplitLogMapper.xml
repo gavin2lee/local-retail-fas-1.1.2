@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillSplitLogMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSplitLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="send_out_date" property="sendOutDate" jdbcType="DATE" />
+    <result column="status" property="processStatus" jdbcType="TINYINT" />
+    <result column="split_time" property="splitTime" jdbcType="TIMESTAMP" />
+    <result column="failure_reason" property="failureReason" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ref_bill_no, bill_type, send_out_date, status, split_time, failure_reason, brand_no
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.startDate and ''!=params.startDate">
+      	 and send_out_date &gt;= #{params.startDate}
+      </if>
+       <if test="null!=params.endDate and ''!=params.endDate">
+      	 and send_out_date &lt;= #{params.endDate}
+      </if>
+      <if test="null!=params.billType and ''!=params.billType">
+      	 and bill_type = #{params.billType}
+      </if>
+      <if test="null!=params.processStatus and ''!=params.processStatus">
+      	 and status = #{params.processStatus}
+      </if>
+      <if test="null!=params.refBillNo and ''!=params.refBillNo">
+      	 and ref_bill_no = #{params.refBillNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo">
+      	 and brand_no = #{params.brandNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_split_log
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_split_log WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_split_log WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField" >
+      ORDER BY split_time DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_split_log WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_split_log
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitLog" >
+    DELETE FROM bill_split_log
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitLog" >
+    INSERT INTO bill_split_log (id, ref_bill_no, bill_type, 
+      status, split_time, failure_reason, brand_no
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{refBillNo,jdbcType=CHAR}, #{billType,jdbcType=INTEGER}, 
+      #{processStatus,jdbcType=TINYINT}, #{splitTime,jdbcType=TIMESTAMP}, #{failureReason,jdbcType=VARCHAR},
+      #{brandNo,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitLog" >
+    INSERT INTO bill_split_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="sendOutDate != null" >
+        send_out_date,
+      </if>
+      <if test="processStatus != null" >
+        status,
+      </if>
+      <if test="splitTime != null" >
+        split_time,
+      </if>
+      <if test="failureReason != null" >
+        failure_reason,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="refBillNo != null" >
+        #{refBillNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="sendOutDate != null" >
+        #{sendOutDate,jdbcType=DATE},
+      </if>
+      <if test="processStatus != null" >
+        #{processStatus,jdbcType=TINYINT},
+      </if>
+      <if test="splitTime != null" >
+        #{splitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failureReason != null" >
+        #{failureReason,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitLog" >
+    UPDATE bill_split_log
+    <set >
+      <if test="refBillNo != null" >
+        ref_bill_no = #{refBillNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="sendOutDate != null" >
+        send_out_date = #{sendOutDate,jdbcType=DATE},
+      </if>
+      <if test="processStatus != null" >
+        status = #{processStatus,jdbcType=TINYINT},
+      </if>
+      <if test="splitTime != null" >
+        split_time = #{splitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failureReason != null" >
+        failure_reason = #{failureReason,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillSplitLog" >
+    UPDATE bill_split_log
+    SET ref_bill_no = #{refBillNo,jdbcType=CHAR},
+      bill_type = #{billType,jdbcType=INTEGER},
+      send_out_date = #{sendOutDate,jdbcType=DATE},
+      status = #{processStatus,jdbcType=TINYINT},
+      split_time = #{splitTime,jdbcType=TIMESTAMP},
+      failure_reason = #{failureReason,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

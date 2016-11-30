@@ -1,0 +1,130 @@
+*
+ * Fas Home
+ * Author: wu.h1
+ * Date: 2015/7/3
+ */
+
+/* global */
+.finance-row { }
+.finance-row:before,.finance-row:after { display: table; content: " "; }
+.finance-column { float:left; width:49.999%; padding: 0 0 0 10px; box-sizing:border-box; }
+.finance-column:last-child { padding-right: 10px; }
+.finance-column .panel { margin-top: 10px; }
+.text-ellipsis { overflow: hidden; text-overflow:ellipsis; white-space: nowrap; }
+
+/* fas functions */
+.fas-funcs { position: relative; padding: 0 10px; box-sizing:border-box; }
+.fas-func-item { float: left; position: relative; width: 30.333%; height: 60px; margin: 20px 3% 0 0; overflow: hidden; }
+.fas-func-item .func-icon { float: left; width: 60px; height: 60px; background-image: url(../images/fas-icons.jpg); background-repeat: no-repeat; }
+.fas-func-item .func-account { background-position: 0; }
+.fas-func-item .func-table { background-position: -60px 0; }
+.fas-func-item .func-table-2 { background-position: -120px 0; }
+.fas-func-item .func-region-account { background-position: -180px 0; }
+.fas-func-item .func-invoice { background-position: -240px 0; }
+.fas-func-item .func-invoice-2 { background-position: -300px 0; }
+.fas-func-item .func-text { padding: 8px 0 0 5px; }
+.fas-func-item .c9 { font-size: 12px; }
+.func-item-delete { position: absolute; left: 0; top: -100px; z-index: 3; width: 100%; height: 100%; background-color: #000; background-color: rgba(0,0,0,.3); transition: top .2s ease-in-out; cursor: pointer; }
+.fas-func-item.active .func-item-delete { top: 0; }
+.fas-func-item.active .func-item-delete:after { content: " "; position: absolute; top: 50%; left: 50%; z-index: 3; width: 30px; height: 30px; margin: -15px 0 0 -15px; background: url(../images/fas-home-icon.png) -100px 0 no-repeat; }
+
+/* functions buttons */
+.finance-column:first-child > .panel:first-child { overflow: visible; }
+.finance-column .funcs-panel.panel-body { overflow: visible; }
+.func-buttons { position: absolute; top:-27px; right: 0; z-index: 5; height: 22px; text-align: right; }
+.func-buttons .func-btn { display: inline-block; margin: 0 10px 0 0; padding: 0 3px; vertical-align: middle; border: 1px solid transparent; cursor: pointer; }
+.func-buttons .func-icon, .func-buttons .func-btn-text { display: inline-block; vertical-align: middle; }
+.func-buttons .func-icon { width: 20px; height: 20px; background-image: url(../images/fas-home-icon.png); background-repeat: no-repeat; }
+.func-buttons .func-btn.active, .func-buttons .func-btn:hover { border-color: #ddd; background-color: #fff; }
+.func-add .func-icon { background-position: -20px 0; }
+.func-ok .func-icon { background-position: -40px 0; }
+
+.func-add { position: relative; }
+.fas-func-add { display: none; position: absolute; right: 0; top: 28px; z-index: 5; width: 180px; padding-bottom: 20px; border: 1px solid #ddd; background-color: #fff; box-shadow: 0 2px 9px #ccc; text-align: left; }
+.func-add:hover .fas-func-add { display: block; }
+.fas-func-add:before, .fas-func-add:after { position: absolute; right: 8px; content: " "; width: 0; height: 0; border: 6px solid transparent; }
+.fas-func-add:before { top:-13px; z-index: 6; border-bottom-color: #ccc; }
+.fas-func-add:after { top:-12px; z-index: 7; border-bottom-color: #fff; }
+.fas-func-add .fas-func-status { padding:6px 5px; }
+.fas-func-add .fas-func-item { float: none; width: auto; margin: 0; height: 40px; padding: 10px 0; }
+.fas-func-add .fas-func-item:nth-child(even) { background-color: #f3f3f3; }
+.fas-func-add .fas-func-item:hover { background-color: #f9f9f9; }
+.fas-func-add .fas-func-item.selected { background-color: #FFF6E6; }
+.fas-func-add .fas-func-item.selected .func-icon { background-position: -60px -40px; }
+.fas-func-add .func-icon { width: 40px; height: 40px; margin: 0 10px; background-position: -60px 0; }
+.fas-func-add .func-text { padding: 0; }
+
+/* fas events */
+.fas-event-item { margin: 15px 0 0; }
+.fas-event-item .event-index { position: relative; width: 37px; height: 30px; margin: 0 15px 0 25px; line-height: 30px; font-size: 26px; overflow: hidden; }
+.fas-event-item .event-index:before, 
+.fas-event-item .event-index:after { position: absolute; right: -40px; bottom: -15px; z-index: 2; content: " "; width: 0; height: 0; border: 40px solid transparent; border-bottom-color: #ccc; -webkit-transform: rotate(-10deg); transform: rotate(-10deg); }
+.fas-event-item .event-index:after { right: -41px; bottom: -17px; z-index: 3; border-width: 41px; border-bottom-color: #fff; }
+.fas-event-item > * { display: inline-block; vertical-align: middle; font-size: 13px; }
+
+.fas-event-item .event-title { width: 55%; }
+.fas-event-item .event-description { width: 30%; }
+
+.fas-tasks { padding: 0 0 10px; overflow: auto; }
+
+.fas-warnings .fas-event-item { float: left; width: 49.999%; margin-top: 20px; }
+.fas-warnings .fas-event-item .event-index { float: left; margin-top: 3px; }
+.fas-warnings .fas-event-item .event-content { width: 66%; }
+.fas-warnings .fas-event-item h4 { font-size: 13px; }
+
+/* fas memos */
+.fas-memo {height:100%; overflow:auto; margin:0; }
+.fas-memo-item {float: left; width: 170px; height: 85px; margin: 10px 0 0 10px; padding: 15px 15px 0 15px; background: url(../images/fas-memo-bg.png) no-repeat; box-sizing: border-box; }
+.fas-memo-item .memo-add { width: 60px; height: 60px; margin-left: 40px; background: url(../images/fas-home-icon.png) 0 -20px no-repeat; cursor: pointer; }
+
+
+.excel-import{
+    width:500px;
+    height:360px;
+    padding:10px
+}
+
+.excel-export{
+    padding:10px
+}
+
+.excel-output{
+    height:150px;
+    overflow:auto;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border: 1px solid #cccccc;
+}
+
+.excel-import .timer,.excel-export .timer{
+    margin-right: 5px;
+    margin-left: 0px;
+}
+
+.excel-output .error{
+    color:red;
+}
+
+
+.excel-output .info{
+    color:green;
+    margin-left:10px;
+}
+
+.excel-import .label{
+    padding-left: 10px;
+    padding-top: 10px;
+}
+.excel-import .progress{
+    padding-left: 10px;
+    padding-right: 10px;
+    display: block;
+}
+.excel-buttons{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: right;
+    padding-right: 5px
+}

@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.InvoiceRuleSetMapper">
+	<resultMap id="BaseResultMap"
+		type="cn.wonhigh.retail.fas.common.model.InvoiceRuleSet">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="invoice_rule_no" property="invoiceRuleNo"
+			jdbcType="CHAR" />
+		<result column="company_no" property="companyNo" jdbcType="CHAR" />
+		<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+		<result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+		<result column="bsgroups_name" property="bsgroupsName"
+			jdbcType="CHAR" />
+		<result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+		<result column="mall_no" property="mallNo" jdbcType="CHAR" />
+		<result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+		<result column="invoice_name" property="invoiceName" jdbcType="VARCHAR" />
+		<result column="tax_registry_no" property="taxRegistryNo"
+			jdbcType="VARCHAR" />
+		<result column="buyer_address" property="buyerAddress"
+			jdbcType="VARCHAR" />
+		<result column="buyer_tel" property="buyerTel" jdbcType="VARCHAR" />
+		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+		<result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+		<result column="bank_account_name" property="bankAccountName"
+			jdbcType="VARCHAR" />
+		<result column="mailing_address" property="mailingAddress"
+			jdbcType="VARCHAR" />
+		<result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="billing_method" property="billingMethod"
+			jdbcType="VARCHAR" />
+		<result column="shop_group_no" property="shopGroupNo" jdbcType="VARCHAR" />
+		<result column="invoice_temp_no" property="invoiceTempNo"
+			jdbcType="CHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		
+		<result column="shop_group_name" property="shopGroupName" jdbcType="VARCHAR" />
+		<result column="invoice_temp_name" property="invoiceTempName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, invoice_rule_no, company_no, company_name, bsgroups_no,
+		bsgroups_name, zone_no,
+		mall_no, mall_name, invoice_name, tax_registry_no, buyer_address, buyer_tel,
+		bank_name,
+		bank_account, bank_account_name, mailing_address, contact_name, tel,
+		billing_method,
+		shop_group_no, invoice_temp_no, status, create_user, create_time, update_user,
+		update_time,remark,
+		(select shop_group_name from shop_group WHERE invoice_rule_set.shop_group_no = shop_group.shop_group_no) shop_group_name,
+		(select name from invoice_template_set WHERE invoice_rule_set.invoice_temp_no = invoice_template_set.invoice_temp_no) invoice_temp_name
+	</sql>
+	<sql id="condition">
+		-- AND @company_no
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.companyNo and ''!=params.companyNo">
+				AND company_no = #{params.companyNo}
+			</if>
+			<if test="null!=params.mallNo and ''!=params.mallNo">
+				AND mall_no = #{params.mallNo}
+			</if>
+			<if test="null!=params.createUser and ''!=params.createUser">
+				AND create_user = #{params.createUser}
+			</if>
+			
+			<if test="null!=params.status and ''!=params.status">
+				AND status = #{params.status}
+			</if>
+			<if test="null!=params.billingMethod and ''!=params.billingMethod">
+				AND billing_method = #{params.billingMethod}
+			</if>
+			<if test="null!=params.shopGroupNo and ''!=params.shopGroupNo">
+				AND shop_group_no = #{params.shopGroupNo}
+			</if>
+			<if test="null!=params.idAlial and ''!=params.idAlial">
+				AND id &lt;&gt; #{params.idAlial}
+			</if>
+		</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM invoice_rule_set
+		WHERE id = #{id,jdbcType=INTEGER}
+		or invoice_rule_no =
+		#{invoiceRuleNo,jdbcType=CHAR}
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) as s FROM invoice_rule_set WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<select id="selectByPage" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM invoice_rule_set WHERE 1=1
+		<include refid="condition" />
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	<select id="selectByParams" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM invoice_rule_set WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<select id="selectInvoiceRuleMaxBillNo" resultType="java.lang.String"
+		parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleSet">
+		SELECT ifNULL(MAX(invoice_rule_no),'00') FROM
+		invoice_rule_set where 1
+		= 1 AND invoice_rule_no like
+		'%${invoiceRuleNo}%'
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		DELETE FROM invoice_rule_set
+		WHERE id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleSet">
+		DELETE FROM invoice_rule_set
+		WHERE id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleSet">
+		INSERT INTO invoice_rule_set (id, invoice_rule_no, company_no,
+		company_name, bsgroups_no, bsgroups_name,
+		zone_no, mall_no, mall_name,
+		invoice_name, tax_registry_no, buyer_address,
+		buyer_tel, bank_name, bank_account,
+		bank_account_name, mailing_address, contact_name,
+		tel, billing_method, shop_group_no,
+		invoice_temp_no, status, create_user,
+		create_time, update_user, update_time,
+		remark)
+		VALUES (#{id,jdbcType=INTEGER}, #{invoiceRuleNo,jdbcType=CHAR},
+		#{companyNo,jdbcType=CHAR},
+		#{companyName,jdbcType=VARCHAR}, #{bsgroupsNo,jdbcType=CHAR}, #{bsgroupsName,jdbcType=CHAR},
+		#{zoneNo,jdbcType=CHAR}, #{mallNo,jdbcType=CHAR},
+		#{mallName,jdbcType=VARCHAR},
+		#{invoiceName,jdbcType=VARCHAR}, #{taxRegistryNo,jdbcType=VARCHAR}, #{buyerAddress,jdbcType=VARCHAR},
+		#{buyerTel,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR},
+		#{bankAccount,jdbcType=VARCHAR},
+		#{bankAccountName,jdbcType=VARCHAR}, #{mailingAddress,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR},
+		#{tel,jdbcType=VARCHAR}, #{billingMethod,jdbcType=VARCHAR},
+		#{shopGroupNo,jdbcType=VARCHAR},
+		#{invoiceTempNo,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleSet">
+		INSERT INTO invoice_rule_set
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="invoiceRuleNo != null">
+				invoice_rule_no,
+			</if>
+			<if test="companyNo != null">
+				company_no,
+			</if>
+			<if test="companyName != null">
+				company_name,
+			</if>
+			<if test="bsgroupsNo != null">
+				bsgroups_no,
+			</if>
+			<if test="bsgroupsName != null">
+				bsgroups_name,
+			</if>
+			<if test="zoneNo != null">
+				zone_no,
+			</if>
+			<if test="mallNo != null">
+				mall_no,
+			</if>
+			<if test="mallName != null">
+				mall_name,
+			</if>
+			<if test="invoiceName != null">
+				invoice_name,
+			</if>
+			<if test="taxRegistryNo != null">
+				tax_registry_no,
+			</if>
+			<if test="buyerAddress != null">
+				buyer_address,
+			</if>
+			<if test="buyerTel != null">
+				buyer_tel,
+			</if>
+			<if test="bankName != null">
+				bank_name,
+			</if>
+			<if test="bankAccount != null">
+				bank_account,
+			</if>
+			<if test="bankAccountName != null">
+				bank_account_name,
+			</if>
+			<if test="mailingAddress != null">
+				mailing_address,
+			</if>
+			<if test="contactName != null">
+				contact_name,
+			</if>
+			<if test="tel != null">
+				tel,
+			</if>
+			<if test="billingMethod != null">
+				billing_method,
+			</if>
+			<if test="shopGroupNo != null">
+				shop_group_no,
+			</if>
+			<if test="invoiceTempNo != null">
+				invoice_temp_no,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateUser != null">
+				update_user,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceRuleNo != null">
+				#{invoiceRuleNo,jdbcType=CHAR},
+			</if>
+			<if test="companyNo != null">
+				#{companyNo,jdbcType=CHAR},
+			</if>
+			<if test="companyName != null">
+				#{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="bsgroupsNo != null">
+				#{bsgroupsNo,jdbcType=CHAR},
+			</if>
+			<if test="bsgroupsName != null">
+				#{bsgroupsName,jdbcType=CHAR},
+			</if>
+			<if test="zoneNo != null">
+				#{zoneNo,jdbcType=CHAR},
+			</if>
+			<if test="mallNo != null">
+				#{mallNo,jdbcType=CHAR},
+			</if>
+			<if test="mallName != null">
+				#{mallName,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceName != null">
+				#{invoiceName,jdbcType=VARCHAR},
+			</if>
+			<if test="taxRegistryNo != null">
+				#{taxRegistryNo,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerAddress != null">
+				#{buyerAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerTel != null">
+				#{buyerTel,jdbcType=VARCHAR},
+			</if>
+			<if test="bankName != null">
+				#{bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccount != null">
+				#{bankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccountName != null">
+				#{bankAccountName,jdbcType=VARCHAR},
+			</if>
+			<if test="mailingAddress != null">
+				#{mailingAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="contactName != null">
+				#{contactName,jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null">
+				#{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="billingMethod != null">
+				#{billingMethod,jdbcType=VARCHAR},
+			</if>
+			<if test="shopGroupNo != null">
+				#{shopGroupNo,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceTempNo != null">
+				#{invoiceTempNo,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleSet">
+		UPDATE invoice_rule_set
+		<set>
+			<if test="invoiceRuleNo != null">
+				invoice_rule_no = #{invoiceRuleNo,jdbcType=CHAR},
+			</if>
+			<if test="companyNo != null">
+				company_no = #{companyNo,jdbcType=CHAR},
+			</if>
+			<if test="companyName != null">
+				company_name = #{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="bsgroupsNo != null">
+				bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+			</if>
+			<if test="bsgroupsName != null">
+				bsgroups_name = #{bsgroupsName,jdbcType=CHAR},
+			</if>
+			<if test="zoneNo != null">
+				zone_no = #{zoneNo,jdbcType=CHAR},
+			</if>
+			<if test="mallNo != null">
+				mall_no = #{mallNo,jdbcType=CHAR},
+			</if>
+			<if test="mallName != null">
+				mall_name = #{mallName,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceName != null">
+				invoice_name = #{invoiceName,jdbcType=VARCHAR},
+			</if>
+			<if test="taxRegistryNo != null">
+				tax_registry_no = #{taxRegistryNo,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerAddress != null">
+				buyer_address = #{buyerAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerTel != null">
+				buyer_tel = #{buyerTel,jdbcType=VARCHAR},
+			</if>
+			<if test="bankName != null">
+				bank_name = #{bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccount != null">
+				bank_account = #{bankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccountName != null">
+				bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+			</if>
+			<if test="mailingAddress != null">
+				mailing_address = #{mailingAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="contactName != null">
+				contact_name = #{contactName,jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null">
+				tel = #{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="billingMethod != null">
+				billing_method = #{billingMethod,jdbcType=VARCHAR},
+			</if>
+			<if test="shopGroupNo != null">
+				shop_group_no = #{shopGroupNo,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceTempNo != null">
+				invoice_temp_no = #{invoiceTempNo,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateUser != null">
+				update_user = #{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceRuleSet">
+		UPDATE invoice_rule_set
+		SET invoice_rule_no = #{invoiceRuleNo,jdbcType=CHAR},
+		company_no = #{companyNo,jdbcType=CHAR},
+		company_name = #{companyName,jdbcType=VARCHAR},
+		bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+		bsgroups_name = #{bsgroupsName,jdbcType=CHAR},
+		zone_no = #{zoneNo,jdbcType=CHAR},
+		mall_no = #{mallNo,jdbcType=CHAR},
+		mall_name = #{mallName,jdbcType=VARCHAR},
+		invoice_name = #{invoiceName,jdbcType=VARCHAR},
+		tax_registry_no = #{taxRegistryNo,jdbcType=VARCHAR},
+		buyer_address = #{buyerAddress,jdbcType=VARCHAR},
+		buyer_tel = #{buyerTel,jdbcType=VARCHAR},
+		bank_name = #{bankName,jdbcType=VARCHAR},
+		bank_account = #{bankAccount,jdbcType=VARCHAR},
+		bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+		mailing_address = #{mailingAddress,jdbcType=VARCHAR},
+		contact_name = #{contactName,jdbcType=VARCHAR},
+		tel = #{tel,jdbcType=VARCHAR},
+		billing_method = #{billingMethod,jdbcType=VARCHAR},
+		shop_group_no = #{shopGroupNo,jdbcType=VARCHAR},
+		invoice_temp_no = #{invoiceTempNo,jdbcType=CHAR},
+		status = #{status,jdbcType=TINYINT},
+		create_user = #{createUser,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_user = #{updateUser,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		remark = #{remark,jdbcType=VARCHAR}
+		WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CreditCardTransactionDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CreditCardTransactionDtl" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="seq_no" property="seqNo" jdbcType="CHAR" />
+    <result column="terminal_number" property="terminalNumber" jdbcType="CHAR" />
+    <result column="card_number" property="cardNumber" jdbcType="CHAR" />
+    <result column="deal_time" property="dealTime" jdbcType="TIMESTAMP" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="actual_income_amount" property="actualIncomeAmount" jdbcType="DECIMAL"/>
+    <result column="given_bank" property="givenBank" jdbcType="VARCHAR" />
+    <result column="reality_deal_time" property="realityDealTime" jdbcType="TIMESTAMP" />
+    <result column="rebate_amount" property="rebateAmount" jdbcType="DECIMAL" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap type="cn.wonhigh.retail.fas.common.dto.CreditCardCensusDto" id="BaseCreditCardCensus">
+  	<result column="terminal_number" property="terminalNumber" jdbcType="VARCHAR"/>
+  	<result column="card_number" property="cardNumber" jdbcType="VARCHAR"/>
+  	<result column="times" property="times" jdbcType="VARCHAR"/>
+  	<result column="company_name" property="companyName" jdbcType="VARCHAR"/>
+  	<result column="totalAmount" property="totalAmount" jdbcType="DECIMAL"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, seq_no, terminal_number, card_number, deal_time, amount, actual_income_amount, given_bank, reality_deal_time, 
+    rebate_amount, auditor, audit_time, create_user, create_time, update_user, update_time, 
+    remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+       <if test="null!=params.createTimeStart and ''!=params.createTimeStart">
+       	   and DATE_FORMAT(deal_time,'%Y-%m-%d') &gt;= #{params.createTimeStart}
+      </if>
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd">
+       	   and DATE_FORMAT(deal_time,'%Y-%m-%d') &lt;= #{params.createTimeEnd}
+      </if>
+      <if test="null!=params.givenBank and ''!=params.givenBank">
+      	 and given_bank = #{params.givenBank}
+      </if>
+      <if test="null!=params.cardNumber and ''!=params.cardNumber">
+      	and card_number like '%${params.cardNumber}%'
+      </if>
+      <if test="null!=params.seqNo and ''!=params.seqNo">
+      	and seq_no = #{params.seqNo}
+      </if>
+      <if test="null!=params.terminalNumber and ''!=params.terminalNumber">
+      	and terminal_number like '%${params.terminalNumber}%'
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM credit_card_transaction_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+     SELECT  COUNT(1) AS s  FROM  credit_card_transaction_dtl C 
+         WHERE 1=1
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    c.id,c.seq_no,c.terminal_number,c.card_number,c.deal_time,c.amount,c.actual_income_amount,c.given_bank,c.reality_deal_time,
+    	c.rebate_amount,c.auditor,c.audit_time,c.create_user,c.create_time,c.update_user,c.update_time,c.remark 
+     FROM credit_card_transaction_dtl c  WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or  ''==orderByField " >
+      ORDER BY create_time DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM credit_card_transaction_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="getCreditCardCensusList" resultMap="BaseCreditCardCensus" parameterType="map">
+	SELECT terminal_number,card_number,SUM(c.amount) totalAmount,COUNT(c.card_number) times FROM credit_card_transaction_dtl c WHERE terminal_number IN (
+		SELECT terminal_number FROM self_shop_bank_info s WHERE 1=1 
+		<if test="shopNoList != null and '' != shopNoList">
+			AND shop_no IN
+			<foreach collection="shopNoList" item="shopNo" open="(" close=")" separator=",">
+				#{shopNo, jdbcType=VARCHAR}
+			</foreach> 
+		</if>
+	)
+	<if test="startDealTime != null and '' != startDealTime">
+		AND deal_time &gt;= #{startDealTime}
+	</if> 
+	<if test="endDealTime != null and '' != endDealTime">
+	 	AND deal_time &lt;= #{endDealTime} 
+	</if> 
+	GROUP BY terminal_number , card_number limit #{startRows},#{endRows}
+  </select>
+  
+  <select id="getCreditCardCensusCount" resultType="java.lang.Integer" parameterType="map">
+   select count(1) from (
+	SELECT count(1) FROM credit_card_transaction_dtl c WHERE terminal_number IN (
+		SELECT terminal_number FROM self_shop_bank_info s WHERE 1=1 
+		<if test="shopNoList != null and '' != shopNoList">
+			AND shop_no IN
+			<foreach collection="shopNoList" item="shopNo" open="(" close=")" separator=",">
+				#{shopNo, jdbcType=VARCHAR}			
+			</foreach> 
+		</if>
+	)
+	<if test="startDealTime != null and '' != startDealTime">
+		AND deal_time &gt;= #{startDealTime}
+	</if> 
+	<if test="endDealTime != null and '' != endDealTime">
+	 	AND deal_time &lt;= #{endDealTime} 
+	</if> 
+	GROUP BY terminal_number , card_number
+	) base_result
+  </select>
+  
+  <select id="getSumRebateAmount" resultType="java.math.BigDecimal" parameterType="map" >
+  	select sum(rebate_amount) rebateAmount from credit_card_transaction_dtl where 1=1
+  	<if test="saleMonth != null and ''!=saleMonth">
+		AND DATE_FORMAT(deal_time,'%Y-%m') = DATE_FORMAT(#{saleMonth},'%Y-%m')
+  	</if>
+  	<if test="terminalNo != null and ''!= terminalNo">
+  		AND terminal_number = #{terminalNo}
+  	</if>
+  </select>
+  
+  <select id="findReturnInfo" resultMap="BaseResultMap" parameterType="map">
+  	SELECT
+		SUM(dtl.actual_income_amount) actual_income_amount,dtl.reality_deal_time,dtl.card_number,dtl.deal_time
+	FROM
+		credit_card_transaction_dtl dtl
+	WHERE
+		1 = 1
+	<if test="null!=params" >
+     <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+       ${params.queryCondition}
+     </if>
+	 <if test="null!=params.cardNumberList and ''!=params.cardNumberList" >
+     	and dtl.card_number in ${params.cardNumberList} 
+  	 </if>
+  	 <if test="null!=params.startDealTime and ''!=params.startDealTime">
+		and dtl.deal_time &gt;= '${params.startDealTime} 00:00:00'
+	  </if>
+	  <if test="null!=params.endDealTime and ''!=params.endDealTime">
+		and dtl.deal_time &lt;= '${params.endDealTime} 23:59:59'
+	  </if>
+	  <if test="null!=params.amount and ''!=params.amount">
+		and dtl.amount &lt;= '${params.amount} 23:59:59'
+	  </if>
+  	</if>
+  	GROUP BY dtl.card_number,dtl.deal_time
+	LIMIT 0,1
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM credit_card_transaction_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.CreditCardTransactionDtl" >
+    DELETE FROM credit_card_transaction_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.CreditCardTransactionDtl" >
+    INSERT INTO credit_card_transaction_dtl (id, seq_no, terminal_number, 
+      card_number, deal_time, amount, actual_income_amount, 
+      given_bank, reality_deal_time, rebate_amount, 
+      auditor, audit_time, create_user, 
+      create_time, update_user, update_time, 
+      remark)
+    VALUES (#{id,jdbcType=CHAR}, #{seqNo,jdbcType=CHAR}, #{terminalNumber,jdbcType=CHAR}, 
+      #{cardNumber,jdbcType=CHAR}, #{dealTime,jdbcType=TIMESTAMP}, #{amount,jdbcType=DECIMAL}, #{actualIncomeAmount,jdbcType=DECIMAL},
+      #{givenBank,jdbcType=VARCHAR}, #{realityDealTime,jdbcType=TIMESTAMP}, #{rebateAmount,jdbcType=DECIMAL}, 
+      #{auditor,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.CreditCardTransactionDtl" >
+    INSERT INTO credit_card_transaction_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="seqNo != null" >
+        seq_no,
+      </if>
+      <if test="terminalNumber != null" >
+        terminal_number,
+      </if>
+      <if test="cardNumber != null" >
+        card_number,
+      </if>
+      <if test="dealTime != null" >
+        deal_time,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="actualIncomeAmount != null" >
+        actual_income_amount,
+      </if>
+      <if test="givenBank != null" >
+        given_bank,
+      </if>
+      <if test="realityDealTime != null" >
+        reality_deal_time,
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="seqNo != null" >
+        #{seqNo,jdbcType=CHAR},
+      </if>
+      <if test="terminalNumber != null" >
+        #{terminalNumber,jdbcType=CHAR},
+      </if>
+      <if test="cardNumber != null" >
+        #{cardNumber,jdbcType=CHAR},
+      </if>
+      <if test="dealTime != null" >
+        #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualIncomeAmount != null" >
+        #{actualIncomeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="givenBank != null" >
+        #{givenBank,jdbcType=VARCHAR},
+      </if>
+      <if test="realityDealTime != null" >
+        #{realityDealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rebateAmount != null" >
+        #{rebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.CreditCardTransactionDtl" >
+    UPDATE credit_card_transaction_dtl
+    <set >
+      <if test="seqNo != null" >
+        seq_no = #{seqNo,jdbcType=CHAR},
+      </if>
+      <if test="terminalNumber != null" >
+        terminal_number = #{terminalNumber,jdbcType=CHAR},
+      </if>
+      <if test="cardNumber != null" >
+        card_number = #{cardNumber,jdbcType=CHAR},
+      </if>
+      <if test="dealTime != null" >
+        deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualIncomeAmount != null">
+      	 actual_income_amount = #{actualIncomeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="givenBank != null" >
+        given_bank = #{givenBank,jdbcType=VARCHAR},
+      </if>
+      <if test="realityDealTime != null" >
+        reality_deal_time = #{realityDealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.CreditCardTransactionDtl" >
+    UPDATE credit_card_transaction_dtl
+    SET seq_no = #{seqNo,jdbcType=CHAR},
+      terminal_number = #{terminalNumber,jdbcType=CHAR},
+      card_number = #{cardNumber,jdbcType=CHAR},
+      deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      amount = #{amount,jdbcType=DECIMAL},
+      actual_income_amount = #{actualIncomeAmount,jdbcType=DECIMAL},
+      given_bank = #{givenBank,jdbcType=VARCHAR},
+      reality_deal_time = #{realityDealTime,jdbcType=TIMESTAMP},
+      rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

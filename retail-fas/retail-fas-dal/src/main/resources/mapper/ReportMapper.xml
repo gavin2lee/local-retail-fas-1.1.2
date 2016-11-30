@@ -1,0 +1,2831 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ReportMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.ReportDto" >
+    <result column="supplier_group_name" property="supplierGroupName" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="VARCHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="VARCHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="supplier_no" property="supplierNo" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="years_name" property="yearsName" jdbcType="VARCHAR" />
+    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+    <result column="purchase_season_name" property="purchaseSeasonName" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="orderfrom_name" property="orderfromName" jdbcType="VARCHAR" />
+    <result column="gender_name" property="genderName" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="three_level_category_no" property="threeLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="three_level_category_name" property="threeLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+    <result column="total_send_qty" property="totalSendQty" jdbcType="INTEGER" />
+    <result column="total_send_amount" property="totalSendAmount" jdbcType="DECIMAL" />  
+    <result column="total_return_qty" property="totalReturnQty" jdbcType="INTEGER" />
+    <result column="total_return_amount" property="totalReturnAmount" jdbcType="DECIMAL" />  
+    <result column="total_balance_qty" property="totalBalanceQty" jdbcType="INTEGER" />
+    <result column="total_balance_amount" property="totalBalanceAmount" jdbcType="DECIMAL" /> 
+    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+    <result column="material_amount" property="materialAmount" jdbcType="DECIMAL" />
+    <result column="purchase_amount" property="purchaseAmount" jdbcType="DECIMAL" />
+    <result column="factory_amount" property="factoryAmount" jdbcType="DECIMAL" />   
+    <result column="headquarter_add" property="headquarterAdd" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_add" property="regionAdd" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="region_cost_from" property="regionCostFrom" jdbcType="DECIMAL" />
+    <result column="headquarter_amount" property="headquarterAmount" jdbcType="DECIMAL" />
+    <result column="region_amount" property="regionAmount" jdbcType="DECIMAL" />
+    <result column="region_from_amount" property="regionFromAmount" jdbcType="DECIMAL" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="ReportFinancialMap" type="cn.wonhigh.retail.fas.common.dto.ReportDto" >
+    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="VARCHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="supplier_no" property="supplierNo" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="years_name" property="yearsName" jdbcType="VARCHAR" />
+    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+    <result column="orderfrom_name" property="orderfromName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+    <result column="material_amount" property="materialAmount" jdbcType="DECIMAL" />
+    <result column="purchase_amount" property="purchaseAmount" jdbcType="DECIMAL" />
+    <result column="factory_amount" property="factoryAmount" jdbcType="DECIMAL" />   
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="region_cost_from" property="regionCostFrom" jdbcType="DECIMAL" />
+    <result column="headquarter_amount" property="headquarterAmount" jdbcType="DECIMAL" />
+    <result column="region_amount" property="regionAmount" jdbcType="DECIMAL" />
+    <result column="region_from_amount" property="regionFromAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ReportGatherMap" type="cn.wonhigh.retail.fas.common.dto.ReportGatherDto" >
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="orderfrom_name" property="orderfromName" jdbcType="VARCHAR" />
+    <result column="supplier_group_no" property="supplierGroupNo" jdbcType="VARCHAR" />
+    <result column="supplier_group_name" property="supplierGroupName" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />  
+    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />  
+    <result column="custom_return_qty" property="customReturnQty" jdbcType="INTEGER" />
+    <result column="custom_return_amount" property="customReturnAmount" jdbcType="DECIMAL" />  
+    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" /> 
+    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" /> 
+    <result column="total_send_qty" property="totalSendQty" jdbcType="INTEGER" />
+    <result column="total_send_amount" property="totalSendAmount" jdbcType="DECIMAL" />  
+    <result column="total_return_qty" property="totalReturnQty" jdbcType="INTEGER" />
+    <result column="total_return_amount" property="totalReturnAmount" jdbcType="DECIMAL" />  
+    <result column="total_balance_qty" property="totalBalanceQty" jdbcType="INTEGER" />
+    <result column="total_balance_amount" property="totalBalanceAmount" jdbcType="DECIMAL" /> 
+    <result column="flag" property="flag" jdbcType="VARCHAR" /> 
+    <result column="organ_no" property="organNo" jdbcType="VARCHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="VARCHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="before_month_balance_qty" property="beforeMonthBalanceQty" jdbcType="INTEGER" />
+    <result column="before_month_balance_amount" property="beforeMonthBalanceAmount" jdbcType="DECIMAL" /> 
+    <result column="current_month_payment_qty" property="currentMonthPaymentQty" jdbcType="INTEGER" />
+    <result column="current_month_payment_amount" property="currentMonthPaymentAmount" jdbcType="DECIMAL" /> 
+    <result column="current_month_balance_qty" property="currentMonthBalanceQty" jdbcType="INTEGER" />
+    <result column="current_month_balance_amount" property="currentMonthBalanceAmount" jdbcType="DECIMAL" /> 
+    <result column="current_month_start_qty" property="currentMonthStartQty" jdbcType="INTEGER" />
+    <result column="current_month_start_amount" property="currentMonthStartAmount" jdbcType="DECIMAL" /> 
+    <result column="current_month_end_qty" property="currentMonthEndQty" jdbcType="INTEGER" />
+    <result column="current_month_end_amount" property="currentMonthEndAmount" jdbcType="DECIMAL" /> 
+  </resultMap>
+  
+  <sql id="reportCondition" >
+  	--	AND @brand_no 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.organSql and ''!=params.organSql" >
+       	AND receive_store_no IN ${params.organSql}
+      </if>
+      <if test="null!=params.multiZoneNo and ''!=params.multiZoneNo" >
+        AND zone_no in ${params.multiZoneNo}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND saler_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiOrganNo and ''!=params.multiOrganNo" >
+        AND organ_no in ${params.multiOrganNo}
+      </if>    
+	  <if test="null!=params.multiOrderUnitNo and ''!=params.multiOrderUnitNo" >
+        AND order_unit_no in ${params.multiOrderUnitNo}
+      </if>
+      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+        AND supplier_no in ${params.multiSupplierNo}
+      </if>  
+      <if test="null!=params.multiBrandUnitNo and ''!=params.multiBrandUnitNo" >
+        AND brand_unit_no  IN ${params.multiBrandUnitNo}
+      </if>     
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND brand_no  IN ${params.multiBrandNo}
+      </if>    
+      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND C1.category_no IN ${params.multiCategoryNo}
+      </if>   
+      <if test="null!=params.multiTwoCategoryNo and ''!=params.multiTwoCategoryNo" >
+        AND C2.category_no IN ${params.multiTwoCategoryNo}
+      </if>     
+      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+        AND item_code in ${params.multiItemCode}
+      </if>  
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+      	AND send_date &gt;= #{params.sendDateStart}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+       AND send_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.multiGenderNo and ''!=params.multiGenderNo" >
+       AND gender IN ${params.multiGenderNo}
+      </if>
+      <if test="null!=params.multiSupplierGroupNo and ''!=params.multiSupplierGroupNo" >
+       AND  SG.supplier_group_no IN ${params.multiSupplierGroupNo}
+      </if> 
+    </if>
+  </sql>
+  <sql id="imperfectCondition" >
+  	--	AND @brand_no 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceType and 1==params.balanceType" >
+         -- AND @company_no!buyer_no
+      </if> 
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND saler_no IN ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no IN ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND brand_no  IN ${params.multiBrandNo}
+      </if>    
+      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND C1.category_no IN ${params.multiCategoryNo}
+      </if>    
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+      	AND return_date &gt;= #{params.sendDateStart}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+       AND return_date &lt;= #{params.sendDateEnd}
+      </if>
+    </if>
+  </sql>
+  <sql id="deductionCondition" >
+  	--	AND @brand_no 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceType and 1==params.balanceType" >
+         -- AND @company_no!buyer_no
+      </if> 
+      <if test="null!=params.balanceType and 2==params.balanceType" >
+         -- AND @company_no!saler_no
+      </if> 
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND saler_no IN ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no IN ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND brand_no  IN ${params.multiBrandNo}
+      </if>    
+      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND C1.category_no IN ${params.multiCategoryNo}
+      </if>    
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+      	AND deduction_date &gt;= #{params.sendDateStart}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+       AND deduction_date &lt;= #{params.sendDateEnd}
+      </if>
+    </if>
+  </sql>
+  <sql id="GatherFinanceCondition" >
+  	--	AND @brand_no 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND saler_no IN ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no IN ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND brand_no  IN ${params.multiBrandNo}
+      </if>    
+      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND C1.category_no IN ${params.multiCategoryNo}
+      </if>    
+      <if test="null!=params.multiTwoCategoryNo and ''!=params.multiTwoCategoryNo" >
+        AND C2.category_no IN ${params.multiTwoCategoryNo}
+      </if>
+      <if test="null!=params.multiSupplierGroupNo and ''!=params.multiSupplierGroupNo" >
+        AND  EXISTS (SELECT 1 FROM supplier_group_rel WHERE saler_no = supplier_no AND group_no IN ${params.multiSupplierGroupNo})
+      </if>    
+    </if>
+  </sql>
+  <!-- 总部业务报表条件过滤 -->
+  <sql id="reportBusiness" >
+  	--	AND @brand_no 
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceType and 1==params.balanceType" >
+         -- AND @company_no!buyer_no
+      </if> 
+      <if test="null!=params.balanceType and 2==params.balanceType" >
+         -- AND @company_no!saler_no
+      </if> 
+      <if test="null!=params.orderfrom and ''!=params.orderfrom">
+        AND orderfrom = ${params.orderfrom}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+        AND supplier_no in ${params.multiSupplierNo}
+      </if>   
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND brand_no  IN ${params.multiBrandNo}
+      </if>    
+      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+        AND C1.category_no IN ${params.multiCategoryNo}
+      </if>    
+      <if test="null!=params.gender and ''!=params.gender" >
+        AND gender = ${params.gender}
+      </if>  
+    </if>
+  </sql>
+  
+  <!-- 总部代采条件过滤 -->
+  <sql id="insteadCondition" >
+   (
+    (
+      (
+        bill_type = '1301' 
+        AND biz_type IN ('0', '1')
+      ) 
+      OR bill_type = '1333'
+    ) 
+    AND (
+      is_split IS NULL 
+      OR is_split != 1
+    ) 
+    AND buyer_no NOT IN (${params.zoneCompanyNo})
+    )
+  </sql>
+  <!-- 总部统采条件过滤 -->
+  <sql id="unifyCondition" >
+  	 (
+	    (
+          (bill_type = 1301 
+            AND biz_type IN (0, 1)) 
+          OR bill_type = 1333
+        )  AND buyer_no IN (${params.zoneCompanyNo})
+    )
+  </sql>
+  <!-- 总部地区条件过滤 -->
+  <sql id="areaCondition" >
+ 	  (
+	 	  ( (bill_type = 1301 AND biz_type in (0,1)) OR  bill_type in (1333, 1371) )
+		  AND saler_no  IN (${params.zoneCompanyNo})
+	  )
+  </sql>
+  
+  <select id="findReportTotalCount" resultType="java.lang.Integer" >
+  		/*balance*/
+	  	SELECT COUNT(1) FROM (
+		  	SELECT 
+		  		1
+		  	  FROM
+			  bill_buy_balance B2 
+			  INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+			        <if test="null!=params.itemSql and ''!=params.itemSql" >
+				       	AND ${params.itemSql}
+				    </if>
+			  ) it
+			  ON B2.item_no = it.item_no_it
+			  INNER JOIN category C1
+			    ON LEFT(B2.`category_no`, 2) = C1.category_no
+			  INNER JOIN category C2
+			    ON LEFT(B2.`category_no`, 4) = C2.category_no  
+			  INNER JOIN category C3
+		    	ON LEFT(B2.`category_no`, 6) = C3.category_no    
+			WHERE 1 = 1 
+			  <include refid="reportCondition" />
+		  	AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+		  	GROUP BY 
+			  B2.saler_no,
+			  B2.brand_no,
+			  C1.category_no,
+			  C2.category_no,
+		  	  C3.category_no) G
+  </select> 
+  
+  <select id="findReportTotalByPage" resultMap="BaseResultMap" parameterType="map">
+  		/*balance*/
+  		SELECT 
+	  		saler_name,
+	  		brand_name,
+	  		C1.name one_level_category_name,
+	  		C2.name two_level_category_name,
+	  		C3.name category_name,
+	  	    SUM(send_qty*P.purchase_price) send_amount,
+	  	  	SUM(send_qty) send_qty,
+	  	  	ROUND(SUM(send_qty*P.purchase_price)/SUM(send_qty),2) cost
+	  	  FROM
+		  bill_buy_balance B2 
+	  	 INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+		        <if test="null!=params.itemSql and ''!=params.itemSql" >
+			       	AND ${params.itemSql}
+			    </if>
+		  ) it
+		  ON B2.item_no = it.item_no_it
+		  INNER JOIN category C1
+		    ON LEFT(B2.`category_no`, 2) = C1.category_no
+		  INNER JOIN category C2
+		    ON LEFT(B2.`category_no`, 4) = C2.category_no  
+		  INNER JOIN category C3
+		    ON LEFT(B2.`category_no`, 6) = C3.category_no   
+		  LEFT JOIN (SELECT 
+		    item_no,
+		    supplier_no,
+		    material_price,
+		    purchase_price,
+		    factory_price 
+		  FROM
+		    (SELECT 
+		      PP.item_no,
+		      pp.supplier_no,
+		      pp.material_price,
+		      pp.purchase_price,
+		      pp.factory_price 
+		    FROM
+		      purchase_price PP 
+		    WHERE 1 = 1 
+		      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+		    ORDER BY item_no DESC,
+		      supplier_no DESC,
+		      STATUS DESC,
+		      effective_date DESC,
+		      create_time DESC) G 
+		  GROUP BY item_no,
+		    supplier_no) P
+			ON B2.item_no = P.item_no
+			AND B2.supplier_no = P.supplier_no    
+		WHERE 1 = 1 
+		  <include refid="reportCondition" />
+	  	AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+	  	GROUP BY 
+		  B2.saler_no,
+		  B2.brand_no,
+		  C1.category_no,
+		  C2.category_no,
+		  C3.category_no
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  
+  <select id="findReportToalFooter" resultMap="BaseResultMap" parameterType="map">
+  		 /*balance*/
+  		 SELECT '合计' saler_name, SUM(send_amount) send_amount, SUM(send_qty) send_qty, ROUND(SUM(send_amount)/SUM(send_qty),2) cost FROM (
+	  		 SELECT 
+		  		saler_name,
+		  		brand_name,
+		  		C1.name one_level_category_name,
+		  		C2.name two_level_category_name,
+		  		C3.name category_name,
+		  	    SUM(send_qty*P.purchase_price) send_amount,
+		  	  	SUM(send_qty) send_qty,
+		  	  	SUM(send_qty*P.purchase_price)/SUM(send_qty) cost
+		  	  FROM
+			  bill_buy_balance B2 
+		  	 INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+			        <if test="null!=params.itemSql and ''!=params.itemSql" >
+				       	AND ${params.itemSql}
+				    </if>
+			  ) it
+			  ON B2.item_no = it.item_no_it			  
+			  INNER JOIN category C1
+			    ON LEFT(B2.`category_no`, 2) = C1.category_no
+			  INNER JOIN category C2
+			    ON LEFT(B2.`category_no`, 4) = C2.category_no  
+			  INNER JOIN category C3
+		    	ON LEFT(B2.`category_no`, 6) = C3.category_no    
+		      LEFT JOIN (SELECT 
+			    item_no,
+			    supplier_no,
+			    material_price,
+			    purchase_price,
+			    factory_price 
+			  FROM
+			    (SELECT 
+			      PP.item_no,
+			      pp.supplier_no,
+			      pp.material_price,
+			      pp.purchase_price,
+			      pp.factory_price 
+			    FROM
+			      purchase_price PP 
+			    WHERE 1 = 1 
+			      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+			    ORDER BY item_no DESC,
+			      supplier_no DESC,
+			      STATUS DESC,
+			      effective_date DESC,
+			      create_time DESC) G 
+			  GROUP BY item_no,
+			    supplier_no) P
+				ON B2.item_no = P.item_no
+				AND B2.supplier_no = P.supplier_no  	
+			WHERE 1 = 1 
+			  <include refid="reportCondition" />
+		  	AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+		  	GROUP BY 
+			  B2.saler_no,
+			  B2.brand_no,
+			  C1.category_no,
+			  C2.category_no,
+		 	  C3.category_no
+  		) G
+  
+  </select>
+  <select id="findRowByPage" resultMap="BaseResultMap" parameterType="map">
+  /*balance*/
+    SELECT 
+	  B2.buyer_no,
+	  B2.saler_no,
+	  B2.brand_no,
+	  C1.category_no one_level_category_no,
+	  C2.category_no two_level_category_no,
+	  C3.category_no three_level_category_no,
+	  B2.buyer_name,
+	  B2.saler_name,
+	  B2.brand_name,
+	  C1.name one_level_category_name,
+	  C2.name two_level_category_name,
+	  C3.name three_level_category_name,
+	  B2.item_no,
+	  B2.item_code,
+	  B2.item_name,
+	  <if test="null!=params.isShowByDay and 'true'==params.isShowByDay" >
+		  B2.send_date,
+		  (SELECT lookup1.name from item INNER JOIN lookup_entry lookup1 
+			    ON lookup1.`code` = item.`purchase_season` 
+			    AND lookup1.`lookup_id` = 6 WHERE item.item_no = B2.item_no 
+			  ) purchase_season_name,
+      </if> 
+      lookup0.name orderfrom_name,
+      lookup1.name years_name,
+      lookup2.name season_name,
+      lookup3.name gender_name,
+	  B2.cost
+
+	FROM
+	  bill_buy_balance B2 
+  		  INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+		        <if test="null!=params.itemSql and ''!=params.itemSql" >
+			       	AND ${params.itemSql}
+			    </if>
+		  ) it
+		  ON B2.item_no = it.item_no_it	
+		  INNER JOIN category C1
+		    ON LEFT(B2.`category_no`, 2) = C1.category_no
+		  INNER JOIN category C2
+		    ON LEFT(B2.`category_no`, 4) = C2.category_no  
+		  INNER JOIN category C3
+	    	ON LEFT(B2.`category_no`, 6) = C3.category_no 
+	      LEFT JOIN lookup_entry lookup0 
+	        ON lookup0.code  = B2.`orderfrom`
+	        AND lookup0.lookup_id = '29'    
+      	  LEFT JOIN lookup_entry lookup1 
+		    ON lookup1.`code` = B2.`years` 
+		    AND lookup1.`lookup_id` = 5 
+		  LEFT JOIN lookup_entry lookup2 
+		    ON lookup2.`code` = B2.`season` 
+		    AND lookup2.`lookup_id` = 72   
+		  LEFT JOIN lookup_entry lookup3 
+		    ON lookup3.`code` = B2.`gender` 
+		    AND lookup3.`lookup_id` = 7    
+	WHERE 1 = 1 
+	  <include refid="reportCondition" />
+	  AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+	GROUP BY 
+	  B2.supplier_no,
+	  B2.item_no 
+	  <if test="null!=params.isShowByDay and 'true'==params.isShowByDay" >
+		  ,B2.send_date
+      </if>
+	ORDER BY 
+	  B2.supplier_no,
+	  B2.item_no 
+	  <if test="null!=params.isShowByDay and 'true'==params.isShowByDay" >
+		  ,B2.send_date
+      </if>
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  <select id="findColumnByPage" resultMap="BaseResultMap" parameterType="map" >
+  /*balance*/
+    SELECT 
+	  IFNULL(B1.zone_no,'NULL') zone_no,
+	  IFNULL(B1.zone_name,'NULL') zone_name,
+	  IFNULL(B1.organ_no,'NULL') organ_no,
+	  IFNULL(B1.organ_name,'NULL') organ_name,
+	  IFNULL(B1.order_unit_no,'NULL') order_unit_no,
+	  IFNULL(B1.order_unit_name,'NULL') order_unit_name
+	FROM
+	  bill_buy_balance B1 
+ 	  INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+	        <if test="null!=params.itemSql and ''!=params.itemSql" >
+		       	AND ${params.itemSql}
+		    </if>
+	  ) it
+	  ON B1.item_no = it.item_no_it		  
+	  INNER JOIN category C1
+	    ON LEFT(B1.`category_no`, 2) = C1.category_no
+	  INNER JOIN category C2
+	    ON LEFT(B1.`category_no`, 4) = C2.category_no  
+	  INNER JOIN category C3
+    	ON LEFT(B1.`category_no`, 6) = C3.category_no 
+	WHERE 1 = 1 
+	  AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+      <include refid="reportCondition" />
+	GROUP BY B1.`zone_no`, B1.`organ_no`, B1.order_unit_no 
+	ORDER BY B1.`zone_no`, B1.`organ_no`, B1.order_unit_no  
+  </select>
+  
+  <select id="findQtyByPage" resultMap="BaseResultMap" parameterType="map">
+  /*balance*/
+    SELECT 
+      <if test="null!=params.isShowByDay and 'true'==params.isShowByDay" >
+		  B1.send_date,
+      </if>
+	  B1.saler_no,
+	  B1.brand_no,
+	  C1.category_no one_level_category_no,
+	  B1.saler_name,
+	  B1.brand_name,
+	  C1.name one_level_category_name,
+	  B1.item_no,
+	  B1.item_code,
+	  B1.item_name,
+	  IFNULL(B1.order_unit_no,'NULL') order_unit_no,
+	  IFNULL(B1.order_unit_name,'NULL') order_unit_name,
+	  P.material_price,
+	  P.purchase_price,
+	  P.factory_price,
+	  SUM(B1.send_qty) send_qty ,
+	  SUM(IFNULL(B1.send_qty*P.purchase_price,0)) send_amount 
+	FROM
+	  bill_buy_balance B1 
+	 	  INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+		        <if test="null!=params.itemSql and ''!=params.itemSql" >
+			       	AND ${params.itemSql}
+			    </if>
+		  ) it
+		  ON B1.item_no = it.item_no_it		  
+		  INNER JOIN category C1
+		    ON LEFT(B1.`category_no`, 2) = C1.category_no
+		  INNER JOIN category C2
+		    ON LEFT(B1.`category_no`, 4) = C2.category_no  
+		  INNER JOIN category C3
+	    	ON LEFT(B1.`category_no`, 6) = C3.category_no 
+	 	  LEFT JOIN (SELECT 
+			item_no,
+		    supplier_no,
+		    material_price,
+		    purchase_price,
+		    factory_price 
+		  FROM
+		    (SELECT 
+		      PP.item_no,
+		      pp.supplier_no,
+		      pp.material_price,
+		      pp.purchase_price,
+		      pp.factory_price 
+		    FROM
+		      purchase_price PP 
+		    WHERE 1 = 1 
+		      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+		    ORDER BY item_no DESC,
+		      supplier_no DESC,
+		      STATUS DESC,
+		      effective_date DESC,
+		      create_time DESC) G 
+		  GROUP BY item_no,
+		    supplier_no) P
+		ON B1.item_no = P.item_no
+		AND B1.supplier_no = P.supplier_no     
+	WHERE 1 = 1 
+	AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+    <include refid="reportCondition" />
+	  AND EXISTS 
+	  (SELECT 
+	    1 
+	  FROM
+	    (SELECT 
+	      B2.buyer_no,
+	      B2.saler_no,
+	      B2.brand_no,
+	      C1.category_no,
+	      B2.item_no 
+	    FROM
+	      bill_buy_balance B2 
+	 	  INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+		        <if test="null!=params.itemSql and ''!=params.itemSql" >
+			       	AND ${params.itemSql}
+			    </if>
+		  ) it
+		  ON B2.item_no = it.item_no_it			      
+		  INNER JOIN category C1
+		    ON LEFT(B2.`category_no`, 2) = C1.category_no
+		  INNER JOIN category C2
+		    ON LEFT(B2.`category_no`, 4) = C2.category_no  
+		  INNER JOIN category C3
+	    	ON LEFT(B2.`category_no`, 6) = C3.category_no
+	    WHERE 1 = 1 
+	 	AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+	    <include refid="reportCondition" />
+		GROUP BY 
+		  B2.supplier_no,
+		  B2.item_no 
+		<if test="null!=params.isShowByDay and 'true'==params.isShowByDay" >
+		  ,B2.send_date
+        </if>
+	     LIMIT #{page.startRowNum} ,#{page.pageSize}) G 
+	  WHERE  G.saler_no = B1.saler_no 
+	    AND G.brand_no = B1.brand_no 
+	    AND G.category_no = C1.category_no 
+	    AND G.item_no = B1.item_no) 
+	GROUP BY 
+	  B1.supplier_no,
+	  B1.item_no,
+	  B1.order_unit_no
+	  <if test="null!=params.isShowByDay and 'true'==params.isShowByDay" >
+		,B1.send_date
+      </if> 
+  </select>
+  
+  <select id="findReportCount" resultType="java.lang.Integer" >
+  /*balance*/
+	SELECT 
+	  COUNT(1) 
+	FROM
+	  (SELECT 
+	    1 
+	  FROM
+	    bill_buy_balance B1 
+	      INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+		        <if test="null!=params.itemSql and ''!=params.itemSql" >
+			       	AND ${params.itemSql}
+			    </if>
+		  ) it
+		  ON B1.item_no = it.item_no_it	
+		  INNER JOIN category C1
+		    ON LEFT(B1.`category_no`, 2) = C1.category_no
+		  INNER JOIN category C2
+		    ON LEFT(B1.`category_no`, 4) = C2.category_no  
+		  INNER JOIN category C3
+	    	ON LEFT(B1.`category_no`, 6) = C3.category_no
+	  WHERE 1 = 1 
+	    AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+	    <include refid="reportCondition" />
+	  GROUP BY 
+	    B1.supplier_no,
+	    B1.item_no 
+	    <if test="null!=params.isShowByDay and 'true'==params.isShowByDay" >
+		  ,B1.send_date
+        </if>
+	  ) G 
+  </select>
+  
+  <select id="findReportFooter" resultMap="BaseResultMap" parameterType="map">
+  /*balance*/
+	SELECT 
+	  SUM(send_qty) send_qty,
+	  SUM(send_amount) send_amount,
+	  order_unit_no,
+	  order_unit_name 
+	FROM
+	  (
+		SELECT 
+		  B1.buyer_no,
+		  B1.saler_no,
+		  B1.brand_no,
+		  C1.category_no one_level_category_no,
+		  B1.buyer_name,
+		  B1.saler_name,
+		  B1.brand_name,
+		  C1.name one_level_category_name,
+		  B1.item_no,
+		  B1.item_code,
+		  B1.item_name,
+		  IFNULL(B1.order_unit_no,'NULL') order_unit_no,
+		  IFNULL(B1.order_unit_name,'NULL') order_unit_name,
+		  SUM(B1.send_qty) send_qty, 
+		  SUM(IFNULL(B1.send_qty*P.purchase_price,0)) send_amount 
+		FROM
+		  bill_buy_balance B1 
+		  INNER JOIN (SELECT item_no item_no_it FROM item WHERE 1 = 1  
+		        <if test="null!=params.itemSql and ''!=params.itemSql" >
+			       	AND ${params.itemSql}
+			    </if>
+		  ) it
+		  ON B1.item_no = it.item_no_it	
+		  INNER JOIN category C1
+		    ON LEFT(B1.`category_no`, 2) = C1.category_no
+		  INNER JOIN category C2
+		    ON LEFT(B1.`category_no`, 4) = C2.category_no  
+		  INNER JOIN category C3
+	    	ON LEFT(B1.`category_no`, 6) = C3.category_no
+		  LEFT JOIN (SELECT 
+		    item_no,
+		    supplier_no,
+		    material_price,
+		    purchase_price,
+		    factory_price 
+		  FROM
+		    (SELECT 
+		      PP.item_no,
+		      pp.supplier_no,
+		      pp.material_price,
+		      pp.purchase_price,
+		      pp.factory_price 
+		    FROM
+		      purchase_price PP 
+		    WHERE 1 = 1 
+		      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+		    ORDER BY item_no DESC,
+		      supplier_no DESC,
+		      STATUS DESC,
+		      effective_date DESC,
+		      create_time DESC) G 
+		  GROUP BY item_no,
+		    supplier_no) P
+			ON B1.item_no = P.item_no
+			AND B1.supplier_no = P.supplier_no   
+		WHERE 1 = 1 
+	  	AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+	    <include refid="reportCondition" />
+		GROUP BY 
+		  B1.supplier_no,
+		  B1.item_no,
+		  B1.order_unit_no ) T
+		  GROUP BY order_unit_no
+  </select>
+  
+  <sql id="current_data_sql" >
+	SELECT 
+	  orderfrom,
+	  t0.name orderfrom_name,
+	  saler_no,
+	  buyer_no,
+	  brand_no,
+	  C1.`category_no`,
+	  saler_name,
+	  buyer_name,
+	  brand_name,
+	  C1.`name` category_name,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1301 
+	      THEN send_qty 
+	      ELSE 0 
+	    END
+	  ) send_qty,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1301 
+	      THEN send_qty * cost 
+	      ELSE 0 
+	    END
+	  ) send_amount,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1333 
+	      THEN send_qty 
+	      ELSE 0 
+	    END
+	  ) return_qty,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1333 
+	      THEN send_qty * cost 
+	      ELSE 0 
+	    END
+	  ) return_amount,
+	  '' flag  
+	FROM
+	  bill_buy_balance 
+	  LEFT JOIN category C1
+	    ON LEFT(
+	      bill_buy_balance.`category_no`,
+	      2
+	    ) = C1.`category_no` 
+	  LEFT JOIN lookup_entry t0 
+        ON bill_buy_balance.`orderfrom` = t0.code 
+        AND t0.lookup_id = '29'    
+	WHERE 1 = 1 
+	  AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+	  <include refid="reportCondition" /> 
+	GROUP BY 
+	  saler_no,
+	  buyer_no,
+	  brand_no,
+	  C1.category_no 
+	UNION
+	ALL 
+	SELECT 
+	  '' orderfrom,
+	  '小计' orderfrom_name,
+	  saler_no,
+	  buyer_no,
+	  '' brand_no,
+	  '' category_no,
+	  '' saler_name,
+	  '' buyer_name,
+	  '' brand_name,
+	  '' category_name,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1301 
+	      THEN send_qty 
+	      ELSE 0 
+	    END
+	  ) send_qty,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1301 
+	      THEN send_qty * cost 
+	      ELSE 0 
+	    END
+	  ) send_amount,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1333 
+	      THEN send_qty 
+	      ELSE 0 
+	    END
+	  ) return_qty,
+	  SUM(
+	    CASE
+	      WHEN bill_type = 1333 
+	      THEN send_qty * cost 
+	      ELSE 0 
+	    END
+	  ) return_amount,
+	  'true' flag 
+	FROM
+	  bill_buy_balance 
+	  LEFT JOIN category C1
+	    ON LEFT(
+	      bill_buy_balance.`category_no`,
+	      2
+	    ) = C1.`category_no` 
+	WHERE 1 = 1 
+	  AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+	  <include refid="reportCondition" /> 
+	GROUP BY 
+	  saler_no,
+	  buyer_no 
+	ORDER BY saler_no,
+	  buyer_no,
+	  brand_no DESC 
+  </sql>
+  <sql id="current_imperfect_data_sql" >
+  	SELECT 
+	    saler_no,
+	    buyer_no,
+	    brand_no,
+	    C1.`category_no`,
+	    saler_name,
+	    buyer_name,
+	    brand_name,
+	    C1.`name` category_name,
+	    SUM(qty) custom_return_qty,
+	    SUM(amount) custom_return_amount
+	  FROM
+	    custom_imperfect 
+	    LEFT JOIN category C1
+		    ON LEFT(
+		      custom_imperfect.`category_no`,
+		      2
+		    ) = C1.`category_no`
+	  WHERE 1 = 1 
+	  AND balance_type IN (1,13)
+      <include refid="imperfectCondition" />
+	  GROUP BY saler_no,
+	    buyer_no,
+	    brand_no,
+	    C1.category_no 
+	  UNION
+	  ALL 
+	  SELECT 
+	    saler_no,
+	    buyer_no,
+	    '' brand_no,
+	    '' category_no,
+	    saler_name,
+	    buyer_name,
+	    '' brand_name,
+	    '' category_name,
+	    SUM(qty) custom_return_qty,
+	    SUM(amount) custom_return_amount
+	  FROM
+	    custom_imperfect 
+	    LEFT JOIN category C1
+		    ON LEFT(
+		      custom_imperfect.`category_no`,
+		      2
+		    ) = C1.`category_no` 
+	  WHERE 1 = 1 
+	  AND balance_type IN (1,13)
+      <include refid="imperfectCondition" />
+	  GROUP BY saler_no,
+	    buyer_no 
+	  ORDER BY saler_no,
+	    buyer_no,
+	    brand_no DESC 
+  </sql>
+  <sql id="current_deduction_data_sql" >
+  	SELECT 
+	    saler_no,
+	    buyer_no,
+	    brand_no,
+	    C1.`category_no`,
+	    saler_name,
+	    buyer_name,
+	    brand_name,
+	    C1.`name` category_name,
+	    SUM(deduction_amount) deduction_amount 
+	  FROM
+	    other_deduction 
+	    LEFT JOIN category C1
+	      ON other_deduction.`category_no` = C1.`category_no` 
+	  WHERE 1 = 1 
+	  AND balance_type IN (1,13)
+      <include refid="deductionCondition" />
+	  GROUP BY saler_no,
+	    buyer_no,
+	    brand_no,
+	    C1.category_no 
+	  UNION
+	  ALL 
+	  SELECT 
+	    saler_no,
+	    buyer_no,
+	    '' brand_no,
+	    '' category_no,
+	    saler_name,
+	    buyer_name,
+	    '' brand_name,
+	    '' category_name,
+	    SUM(deduction_amount) deduction_amount 
+	  FROM
+	    other_deduction 
+	    LEFT JOIN category C1
+	      ON other_deduction.`category_no` = C1.`category_no` 
+	  WHERE 1 = 1 
+	  AND balance_type IN (1,13)
+      <include refid="deductionCondition" />
+	  GROUP BY saler_no,
+	    buyer_no 
+	  ORDER BY saler_no,
+	    buyer_no,
+	    brand_no DESC 
+  </sql>
+    <select id="findReportGatherCount" resultType="java.lang.Integer" >
+    /*balance*/
+	  	SELECT 
+		  COUNT(1) 
+		FROM
+		  (<include refid="current_data_sql" />) T0 
+	</select>    
+	<select id="findReportGatherByPage" resultMap="ReportGatherMap" parameterType="map" >
+	/*balance*/
+	  	SELECT 
+		  T0.*,
+		  IFNULL(T1.custom_return_qty, 0) custom_return_qty,
+		  IFNULL(T1.custom_return_amount, 0) custom_return_amount,
+		  IFNULL(T2.deduction_amount, 0) deduction_amount,
+		  IFNULL(T0.send_qty,0) + IFNULL(T0.return_qty,0) - IFNULL(T1.custom_return_qty,0)  balance_qty,
+		  IFNULL(T0.send_amount,0) + IFNULL(T0.return_amount,0) - IFNULL(T1.custom_return_amount, 0) - IFNULL(T2.deduction_amount, 0) balance_amount
+		FROM
+		  (<include refid="current_data_sql" />
+		  LIMIT #{page.startRowNum} ,#{page.pageSize} ) T0 
+		   LEFT JOIN 
+		    (<include refid="current_imperfect_data_sql" />) T1 
+		    ON T0.saler_no = T1.saler_no 
+		    AND T0.buyer_no = T1.buyer_no 
+		    AND T0.brand_no = T1.brand_no 
+	        AND T0.category_no = T1.category_no
+	      LEFT JOIN 
+		    (<include refid="current_deduction_data_sql" />) T2 
+		    ON T0.saler_no = T2.saler_no 
+		    AND T0.buyer_no = T2.buyer_no 
+		    AND T0.brand_no = T2.brand_no 
+	        AND T0.category_no = T2.category_no
+	</select> 
+	 
+	 
+   <sql id="current_balance_data_sql" >
+  		SELECT 
+  		    0 order_flag,
+		    T1.saler_no,
+		    T1.buyer_no,
+		    T1.brand_no,
+		    T1.saler_name,
+		    T1.buyer_name,
+		    T1.brand_name,
+		    T1.one_level_category_no,
+		    T1.two_level_category_no,
+		    T1.one_level_category_name,
+		    T1.two_level_category_name,
+		    T1.send_qty,
+		    T1.send_amount,
+		    T1.return_qty,
+		    T1.return_amount,
+		    T1.custom_return_qty,
+		    T1.custom_return_amount,
+		    IFNULL(T2.deduction_amount, 0) deduction_amount,
+		    T1.send_qty + T1.return_qty - T1.custom_return_qty balance_qty,
+		    T1.send_amount + T1.return_amount - T1.custom_return_amount - IFNULL(T2.deduction_amount, 0) balance_amount,
+		    0 before_balance_qty,
+		    0 before_balance_amount,
+		    0 payment_qty,
+		    0 payment_amount 
+		  FROM
+		    (SELECT 
+		      saler_no,
+		      buyer_no,
+		      brand_no,
+		      saler_name,
+		      buyer_name,
+		      brand_name,
+		      one_level_category_no,
+		      two_level_category_no,
+		      one_level_category_name,
+		      two_level_category_name,
+		      SUM(send_qty) send_qty,
+		      SUM(send_amount) send_amount,
+		      SUM(return_qty) return_qty,
+		      SUM(return_amount) return_amount,
+		      SUM(custom_return_qty) custom_return_qty,
+		      SUM(custom_return_amount) custom_return_amount 
+		    FROM
+		      (SELECT 
+		        saler_no,
+		        buyer_no,
+		        brand_no,
+		        saler_name,
+		        buyer_name,
+		        brand_name,
+		        C1.CATEGORY_NO one_level_category_no,
+		        C2.CATEGORY_NO two_level_category_no,
+		        C1.NAME one_level_category_name,
+		        C2.NAME two_level_category_name,
+		        IF(bill_type = 1301, send_qty, 0) send_qty,
+		        IF(bill_type = 1301, send_qty * cost, 0) send_amount,
+		        IF(bill_type = 1333, send_qty, 0) return_qty,
+		        IF(bill_type = 1333, send_qty * cost, 0) return_amount,
+		        0 custom_return_qty,
+		        0 custom_return_amount 
+		      FROM
+		        bill_buy_balance 
+		        LEFT JOIN CATEGORY C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.CATEGORY_NO
+		        LEFT JOIN CATEGORY C2 ON LEFT(bill_buy_balance.category_no, 4) = C2.CATEGORY_NO
+		      WHERE 1 = 1 		        
+		        <include refid="GatherFinanceCondition" />
+		      	<!--总部厂商与总部代采 过滤条件  -->
+		        AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+		        AND send_date &gt;= #{params.sendDateStart}
+	        	AND send_date &lt;= #{params.sendDateEnd}
+		      UNION
+		      ALL 
+		      SELECT 
+		        saler_no,
+		        buyer_no,
+		        brand_no,
+		        saler_name,
+		        buyer_name,
+		        brand_name,
+		        C1.CATEGORY_NO one_level_category_no,
+		        C2.CATEGORY_NO two_level_category_no,
+		        C1.NAME one_level_category_name,
+		        C2.NAME two_level_category_name,
+		        0 send_qty,
+		        0 send_amount,
+		        0 return_qty,
+		        0 return_amount,
+		        qty custom_return_qty,
+		        amount custom_return_amount 
+		      FROM
+		        custom_imperfect 
+		        LEFT JOIN CATEGORY C1 ON LEFT(custom_imperfect.category_no, 2) = C1.CATEGORY_NO
+		        LEFT JOIN CATEGORY C2 ON LEFT(custom_imperfect.category_no, 4) = C2.CATEGORY_NO
+		      WHERE 1 = 1 		       
+		      <include refid="GatherFinanceCondition" />
+			  <!--本月残鞋过滤条件  -->
+		      	AND balance_type IN (1, 13) 
+		        AND return_date &gt;= #{params.sendDateStart}
+	        	AND return_date &lt;= #{params.sendDateEnd}) T0 
+		    GROUP BY saler_no,
+		      buyer_no,
+		      brand_no,
+		      one_level_category_no,
+		      two_level_category_no
+		    UNION
+		    ALL 
+		    SELECT 
+		      saler_no,
+		      buyer_no,
+		      '小计' brand_no,
+		      saler_name,
+		      buyer_name,
+		      '小计' brand_name,
+		      '' ONE_LEVEL_CATEGORY_NO,
+		      '' TWO_LEVEL_CATEGORY_NO,
+		      '' ONE_LEVEL_CATEGORY_NAME,
+		      '' TWO_LEVEL_CATEGORY_NAME,
+		      SUM(send_qty) send_qty,
+		      SUM(send_amount) send_amount,
+		      SUM(return_qty) return_qty,
+		      SUM(return_amount) return_amount,
+		      SUM(custom_return_qty) custom_return_qty,
+		      SUM(custom_return_amount) custom_return_amount 
+		    FROM
+		      (SELECT 
+		        saler_no,
+		        buyer_no,
+		        brand_no,
+		        saler_name,
+		        buyer_name,
+		        brand_name,
+		        '' ONE_LEVEL_CATEGORY_NO,
+		        '' TWO_LEVEL_CATEGORY_NO,
+		        '' ONE_LEVEL_CATEGORY_NAME,
+		        '' TWO_LEVEL_CATEGORY_NAME,
+		        IF(bill_type = 1301, send_qty, 0) send_qty,
+		        IF(bill_type = 1301, send_qty * cost, 0) send_amount,
+		        IF(bill_type = 1333, send_qty, 0) return_qty,
+		        IF(bill_type = 1333, send_qty * cost, 0) return_amount,
+		        0 custom_return_qty,
+		        0 custom_return_amount 
+		      FROM
+		        bill_buy_balance 
+		        LEFT JOIN CATEGORY C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.CATEGORY_NO
+		        LEFT JOIN CATEGORY C2 ON LEFT(bill_buy_balance.category_no, 4) = C2.CATEGORY_NO
+		      WHERE 1 = 1 
+		        <include refid="GatherFinanceCondition" />
+		      	<!--总部厂商与总部代采 过滤条件  -->
+		        AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+		        AND send_date &gt;= #{params.sendDateStart}
+	        	AND send_date &lt;= #{params.sendDateEnd}
+		      UNION
+		      ALL 
+		      SELECT 
+		        saler_no,
+		        buyer_no,
+		        brand_no,
+		        saler_name,
+		        buyer_name,
+		        brand_name,
+		        '' one_level_category_no,
+		        '' two_level_category_no,
+		        '' one_level_category_name,
+		        '' two_level_category_name,
+		        0 send_qty,
+		        0 send_amount,
+		        0 return_qty,
+		        0 return_amount,
+		        qty custom_return_qty,
+		        amount custom_return_amount 
+		      FROM
+		        custom_imperfect 
+		        LEFT JOIN CATEGORY C1 ON LEFT(custom_imperfect.category_no, 2) = C1.CATEGORY_NO
+		        LEFT JOIN CATEGORY C2 ON LEFT(custom_imperfect.category_no, 4) = C2.CATEGORY_NO
+		      WHERE 1 = 1 
+		       <include refid="GatherFinanceCondition" />
+			  <!--本月残鞋过滤条件  -->
+		      	AND balance_type IN (1, 13) 
+		        AND return_date &gt;= #{params.sendDateStart}
+	        	AND return_date &lt;= #{params.sendDateEnd}) T0 
+		    GROUP BY saler_no,
+		      buyer_no) T1 
+		    LEFT JOIN 
+		      (SELECT 
+		        saler_no,
+		        buyer_no,
+		        '小计' brand_no,
+		        SUM(deduction_amount) deduction_amount 
+		      FROM
+		        other_deduction C1
+		      WHERE 1 = 1 
+		      	<include refid="GatherFinanceCondition" />
+			  <!--本月扣项过滤条件  -->
+		      	AND balance_type IN (1, 13) 
+		        AND deduction_date &gt;= #{params.sendDateStart}
+	        	AND deduction_date &lt;= #{params.sendDateEnd} 
+		      GROUP BY saler_no,
+		        buyer_no) T2 
+		      ON T1.saler_no = T2.saler_no 
+		      AND T1.buyer_no = T2.buyer_no 
+		      AND T1.brand_no = T2.brand_no 
+   </sql>
+  
+   <sql id="before_balance_data_sql" >
+	  SELECT 
+	    1 order_flag,
+	    T1.saler_no,
+	    T1.buyer_no,
+	    '小计' brand_no,
+	    T1.saler_name,
+	    T1.buyer_name,
+	    '小计' brand_name,
+	    '' one_level_category_no,
+		'' two_level_category_no,
+		'' one_level_category_name,
+		'' two_level_category_name,
+	    0 send_qty,
+	    0 send_amount,
+	    0 return_qty,
+	    0 return_amount,
+	    0 custom_return_qty,
+	    0 custom_return_amount,
+	    0 deduction_amount,
+	    0 balance_qty,
+	    0 balance_amount,
+	    T1.send_qty before_balance_qty,
+	    T1.send_amount - IFNULL(T3.deduction_amount, 0) before_balance_amount,
+	    IFNULL(T2.payment_qty, 0) payment_qty,
+	    IFNULL(T2.payment_amount, 0) payment_amount 
+	  FROM
+	    (SELECT 
+	      saler_no,
+	      buyer_no,
+	      saler_name,
+	      buyer_name,
+	      SUM(send_qty) send_qty,
+	      SUM(send_amount) send_amount 
+	    FROM
+	      (SELECT 
+	        saler_no,
+	        buyer_no,
+	        saler_name,
+	        buyer_name,
+	        send_qty,
+	        send_qty * cost send_amount 
+	      FROM
+	        bill_buy_balance 
+	        LEFT JOIN CATEGORY C1 ON LEFT(bill_buy_balance.category_no, 2) = C1.CATEGORY_NO
+		    LEFT JOIN CATEGORY C2 ON LEFT(bill_buy_balance.category_no, 4) = C2.CATEGORY_NO
+	      WHERE 1 = 1 
+	        <include refid="GatherFinanceCondition" />
+	      	<!--上月未结进货 过滤条件  -->
+	      	AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+	        AND (balance_status IS NULL  OR balance_status != 5) 
+	        AND send_date &lt;= #{params.sendDateStart} 
+	      UNION
+	      ALL 
+	      SELECT 
+	        saler_no,
+	        buyer_no,
+	        saler_name,
+	        buyer_name,
+	        - 1 * qty send_qty,
+	        - 1 * amount send_amount 
+	      FROM
+	        custom_imperfect 
+	        LEFT JOIN CATEGORY C1 ON LEFT(custom_imperfect.category_no, 2) = C1.CATEGORY_NO
+		    LEFT JOIN CATEGORY C2 ON LEFT(custom_imperfect.category_no, 4) = C2.CATEGORY_NO
+	      WHERE 1 = 1 
+	      	<include refid="GatherFinanceCondition" />
+		   <!--上月未结残鞋 过滤条件 -->
+	        AND balance_type IN (1, 13) 
+	        AND (balance_status IS NULL  OR balance_status != 5) 
+	        AND return_date &lt;= #{params.sendDateStart} ) T0 
+	    GROUP BY saler_no,
+	      buyer_no) T1 
+	    LEFT JOIN 
+	      (SELECT 
+	        saler_no,
+	        buyer_no,
+	        SUM(qty) payment_qty,
+	        SUM(amount) payment_amount 
+	      FROM
+	        bill_payment 
+	      WHERE 1 = 1  
+	      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+	        AND saler_no in ${params.multiSalerNo}
+	      </if>    
+		  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+	        AND buyer_no in ${params.multiBuyerNo}
+	      </if>
+	       <!--本月付款 过滤条件  -->
+	      	AND STATUS = 5 
+	        AND bill_date &gt;= #{params.sendDateStart}
+	        AND bill_date &lt;= #{params.sendDateEnd} 
+	      GROUP BY saler_no,
+	        buyer_no) T2 
+	      ON T1.saler_no = T2.saler_no 
+	      AND T1.buyer_no = T2.buyer_no 
+	    LEFT JOIN 
+	      (SELECT 
+	        saler_no,
+	        buyer_no,
+	        SUM(deduction_amount) deduction_amount 
+	      FROM
+	        other_deduction C1
+	      WHERE 1 = 1 
+	      <include refid="GatherFinanceCondition" />
+	      <!--上月未结扣项  过滤条件 -->
+	        AND balance_type IN (1, 13) 
+	        AND (C1.balance_status IS NULL  OR C1.balance_status != 5) 
+	        AND deduction_date &lt;= #{params.sendDateStart} 
+	      GROUP BY saler_no,
+	        buyer_no) T3 
+	      ON T1.saler_no = T3.saler_no 
+	      AND T1.buyer_no = T3.buyer_no
+   </sql>
+   
+	<select id="findReportGatherFinanceCount" resultType="java.lang.Integer" >
+	/*balance*/
+		SELECT COUNT(1) 
+			FROM (
+				SELECT 
+				  1
+				FROM (<include refid="current_balance_data_sql" /> UNION ALL <include refid="before_balance_data_sql" />) T0 
+			GROUP BY saler_no,buyer_no,brand_no,one_level_category_no,two_level_category_no ) T1
+	</select>    
+	
+	<select id="findReportGatherFinanceByPage" resultMap="ReportGatherMap" parameterType="map" >
+	/*balance*/
+			SELECT 
+			  T2.group_no supplier_group_no,
+			  T2.group_name supplier_group_name,
+			  saler_no,
+			  buyer_no,
+			  brand_no,
+			  saler_name,
+			  buyer_name,
+			  brand_name,
+			  one_level_category_no,
+			  two_level_category_no,
+			  one_level_category_name,
+			  two_level_category_name,
+			  SUM(send_qty) send_qty,
+			  SUM(send_amount) send_amount,
+			  SUM(return_qty) return_qty,
+			  SUM(return_amount) return_amount,
+			  SUM(custom_return_qty) custom_return_qty,
+			  SUM(custom_return_amount) custom_return_amount,
+			  SUM(deduction_amount) deduction_amount,
+			  SUM(balance_qty) balance_qty,
+			  SUM(balance_amount) balance_amount,
+			  SUM(before_balance_qty) before_month_balance_qty, 
+			  SUM(before_balance_amount) before_month_balance_amount, 
+			  SUM(payment_qty) current_month_payment_qty, 
+			  SUM(payment_amount) current_month_payment_amount,
+			  SUM(balance_qty) current_month_balance_qty, 
+			  SUM(balance_amount) current_month_balance_amount,
+			  SUM(before_balance_qty)   current_month_start_qty, 
+			  SUM(before_balance_amount)   current_month_start_amount, 
+			  SUM(before_balance_qty)  + SUM(balance_qty) current_month_end_qty, 
+			  SUM(before_balance_amount)  + SUM(balance_amount) current_month_end_amount 
+			FROM (<include refid="current_balance_data_sql" /> UNION ALL <include refid="before_balance_data_sql" />) T0 
+			LEFT JOIN supplier_group_rel T1 ON T0.saler_no = T1.supplier_no
+			LEFT JOIN supplier_group T2 ON T1.group_no = T2.group_no
+			GROUP BY saler_no,buyer_no,brand_no,one_level_category_no,two_level_category_no 
+			ORDER BY order_flag, saler_no,buyer_no,brand_no
+			LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</select>  
+	
+	
+	<select id="findReportDetailCount" resultType="java.lang.Integer" >
+	/*balance*/
+	  	SELECT COUNT(1) FROM (
+		  	SELECT 
+			  1
+			FROM
+			  bill_sale_balance 
+			  LEFT JOIN category C1 
+			    ON LEFT(
+			      bill_sale_balance.`category_no`,
+			      2
+			    ) = C1.`category_no` 
+			  LEFT JOIN category C2 
+			    ON LEFT(
+			      bill_sale_balance.`category_no`,
+			      4
+			    ) = C2.`category_no` 
+			  LEFT JOIN lookup_entry lookup1 
+			    ON lookup1.`code` = bill_sale_balance.`years` 
+			    AND lookup1.`lookup_id` = 5 
+			  LEFT JOIN lookup_entry lookup2 
+			    ON lookup2.`code` = bill_sale_balance.`season` 
+			    AND lookup2.`lookup_id` = 72 
+			  LEFT JOIN (SELECT t0.group_no supplier_group_no, t0.group_name supplier_group_name, t1.supplier_no supplier_no_sg FROM supplier_group t0,supplier_group_rel t1 WHERE t0.group_no = t1.group_no) SG
+				ON bill_sale_balance.supplier_no = SG.supplier_no_sg  
+			WHERE 1 = 1 
+			   AND <include refid="areaCondition" />
+			   <include refid="reportCondition" />
+			 GROUP BY saler_no,
+			  buyer_no,
+			  organ_no,
+			  item_no  ) G
+	</select>    
+	<select id="findReportDetailByPage" resultMap="BaseResultMap" parameterType="map" >
+		/*balance*/
+		SELECT 
+				G.*, 
+				G.send_qty*G.purchase_price purchase_amount,
+				G.send_qty*G.factory_price factory_amount,
+				G.headquarter_cost - G.factory_price headquarter_add,
+				G.region_cost - G.headquarter_cost region_add,
+				G.send_qty*G.region_cost region_amount FROM (
+			SELECT 
+			  SG.supplier_group_name,
+			  PP.material_price,
+			  PP.purchase_price,
+			  PP.factory_price,
+			  zone_no,
+			  organ_no,
+			  buyer_no,
+			  saler_no,
+			  brand_no,
+			  C1.`category_no` one_level_category_no,
+			  C2.`category_no` two_level_category_no,
+			  bill_sale_balance.`category_no`,
+			  item_no,
+			  item_code,
+			  saler_name,
+			  buyer_name,
+			  brand_name,
+			  C1.`name` one_level_category_name,
+			  C2.`name` two_level_category_name,
+			  bill_sale_balance.`category_name`,
+			  item_name,
+			  cost,
+			  SUM(send_qty) send_qty,
+			  SUM(send_qty * cost) send_amount,
+			  tag_price,
+			  years,
+			  season,
+			  lookup1.name years_name,
+			  lookup2.name season_name,
+			  organ_name,
+			  zone_name,
+			  supplier_no, 
+			  supplier_name,
+			    (SELECT 
+			      headquarter_cost 
+			    FROM
+			      headquarter_cost_maintain 
+			    WHERE 1 = 1 
+			      AND headquarter_cost_maintain.item_no = bill_sale_balance.item_no 
+			      AND effective_time &lt;= #{params.sendDateEnd} 
+			    ORDER BY effective_time DESC 
+			    LIMIT 0, 1) headquarter_cost,
+			  cost region_cost 
+			FROM
+			  bill_sale_balance 
+			  LEFT JOIN category C1 
+			    ON LEFT(
+			      bill_sale_balance.`category_no`,
+			      2
+			    ) = C1.`category_no` 
+			  LEFT JOIN category C2 
+			    ON LEFT(
+			      bill_sale_balance.`category_no`,
+			      4
+			    ) = C2.`category_no` 
+			  LEFT JOIN lookup_entry lookup1 
+			    ON lookup1.`code` = bill_sale_balance.`years` 
+			    AND lookup1.`lookup_id` = 5 
+			  LEFT JOIN lookup_entry lookup2 
+			    ON lookup2.`code` = bill_sale_balance.`season` 
+			    AND lookup2.`lookup_id` = 72 
+			  LEFT JOIN 
+			    (SELECT 
+				    item_no item_no_pp,
+				    supplier_no supplier_no_pp,
+				    material_price,
+				    purchase_price,
+				    factory_price 
+				  FROM
+				    (SELECT 
+				      PP.item_no,
+				      pp.supplier_no,
+				      pp.material_price,
+				      pp.purchase_price,
+				      pp.factory_price 
+				    FROM
+				      purchase_price PP 
+				    WHERE 1 = 1 
+				      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+				    ORDER BY item_no DESC,
+				      supplier_no DESC,
+				      STATUS DESC,
+				      effective_date DESC,
+				      create_time DESC) G 
+				  GROUP BY item_no,
+				    supplier_no) PP 
+			    ON bill_sale_balance.item_no = PP.item_no_pp 
+			    AND bill_sale_balance.supplier_no = PP.supplier_no_pp 
+			LEFT JOIN (SELECT t0.group_no supplier_group_no, t0.group_name supplier_group_name, t1.supplier_no supplier_no_sg FROM supplier_group t0,supplier_group_rel t1 WHERE t0.group_no = t1.group_no) SG
+				ON bill_sale_balance.supplier_no = SG.supplier_no_sg
+			WHERE 1 = 1 
+			  AND <include refid="areaCondition" />
+			  <include refid="reportCondition" />
+			  GROUP BY saler_no,
+			  buyer_no,
+			  organ_no,
+			  item_no 
+			  LIMIT #{page.startRowNum} ,#{page.pageSize} ) G 
+	</select>
+	<select id="findReportDetailFooter" resultMap="BaseResultMap" parameterType="map" >
+		/*balance*/
+		SELECT '合计' saler_name, SUM(send_qty) send_qty, SUM(purchase_price * send_qty) purchase_amount, SUM(factory_price * send_qty) factory_amount, SUM(region_cost * send_qty) region_amount FROM (
+			SELECT 
+			  SG.supplier_group_name,
+			  PP.material_price,
+			  PP.purchase_price,
+			  PP.factory_price,
+			  zone_no,
+			  organ_no,
+			  buyer_no,
+			  saler_no,
+			  brand_no,
+			  C1.`category_no` one_level_category_no,
+			  C2.`category_no` two_level_category_no,
+			  bill_sale_balance.`category_no`,
+			  item_no,
+			  item_code,
+			  saler_name,
+			  buyer_name,
+			  brand_name,
+			  C1.`name` one_level_category_name,
+			  C2.`name` two_level_category_name,
+			  bill_sale_balance.`category_name`,
+			  item_name,
+			  cost,
+			  SUM(send_qty) send_qty,
+			  SUM(send_qty * cost) send_amount,
+			  tag_price,
+			  years,
+			  season,
+			  lookup1.name years_name,
+			  lookup2.name season_name,
+			  organ_name,
+			  zone_name,
+			  supplier_no, 
+			  supplier_name,
+			    (SELECT 
+			      headquarter_cost 
+			    FROM
+			      headquarter_cost_maintain 
+			    WHERE 1 = 1 
+			      AND headquarter_cost_maintain.item_no = bill_sale_balance.item_no 
+			      AND effective_time &lt;= #{params.sendDateEnd} 
+			    ORDER BY effective_time DESC 
+			    LIMIT 0, 1) headquarter_cost,
+			  cost region_cost 
+			FROM
+			  bill_sale_balance 
+			  LEFT JOIN category C1 
+			    ON LEFT(
+			      bill_sale_balance.`category_no`,
+			      2
+			    ) = C1.`category_no` 
+			  LEFT JOIN category C2 
+			    ON LEFT(
+			      bill_sale_balance.`category_no`,
+			      4
+			    ) = C2.`category_no` 
+			  LEFT JOIN lookup_entry lookup1 
+			    ON lookup1.`code` = bill_sale_balance.`years` 
+			    AND lookup1.`lookup_id` = 5 
+			  LEFT JOIN lookup_entry lookup2 
+			    ON lookup2.`code` = bill_sale_balance.`season` 
+			    AND lookup2.`lookup_id` = 72 
+			  LEFT JOIN 
+			    (SELECT 
+				    item_no item_no_pp,
+				    supplier_no supplier_no_pp,
+				    material_price,
+				    purchase_price,
+				    factory_price 
+				  FROM
+				    (SELECT 
+				      PP.item_no,
+				      pp.supplier_no,
+				      pp.material_price,
+				      pp.purchase_price,
+				      pp.factory_price 
+				    FROM
+				      purchase_price PP 
+				    WHERE 1 = 1 
+				      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+				    ORDER BY item_no DESC,
+				      supplier_no DESC,
+				      STATUS DESC,
+				      effective_date DESC,
+				      create_time DESC) G 
+				  GROUP BY item_no,
+				    supplier_no) PP 
+			    ON bill_sale_balance.item_no = PP.item_no_pp 
+			    AND bill_sale_balance.supplier_no = PP.supplier_no_pp  
+			  LEFT JOIN (SELECT t0.group_no supplier_group_no, t0.group_name supplier_group_name, t1.supplier_no supplier_no_sg FROM supplier_group t0,supplier_group_rel t1 WHERE t0.group_no = t1.group_no) SG
+				ON bill_sale_balance.supplier_no = SG.supplier_no_sg   
+			WHERE 1 = 1 
+			  AND <include refid="areaCondition" />
+			  <include refid="reportCondition" />
+			  GROUP BY saler_no,
+			  buyer_no,
+			  organ_no,
+			  item_no ) G
+	</select>
+	<select id="findReportGatherAreaCount" resultType="java.lang.Integer" >
+		/*balance*/
+		SELECT 
+		  COUNT(1) 
+		FROM
+		  (SELECT 
+		    1 
+		  FROM
+		    bill_sale_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_sale_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		  WHERE 1 = 1 
+		  AND <include refid="areaCondition" />
+		  <include refid="reportCondition" />
+		  GROUP BY saler_no,
+		  buyer_no,
+		  organ_no,
+		  brand_no,
+		  supplier_no,
+		  C1.`category_no`
+		UNION
+		ALL 
+		SELECT 
+		  1
+		FROM
+		  bill_sale_balance 
+		  LEFT JOIN category C1 
+		    ON LEFT(
+		      bill_sale_balance.`category_no`,
+		      2
+		    ) = C1.`category_no` 
+		WHERE 1 = 1 
+		  AND <include refid="areaCondition" />
+		  <include refid="reportCondition" />
+		GROUP BY saler_no,
+		  buyer_no ) G 
+		  
+	</select>
+	
+	<select id="findReportGatherAreaByPage" resultMap="ReportGatherMap" parameterType="map" >
+		/*balance*/
+		SELECT 
+		  zone_no,
+		  organ_no,
+		  buyer_no,
+		  saler_no,
+		  brand_no,
+		  supplier_no,
+		  C1.`category_no` category_no,
+		  saler_name,
+		  buyer_name,
+		  organ_name,
+		  zone_name,
+		  brand_name,
+		  supplier_name,
+		  C1.`name` category_name,
+		  SUM(send_qty) balance_qty,
+		  SUM(IFNULL(send_qty*cost,0)) balance_amount,
+		  '' flag,
+		  SUM(
+		    CASE
+		      WHEN bill_type IN (1301, 1371) 
+		      THEN send_qty 
+		      ELSE 0 
+		    END
+		  ) send_qty,
+		  SUM(
+		    CASE
+		      WHEN bill_type IN (1301, 1371) 
+		      THEN IFNULL(send_qty * cost ,0)
+		      ELSE 0 
+		    END
+		  ) send_amount,
+		  SUM(
+		    CASE
+		      WHEN bill_type = 1333 
+		      THEN send_qty 
+		      ELSE 0 
+		    END
+		  ) return_qty,
+		  SUM(
+		    CASE
+		      WHEN bill_type = 1333 
+		      THEN IFNULL(send_qty * cost ,0)
+		      ELSE 0 
+		    END
+		  ) return_amount 
+		FROM
+		  bill_sale_balance 
+		  LEFT JOIN category C1 
+		    ON LEFT(
+		      bill_sale_balance.`category_no`,
+		      2
+		    ) = C1.`category_no` 
+		WHERE 1 = 1 
+		  AND <include refid="areaCondition" />
+		  <include refid="reportCondition" />
+		GROUP BY saler_no,
+		  buyer_no,
+		  organ_no,
+		  brand_no,
+		  supplier_no,
+		  C1.`category_no`
+		UNION
+		ALL 
+		SELECT 
+		  '' zone_no,
+		  '' organ_no,
+		  buyer_no,
+		  saler_no,
+		  '' brand_no,
+		  '' supplier_no,
+		  '' category_no,
+		  '小计' saler_name,
+		  '' buyer_name,
+		  '' organ_name,
+		  '' zone_name,
+		  '' brand_name,
+		  '' supplier_name,
+		  '' category_name,
+		  SUM(send_qty) balance_qty,
+		  SUM(IFNULL(send_qty * cost, 0)) balance_amount,
+		  'true' flag,
+		  SUM(
+		    CASE
+		      WHEN bill_type IN (1301, 1371) 
+		      THEN send_qty 
+		      ELSE 0 
+		    END
+		  ) send_qty,
+		  SUM(
+		    CASE
+		      WHEN bill_type IN (1301, 1371) 
+		      THEN IFNULL(send_qty * cost ,0) 
+		      ELSE 0 
+		    END
+		  ) send_amount,
+		  SUM(
+		    CASE
+		      WHEN bill_type = 1333 
+		      THEN send_qty 
+		      ELSE 0 
+		    END
+		  ) return_qty,
+		  SUM(
+		    CASE
+		      WHEN bill_type = 1333 
+		      THEN IFNULL(send_qty * cost ,0)
+		      ELSE 0 
+		    END
+		  ) return_amount 
+		FROM
+		  bill_sale_balance 
+		  LEFT JOIN category C1 
+		    ON LEFT(
+		      bill_sale_balance.`category_no`,
+		      2
+		    ) = C1.`category_no` 
+		WHERE 1 = 1 
+		  AND <include refid="areaCondition" />
+		  <include refid="reportCondition" />
+		GROUP BY saler_no,
+		  buyer_no 
+		ORDER BY saler_no,
+		  buyer_no,
+		  organ_no DESC   
+		 LIMIT #{page.startRowNum} ,#{page.pageSize}    
+	</select>
+	<select id="findReportFinanceCount" resultType="java.lang.Integer" >
+		/*balance*/
+		SELECT 
+		  COUNT(1)
+		FROM
+		  (SELECT 
+		    supplier_no,
+		    supplier_name,
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    item_no,
+		    item_code,
+		    item_name,
+		    organ_no,
+		    organ_name,
+		    zone_no,
+		    zone_name,
+		    zone_no_from,
+		    zone_name_from,
+		    SUM(send_qty) send_qty,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    bill_sale_balance.category_no,
+		    bill_sale_balance.category_name,
+		    lookup1.name years_name,
+		    lookup2.name season_name
+		  FROM
+		    bill_sale_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_sale_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(
+		        bill_sale_balance.`category_no`,
+		        4
+		      ) = C2.`category_no` 
+		    LEFT JOIN lookup_entry lookup1 
+		      ON lookup1.`code` = bill_sale_balance.`years` 
+		      AND lookup1.`lookup_id` = 5 
+		    LEFT JOIN lookup_entry lookup2 
+		      ON lookup2.`code` = bill_sale_balance.`season` 
+		      AND lookup2.`lookup_id` = 72 
+		  WHERE 1 = 1 
+		  AND <include refid="areaCondition" />
+		  AND orderfrom = '20141017000078'
+		  <include refid="reportCondition" />
+		  GROUP BY supplier_no,
+		    saler_no,
+		    buyer_no,
+		    item_no,
+		    organ_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    supplier_no,
+		    supplier_name,
+		    '' saler_no,
+		    '' saler_name,
+		    buyer_no,
+		    buyer_name,
+		    item_no,
+		    item_code,
+		    item_name,
+		    organ_no,
+		    organ_name,
+		    zone_no,
+		    zone_name,
+		    zone_no_from,
+		    zone_name_from,
+		    SUM(send_qty) send_qty,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    bill_buy_balance.category_no,
+		    bill_buy_balance.category_name,
+		    lookup1.name years_name,
+		    lookup2.name season_name
+		  FROM
+		    bill_buy_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_buy_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(
+		        bill_buy_balance.`category_no`,
+		        4
+		      ) = C2.`category_no` 
+		    LEFT JOIN lookup_entry lookup1 
+		      ON lookup1.`code` = bill_buy_balance.`years` 
+		      AND lookup1.`lookup_id` = 5 
+		    LEFT JOIN lookup_entry lookup2 
+		      ON lookup2.`code` = bill_buy_balance.`season` 
+		      AND lookup2.`lookup_id` = 72 
+		  WHERE 1 = 1 
+		  AND orderfrom = '20141017000078'
+		  AND <include refid="insteadCondition" />
+		  <include refid="reportCondition" />
+		  GROUP BY supplier_no,
+		    saler_no,
+		    buyer_no,
+		    item_no,
+		    organ_no) T 
+	</select>
+	<select id="findReportFinanceByPage" resultMap="ReportFinancialMap" parameterType="map" >
+		/*balance*/
+		SELECT 
+		  T.*,
+		  PP.material_price,
+		  PP.purchase_price,
+		  PP.factory_price,
+		  PP.material_price*T.send_qty material_amount,
+		  PP.purchase_price*T.send_qty purchase_amount,
+		  PP.factory_price*T.send_qty factory_amount,
+		  T.headquarter_cost*T.send_qty headquarter_amount,
+		  T.region_cost*T.send_qty region_amount,
+		  T.region_cost_from*T.send_qty region_from_amount
+		FROM
+		  (SELECT 
+		    supplier_no,
+		    supplier_name,
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    item_no,
+		    item_code,
+		    item_name,
+		    organ_no,
+		    organ_name,
+		    zone_no,
+		    zone_name,
+		    zone_no_from,
+		    zone_name_from,
+		    SUM(send_qty) send_qty,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    bill_sale_balance.category_no,
+		    bill_sale_balance.category_name,
+		    lookup1.name years_name,
+		    lookup2.name season_name,
+		    (SELECT 
+		      headquarter_cost 
+		    FROM
+		      headquarter_cost_maintain 
+		    WHERE 1 = 1 
+		      AND item_no = bill_sale_balance.item_no 
+		      AND effective_time &lt;= #{params.sendDateEnd} 
+		    ORDER BY effective_time DESC 
+		    LIMIT 0, 1) headquarter_cost,
+		    cost region_cost,
+		    IF(saler_no='I0007',(SELECT bbb.cost FROM bill_buy_balance bbb WHERE bbb.original_bill_no = bill_sale_balance.original_bill_no AND bbb.item_no = bill_sale_balance.item_no LIMIT 1), NULL) region_cost_from 
+		  FROM
+		    bill_sale_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_sale_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(
+		        bill_sale_balance.`category_no`,
+		        4
+		      ) = C2.`category_no` 
+		    LEFT JOIN lookup_entry lookup1 
+		      ON lookup1.`code` = bill_sale_balance.`years` 
+		      AND lookup1.`lookup_id` = 5 
+		    LEFT JOIN lookup_entry lookup2 
+		      ON lookup2.`code` = bill_sale_balance.`season` 
+		      AND lookup2.`lookup_id` = 72 
+		  WHERE 1 = 1 
+		  AND <include refid="areaCondition" />
+		  AND orderfrom = '20141017000078'
+		  <include refid="reportCondition" />
+		  GROUP BY supplier_no,
+		    saler_no,
+		    buyer_no,
+		    item_no,
+		    organ_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    supplier_no,
+		    supplier_name,
+		    NULL saler_no,
+		    NULL saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    item_no,
+		    item_code,
+		    item_name,
+		    organ_no,
+		    organ_name,
+		    zone_no,
+		    zone_name,
+		    zone_no_from,
+		    zone_name_from,
+		    SUM(send_qty) send_qty,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    bill_buy_balance.category_no,
+		    bill_buy_balance.category_name,
+		    lookup1.name years_name,
+		    lookup2.name season_name,
+		    (SELECT 
+		      headquarter_cost 
+		    FROM
+		      headquarter_cost_maintain 
+		    WHERE 1 = 1 
+		      AND item_no = bill_buy_balance.item_no 
+		      AND effective_time &lt;= #{params.sendDateEnd} 
+		    ORDER BY effective_time DESC 
+		    LIMIT 0, 1) headquarter_cost,
+		    cost region_cost,
+		    NULL region_cost_from 
+		  FROM
+		    bill_buy_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_buy_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(
+		        bill_buy_balance.`category_no`,
+		        4
+		      ) = C2.`category_no` 
+		    LEFT JOIN lookup_entry lookup1 
+		      ON lookup1.`code` = bill_buy_balance.`years` 
+		      AND lookup1.`lookup_id` = 5 
+		    LEFT JOIN lookup_entry lookup2 
+		      ON lookup2.`code` = bill_buy_balance.`season` 
+		      AND lookup2.`lookup_id` = 72 
+		  WHERE 1 = 1 
+		  AND orderfrom = '20141017000078'
+		  AND <include refid="insteadCondition" />
+		  <include refid="reportCondition" />
+		  GROUP BY supplier_no,
+		    saler_no,
+		    buyer_no,
+		    item_no,
+		    organ_no) T 
+		  LEFT JOIN 
+		    (SELECT 
+			    item_no,
+			    supplier_no,
+			    material_price,
+			    purchase_price,
+			    factory_price 
+			  FROM
+			    (SELECT 
+			      PP.item_no,
+			      pp.supplier_no,
+			      pp.material_price,
+			      pp.purchase_price,
+			      pp.factory_price 
+			    FROM
+			      purchase_price PP 
+			    WHERE 1 = 1 
+			      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+			    ORDER BY item_no DESC,
+			      supplier_no DESC,
+			      STATUS DESC,
+			      effective_date DESC,
+			      create_time DESC) G 
+			  GROUP BY item_no,
+			    supplier_no) PP 
+		    ON T.item_no = PP.item_no 
+		    AND T.supplier_no = PP.supplier_no 
+		    LIMIT #{page.startRowNum} ,#{page.pageSize}  
+	</select>
+	<select id="findReportFinanceFooter" resultMap="ReportFinancialMap" parameterType="map" >
+		/*balance*/
+		SELECT 
+		  '合计' orderfrom_name,
+		  SUM(T.send_qty) send_qty,
+		  SUM(PP.material_price*T.send_qty) material_amount,
+		  SUM(PP.purchase_price*T.send_qty) purchase_amount,
+		  SUM(PP.factory_price*T.send_qty) factory_amount,
+		  SUM(T.headquarter_cost*T.send_qty) headquarter_amount,
+		  SUM(T.region_cost*T.send_qty) region_amount,
+		  SUM(T.region_cost_from*T.send_qty) region_from_amount
+		FROM
+		  (SELECT 
+		    supplier_no,
+		    supplier_name,
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    item_no,
+		    item_code,
+		    item_name,
+		    organ_no,
+		    organ_name,
+		    zone_no,
+		    zone_name,
+		    zone_no_from,
+		    zone_name_from,
+		    SUM(send_qty) send_qty,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    bill_sale_balance.category_no,
+		    bill_sale_balance.category_name,
+		    lookup1.name years_name,
+		    lookup2.name season_name,
+		    (SELECT 
+		      headquarter_cost 
+		    FROM
+		      headquarter_cost_maintain 
+		    WHERE 1 = 1 
+		      AND item_no = bill_sale_balance.item_no 
+		      AND effective_time &lt;= #{params.sendDateEnd} 
+		    ORDER BY effective_time DESC 
+		    LIMIT 0, 1) headquarter_cost,
+		    cost region_cost,
+		    IF(saler_no='I0007',(SELECT bbb.cost FROM bill_buy_balance bbb WHERE bbb.original_bill_no = bill_sale_balance.original_bill_no AND bbb.item_no = bill_sale_balance.item_no LIMIT 1), NULL) region_cost_from 
+		  FROM
+		    bill_sale_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_sale_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(
+		        bill_sale_balance.`category_no`,
+		        4
+		      ) = C2.`category_no` 
+		    LEFT JOIN lookup_entry lookup1 
+		      ON lookup1.`code` = bill_sale_balance.`years` 
+		      AND lookup1.`lookup_id` = 5 
+		    LEFT JOIN lookup_entry lookup2 
+		      ON lookup2.`code` = bill_sale_balance.`season` 
+		      AND lookup2.`lookup_id` = 72 
+		  WHERE 1 = 1 
+		  AND <include refid="areaCondition" />
+		  AND orderfrom = '20141017000078'
+		  <include refid="reportCondition" />
+		  GROUP BY supplier_no,
+		    saler_no,
+		    buyer_no,
+		    item_no,
+		    organ_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    supplier_no,
+		    supplier_name,
+		    NULL saler_no,
+		    NULL saler_name,
+		    buyer_no,
+		    buyer_name,
+		    item_no,
+		    item_code,
+		    item_name,
+		    organ_no,
+		    organ_name,
+		    zone_no,
+		    zone_name,
+		    zone_no_from,
+		    zone_name_from,
+		    SUM(send_qty) send_qty,
+		    C1.category_no one_level_category_no,
+		    C1.name one_level_category_name,
+		    C2.category_no two_level_category_no,
+		    C2.name two_level_category_name,
+		    bill_buy_balance.category_no,
+		    bill_buy_balance.category_name,
+		    lookup1.name years_name,
+		    lookup2.name season_name,
+		    (SELECT 
+		      headquarter_cost 
+		    FROM
+		      headquarter_cost_maintain 
+		    WHERE 1 = 1 
+		      AND item_no = bill_buy_balance.item_no 
+		      AND effective_time &lt;= #{params.sendDateEnd} 
+		    ORDER BY effective_time DESC 
+		    LIMIT 0, 1) headquarter_cost,
+		    cost region_cost,
+		    NULL region_cost_from 
+		  FROM
+		    bill_buy_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_buy_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		    LEFT JOIN category C2 
+		      ON LEFT(
+		        bill_buy_balance.`category_no`,
+		        4
+		      ) = C2.`category_no` 
+		    LEFT JOIN lookup_entry lookup1 
+		      ON lookup1.`code` = bill_buy_balance.`years` 
+		      AND lookup1.`lookup_id` = 5 
+		    LEFT JOIN lookup_entry lookup2 
+		      ON lookup2.`code` = bill_buy_balance.`season` 
+		      AND lookup2.`lookup_id` = 72 
+		  WHERE 1 = 1 
+		  AND orderfrom = '20141017000078'
+		  AND <include refid="insteadCondition" />
+		  <include refid="reportCondition" />
+		  GROUP BY supplier_no,
+		    saler_no,
+		    buyer_no,
+		    item_no,
+		    organ_no) T 
+		  LEFT JOIN 
+		    (SELECT 
+			    item_no,
+			    supplier_no,
+			    material_price,
+			    purchase_price,
+			    factory_price 
+			  FROM
+			    (SELECT 
+			      PP.item_no,
+			      pp.supplier_no,
+			      pp.material_price,
+			      pp.purchase_price,
+			      pp.factory_price 
+			    FROM
+			      purchase_price PP 
+			    WHERE 1 = 1 
+			      AND PP.effective_date &lt;= #{params.sendDateEnd} 
+			    ORDER BY item_no DESC,
+			      supplier_no DESC,
+			      STATUS DESC,
+			      effective_date DESC,
+			      create_time DESC) G 
+			  GROUP BY item_no,
+			    supplier_no) PP 
+		    ON T.item_no = PP.item_no 
+		    AND T.supplier_no = PP.supplier_no 
+	</select>
+	<select id="findReportBusinessCount" resultType="java.lang.Integer" >
+		/*balance*/
+		SELECT COUNT(1) FROM
+				  (SELECT 
+					COUNT(1)
+				      FROM 
+				      ( SELECT b.*,l.name AS orderfrom_name FROM bill_buy_balance b,lookup_entry l 
+				      		WHERE b.orderfrom=l.CODE 
+				      )a 
+					  LEFT JOIN category C1
+					    ON LEFT(a.`category_no`,4) = C1.`category_no` 
+					    INNER JOIN lookup_entry ll ON a.gender=ll.code
+					 WHERE 1 = 1
+					 AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)  
+					      		AND orderfrom IS NOT NULL  <include refid="reportBusiness" /> 
+					      		AND send_date &gt;= #{params.sendDateStart}
+				      	  		AND send_date &lt;= #{params.sendDateEnd}
+				      GROUP BY orderfrom,saler_no, buyer_no,brand_no,gender,C1.category_no
+			 )bill_buy_balance1
+	</select>
+	<select id="findReportBusinessByPage" resultMap="BaseResultMap" parameterType="map">
+		/*balance*/
+		 SELECT 
+			  T0.*,
+			  T1.balance_qty total_balance_qty,
+			  T1.balance_amount total_balance_amount,
+			  T1.out_qty total_send_qty,
+			  T1.out_amount total_send_amount,
+			  T1.return_qty total_return_qty,
+			  T1.return_amount total_return_amount
+			FROM
+			  (SELECT 
+			    buyer_no,
+			    buyer_name,
+			    saler_no,
+			    saler_name,
+			    brand_no,
+			    brand_name,
+			    orderfrom,
+			    gender,
+			    C1.category_no,
+			    t1.name orderfrom_name,
+			    t2.name gender_name,
+			    C1.`name` category_name,
+			    SUM(send_qty) balance_qty,
+			    SUM(send_qty * cost) balance_amount,
+			    SUM(
+			      CASE
+			        WHEN bill_type = 1301 
+			        THEN send_qty 
+			        ELSE 0 
+			      END
+			    ) send_qty,
+			    SUM(
+			      CASE
+			        WHEN bill_type = 1301 
+			        THEN send_qty * cost 
+			        ELSE 0 
+			      END
+			    ) send_amount,
+			    SUM(
+			      CASE
+			        WHEN bill_type = 1333 
+			        THEN send_qty 
+			        ELSE 0 
+			      END
+			    ) return_qty,
+			    SUM(
+			      CASE
+			        WHEN bill_type = 1333 
+			        THEN send_qty * cost 
+			        ELSE 0 
+			      END
+			    ) return_amount 
+			  FROM
+			    bill_buy_balance 
+			    LEFT JOIN category C1 
+			      ON LEFT(
+			        bill_buy_balance.`category_no`,
+			        4
+			      ) = C1.`category_no` 
+			    LEFT JOIN lookup_entry t1 
+			      ON bill_buy_balance.`orderfrom` = t1.code 
+			      AND t1.lookup_id = '29' 
+			    LEFT JOIN lookup_entry t2 
+			      ON bill_buy_balance.`gender` = t2.code 
+			      AND t2.lookup_id = '7' 
+			  WHERE 1 = 1
+			    AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+			    AND orderfrom IS NOT NULL
+			    <include refid="reportBusiness" />
+			     	AND send_date &gt;= #{params.sendDateStart}
+			      	AND send_date &lt;= #{params.sendDateEnd}
+			  GROUP BY orderfrom,
+			    saler_no,
+			    buyer_no,
+			    brand_no,
+			    gender,
+			    C1.`category_no`) T0 
+			  LEFT JOIN 
+			    (SELECT 
+			      buyer_no,
+			      buyer_name,
+			      saler_no,
+			      saler_name,
+			      brand_no,
+			      brand_name,
+			      orderfrom,
+			      gender,
+			      C1.category_no,
+			      t1.name orderfrom_name,
+			      t2.name gender_name,
+			      C1.`name` category_name,
+			      SUM(send_qty) balance_qty,
+			      SUM(send_qty * cost) balance_amount,
+			      SUM(
+			        CASE
+			          WHEN bill_type = 1301 
+			          THEN send_qty 
+			          ELSE 0 
+			        END
+			      ) out_qty,
+			      SUM(
+			        CASE
+			          WHEN bill_type = 1301 
+			          THEN send_qty * cost 
+			          ELSE 0 
+			        END
+			      ) out_amount,
+			      SUM(
+			        CASE
+			          WHEN bill_type = 1333 
+			          THEN send_qty 
+			          ELSE 0 
+			        END
+			      ) return_qty,
+			      SUM(
+			        CASE
+			          WHEN bill_type = 1333 
+			          THEN send_qty * cost
+			          ELSE 0 
+			        END
+			      ) return_amount 
+			    FROM
+			      bill_buy_balance 
+			      LEFT JOIN category C1 
+			        ON LEFT(
+			          bill_buy_balance.`category_no`,
+			          4
+			        ) = C1.`category_no` 
+			      LEFT JOIN lookup_entry t1 
+			        ON bill_buy_balance.`orderfrom` = t1.code 
+			        AND t1.lookup_id = '29' 
+			      LEFT JOIN lookup_entry t2 
+			        ON bill_buy_balance.`gender` = t2.code 
+			        AND t2.lookup_id = '7' 
+			    WHERE 1 = 1
+			      AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+			      AND orderfrom IS NOT NULL 
+			      <include refid="reportBusiness" />
+			     AND YEAR(send_date)=YEAR(#{params.sendDateStart})
+			    GROUP BY orderfrom,
+			      saler_no,
+			      buyer_no,
+			      brand_no,
+			      gender,
+			      C1.`category_no`) T1 
+			    ON T0.orderfrom = T1.orderfrom 
+			    AND T0.saler_no = T1.saler_no 
+			    AND T0.buyer_no = T1.buyer_no 
+			    AND T0.brand_no = T1.brand_no 
+			    AND T0.gender = T1.gender 
+			    AND T0.category_no = T1.category_no
+		  LIMIT #{page.startRowNum} ,#{page.pageSize}  
+	</select>
+	
+	<select id="findSumBalanceList" resultMap="ReportGatherMap" parameterType="map" >
+		/*balance*/
+		SELECT 
+		  buyer_no,
+		  saler_no,
+		  brand_no,
+		  category_no,
+		  buyer_name,
+		  saler_name,
+		  brand_name,
+		  category_name,
+		  SUM(send_qty) send_qty,
+		  SUM(send_amount) send_amount,
+		  SUM(return_qty) return_qty,
+		  SUM(return_amount) return_amount,
+		  SUM(custom_return_qty) custom_return_qty,
+		  SUM(custom_return_amount) custom_return_amount,
+		  SUM(deduction_amount) deduction_amount,
+		  SUM(send_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+		  SUM(send_amount) + SUM(return_amount) - SUM(deduction_amount) - SUM(custom_return_amount) balance_amount
+		FROM
+		  (SELECT 
+		    buyer_no,
+		    saler_no,
+		    brand_no,
+		    C1.`category_no`,
+		    buyer_name,
+		    saler_name,
+		    brand_name,
+		    C1.`name` category_name,
+		    SUM(IF(bill_type = 1301, send_qty, 0)) send_qty,
+		    SUM(
+		      IF(bill_type = 1301, send_qty * cost, 0)
+		    ) send_amount,
+		    SUM(IF(bill_type = 1333, send_qty, 0)) return_qty,
+		    SUM(
+		      IF(bill_type = 1333, send_qty * cost, 0)
+		    ) return_amount,
+		    0 custom_return_qty,
+		    0 custom_return_amount,
+		    0 deduction_amount 
+		  FROM
+		    bill_buy_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_buy_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		    WHERE 1 = 1
+		    AND (balance_status IS NULL  OR balance_status != 5)
+		    AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+		  <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if> 
+	      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if>       
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	        AND send_date &gt;= #{params.sendDateStart}
+	      </if> 
+	      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	        AND send_date &lt;= #{params.sendDateEnd}
+	      </if>    
+		  GROUP BY buyer_no,
+		    saler_no,
+		    brand_no,
+		    C1.`category_no` 
+		  UNION
+		  ALL 
+		  SELECT 
+		    buyer_no,
+		    saler_no,
+		    brand_no,
+		    category_no,
+		    buyer_name,
+		    saler_name,
+		    brand_name,
+		    category_name,
+		    0 send_qty,
+		    0 send_amount,
+		    0 return_qty,
+		    0 return_amount,
+		    0 custom_return_qty,
+		    0 custom_return_amount,
+		    SUM(deduction_amount) deduction_amount 
+		  FROM
+		    other_deduction 
+		    WHERE 1 = 1
+		    AND balance_type = 1
+		    AND (balance_status IS NULL  OR balance_status != 5)
+		  <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if> 
+	      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if>       
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	        AND deduction_date &gt;= #{params.sendDateStart}
+	      </if> 
+	      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	        AND deduction_date &lt;= #{params.sendDateEnd}
+	      </if>   
+		  GROUP BY buyer_no,
+		    saler_no,
+		    brand_no,
+		    category_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    buyer_no,
+		    saler_no,
+		    brand_no,
+		    C1.category_no,
+		    buyer_name,
+		    saler_name,
+		    brand_name,
+		    C1.name category_name,
+		    0 send_qty,
+		    0 send_amount,
+		    0 return_qty,
+		    0 return_amount,
+		    SUM(qty) custom_return_qty,
+		    SUM(amount) custom_return_amount,
+		    0 deduction_amount 
+		  FROM
+		    custom_imperfect 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        custom_imperfect.`category_no`,
+		        2
+		      ) = C1.`category_no`
+		    WHERE 1 = 1
+		    AND balance_type = 1
+		    AND (balance_status IS NULL  OR balance_status != 5)
+		  <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if> 
+	      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if>       
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	        AND return_date &gt;= #{params.sendDateStart}
+	      </if> 
+	      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	        AND return_date &lt;= #{params.sendDateEnd}
+	      </if>   
+		  GROUP BY buyer_no,
+		    saler_no,
+		    brand_no,
+		    C1.`category_no`) G 
+		GROUP BY buyer_no,
+		  saler_no,
+		  brand_no,
+		  category_no 
+	</select>
+	
+	<select id="findSumBalanceFooter" resultMap="ReportGatherMap" parameterType="map" >
+		/*balance*/
+		SELECT 
+		  '合计' buyer_name,
+		  SUM(send_qty) send_qty,
+		  SUM(send_amount) send_amount,
+		  SUM(return_qty) return_qty,
+		  SUM(return_amount) return_amount,
+		  SUM(custom_return_qty) custom_return_qty,
+		  SUM(custom_return_amount) custom_return_amount,
+		  SUM(deduction_amount) deduction_amount,
+		  SUM(send_qty) + SUM(return_qty) - SUM(custom_return_qty) balance_qty,
+		  SUM(send_amount) + SUM(return_amount) - SUM(deduction_amount) - SUM(custom_return_amount) balance_amount
+		FROM
+		  (SELECT 
+		    buyer_no,
+		    saler_no,
+		    brand_no,
+		    C1.`category_no`,
+		    buyer_name,
+		    saler_name,
+		    brand_name,
+		    C1.`name` category_name,
+		    SUM(IF(bill_type = 1301, send_qty, 0)) send_qty,
+		    SUM(
+		      IF(bill_type = 1301, send_qty * cost, 0)
+		    ) send_amount,
+		    SUM(IF(bill_type = 1333, send_qty, 0)) return_qty,
+		    SUM(
+		      IF(bill_type = 1333, send_qty * cost, 0)
+		    ) return_amount,
+		    0 custom_return_qty,
+		    0 custom_return_amount,
+		    0 deduction_amount 
+		  FROM
+		    bill_buy_balance 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        bill_buy_balance.`category_no`,
+		        2
+		      ) = C1.`category_no` 
+		    WHERE 1 = 1
+		    AND (balance_status IS NULL  OR balance_status != 5)
+		    AND (<include refid="insteadCondition" /> OR <include refid="unifyCondition" />)
+		  <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if> 
+	      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if>       
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	        AND send_date &gt;= #{params.sendDateStart}
+	      </if> 
+	      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	        AND send_date &lt;= #{params.sendDateEnd}
+	      </if>    
+		  GROUP BY buyer_no,
+		    saler_no,
+		    brand_no,
+		    C1.`category_no` 
+		  UNION
+		  ALL 
+		  SELECT 
+		    buyer_no,
+		    saler_no,
+		    brand_no,
+		    category_no,
+		    buyer_name,
+		    saler_name,
+		    brand_name,
+		    category_name,
+		    0 send_qty,
+		    0 send_amount,
+		    0 return_qty,
+		    0 return_amount,
+		    0 custom_return_qty,
+		    0 custom_return_amount,
+		    SUM(deduction_amount) deduction_amount 
+		  FROM
+		    other_deduction 
+		    WHERE 1 = 1
+		    AND balance_type = 1
+		    AND (balance_status IS NULL  OR balance_status != 5)
+		  <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if> 
+	      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if>       
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	        AND deduction_date &gt;= #{params.sendDateStart}
+	      </if> 
+	      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	        AND deduction_date &lt;= #{params.sendDateEnd}
+	      </if>   
+		  GROUP BY buyer_no,
+		    saler_no,
+		    brand_no,
+		    category_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    buyer_no,
+		    saler_no,
+		    brand_no,
+		    C1.category_no,
+		    buyer_name,
+		    saler_name,
+		    brand_name,
+		    C1.name category_name,
+		    0 send_qty,
+		    0 send_amount,
+		    0 return_qty,
+		    0 return_amount,
+		    SUM(qty) custom_return_qty,
+		    SUM(amount) custom_return_amount,
+		    0 deduction_amount 
+		  FROM
+		    custom_imperfect 
+		    LEFT JOIN category C1 
+		      ON LEFT(
+		        custom_imperfect.`category_no`,
+		        2
+		      ) = C1.`category_no`
+		    WHERE 1 = 1
+		    AND balance_type = 1
+		    AND (balance_status IS NULL  OR balance_status != 5)
+		  <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if> 
+	      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if>       
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	        AND return_date &gt;= #{params.sendDateStart}
+	      </if> 
+	      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	        AND return_date &lt;= #{params.sendDateEnd}
+	      </if>   
+		  GROUP BY buyer_no,
+		    saler_no,
+		    brand_no,
+		    C1.`category_no`) G 
+	</select>
+</mapper>

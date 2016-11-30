@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.OrderUnitMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.OrderUnit" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_code" property="orderUnitCode" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="DetailBaseResultMap"  extends="BaseResultMap"  type="cn.wonhigh.retail.fas.common.model.OrderUnit"  >
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+   </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_unit_no, order_unit_code, organ_no, name, company_no, create_user, create_time, update_user, 
+    update_time, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.id and ''!=params.id">
+	     and t.id=#{params.id,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.orderUnitNo and ''!=params.orderUnitNo">
+	     and t.order_unit_no=#{params.orderUnitNo,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null != params.orderUnitNos and '' != params.orderUnitNos">
+	  	AND t.order_unit_no in 
+ 	  <foreach collection="params.orderUnitNos" item="orderUnitNo" separator="," open="(" close=")" index=""> 
+	 	#{orderUnitNo}
+	  </foreach>  
+	  </if>
+	   <if test="null!=params.orderUnitCode and ''!=params.orderUnitCode">
+	     and t.order_unit_code=#{params.orderUnitCode,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.name and ''!=params.name">
+   		 and t.name like '%${params.name}%'
+	  </if>
+	   <if test="null!=params.organNo and ''!=params.organNo">
+   		 and t.organ_no =#{params.organNo,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.organNoCon and ''!=params.organNoCon">
+   		 and t.organ_no =#{params.organNoCon,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.companyNo and ''!=params.companyNo">
+   		 and t.company_no = #{params.companyNo,jdbcType=VARCHAR}
+	  </if>
+	  <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (UPPER(t.order_unit_no) LIKE UPPER(CONCAT(#{params.q},'%')) OR t.name LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+	  <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND (UPPER(t.order_unit_no) IN ${params.multiq} OR UPPER(t.name) IN ${params.multiq} ) 
+	  </if>
+    </if>
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_unit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+      SELECT COUNT(1) AS S 
+      	FROM 
+      		(SELECT T1.*
+      			FROM ORDER_UNIT T1 WHERE 1 = 1
+      			/*organ_type_no*/
+      		) T 
+      	WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="DetailBaseResultMap" parameterType="map" >
+    	SELECT 
+     		T.*,ORG.NAME  AS ORGAN_NAME, COMPANY.NAME COMPANY_NAME
+     	FROM
+     		 (SELECT T1.* 
+      			FROM ORDER_UNIT T1  WHERE 1 = 1
+      			/*organ_type_no*/
+      		) T 
+      	left JOIN ORGAN ORG ON T.ORGAN_NO= ORG.ORGAN_NO 
+      	left JOIN COMPANY ON T.COMPANY_NO = COMPANY.COMPANY_NO
+      	WHERE 1=1     
+     <include refid="condition" />
+      <choose>
+	    	<when test="orderByField != null and ''!=orderByField">
+	    		order by ${orderByField}
+	    		<if test="orderByField" >
+		        	${orderBy}
+		      	</if>
+	    	</when>
+	    	<otherwise>
+	    		ORDER BY ORG.ORGAN_NO,T.ORDER_UNIT_NO ASC
+	    	</otherwise>
+	    </choose>
+     limit #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from order_unit t where 1=1 
+     /*organ_type_no*/
+    <include refid="condition" />
+  </select>
+  
+  <select id="selectByShopNo" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from order_unit where 1=1 and order_unit_no in(
+     	select order_unit_no from shop_brand where 1=1
+     	<if test="null!=params" >
+	      <if test="null!=params.shopNo and ''!=params.shopNo">
+			and shop_no=#{params.shopNo,jdbcType=CHAR} 
+		  </if>
+	    </if>
+     )
+    </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from order_unit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.OrderUnit" >
+    delete from order_unit
+    where id = #{id,jdbcType=INTEGER} or order_unit_no = #{orderUnitNo,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteAll" >
+    TRUNCATE TABLE order_unit
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.OrderUnit" >
+    insert into order_unit (order_unit_no, order_unit_code, 
+      organ_no, name, company_no, create_user, 
+      create_time, update_user, update_time, 
+      remark)
+    values ( #{orderUnitNo,jdbcType=CHAR}, #{orderUnitCode,jdbcType=VARCHAR}, 
+      #{organNo,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{companyNo,jdbcType=CHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective"   parameterType="cn.wonhigh.retail.fas.common.model.OrderUnit" >
+    insert into order_unit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderUnitNo != null" >
+        order_unit_no,
+      </if>
+      <if test="orderUnitCode != null" >
+        order_unit_code,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderUnitNo != null" >
+        #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitCode != null" >
+        #{orderUnitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+      	#{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.OrderUnit" >
+    update order_unit
+    <set >
+      <if test="orderUnitNo != null" >
+        order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitCode != null" >
+        order_unit_code = #{orderUnitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER} or order_unit_no = #{orderUnitNo,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.OrderUnit" >
+    update order_unit
+    set order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      order_unit_code = #{orderUnitCode,jdbcType=VARCHAR},
+      organ_no = #{organNo,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER} or order_unit_no = #{orderUnitNo,jdbcType=CHAR}
+  </update>
+  
+  <select id="findOrderUnitNameByNo" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT name FROM order_unit WHERE order_unit_no=#{orderUnitNo}
+  </select>
+  
+</mapper>

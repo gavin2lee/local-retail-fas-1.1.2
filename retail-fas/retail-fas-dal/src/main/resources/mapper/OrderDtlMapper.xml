@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.OrderDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.OrderDtlDto" >
+    <id column="id" property="orderDtlId" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="item_flag" property="itemFlag" jdbcType="SMALLINT" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="disc_price" property="discPrice" jdbcType="DECIMAL" />
+    <result column="settle_price" property="settlePrice" jdbcType="DECIMAL" />
+    <result column="reduce_price" property="reducePrice" jdbcType="DECIMAL" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="pref_price" property="prefPrice" jdbcType="DECIMAL" />
+    <result column="pro_no" property="proNo" jdbcType="VARCHAR" />
+    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="vip_discount" property="vipDiscount" jdbcType="DECIMAL" />
+    <result column="base_score" property="baseScore" jdbcType="INTEGER" />
+    <result column="pro_score" property="proScore" jdbcType="INTEGER" />
+    <result column="item_discount" property="itemDiscount" jdbcType="DECIMAL" />
+    <result column="discount_type" property="discountType" jdbcType="SMALLINT" />
+    <result column="discount_source_id" property="discountSourceId" jdbcType="VARCHAR" />
+    <result column="color_no" property="colorNo" jdbcType="VARCHAR" />
+    <result column="color_name" property="colorName" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="out_date" property="outDate" jdbcType="DATE" />
+    <result column="assistant_no" property="assistantNo" jdbcType="VARCHAR" />
+    <result column="assistant_name" property="assistantName" jdbcType="VARCHAR" />
+    <result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+    <result column="tag_amount" property="tagAmount" jdbcType="DECIMAL" />
+    <result column="bill_date" property="billDate" jdbcType="TIMESTAMP" />
+    <result column="finance_confirm_flag" property="financeConfirmFlag" jdbcType="INTEGER" />
+    <result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+    <result column="invoice_amount" property="invoiceAmount" jdbcType="DECIMAL" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="OrderSummaryResultMap" type="cn.wonhigh.retail.fas.common.model.MemberOrderSummary">
+  	   <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+	   <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+	   <result column="total_qty" property="totalQty" jdbcType="INTEGER" />
+	   <result column="tag_price_amount" property="tagPriceAmount" jdbcType="DECIMAL" />
+	   <result column="sale_price_amount" property="salePriceAmount" jdbcType="DECIMAL" />
+	   <result column="settle_amount" property="settleAmount" jdbcType="DECIMAL" />
+	   <result column="coupon_amount" property="couponAmount" jdbcType="DECIMAL" />
+	   <result column="amount" property="amount" jdbcType="DECIMAL" />
+	   <result column="start_date" property="startDate" jdbcType="DATE" />
+	   <result column="end_date" property="endDate" jdbcType="DATE" />	 
+	   <result column="finance_confirm_flag" property="financeConfirmFlag" jdbcType="INTEGER" />
+       <result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+       <result column="invoice_amount" property="invoiceAmount" jdbcType="DECIMAL" />  
+  </resultMap>
+  
+  <resultMap id="OrderDetailResultMap" type="cn.wonhigh.retail.fas.common.model.MemberOrderDetail" extends="BaseResultMap">
+  	   <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+	   <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+	   <result column="tag_price_amount" property="tagPriceAmount" jdbcType="DECIMAL" />
+	   <result column="sale_price_amount" property="salePriceAmount" jdbcType="DECIMAL" />
+	   <result column="disc_price_amount" property="discPriceAmount" jdbcType="DECIMAL" />
+	   <result column="settle_amount" property="settleAmount" jdbcType="DECIMAL" />
+	   <result column="reduce_amount" property="reduceAmount" jdbcType="DECIMAL" />
+	   <result column="pref_amount" property="prefAmount" jdbcType="DECIMAL" />
+	   <result column="coupon_amount" property="couponAmount" jdbcType="DECIMAL" />
+	   <result column="all_amount" property="allAmount" jdbcType="DECIMAL" />
+	   <result column="out_date" property="outDate" jdbcType="DATE" />
+       <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+       <result column="company_name" property="companyName" jdbcType="VARCHAR" />  
+       <result column="business_type" property="businessType" jdbcType="SMALLINT" />
+       <result column="assistant_no" property="assistantNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    t.id, t.order_no, t.sku_no, t.item_no, t.size_no, t.item_code, t.item_name, t.brand_no, t.item_flag, 
+    t.tag_price, t.sale_price, t.disc_price, t.settle_price, t.reduce_price, t.qty, t.amount, t.pref_price, 
+    t.pro_no, t.pro_name, t.discount, t.vip_discount, t.base_score, t.pro_score, t.item_discount, t.discount_type, 
+    t.discount_source_id, t.color_no, t.color_name, t.brand_name, t1.shop_no, t1.shop_name, t1.assistant_no, '' assistant_name,
+    t1.create_time bill_date,
+    t1.out_date,s.company_no
+  </sql>
+  
+  <sql id="OrderSummary_Column_List">
+  	  shop_no,
+	  shop_name,
+	  SUM(qty) total_qty,
+	  SUM(tag_price_amount) tag_price_amount,
+	  SUM(sale_price_amount) sale_price_amount,
+	  SUM(settle_amount) settle_amount,
+	  SUM(coupon_amount) coupon_amount,
+	  SUM(settle_amount - coupon_amount) amount,
+	  MIN(out_date) start_date,
+	  MAX(out_date) end_date
+  </sql>
+  
+  <sql id="OrderSummary_Column_Operate_List">
+  	  shop_no,
+	  shop_name,
+	  SUM(t1.qty) total_qty,
+	  SUM(tag_price_amount) tag_price_amount,
+	  SUM(sale_price_amount) sale_price_amount,
+	  SUM(settle_amount) settle_amount,
+	  SUM(coupon_amount) coupon_amount,
+	  SUM(settle_amount - coupon_amount) amount,
+	  MIN(out_date) start_date,
+	  MAX(out_date) end_date,
+	  t2.finance_confirm_flag,
+  	  t2.invoice_no, 
+      t2.invoice_amount
+  </sql>
+  
+  <sql id="OrderDetail_Column_List">
+  	  shop_no,
+	  shop_name,
+	  tag_price_amount,
+	  sale_price_amount,
+	  disc_price_amount,
+	  settle_amount,
+	  reduce_amount,m.pref_amount,
+	  coupon_amount,m.all_amount,
+	  out_date,
+	  company_no,
+	  company_name,
+	  business_type
+  </sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.businessType and ''!=params.businessType" >
+        and t1.business_type = #{params.businessType}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+        and t1.shop_no = #{params.shopNo}
+      </if>
+      <if test="null!=params.startDate and ''!=params.startDate" >
+        and t1.out_date &gt;= #{params.startDate}
+      </if>
+       <if test="null!=params.endDate and ''!=params.endDate" >
+        and t1.out_date &lt;= #{params.endDate}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        and s.company_no = #{params.companyNo}
+      </if>
+    </if>
+  </sql>
+  
+   <sql id="condition2" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.businessType and ''!=params.businessType" >
+        and m.business_type = #{params.businessType}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+        and m.shop_no = #{params.shopNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        and c.company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.startDate and ''!=params.startDate" >
+        and m.out_date &gt;= #{params.startDate}
+      </if>
+       <if test="null!=params.endDate and ''!=params.endDate" >
+        and m.out_date &lt;= #{params.endDate}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectOrderMemberList" resultMap="OrderDetailResultMap" parameterType="map">
+  		SELECT d.*,m.shop_no,m.shop_name,m.out_date,m.tag_price_amount,
+		m.sale_price_amount,m.disc_price_amount,m.settle_amount,m.reduce_amount,m.pref_amount,
+		m.coupon_amount,m.all_amount,m.business_type,m.assistant_no,m.assistant_name,
+		m.invoice_no,m.invoice_date,c.company_no,c.`name` as company_name  
+        FROM order_main m 
+		left JOIN order_dtl d on m.order_no = d.order_no
+		LEFT JOIN company c on c.company_no = (SELECT s.company_no from shop s where s.shop_no = m.shop_no)
+		WHERE 1 = 1
+		<include refid="condition2" />
+  </select>
+  
+  <!-- 不能在查询数量的sql语句中直接使用group by,因为查出来的数据有可能为空,空对象不能转换成java.lang.Integer -->
+  <select id="selectOrderSummaryCount" resultType="java.lang.Integer" parameterType="map">
+  		SELECT COUNT(1) FROM (SELECT * FROM order_main GROUP BY shop_no) t1
+			WHERE 1 = 1
+			<include refid="condition" />
+  </select>
+  <select id="selectOrderSummaryByPage" resultMap="OrderSummaryResultMap" parameterType="map">
+  		SELECT 
+  		<include refid="OrderSummary_Column_List" /> 
+  		FROM order_main t1
+		WHERE 1 = 1
+		<include refid="condition" />
+		GROUP BY shop_no
+  </select>
+  <select id="selectOrderSummaryOperateByPage" resultMap="OrderSummaryResultMap" parameterType="map">
+  		SELECT 
+  		<include refid="OrderSummary_Column_Operate_List" /> 
+  		FROM order_main t1 left join order_dtl t2 on t1.order_no = t2.order_no
+		WHERE 1 = 1
+		<include refid="condition" />
+		GROUP BY shop_no
+  </select>
+  
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM order_main t1 
+    	JOIN shop s ON t1.shop_no = s.shop_no
+    	INNER JOIN order_dtl t
+    	ON t1.order_no = t.order_no WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM order_main t1 
+     	JOIN shop s ON t1.shop_no = s.shop_no
+     	INNER JOIN order_dtl t
+    	ON t1.order_no = t.order_no WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.OrderDtl">
+  	UPDATE order_dtl
+  	<set >
+      <if test="headquarterCost != null" >
+        headquarter_cost = #{headquarterCost,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCost != null" >
+        region_cost = #{regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        unit_cost = #{unitCost,jdbcType=DECIMAL},
+      </if>
+	</set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <update id="financeConfirm" parameterType="map">
+  	UPDATE order_dtl t SET
+        t.finance_confirm_flag = #{params.financeConfirmFlag},
+        t.invoice_no = #{params.invoiceNo},
+        t.invoice_amount = #{params.invoiceAmount}
+	WHERE 1 = 1  
+		AND EXISTS(SELECT
+                 'X'
+               FROM order_main m
+               WHERE m.order_no = t.order_no
+                   AND m.shop_no = #{params.shopNo}
+                   AND m.out_date &gt;= #{params.startDate}
+                   AND m.out_date &lt;= #{params.endDate})
+  </update>
+  
+  <update id="financeAntiConfirm" parameterType="map">
+  	UPDATE order_dtl t SET
+        t.finance_confirm_flag = #{params.financeConfirmFlag},
+        t.invoice_no = #{params.invoiceNo},
+        t.invoice_amount = #{params.invoiceAmount}
+	WHERE 1 = 1  
+		AND EXISTS(SELECT
+                 'X'
+               FROM order_main m
+               WHERE m.order_no = t.order_no
+                   AND m.shop_no = #{params.shopNo}
+                   AND m.out_date &gt;= #{params.startDate}
+                   AND m.out_date &lt;= #{params.endDate})
+  </update>
+  
+</mapper>

@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PurchasePriceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PurchasePrice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+    <result column="effective_date" property="effectiveDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, item_no, item_code, supplier_no, purchase_price, material_price, factory_price, 
+    effective_date, status, create_user, create_time, update_user, update_time
+  </sql>
+  
+  <sql id="Base_Column_List_One" >
+    p.id, p.item_no, p.item_code, p.supplier_no, p.purchase_price, p.material_price, p.factory_price, 
+    p.effective_date, p.status, p.create_user, p.create_time, p.update_user, p.update_time,
+    i.name AS item_name,
+    b.brand_no,
+    b.name AS brand_name,
+    s.short_name AS supplier_name
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo" >
+        AND item_no = #{params.itemNo}
+      </if>
+      <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+        AND supplier_no = #{params.supplierNo}
+      </if>
+      <if test="null!=params.effectiveDateStart and ''!=params.effectiveDateStart">
+         AND effective_date &gt;= DATE_FORMAT(#{params.effectiveDateStart},'%Y-%m-%d')
+      </if>
+       <if test="null!=params.effectiveDateEnd and ''!=params.effectiveDateEnd">
+         AND effective_date &lt;= DATE_FORMAT(#{params.effectiveDateEnd},'%Y-%m-%d')
+      </if>
+    </if>
+  </sql>
+  
+  <sql id="pageCondition" >
+  -- AND @B.brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.itemNo and ''!=params.itemNo" >
+        AND p.item_no = #{params.itemNo}
+      </if>
+      <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+        AND p.supplier_no = #{params.supplierNo}
+      </if>
+       <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND b.brand_no = #{params.brandNo}
+      </if>
+      <if test="null != params.brandNos and '' != params.brandNos">
+		   AND b.brand_no in 
+		    <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+			</foreach>  
+	   </if>
+      <if test="null!=params.effectiveDateStart and ''!=params.effectiveDateStart">
+         AND p.effective_date &gt;= DATE_FORMAT(#{params.effectiveDateStart},'%Y-%m-%d')
+      </if>
+       <if test="null!=params.effectiveDateEnd and ''!=params.effectiveDateEnd">
+         AND p.effective_date &lt;= DATE_FORMAT(#{params.effectiveDateEnd},'%Y-%m-%d')
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM purchase_price
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s 
+    FROM purchase_price p
+    INNER JOIN item i ON i.`item_no`= p.`item_no`
+    LEFT JOIN brand b ON b.`brand_no`=i.`brand_no` 
+    LEFT JOIN supplier s ON s.`supplier_no`=p.`supplier_no` 
+    WHERE 1=1 
+    <include refid="pageCondition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List_One" />
+      FROM purchase_price p
+    INNER JOIN item i ON i.`item_no`= p.`item_no`
+    LEFT JOIN brand b ON b.`brand_no`=i.`brand_no` 
+    LEFT JOIN supplier s ON s.`supplier_no`=p.`supplier_no`
+     WHERE 1=1 
+    <include refid="pageCondition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM purchase_price WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM purchase_price
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.PurchasePrice" >
+    DELETE FROM purchase_price
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.PurchasePrice" >
+    INSERT INTO purchase_price (id, item_no, item_code, 
+      supplier_no, purchase_price, material_price, 
+      factory_price, effective_date, status, 
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{id,jdbcType=INTEGER}, #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{supplierNo,jdbcType=CHAR}, #{purchasePrice,jdbcType=DECIMAL}, #{materialPrice,jdbcType=DECIMAL}, 
+      #{factoryPrice,jdbcType=DECIMAL}, #{effectiveDate,jdbcType=DATE}, #{status,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.PurchasePrice" >
+    INSERT INTO purchase_price
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="materialPrice != null" >
+        material_price,
+      </if>
+      <if test="factoryPrice != null" >
+        factory_price,
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materialPrice != null" >
+        #{materialPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="factoryPrice != null" >
+        #{factoryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="effectiveDate != null" >
+        #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.PurchasePrice" >
+    UPDATE purchase_price
+    <set >
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materialPrice != null" >
+        material_price = #{materialPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="factoryPrice != null" >
+        factory_price = #{factoryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date = #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.PurchasePrice" >
+    UPDATE purchase_price
+    SET item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      material_price = #{materialPrice,jdbcType=DECIMAL},
+      factory_price = #{factoryPrice,jdbcType=DECIMAL},
+      effective_date = #{effectiveDate,jdbcType=DATE},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="getBalancePurchasePrice" resultMap="BaseResultMap" parameterType="map" >
+    SELECT id, item_no, item_code, supplier_no, purchase_price, material_price, factory_price, 
+    effective_date, status, create_user, create_time, update_user, update_time
+     FROM purchase_price WHERE item_no= #{params.itemNo} AND supplier_no= #{params.supplierNo}
+    AND effective_date &lt;= DATE_FORMAT(#{params.effectiveDate},'%Y-%m-%d') 
+    AND status = 100
+    ORDER BY effective_date DESC LIMIT 0,1
+  </select>
+  
+  
+  <select id="getBalancePurchasePriceByItemNo" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+	  * 
+	FROM
+	  (SELECT 
+	    id,
+	    item_no,
+	    item_code,
+	    supplier_no,
+	    purchase_price,
+	    material_price,
+	    factory_price,
+	    effective_date,
+	    STATUS,
+	    create_user,
+	    create_time,
+	    update_user,
+	    update_time,
+	    IF(
+	      (SELECT 
+	        supplier_no 
+	      FROM
+	        item 
+	      WHERE item.item_no = #{params.itemNo}) = supplier_no,
+	      1,
+	      0
+	    ) flag 
+	  FROM
+	    purchase_price 
+	  WHERE item_no = #{params.itemNo}
+	    AND effective_date &lt;=#{params.effectiveDate}
+	    AND STATUS = 100) G 
+	ORDER BY effective_date,
+	  flag DESC 
+	LIMIT 0, 1 
+  </select>
+</mapper>

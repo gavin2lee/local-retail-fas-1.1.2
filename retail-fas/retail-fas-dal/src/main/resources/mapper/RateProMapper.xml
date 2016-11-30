@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.RateProMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.RatePro" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="activity_no" property="activityNo" jdbcType="VARCHAR" />
+    <result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+    <result column="activity_describe" property="activityDescribe" jdbcType="VARCHAR" />
+    <result column="launch_type" property="launchType" jdbcType="TINYINT" />
+    <result column="activity_type" property="activityType" jdbcType="TINYINT" />
+    <result column="activity_bill_type" property="activityBillType" jdbcType="TINYINT" />
+    <result column="zone_no" property="zoneNo" jdbcType="VARCHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="manage_organ_no" property="manageOrganNo" jdbcType="VARCHAR" />
+    <result column="manage_organ_name" property="manageOrganName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="VARCHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="rate" property="rate" jdbcType="DECIMAL" />
+    <result column="rate_code" property="rateCode" jdbcType="VARCHAR" />
+    <result column="rate_name" property="rateName" jdbcType="VARCHAR" />
+    <result column="basic_rate_flag" property="basicRateFlag" jdbcType="TINYINT" />
+    <result column="step_rate_flag" property="stepRateFlag" jdbcType="TINYINT" />
+    <result column="debited_mode" property="debitedMode" jdbcType="TINYINT" />
+    <result column="payment_mode" property="paymentMode" jdbcType="TINYINT" />
+    <result column="settlement_date" property="settlementDate" jdbcType="DATE" />
+    <result column="billing_code" property="billingCode" jdbcType="VARCHAR" />
+    <result column="virtual_flag" property="virtualFlag" jdbcType="TINYINT" />
+    <result column="balance_base" property="balanceBase" jdbcType="TINYINT" />
+    <result column="properties" property="properties" jdbcType="TINYINT" />
+    <result column="full_value" property="fullValue" jdbcType="DECIMAL" />
+    <result column="deduction_value" property="deductionValue" jdbcType="DECIMAL" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="strength" property="strength" jdbcType="DECIMAL" />
+    <result column="pro_no" property="proNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user_no" property="createUserNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_no" property="updateUserNo" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="audit_no" property="auditNo" jdbcType="VARCHAR" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, activity_no, activity_name, activity_describe, launch_type, activity_type, activity_bill_type, 
+    zone_no, zone_name, manage_organ_no, manage_organ_name, mall_no, mall_name, shop_no, 
+    shop_name, brand_no, brand_name, start_date, end_date, rate, rate_code, rate_name, 
+    basic_rate_flag, step_rate_flag, debited_mode, payment_mode, settlement_date, billing_code, 
+    virtual_flag, balance_base, properties, full_value, deduction_value, discount, strength, 
+    pro_no, status, create_user_no, create_user, create_time, update_user_no, update_user, 
+    update_time, audit_no, auditor, audit_time, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo">
+		AND shop_no = '${params.shopNo}' 
+	  </if>
+	  <if test="null!=params.proNo and ''!=params.proNo">
+		AND pro_no = '${params.proNo}' 
+   	  </if> 
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM rate_pro
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  
+  <select id="findByRatePro" resultMap="BaseResultMap" parameterType="map">
+    SELECT DISTINCT 
+    <include refid="Base_Column_List" />
+    FROM rate_pro
+     WHERE 1=1 
+         <if test="null!=params.shopNo and ''!=params.shopNo">
+		   AND shop_no = '${params.shopNo}' 
+		   </if>
+		   <if test="null!=params.proNo and ''!=params.proNo">
+			  AND pro_no = '${params.proNo}' 
+   		 </if> 
+   LIMIT 0, 1
+  </select>
+	  
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM rate_pro WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM rate_pro WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM rate_pro WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM rate_pro
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.RatePro" >
+    DELETE FROM rate_pro
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.RatePro" >
+    INSERT INTO rate_pro (id, activity_no, activity_name, 
+      activity_describe, launch_type, activity_type, 
+      activity_bill_type, zone_no, zone_name, 
+      manage_organ_no, manage_organ_name, mall_no, 
+      mall_name, shop_no, shop_name, 
+      brand_no, brand_name, start_date, 
+      end_date, rate, rate_code, 
+      rate_name, basic_rate_flag, step_rate_flag, 
+      debited_mode, payment_mode, settlement_date, 
+      billing_code, virtual_flag, balance_base, 
+      properties, full_value, deduction_value, 
+      discount, strength, pro_no, 
+      status, create_user_no, create_user, 
+      create_time, update_user_no, update_user, 
+      update_time, audit_no, auditor, 
+      audit_time, remark)
+    VALUES (#{id,jdbcType=CHAR}, #{activityNo,jdbcType=VARCHAR}, #{activityName,jdbcType=VARCHAR}, 
+      #{activityDescribe,jdbcType=VARCHAR}, #{launchType,jdbcType=TINYINT}, #{activityType,jdbcType=TINYINT}, 
+      #{activityBillType,jdbcType=TINYINT}, #{zoneNo,jdbcType=VARCHAR}, #{zoneName,jdbcType=VARCHAR}, 
+      #{manageOrganNo,jdbcType=VARCHAR}, #{manageOrganName,jdbcType=VARCHAR}, #{mallNo,jdbcType=VARCHAR}, 
+      #{mallName,jdbcType=VARCHAR}, #{shopNo,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{brandNo,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, #{startDate,jdbcType=DATE}, 
+      #{endDate,jdbcType=DATE}, #{rate,jdbcType=DECIMAL}, #{rateCode,jdbcType=VARCHAR}, 
+      #{rateName,jdbcType=VARCHAR}, #{basicRateFlag,jdbcType=TINYINT}, #{stepRateFlag,jdbcType=TINYINT}, 
+      #{debitedMode,jdbcType=TINYINT}, #{paymentMode,jdbcType=TINYINT}, #{settlementDate,jdbcType=DATE}, 
+      #{billingCode,jdbcType=VARCHAR}, #{virtualFlag,jdbcType=TINYINT}, #{balanceBase,jdbcType=TINYINT}, 
+      #{properties,jdbcType=TINYINT}, #{fullValue,jdbcType=DECIMAL}, #{deductionValue,jdbcType=DECIMAL}, 
+      #{discount,jdbcType=DECIMAL}, #{strength,jdbcType=DECIMAL}, #{proNo,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{createUserNo,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUserNo,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{auditNo,jdbcType=VARCHAR}, #{auditor,jdbcType=VARCHAR}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.RatePro" >
+    INSERT INTO rate_pro
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="activityNo != null" >
+        activity_no,
+      </if>
+      <if test="activityName != null" >
+        activity_name,
+      </if>
+      <if test="activityDescribe != null" >
+        activity_describe,
+      </if>
+      <if test="launchType != null" >
+        launch_type,
+      </if>
+      <if test="activityType != null" >
+        activity_type,
+      </if>
+      <if test="activityBillType != null" >
+        activity_bill_type,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="zoneName != null" >
+        zone_name,
+      </if>
+      <if test="manageOrganNo != null" >
+        manage_organ_no,
+      </if>
+      <if test="manageOrganName != null" >
+        manage_organ_name,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="mallName != null" >
+        mall_name,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="rate != null" >
+        rate,
+      </if>
+      <if test="rateCode != null" >
+        rate_code,
+      </if>
+      <if test="rateName != null" >
+        rate_name,
+      </if>
+      <if test="basicRateFlag != null" >
+        basic_rate_flag,
+      </if>
+      <if test="stepRateFlag != null" >
+        step_rate_flag,
+      </if>
+      <if test="debitedMode != null" >
+        debited_mode,
+      </if>
+      <if test="paymentMode != null" >
+        payment_mode,
+      </if>
+      <if test="settlementDate != null" >
+        settlement_date,
+      </if>
+      <if test="billingCode != null" >
+        billing_code,
+      </if>
+      <if test="virtualFlag != null" >
+        virtual_flag,
+      </if>
+      <if test="balanceBase != null" >
+        balance_base,
+      </if>
+      <if test="properties != null" >
+        properties,
+      </if>
+      <if test="fullValue != null" >
+        full_value,
+      </if>
+      <if test="deductionValue != null" >
+        deduction_value,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="strength != null" >
+        strength,
+      </if>
+      <if test="proNo != null" >
+        pro_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUserNo != null" >
+        update_user_no,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="auditNo != null" >
+        audit_no,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="activityNo != null" >
+        #{activityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null" >
+        #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDescribe != null" >
+        #{activityDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="launchType != null" >
+        #{launchType,jdbcType=TINYINT},
+      </if>
+      <if test="activityType != null" >
+        #{activityType,jdbcType=TINYINT},
+      </if>
+      <if test="activityBillType != null" >
+        #{activityBillType,jdbcType=TINYINT},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneName != null" >
+        #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="manageOrganNo != null" >
+        #{manageOrganNo,jdbcType=VARCHAR},
+      </if>
+      <if test="manageOrganName != null" >
+        #{manageOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mallName != null" >
+        #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="rate != null" >
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="rateCode != null" >
+        #{rateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rateName != null" >
+        #{rateName,jdbcType=VARCHAR},
+      </if>
+      <if test="basicRateFlag != null" >
+        #{basicRateFlag,jdbcType=TINYINT},
+      </if>
+      <if test="stepRateFlag != null" >
+        #{stepRateFlag,jdbcType=TINYINT},
+      </if>
+      <if test="debitedMode != null" >
+        #{debitedMode,jdbcType=TINYINT},
+      </if>
+      <if test="paymentMode != null" >
+        #{paymentMode,jdbcType=TINYINT},
+      </if>
+      <if test="settlementDate != null" >
+        #{settlementDate,jdbcType=DATE},
+      </if>
+      <if test="billingCode != null" >
+        #{billingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualFlag != null" >
+        #{virtualFlag,jdbcType=TINYINT},
+      </if>
+      <if test="balanceBase != null" >
+        #{balanceBase,jdbcType=TINYINT},
+      </if>
+      <if test="properties != null" >
+        #{properties,jdbcType=TINYINT},
+      </if>
+      <if test="fullValue != null" >
+        #{fullValue,jdbcType=DECIMAL},
+      </if>
+      <if test="deductionValue != null" >
+        #{deductionValue,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="strength != null" >
+        #{strength,jdbcType=DECIMAL},
+      </if>
+      <if test="proNo != null" >
+        #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUserNo != null" >
+        #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserNo != null" >
+        #{updateUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditNo != null" >
+        #{auditNo,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.RatePro" >
+    UPDATE rate_pro
+    <set >
+      <if test="activityNo != null" >
+        activity_no = #{activityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null" >
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDescribe != null" >
+        activity_describe = #{activityDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="launchType != null" >
+        launch_type = #{launchType,jdbcType=TINYINT},
+      </if>
+      <if test="activityType != null" >
+        activity_type = #{activityType,jdbcType=TINYINT},
+      </if>
+      <if test="activityBillType != null" >
+        activity_bill_type = #{activityBillType,jdbcType=TINYINT},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneName != null" >
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="manageOrganNo != null" >
+        manage_organ_no = #{manageOrganNo,jdbcType=VARCHAR},
+      </if>
+      <if test="manageOrganName != null" >
+        manage_organ_name = #{manageOrganName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mallName != null" >
+        mall_name = #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="rate != null" >
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="rateCode != null" >
+        rate_code = #{rateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rateName != null" >
+        rate_name = #{rateName,jdbcType=VARCHAR},
+      </if>
+      <if test="basicRateFlag != null" >
+        basic_rate_flag = #{basicRateFlag,jdbcType=TINYINT},
+      </if>
+      <if test="stepRateFlag != null" >
+        step_rate_flag = #{stepRateFlag,jdbcType=TINYINT},
+      </if>
+      <if test="debitedMode != null" >
+        debited_mode = #{debitedMode,jdbcType=TINYINT},
+      </if>
+      <if test="paymentMode != null" >
+        payment_mode = #{paymentMode,jdbcType=TINYINT},
+      </if>
+      <if test="settlementDate != null" >
+        settlement_date = #{settlementDate,jdbcType=DATE},
+      </if>
+      <if test="billingCode != null" >
+        billing_code = #{billingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualFlag != null" >
+        virtual_flag = #{virtualFlag,jdbcType=TINYINT},
+      </if>
+      <if test="balanceBase != null" >
+        balance_base = #{balanceBase,jdbcType=TINYINT},
+      </if>
+      <if test="properties != null" >
+        properties = #{properties,jdbcType=TINYINT},
+      </if>
+      <if test="fullValue != null" >
+        full_value = #{fullValue,jdbcType=DECIMAL},
+      </if>
+      <if test="deductionValue != null" >
+        deduction_value = #{deductionValue,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="strength != null" >
+        strength = #{strength,jdbcType=DECIMAL},
+      </if>
+      <if test="proNo != null" >
+        pro_no = #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUserNo != null" >
+        create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserNo != null" >
+        update_user_no = #{updateUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditNo != null" >
+        audit_no = #{auditNo,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.RatePro" >
+    UPDATE rate_pro
+    SET activity_no = #{activityNo,jdbcType=VARCHAR},
+      activity_name = #{activityName,jdbcType=VARCHAR},
+      activity_describe = #{activityDescribe,jdbcType=VARCHAR},
+      launch_type = #{launchType,jdbcType=TINYINT},
+      activity_type = #{activityType,jdbcType=TINYINT},
+      activity_bill_type = #{activityBillType,jdbcType=TINYINT},
+      zone_no = #{zoneNo,jdbcType=VARCHAR},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      manage_organ_no = #{manageOrganNo,jdbcType=VARCHAR},
+      manage_organ_name = #{manageOrganName,jdbcType=VARCHAR},
+      mall_no = #{mallNo,jdbcType=VARCHAR},
+      mall_name = #{mallName,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=VARCHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      rate = #{rate,jdbcType=DECIMAL},
+      rate_code = #{rateCode,jdbcType=VARCHAR},
+      rate_name = #{rateName,jdbcType=VARCHAR},
+      basic_rate_flag = #{basicRateFlag,jdbcType=TINYINT},
+      step_rate_flag = #{stepRateFlag,jdbcType=TINYINT},
+      debited_mode = #{debitedMode,jdbcType=TINYINT},
+      payment_mode = #{paymentMode,jdbcType=TINYINT},
+      settlement_date = #{settlementDate,jdbcType=DATE},
+      billing_code = #{billingCode,jdbcType=VARCHAR},
+      virtual_flag = #{virtualFlag,jdbcType=TINYINT},
+      balance_base = #{balanceBase,jdbcType=TINYINT},
+      properties = #{properties,jdbcType=TINYINT},
+      full_value = #{fullValue,jdbcType=DECIMAL},
+      deduction_value = #{deductionValue,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      strength = #{strength,jdbcType=DECIMAL},
+      pro_no = #{proNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_user_no = #{createUserNo,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user_no = #{updateUserNo,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      audit_no = #{auditNo,jdbcType=VARCHAR},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.FinancialAccountMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.FinancialAccount" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="group_lead_role" property="groupLeadRole" jdbcType="TINYINT" />
+    <result column="nc_id" property="ncId" jdbcType="CHAR" />
+    <result column="parent_company" property="parentCompany" jdbcType="CHAR" />
+    <result column="child_company" property="childCompany" jdbcType="TINYINT" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="price_zone" property="priceZone" jdbcType="CHAR" />
+    <result column="revenue_journal_type" property="revenueJournalType" jdbcType="CHAR" />
+    <result column="cost_journal_type" property="costJournalType" jdbcType="CHAR" />
+    <result column="liabilities_journal_type" property="liabilitiesJournalType" jdbcType="CHAR" />
+    <result column="internal_journal_type" property="internalJournalType" jdbcType="CHAR" />
+    <result column="assist_project_01" property="assistProject01" jdbcType="CHAR" />
+    <result column="assist_project_02" property="assistProject02" jdbcType="CHAR" />
+    <result column="assist_project_03" property="assistProject03" jdbcType="CHAR" />
+    <result column="assist_project_04" property="assistProject04" jdbcType="CHAR" />
+    <result column="assist_project_05" property="assistProject05" jdbcType="CHAR" />
+    <result column="assist_project_06" property="assistProject06" jdbcType="CHAR" />
+    <result column="assist_project_07" property="assistProject07" jdbcType="CHAR" />
+    <result column="assist_project_08" property="assistProject08" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="parent_company_name" property="parentCompanyName" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="price_zone_name" property="priceZoneName" jdbcType="VARCHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+	A.id,
+	A.company_no,
+	C.name company_name,
+	(SELECT 
+	    NAME 
+	  FROM
+	    zone_info 
+	WHERE C.zone_no = zone_info.zone_no) zone_name,
+	A.parent_company,
+	D.name parent_company_name,
+	A.group_lead_role,
+	A.nc_id,
+	A.child_company,
+	A.supplier_no,
+	A.price_zone,
+	A.revenue_journal_type,
+	A.cost_journal_type,
+	A.liabilities_journal_type,
+	A.internal_journal_type,
+	A.assist_project_01,
+	A.assist_project_02,
+	A.assist_project_03,
+	A.assist_project_04,
+	A.assist_project_05,
+	A.assist_project_06,
+	A.assist_project_07,
+	A.assist_project_08,
+	A.status,
+	A.create_user,
+	A.create_time,
+	A.update_user,
+	A.update_time,
+	A.remark,
+	S.`full_name` supplier_name,
+	E.name price_zone_name 
+  </sql>
+  
+  <sql id="Base_Info_Column">
+  	A.id,
+	A.company_no,
+	A.parent_company,
+	A.group_lead_role,
+	A.nc_id,
+	A.child_company,
+	A.supplier_no,
+	A.price_zone,
+	A.revenue_journal_type,
+	A.cost_journal_type,
+	A.liabilities_journal_type,
+	A.internal_journal_type,
+	A.assist_project_01,
+	A.assist_project_02,
+	A.assist_project_03,
+	A.assist_project_04,
+	A.assist_project_05,
+	A.assist_project_06,
+	A.assist_project_07,
+	A.assist_project_08,
+	A.status,
+	A.create_user,
+	A.create_time,
+	A.update_user,
+	A.update_time,
+	A.remark,
+	E.name price_zone_name 
+  </sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+       <if test="null!=params.companyNo and ''!=params.companyNo" >
+      	 and A.company_no like '%${params.companyNo}%' 
+       </if>
+       <if test="null!=params.ncId and ''!=params.ncId" >
+      	 and A.nc_id like '%${params.ncId}%' 
+       </if>
+       <if test="null!=params.status and ''!=params.status" >
+       	 and A.status = #{params.status}
+      </if>
+       <if test="null!=params.groupLeadRole and ''!=params.groupLeadRole" >
+       	 and A.group_lead_role = #{params.groupLeadRole}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="findBaseInfo" resultMap="BaseResultMap" parameterType="map">
+  	SELECT 
+    <include refid="Base_Info_Column" />
+    FROM financial_account A LEFT JOIN 
+    (SELECT 
+      zone_no,
+      NAME 
+    FROM
+      zone_info 
+    UNION
+    ALL 
+    SELECT 
+      zone_no,
+      NAME 
+    FROM
+      special_zone_info) E 
+  		  ON A.`price_zone` = E.zone_no
+    WHERE 1 = 1
+    <if test="null!=params.companyNo and ''!=params.companyNo" >
+   	 	and A.company_no = #{params.companyNo} 
+    </if>
+    <if test="null!=params.status and ''!=params.status" >
+    	and A.status = #{params.status}
+   </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM financial_account
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM financial_account A WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+	FROM
+		 financial_account A 
+    LEFT JOIN company c 
+         ON A.`company_no` = c.`company_no` 
+  	LEFT JOIN company D 
+   		 ON A.`parent_company` = D.`company_no` 
+  	LEFT JOIN supplier S 
+   		 ON A.`supplier_no` = S.`supplier_no` 
+ 	LEFT JOIN 
+    (SELECT 
+      zone_no,
+      NAME 
+    FROM
+      zone_info 
+    UNION
+    ALL 
+    SELECT 
+      zone_no,
+      NAME 
+    FROM
+      special_zone_info) E 
+  		  ON A.`price_zone` = E.zone_no 
+	WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM
+		 financial_account A 
+    LEFT JOIN company c 
+         ON A.`company_no` = c.`company_no` 
+  	LEFT JOIN company D 
+   		 ON A.`parent_company` = D.`company_no` 
+  	LEFT JOIN supplier S 
+   		 ON A.`supplier_no` = S.`supplier_no` 
+ 	LEFT JOIN 
+    (SELECT 
+      zone_no,
+      NAME 
+    FROM
+      zone_info 
+    UNION
+    ALL 
+    SELECT 
+      zone_no,
+      NAME 
+    FROM
+      special_zone_info) E 
+  		  ON A.`price_zone` = E.zone_no 
+	WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM financial_account
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.FinancialAccount" >
+    DELETE FROM financial_account
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.FinancialAccount" >
+    INSERT INTO financial_account (id, company_no, group_lead_role, 
+      nc_id, parent_company, child_company, 
+      supplier_no, price_zone,revenue_journal_type, cost_journal_type, 
+      liabilities_journal_type, internal_journal_type, 
+      assist_project_01, assist_project_02, assist_project_03, 
+      assist_project_04, assist_project_05, assist_project_06, 
+      assist_project_07, assist_project_08, status, 
+      create_user, create_time, update_user, 
+      update_time, remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{companyNo,jdbcType=CHAR}, #{groupLeadRole,jdbcType=TINYINT}, 
+      #{ncId,jdbcType=CHAR}, #{parentCompany,jdbcType=CHAR}, #{childCompany,jdbcType=TINYINT}, 
+      #{supplierNo,jdbcType=CHAR},#{priceZone,jdbcType=CHAR}, #{revenueJournalType,jdbcType=CHAR}, #{costJournalType,jdbcType=CHAR}, 
+      #{liabilitiesJournalType,jdbcType=CHAR}, #{internalJournalType,jdbcType=CHAR}, 
+      #{assistProject01,jdbcType=CHAR}, #{assistProject02,jdbcType=CHAR}, #{assistProject03,jdbcType=CHAR}, 
+      #{assistProject04,jdbcType=CHAR}, #{assistProject05,jdbcType=CHAR}, #{assistProject06,jdbcType=CHAR}, 
+      #{assistProject07,jdbcType=CHAR}, #{assistProject08,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.FinancialAccount" >
+    INSERT INTO financial_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="groupLeadRole != null" >
+        group_lead_role,
+      </if>
+      <if test="ncId != null" >
+        nc_id,
+      </if>
+      <if test="parentCompany != null" >
+        parent_company,
+      </if>
+      <if test="childCompany != null" >
+        child_company,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+       <if test="priceZone != null" >
+        price_zone,
+      </if>
+      <if test="revenueJournalType != null" >
+        revenue_journal_type,
+      </if>
+      <if test="costJournalType != null" >
+        cost_journal_type,
+      </if>
+      <if test="liabilitiesJournalType != null" >
+        liabilities_journal_type,
+      </if>
+      <if test="internalJournalType != null" >
+        internal_journal_type,
+      </if>
+      <if test="assistProject01 != null" >
+        assist_project_01,
+      </if>
+      <if test="assistProject02 != null" >
+        assist_project_02,
+      </if>
+      <if test="assistProject03 != null" >
+        assist_project_03,
+      </if>
+      <if test="assistProject04 != null" >
+        assist_project_04,
+      </if>
+      <if test="assistProject05 != null" >
+        assist_project_05,
+      </if>
+      <if test="assistProject06 != null" >
+        assist_project_06,
+      </if>
+      <if test="assistProject07 != null" >
+        assist_project_07,
+      </if>
+      <if test="assistProject08 != null" >
+        assist_project_08,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="groupLeadRole != null" >
+        #{groupLeadRole,jdbcType=TINYINT},
+      </if>
+      <if test="ncId != null" >
+        #{ncId,jdbcType=CHAR},
+      </if>
+      <if test="parentCompany != null" >
+        #{parentCompany,jdbcType=CHAR},
+      </if>
+      <if test="childCompany != null" >
+        #{childCompany,jdbcType=TINYINT},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="priceZone != null" >
+        #{priceZone,jdbcType=CHAR},
+      </if>
+      <if test="revenueJournalType != null" >
+        #{revenueJournalType,jdbcType=CHAR},
+      </if>
+      <if test="costJournalType != null" >
+        #{costJournalType,jdbcType=CHAR},
+      </if>
+      <if test="liabilitiesJournalType != null" >
+        #{liabilitiesJournalType,jdbcType=CHAR},
+      </if>
+      <if test="internalJournalType != null" >
+        #{internalJournalType,jdbcType=CHAR},
+      </if>
+      <if test="assistProject01 != null" >
+        #{assistProject01,jdbcType=CHAR},
+      </if>
+      <if test="assistProject02 != null" >
+        #{assistProject02,jdbcType=CHAR},
+      </if>
+      <if test="assistProject03 != null" >
+        #{assistProject03,jdbcType=CHAR},
+      </if>
+      <if test="assistProject04 != null" >
+        #{assistProject04,jdbcType=CHAR},
+      </if>
+      <if test="assistProject05 != null" >
+        #{assistProject05,jdbcType=CHAR},
+      </if>
+      <if test="assistProject06 != null" >
+        #{assistProject06,jdbcType=CHAR},
+      </if>
+      <if test="assistProject07 != null" >
+        #{assistProject07,jdbcType=CHAR},
+      </if>
+      <if test="assistProject08 != null" >
+        #{assistProject08,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.FinancialAccount" >
+    UPDATE financial_account
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="groupLeadRole != null" >
+        group_lead_role = #{groupLeadRole,jdbcType=TINYINT},
+      </if>
+      <if test="ncId != null" >
+        nc_id = #{ncId,jdbcType=CHAR},
+      </if>
+      <if test="parentCompany != null" >
+        parent_company = #{parentCompany,jdbcType=CHAR},
+      </if>
+      <if test="childCompany != null" >
+        child_company = #{childCompany,jdbcType=TINYINT},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="priceZone != null" >
+        price_zone = #{priceZone,jdbcType=CHAR},
+      </if>
+      <if test="revenueJournalType != null" >
+        revenue_journal_type = #{revenueJournalType,jdbcType=CHAR},
+      </if>
+      <if test="costJournalType != null" >
+        cost_journal_type = #{costJournalType,jdbcType=CHAR},
+      </if>
+      <if test="liabilitiesJournalType != null" >
+        liabilities_journal_type = #{liabilitiesJournalType,jdbcType=CHAR},
+      </if>
+      <if test="internalJournalType != null" >
+        internal_journal_type = #{internalJournalType,jdbcType=CHAR},
+      </if>
+      <if test="assistProject01 != null" >
+        assist_project_01 = #{assistProject01,jdbcType=CHAR},
+      </if>
+      <if test="assistProject02 != null" >
+        assist_project_02 = #{assistProject02,jdbcType=CHAR},
+      </if>
+      <if test="assistProject03 != null" >
+        assist_project_03 = #{assistProject03,jdbcType=CHAR},
+      </if>
+      <if test="assistProject04 != null" >
+        assist_project_04 = #{assistProject04,jdbcType=CHAR},
+      </if>
+      <if test="assistProject05 != null" >
+        assist_project_05 = #{assistProject05,jdbcType=CHAR},
+      </if>
+      <if test="assistProject06 != null" >
+        assist_project_06 = #{assistProject06,jdbcType=CHAR},
+      </if>
+      <if test="assistProject07 != null" >
+        assist_project_07 = #{assistProject07,jdbcType=CHAR},
+      </if>
+      <if test="assistProject08 != null" >
+        assist_project_08 = #{assistProject08,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.FinancialAccount" >
+    UPDATE financial_account
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      group_lead_role = #{groupLeadRole,jdbcType=TINYINT},
+      nc_id = #{ncId,jdbcType=CHAR},
+      parent_company = #{parentCompany,jdbcType=CHAR},
+      child_company = #{childCompany,jdbcType=TINYINT},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      price_zone = #{priceZone,jdbcType=CHAR},
+      revenue_journal_type = #{revenueJournalType,jdbcType=CHAR},
+      cost_journal_type = #{costJournalType,jdbcType=CHAR},
+      liabilities_journal_type = #{liabilitiesJournalType,jdbcType=CHAR},
+      internal_journal_type = #{internalJournalType,jdbcType=CHAR},
+      assist_project_01 = #{assistProject01,jdbcType=CHAR},
+      assist_project_02 = #{assistProject02,jdbcType=CHAR},
+      assist_project_03 = #{assistProject03,jdbcType=CHAR},
+      assist_project_04 = #{assistProject04,jdbcType=CHAR},
+      assist_project_05 = #{assistProject05,jdbcType=CHAR},
+      assist_project_06 = #{assistProject06,jdbcType=CHAR},
+      assist_project_07 = #{assistProject07,jdbcType=CHAR},
+      assist_project_08 = #{assistProject08,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+
+	<!-- 查询承担总部职能的公司 -->
+	<select id="selectLeadRoleCompanyNos" resultType="java.lang.String">
+		SELECT 
+		  CONCAT(
+		    "'",
+		    GROUP_CONCAT(company_no SEPARATOR "','"),
+		    "'"
+		  ) 
+		FROM
+		  financial_account 
+		WHERE 1 = 1 
+		  AND financial_account.`group_lead_role` = '1' 
+		  AND financial_account.`status` = '1' 
+		  <if test="organTypeNo != null">
+		  	AND company_no in ( Select company_no from company where organ_type_no = #{organTypeNo})
+		  </if> 
+		  
+	</select>
+	
+	<select id="selectNotLeadRoleCompanyNos" resultType="java.lang.String">
+	SELECT 
+	    CONCAT(
+	      "'",
+	      GROUP_CONCAT(A.company_no SEPARATOR "','"),
+	      "'"
+	    ) 
+	FROM
+	  company A 
+	WHERE A.company_no NOT IN 
+	  (SELECT 
+	   company_no
+	  FROM
+	    financial_account 
+	  WHERE 1 = 1 
+	    AND financial_account.`group_lead_role` = '1' 
+	    AND financial_account.`status` = '1')
+	    <if test="organTypeNo != null">
+		   AND company_no in ( Select company_no from company where organ_type_no = #{organTypeNo})
+		</if>
+	</select>
+</mapper>

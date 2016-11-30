@@ -1,0 +1,956 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillShopBalanceCateSumMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillShopBalanceCateSum" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="sale_qty" property="saleQty" jdbcType="INTEGER" />
+    <result column="sale_amount" property="saleAmount" jdbcType="DECIMAL" />
+    <result column="billing_amount" property="billingAmount" jdbcType="DECIMAL" />
+    <result column="prepayment_amount" property="prepaymentAmount" jdbcType="DECIMAL" />
+    <result column="used_prepayment_amount" property="usedPrepaymentAmount" jdbcType="DECIMAL" />
+    <result column="system_deduct_amount" property="systemDeductAmount" jdbcType="DECIMAL" />
+    <result column="balance_deduct_amount" property="balanceDeductAmount" jdbcType="DECIMAL" />
+    <result column="balance_diff_amount" property="balanceDiffAmount" jdbcType="DECIMAL" />
+    <result column="deduct_amount" property="deductAmount" jdbcType="DECIMAL" />
+    <result column="diff_amount" property="diffAmount" jdbcType="DECIMAL" />
+    <result column="sys_deduct_amount" property="sysDeductAmount" jdbcType="DECIMAL" />
+    <result column="change_amount" property="changeAmount" jdbcType="DECIMAL" />
+    <result column="zone_yyyymm" property="zoneYyyymm" jdbcType="CHAR" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+	<result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+	<result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+	<result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+	 <result column="mall_number_amount" property="mallNumberAmount" jdbcType="DECIMAL" />
+	 <result column="sales_diffamount" property="salesDiffamount" jdbcType="DECIMAL" />
+	 <result column="expense_operate_amount" property="expenseOperateAmount" jdbcType="DECIMAL" />
+	 
+	 <result column="category_1"  property="category1"  jdbcType="CHAR" />
+    <result column="category_name_1"  property="categoryName1"  jdbcType="CHAR" />
+    <result column="category_2"  property="category2"  jdbcType="CHAR" />
+    <result column="category_name_2"  property="categoryName2"  jdbcType="CHAR" />
+    <result column="category_3"  property="category3"  jdbcType="CHAR" />
+    <result column="category_name_3"  property="categoryName3"  jdbcType="CHAR" />
+    <result column="actual_Billing_Amount" property="actualBillingAmount" jdbcType="DECIMAL" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, balance_no, company_no, company_name, mall_no, mall_name, shop_no, short_name, 
+    full_name, month, balance_start_date, balance_end_date, brand_no, brand_name, category_no, 
+    category_name, sale_qty, sale_amount, billing_amount, prepayment_amount, used_prepayment_amount, 
+    system_deduct_amount, balance_deduct_amount, balance_diff_amount, deduct_amount, 
+    diff_amount, sys_deduct_amount, change_amount, zone_yyyymm, sharding_flag,saler_no, saler_name, buyer_no, buyer_name,
+    mall_number_amount,sales_diffamount,expense_operate_amount
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo">
+        AND shop_no = #{params.shopNo}
+      </if>
+       <if test="null!=params.month and ''!=params.month" >
+        AND month = #{params.month}
+      </if> 
+       <if test="null!=params.startDate and ''!=params.startDate" >
+        AND balance_start_date &gt;= '${params.startDate} 00:00:00'
+      </if>  
+       <if test="null!=params.endDate and ''!=params.endDate" >
+        AND balance_end_date &lt;= '${params.endDate} 23:59:59'
+      </if> 
+       <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND balance_no = #{params.balanceNo}
+      </if> 
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_shop_balance_cate_sum
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_shop_balance_cate_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_cate_sum WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_shop_balance_cate_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+   <select id="findBrandShopCate" resultMap="BaseResultMap" parameterType="map" >
+    SELECT   GROUP_CONCAT(DISTINCT brand_no) AS brand_no ,GROUP_CONCAT(DISTINCT brand_name)  AS brand_name  
+     FROM bill_shop_balance_cate_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="findBalanceShopBrand" resultMap="BaseResultMap" parameterType="map" >
+    SELECT DISTINCT  brand_no ,  brand_name  
+     FROM bill_shop_balance_cate_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+   <select id="getSumAmount"  resultType="java.math.BigDecimal"  parameterType="map" >
+    SELECT SUM(sale_amount)  as  saleAmount  FROM bill_shop_balance_cate_sum WHERE 1=1 
+    <include refid="condition" />
+   </select> 
+   
+     <update id="modifyInvoiceAmountShareByNo" parameterType="map"  >
+        /*sharding_flag*/
+    	update bill_shop_balance_cate_sum a,bill_shop_balance b  
+        set  a.billing_amount=round(ROUND((a.sale_amount+a.prepayment_amount + diff_amount)/b.system_sales_amount,8)*ifNULL(b.mall_billing_amount,'0.000'),2) 
+        WHERE a.balance_no = b.balance_no    
+        AND a.balance_no = #{params.balanceNo}
+    </update>
+   
+    <update id="modifySubInvoiceAmountByBalance" parameterType="map"  >
+        /*sharding_flag*/
+    	update bill_shop_balance_cate_sum a,bill_shop_balance b  
+        set  a.billing_amount=round(ROUND((a.sale_amount+a.prepayment_amount + diff_amount)/b.system_sales_amount,8)*ifNULL(b.mall_billing_amount,'0.000'),2) 
+        WHERE a.balance_no = b.balance_no    
+        AND a.balance_no = #{params.balanceNo}
+    </update>
+    
+     <update id="modifySubInvoiceAmountByRound" parameterType="map"  >
+        /*sharding_flag*/
+        UPDATE bill_shop_balance_cate_sum a
+		SET a.billing_amount = round(a.billing_amount,2) 
+		WHERE 1=1
+		AND a.balance_no = #{params.balanceNo}
+    </update>
+    
+    <update id="modifySubInvoiceAmountByBrand" parameterType="map"  >
+        /*sharding_flag*/
+       	UPDATE bill_shop_balance_cate_sum a,
+		 bill_shop_balance b,
+		 (
+			SELECT
+				c.balance_no,
+				MAX(c.sale_amount) max_sale,
+				sum(ROUND(c.billing_amount, 2)) sum_billing_amount  
+			FROM
+				bill_shop_balance_cate_sum c
+			GROUP BY
+				c.balance_no
+		) d
+		SET a.billing_amount = a.billing_amount + (b.mall_billing_amount-d.sum_billing_amount)  
+		WHERE 1=1
+		AND a.balance_no = b.balance_no   
+		AND a.balance_no = d.balance_no 
+		AND a.balance_no = #{params.balanceNo} 
+		AND a.sale_amount = d.max_sale
+    </update>
+    
+    <update id="modifyBrandBillingAmountByRound" parameterType="map"  >
+        /*sharding_flag*/
+        UPDATE bill_shop_balance_brand a
+		SET a.mall_billing_amount = round(a.mall_billing_amount,2) 
+		WHERE 1=1
+		AND a.balance_no = #{params.balanceNo}
+    </update>
+    
+    <update id="modifyBrandBillingAmountByBrand" parameterType="map"  >
+        /*sharding_flag*/
+       	UPDATE bill_shop_balance_brand a,
+		 bill_shop_balance b,
+		 (
+			SELECT
+				c.balance_no,
+				MAX(c.sales_amount) max_sale,
+				sum(ROUND(c.mall_billing_amount, 2)) sum_billing_amount  
+			FROM
+				bill_shop_balance_brand  c
+			GROUP BY
+				c.balance_no
+		) d
+		SET a.mall_billing_amount = a.mall_billing_amount + (b.mall_billing_amount-d.sum_billing_amount)  
+		WHERE 1=1
+		AND a.balance_no = b.balance_no   
+		AND a.balance_no = d.balance_no 
+		AND a.balance_no = #{params.balanceNo} 
+		AND a.sales_amount = d.max_sale
+    </update>
+    
+    
+     <update id="modifyCateSumAmountDiff" parameterType="map"  >
+        /*sharding_flag*/
+    	UPDATE 
+	  bill_shop_balance_cate_sum T 
+	  INNER JOIN 
+	    (SELECT 
+	      T0.mall_billing_amount,
+	      T1.sale_amount all_sale_amount,
+	      T2.id,
+	      T2.category_no,
+	      T2.sale_amount,
+	      ROUND(
+	        T2.sale_amount / T1.sale_amount,
+	        8
+	      ) percent,
+	      ROUND(
+	        T0.mall_billing_amount * ROUND(
+          T2.sale_amount / T1.sale_amount,
+          8
+        ),
+        2
+      ) billing_amount,
+      T2.billing_amount billing_amount1 
+    FROM
+      (SELECT 
+        SUM(mall_billing_amount) mall_billing_amount,
+        brand_no 
+      FROM
+        `bill_shop_balance_brand` 
+      WHERE balance_no = #{params.balanceNo} 
+      GROUP BY brand_no) T0 
+      INNER JOIN 
+        (SELECT 
+          SUM(sale_amount) sale_amount,
+          brand_no 
+        FROM
+          bill_shop_balance_cate_sum 
+        WHERE balance_no = #{params.balanceNo} 
+        GROUP BY brand_no) T1 
+        ON T0.brand_no = T1.brand_no 
+      INNER JOIN 
+        (SELECT 
+          id,
+          sale_amount sale_amount,
+          billing_amount,
+          brand_no,
+          category_no 
+        FROM
+          bill_shop_balance_cate_sum 
+        WHERE balance_no = #{params.balanceNo} 
+        GROUP BY brand_no,
+          category_no) T2 
+        ON T1.brand_no = T2.brand_no) G 
+    ON T.id = G.id 
+    SET T.billing_amount = G.billing_amount;
+    
+	UPDATE 
+	  bill_shop_balance_cate_sum T 
+	  INNER JOIN 
+	    (SELECT 
+	      (SELECT 
+	        id 
+	      FROM
+	        bill_shop_balance_cate_sum C 
+	      WHERE C.brand_no = G.brand_no 
+	        AND balance_no = #{params.balanceNo}
+	      ORDER BY CATEGORY_NO 
+	      LIMIT 1) id,
+	      G.diff_amount 
+		    FROM
+		      (SELECT 
+		        T0.mall_billing_amount - T1.billing_amount diff_amount,
+		        T0.brand_no 
+		      FROM
+		        (SELECT 
+	          SUM(mall_billing_amount) mall_billing_amount,
+	          brand_no 
+	        FROM
+	          bill_shop_balance_brand 
+	        WHERE balance_no = #{params.balanceNo}
+	        GROUP BY brand_no) T0 
+	        INNER JOIN 
+	          (SELECT 
+	            SUM(billing_amount) billing_amount,
+	            brand_no 
+	          FROM
+	            bill_shop_balance_cate_sum 
+	          WHERE balance_no = #{params.balanceNo} 
+	          GROUP BY brand_no) T1 
+	          ON T0.brand_no = T1.brand_no) G) G 
+	    ON T.id = G.id 
+	    SET T.billing_amount = T.billing_amount + G.diff_amount;
+    </update>
+    
+      <select id="findBrandSalesCategory3" resultMap="BaseResultMap" parameterType="map" >
+        SELECT
+				T2.SHOP_NO,
+				T2.category_1,(select name from category where category_no=t2.category_1 ) category_name_1,
+				T2.category_2,(select name from category where category_no=t2.category_2 ) category_name_2,
+				T2.category_3,(select name from category where category_no=t2.category_3 ) category_name_3,
+				T2.qty AS  sale_qty ,T2.detail_sale_amount  AS sale_amount,
+				CASE
+			WHEN isnull(T3.detail_billing_amount) THEN
+				T2.detail_billing_amount
+			ELSE
+				T2.detail_billing_amount + T2.billing_amount - T3.detail_billing_amount
+			END AS Actual_Billing_amount
+			FROM
+				(
+					SELECT
+						T.shop_no,
+						t.brand_no,
+						T.category_1,
+						T.category_2,
+						T.category_3,
+						Sum(T.qty) qty,
+						sum(t.amount) detail_sale_amount,
+						round(T.billing_amount, 2) billing_amount,
+						T.sale_amount,
+						round(
+							T.billing_amount * sum(t.amount) / T.sale_amount,
+							2
+						) detail_billing_amount
+					FROM
+						(
+							SELECT
+								bcs.shop_no,
+								bcs.balance_start_date,
+								bcs.balance_end_date,
+								od.qty,
+								od.amount amount,
+								bcs.billing_amount,
+								bcs.sale_amount,
+								om.out_date,
+								bcs.brand_no,
+								od.category_no category_3,
+								LEFT (od.category_no, 4) category_2,
+								bcs.category_no category_1
+							FROM
+								bill_shop_balance_cate_sum bcs
+							INNER JOIN order_main om ON bcs.shop_no = om.shop_no
+							AND om.out_date BETWEEN bcs.balance_start_date
+							AND bcs.balance_end_date
+							INNER JOIN order_dtl od ON om.order_no = od.order_no
+							AND bcs.category_no = LEFT (od.category_no, 2)  
+							and bcs.brand_no = od.brand_unit_no 
+							WHERE
+								bcs.balance_no =  #{params.balanceNo}
+							AND om. STATUS IN (30, 41)
+							AND om.business_type IN (0, 1, 2, 5, 6)
+							UNION ALL
+								SELECT
+									bcs.shop_no,
+									bcs.balance_start_date,
+									bcs.balance_end_date,
+									od.qty qty,
+									od.amount amount,
+									bcs.billing_amount,
+									bcs.sale_amount,
+									om.out_date,
+									bcs.brand_no,
+									od.category_no category_3,
+									LEFT (od.category_no, 4) category_2,
+									bcs.category_no category_1
+								FROM
+									bill_shop_balance_cate_sum bcs
+								INNER JOIN return_exchange_main om ON bcs.shop_no = om.shop_no
+								AND om.out_date BETWEEN bcs.balance_start_date
+								AND bcs.balance_end_date
+								INNER JOIN return_exchange_dtl od ON om.business_no = od.business_no
+								AND bcs.category_no = LEFT (od.category_no, 2)  
+								and bcs.brand_no = od.brand_unit_no  
+								WHERE
+									bcs.balance_no =  #{params.balanceNo}
+								AND om. STATUS IN (30, 41)
+						) T
+					GROUP BY
+						shop_no,
+						brand_no,
+						category_3
+				) T2
+			LEFT JOIN (
+				select
+					T1.shop_no,
+					t1.brand_no,
+					T1.category_1,
+					T1.category_2,
+					T1.category_3,
+					Sum(T1.qty) qty,
+					sum(T1.detail_sale_amount) detail_sale_amount,
+					t1.billing_amount,
+					T1.sale_amount,
+					ifnull(
+						sum(T1.detail_billing_amount),
+						0
+					) detail_billing_amount
+				from
+					(
+						SELECT
+							T.shop_no,
+							T.brand_no,
+							T.category_1,
+							T.category_2,
+							T.category_3,
+							Sum(T.qty) qty,
+							sum(t.amount) detail_sale_amount,
+							round(T.billing_amount, 2) billing_amount,
+							T.sale_amount,
+							round(
+								T.billing_amount * sum(t.amount) / T.sale_amount,
+								2
+							) detail_billing_amount
+						FROM
+							(
+								SELECT
+									bcs.shop_no,
+									bcs.balance_start_date,
+									bcs.balance_end_date,
+									od.qty,
+									od.amount amount,
+									bcs.billing_amount,
+									bcs.sale_amount,
+									om.out_date,
+									bcs.brand_no,   
+									od.category_no category_3,
+									LEFT (od.category_no, 4) category_2,
+									bcs.category_no category_1
+								FROM
+									bill_shop_balance_cate_sum bcs
+								INNER JOIN order_main om ON bcs.shop_no = om.shop_no
+								AND om.out_date BETWEEN bcs.balance_start_date
+								AND bcs.balance_end_date
+								INNER JOIN order_dtl od ON om.order_no = od.order_no
+								AND bcs.category_no = LEFT (od.category_no, 2)  
+								   and bcs.brand_no = od.brand_unit_no   
+								WHERE
+									bcs.balance_no =  #{params.balanceNo}
+								AND om. STATUS IN (30, 41)
+								AND om.business_type IN (0, 1, 2, 5, 6)
+								UNION ALL
+									SELECT
+										bcs.shop_no,
+										bcs.balance_start_date,
+										bcs.balance_end_date,
+										od.qty qty,
+										od.amount amount,
+										bcs.billing_amount,
+										bcs.sale_amount,
+										om.out_date,
+										bcs.brand_no,   
+										od.category_no category_3,
+										LEFT (od.category_no, 4) category_2,
+										bcs.category_no category_1
+									FROM
+										bill_shop_balance_cate_sum bcs
+									INNER JOIN return_exchange_main om ON bcs.shop_no = om.shop_no
+									AND om.out_date BETWEEN bcs.balance_start_date
+									AND bcs.balance_end_date
+									INNER JOIN return_exchange_dtl od ON om.business_no = od.business_no
+									AND bcs.category_no = LEFT (od.category_no, 2)
+									 and bcs.brand_no = od.brand_unit_no   
+									WHERE
+										bcs.balance_no =  #{params.balanceNo}
+									AND om. STATUS IN (30, 41)
+							) T
+						GROUP BY
+							shop_no,
+							brand_no,
+							category_3
+					) T1
+				GROUP BY
+					shop_no,
+					brand_no,
+					category_1
+			) T3 ON T2.SHOP_NO = T3.SHOP_NO
+			AND T2.category_1 = T3.category_1
+			AND T2.category_2 = T3.category_2
+			AND T2.category_3 = T3.category_3   
+			and t2.brand_no = T3.brand_no   
+     </select>
+  
+    
+   <!-- 获取页脚对象 -->
+    <resultMap id="FooterBaseResultMap" type="cn.wonhigh.retail.fas.common.dto.BillShopBalanceCateSumFooterDto" >
+	    <result column="total_sale_qty" property="totalSaleQty" jdbcType="INTEGER" />
+	    <result column="total_sale_amount" property="totalSaleAmount" jdbcType="DECIMAL" />
+	    <result column="total_billing_amount" property="totalBillingAmount" jdbcType="DECIMAL" />
+		<result column="total_prepayment_amount" property="totalPrepaymentAmount" jdbcType="DECIMAL" />
+		<result column="total_diff_amount" property="totalDiffAmount" jdbcType="DECIMAL" />
+		<result column="total_systemdeduct_amount" property="totalSystemDeductAmount" jdbcType="DECIMAL" />
+		<result column="total_balancededuct_amount" property="totalBalanceDeductAmount" jdbcType="DECIMAL" />
+		<result column="total_balancediff_amount" property="totalBalanceDiffAmount" jdbcType="DECIMAL" />
+		<result column="total_deduct_amount" property="totalDeductAmount" jdbcType="DECIMAL" /> 
+		<result column="actual_Billing_Amount" property="actualBillingAmount" jdbcType="DECIMAL" />
+  	</resultMap>
+   <select id="getFootDto" resultMap="FooterBaseResultMap" parameterType="map" >
+    	SELECT SUM(sale_amount) as total_sale_amount, 
+    		SUM(sale_qty) total_sale_qty,
+    		SUM(billing_amount) total_billing_amount,
+    		SUM(prepayment_amount) total_prepayment_amount,  SUM(diff_amount) total_diff_amount, SUM(system_deduct_amount) total_systemdeduct_amount,  SUM(balance_deduct_amount) total_balancededuct_amount,  
+    		SUM(balance_diff_amount) total_balancediff_amount,  SUM(deduct_amount) total_deduct_amount,SUM(billing_amount) actual_Billing_Amount   
+    	FROM bill_shop_balance_cate_sum WHERE 1=1 
+    	<include refid="condition" />
+   </select> 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_shop_balance_cate_sum
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceCateSum" >
+    DELETE FROM bill_shop_balance_cate_sum
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+   <delete id="deleteBalanceNoForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceCateSum" >
+    DELETE FROM bill_shop_balance_cate_sum
+    WHERE balance_no = #{balanceNo,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceCateSum" >
+    INSERT INTO bill_shop_balance_cate_sum (id, bill_no, balance_no, 
+      company_no, company_name, mall_no, 
+      mall_name, shop_no, short_name, 
+      full_name, month, balance_start_date, 
+      balance_end_date, brand_no, brand_name, 
+      category_no, category_name, sale_qty, 
+      sale_amount, billing_amount, prepayment_amount, 
+      used_prepayment_amount, system_deduct_amount, 
+      balance_deduct_amount, balance_diff_amount, 
+      deduct_amount, diff_amount, sys_deduct_amount, 
+      change_amount, zone_yyyymm, sharding_flag,saler_no, 
+	  saler_name, buyer_no, buyer_name,mall_number_amount,sales_diffamount,expense_operate_amount  
+      )
+    VALUES (#{id,jdbcType=CHAR}, #{billNo,jdbcType=CHAR}, #{balanceNo,jdbcType=CHAR}, 
+      #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{mallNo,jdbcType=CHAR}, 
+      #{mallName,jdbcType=VARCHAR}, #{shopNo,jdbcType=CHAR}, #{shortName,jdbcType=VARCHAR}, 
+      #{fullName,jdbcType=VARCHAR}, #{month,jdbcType=CHAR}, #{balanceStartDate,jdbcType=DATE}, 
+      #{balanceEndDate,jdbcType=DATE}, #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{categoryNo,jdbcType=CHAR}, #{categoryName,jdbcType=VARCHAR}, #{saleQty,jdbcType=INTEGER}, 
+      #{saleAmount,jdbcType=DECIMAL}, #{billingAmount,jdbcType=DECIMAL}, #{prepaymentAmount,jdbcType=DECIMAL}, 
+      #{usedPrepaymentAmount,jdbcType=DECIMAL}, #{systemDeductAmount,jdbcType=DECIMAL}, 
+      #{balanceDeductAmount,jdbcType=DECIMAL}, #{balanceDiffAmount,jdbcType=DECIMAL}, 
+      #{deductAmount,jdbcType=DECIMAL}, #{diffAmount,jdbcType=DECIMAL}, #{sysDeductAmount,jdbcType=DECIMAL}, 
+      #{changeAmount,jdbcType=DECIMAL}, #{zoneYyyymm,jdbcType=CHAR}, #{shardingFlag,jdbcType=CHAR}, #{salerNo,jdbcType=CHAR}, 
+	  #{salerName,jdbcType=VARCHAR}, #{buyerNo,jdbcType=CHAR}, #{buyerName,jdbcType=VARCHAR},
+	   #{mallNumberAmount,jdbcType=DECIMAL},  #{salesDiffamount,jdbcType=DECIMAL},  #{expenseOperateAmount,jdbcType=DECIMAL} 
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceCateSum" >
+    INSERT INTO bill_shop_balance_cate_sum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="mallName != null" >
+        mall_name,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="fullName != null" >
+        full_name,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date,
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="saleQty != null" >
+        sale_qty,
+      </if>
+      <if test="saleAmount != null" >
+        sale_amount,
+      </if>
+      <if test="billingAmount != null" >
+        billing_amount,
+      </if>
+      <if test="prepaymentAmount != null" >
+        prepayment_amount,
+      </if>
+      <if test="usedPrepaymentAmount != null" >
+        used_prepayment_amount,
+      </if>
+      <if test="systemDeductAmount != null" >
+        system_deduct_amount,
+      </if>
+      <if test="balanceDeductAmount != null" >
+        balance_deduct_amount,
+      </if>
+      <if test="balanceDiffAmount != null" >
+        balance_diff_amount,
+      </if>
+      <if test="deductAmount != null" >
+        deduct_amount,
+      </if>
+      <if test="diffAmount != null" >
+        diff_amount,
+      </if>
+      <if test="sysDeductAmount != null" >
+        sys_deduct_amount,
+      </if>
+      <if test="changeAmount != null" >
+        change_amount,
+      </if>
+      <if test="zoneYyyymm != null" >
+        zone_yyyymm,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+      <if test="salerNo != null">
+				saler_no,
+			</if>
+			<if test="salerName != null">
+				saler_name,
+			</if>
+			<if test="buyerNo != null">
+				buyer_no,
+			</if>
+			<if test="buyerName != null">
+				buyer_name,
+			</if>
+			<if test="mallNumberAmount != null">
+			mall_number_amount,
+			</if>
+			<if test="salesDiffamount != null">
+			sales_diffamount,
+			</if>
+			<if test="expenseOperateAmount != null">
+			expense_operate_amount,
+			</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="saleQty != null" >
+        #{saleQty,jdbcType=INTEGER},
+      </if>
+      <if test="saleAmount != null" >
+        #{saleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="billingAmount != null" >
+        #{billingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prepaymentAmount != null" >
+        #{prepaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="usedPrepaymentAmount != null" >
+        #{usedPrepaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="systemDeductAmount != null" >
+        #{systemDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceDeductAmount != null" >
+        #{balanceDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceDiffAmount != null" >
+        #{balanceDiffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductAmount != null" >
+        #{deductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffAmount != null" >
+        #{diffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sysDeductAmount != null" >
+        #{sysDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="changeAmount != null" >
+        #{changeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="zoneYyyymm != null" >
+        #{zoneYyyymm,jdbcType=CHAR},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+      <if test="salerNo != null">
+				#{salerNo,jdbcType=CHAR},
+			</if>
+			<if test="salerName != null">
+				#{salerName,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerNo != null">
+				#{buyerNo,jdbcType=CHAR},
+			</if>
+			<if test="buyerName != null">
+				#{buyerName,jdbcType=VARCHAR},
+			</if>
+			<if test="mallNumberAmount != null">
+			 #{mallNumberAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="salesDiffamount != null">
+			 #{salesDiffamount,jdbcType=DECIMAL},
+			</if>
+			<if test="expenseOperateAmount != null">
+			 #{expenseOperateAmount,jdbcType=DECIMAL},
+			</if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceCateSum" >
+    UPDATE bill_shop_balance_cate_sum
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        mall_name = #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="saleQty != null" >
+        sale_qty = #{saleQty,jdbcType=INTEGER},
+      </if>
+      <if test="saleAmount != null" >
+        sale_amount = #{saleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="billingAmount != null" >
+        billing_amount = #{billingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="prepaymentAmount != null" >
+        prepayment_amount = #{prepaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="usedPrepaymentAmount != null" >
+        used_prepayment_amount = #{usedPrepaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="systemDeductAmount != null" >
+        system_deduct_amount = #{systemDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceDeductAmount != null" >
+        balance_deduct_amount = #{balanceDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceDiffAmount != null" >
+        balance_diff_amount = #{balanceDiffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductAmount != null" >
+        deduct_amount = #{deductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffAmount != null" >
+        diff_amount = #{diffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sysDeductAmount != null" >
+        sys_deduct_amount = #{sysDeductAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="changeAmount != null" >
+        change_amount = #{changeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="zoneYyyymm != null" >
+        zone_yyyymm = #{zoneYyyymm,jdbcType=CHAR},
+      </if>
+      <if test="salerNo != null">
+				saler_no = #{salerNo,jdbcType=CHAR},
+			</if>
+			<if test="salerName != null">
+				saler_name = #{salerName,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerNo != null">
+				buyer_no = #{buyerNo,jdbcType=CHAR},
+			</if>
+			<if test="buyerName != null">
+				buyer_name = #{buyerName,jdbcType=VARCHAR},
+			</if>
+			<if test="mallNumberAmount != null">
+			mall_number_amount = #{mallNumberAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="salesDiffamount != null">
+			sales_diffamount = #{salesDiffamount,jdbcType=DECIMAL},
+			</if>
+			<if test="expenseOperateAmount != null">
+			expense_operate_amount = #{expenseOperateAmount,jdbcType=DECIMAL},
+			</if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillShopBalanceCateSum" >
+    UPDATE bill_shop_balance_cate_sum
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      mall_no = #{mallNo,jdbcType=CHAR},
+      mall_name = #{mallName,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      month = #{month,jdbcType=CHAR},
+      balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      sale_qty = #{saleQty,jdbcType=INTEGER},
+      sale_amount = #{saleAmount,jdbcType=DECIMAL},
+      billing_amount = #{billingAmount,jdbcType=DECIMAL},
+      prepayment_amount = #{prepaymentAmount,jdbcType=DECIMAL},
+      used_prepayment_amount = #{usedPrepaymentAmount,jdbcType=DECIMAL},
+      system_deduct_amount = #{systemDeductAmount,jdbcType=DECIMAL},
+      balance_deduct_amount = #{balanceDeductAmount,jdbcType=DECIMAL},
+      balance_diff_amount = #{balanceDiffAmount,jdbcType=DECIMAL},
+      deduct_amount = #{deductAmount,jdbcType=DECIMAL},
+      diff_amount = #{diffAmount,jdbcType=DECIMAL},
+      sys_deduct_amount = #{sysDeductAmount,jdbcType=DECIMAL},
+      change_amount = #{changeAmount,jdbcType=DECIMAL},
+      zone_yyyymm = #{zoneYyyymm,jdbcType=CHAR},
+      saler_no = #{salerNo,jdbcType=CHAR},
+	  saler_name = #{salerName,jdbcType=VARCHAR},
+	  buyer_no = #{buyerNo,jdbcType=CHAR},
+	  buyer_name = #{buyerName,jdbcType=VARCHAR},
+	  mall_number_amount = #{mallNumberAmount,jdbcType=DECIMAL},
+	  sales_diffamount = #{salesDiffamount,jdbcType=DECIMAL},
+	  expense_operate_amount = #{expenseOperateAmount,jdbcType=DECIMAL}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <select id="getShopCateSummary" resultMap="BaseResultMap" parameterType="map" >
+    SELECT id, bill_no, balance_no, company_no, company_name, mall_no, mall_name, shop_no, short_name, 
+    full_name, month, balance_start_date, balance_end_date, brand_no, brand_name, category_no, 
+    category_name, sale_qty, sale_amount, billing_amount
+     FROM bill_shop_balance_cate_sum WHERE 1=1 
+    <if test="null != params.balanceNos and '' != params.balanceNos">
+		AND balance_no in 
+		<foreach collection="params.balanceNos" item="balanceNo" separator="," open="(" close=")" index=""> 
+			#{balanceNo}  
+		</foreach>  
+	</if>
+	<if test="null != params.balanceNo and '' != params.balanceNo">
+		AND balance_no = #{params.balanceNo}  
+	</if>
+  </select>
+</mapper>

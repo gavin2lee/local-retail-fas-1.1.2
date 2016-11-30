@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CostComputeRuleMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CostComputeRule" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="rule_code" property="ruleCode" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="start_year_code" property="startYearCode" jdbcType="CHAR" />
+    <result column="start_year_name" property="startYearName" jdbcType="CHAR" />
+    <result column="start_season_code" property="startSeasonCode" jdbcType="CHAR" />
+    <result column="start_season_name" property="startSeasonName" jdbcType="CHAR" />
+    <result column="end_year_code" property="endYearCode" jdbcType="CHAR" />
+    <result column="end_year_name" property="endYearName" jdbcType="CHAR" />
+    <result column="end_season_code" property="endSeasonCode" jdbcType="CHAR" />
+    <result column="end_season_name" property="endSeasonName" jdbcType="CHAR" />
+    <result column="compute_rule" property="computeRule" jdbcType="TINYINT" />
+    <result column="weighted_cost_coeff" property="weightedCostCoeff" jdbcType="DECIMAL" />
+    <result column="hq_cost_coeff" property="hqCostCoeff" jdbcType="DECIMAL" />
+    <result column="area_cost_coeff" property="areaCostCoeff" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="start_year_season" property="startYearSeason" jdbcType="VARCHAR" />
+    <result column="end_year_season" property="endYearSeason" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, rule_code, company_no, company_name, brand_no, brand_name, start_year_code, start_year_name, 
+    start_season_code, start_season_name, end_year_code, end_year_name, end_season_code, 
+    end_season_name, compute_rule, weighted_cost_coeff, hq_cost_coeff, area_cost_coeff, 
+    status, create_user, create_time, update_user, update_time, brand_unit_no, brand_unit_name, 
+    start_year_season, end_year_season, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        and status =#{params.status}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        and company_no =#{params.companyNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM cost_compute_rule
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM cost_compute_rule WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM cost_compute_rule WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM cost_compute_rule WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM cost_compute_rule
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.CostComputeRule" >
+    DELETE FROM cost_compute_rule
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.CostComputeRule" >
+    INSERT INTO cost_compute_rule (id, rule_code, company_no, 
+      company_name, brand_no, brand_name, 
+      start_year_code, start_year_name, start_season_code, 
+      start_season_name, end_year_code, end_year_name, 
+      end_season_code, end_season_name, compute_rule, 
+      weighted_cost_coeff, hq_cost_coeff, area_cost_coeff, 
+      status, create_user, create_time, 
+      update_user, update_time, brand_unit_no, 
+      brand_unit_name, start_year_season, end_year_season, 
+      remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{ruleCode,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, 
+      #{companyName,jdbcType=VARCHAR}, #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{startYearCode,jdbcType=CHAR}, #{startYearName,jdbcType=CHAR}, #{startSeasonCode,jdbcType=CHAR}, 
+      #{startSeasonName,jdbcType=CHAR}, #{endYearCode,jdbcType=CHAR}, #{endYearName,jdbcType=CHAR}, 
+      #{endSeasonCode,jdbcType=CHAR}, #{endSeasonName,jdbcType=CHAR}, #{computeRule,jdbcType=TINYINT}, 
+      #{weightedCostCoeff,jdbcType=DECIMAL}, #{hqCostCoeff,jdbcType=DECIMAL}, #{areaCostCoeff,jdbcType=DECIMAL}, 
+      #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{brandUnitNo,jdbcType=CHAR}, 
+      #{brandUnitName,jdbcType=VARCHAR}, #{startYearSeason,jdbcType=VARCHAR}, #{endYearSeason,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.CostComputeRule" >
+    INSERT INTO cost_compute_rule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="ruleCode != null" >
+        rule_code,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="startYearCode != null" >
+        start_year_code,
+      </if>
+      <if test="startYearName != null" >
+        start_year_name,
+      </if>
+      <if test="startSeasonCode != null" >
+        start_season_code,
+      </if>
+      <if test="startSeasonName != null" >
+        start_season_name,
+      </if>
+      <if test="endYearCode != null" >
+        end_year_code,
+      </if>
+      <if test="endYearName != null" >
+        end_year_name,
+      </if>
+      <if test="endSeasonCode != null" >
+        end_season_code,
+      </if>
+      <if test="endSeasonName != null" >
+        end_season_name,
+      </if>
+      <if test="computeRule != null" >
+        compute_rule,
+      </if>
+      <if test="weightedCostCoeff != null" >
+        weighted_cost_coeff,
+      </if>
+      <if test="hqCostCoeff != null" >
+        hq_cost_coeff,
+      </if>
+      <if test="areaCostCoeff != null" >
+        area_cost_coeff,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="startYearSeason != null" >
+        start_year_season,
+      </if>
+      <if test="endYearSeason != null" >
+        end_year_season,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="ruleCode != null" >
+        #{ruleCode,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="startYearCode != null" >
+        #{startYearCode,jdbcType=CHAR},
+      </if>
+      <if test="startYearName != null" >
+        #{startYearName,jdbcType=CHAR},
+      </if>
+      <if test="startSeasonCode != null" >
+        #{startSeasonCode,jdbcType=CHAR},
+      </if>
+      <if test="startSeasonName != null" >
+        #{startSeasonName,jdbcType=CHAR},
+      </if>
+      <if test="endYearCode != null" >
+        #{endYearCode,jdbcType=CHAR},
+      </if>
+      <if test="endYearName != null" >
+        #{endYearName,jdbcType=CHAR},
+      </if>
+      <if test="endSeasonCode != null" >
+        #{endSeasonCode,jdbcType=CHAR},
+      </if>
+      <if test="endSeasonName != null" >
+        #{endSeasonName,jdbcType=CHAR},
+      </if>
+      <if test="computeRule != null" >
+        #{computeRule,jdbcType=TINYINT},
+      </if>
+      <if test="weightedCostCoeff != null" >
+        #{weightedCostCoeff,jdbcType=DECIMAL},
+      </if>
+      <if test="hqCostCoeff != null" >
+        #{hqCostCoeff,jdbcType=DECIMAL},
+      </if>
+      <if test="areaCostCoeff != null" >
+        #{areaCostCoeff,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="startYearSeason != null" >
+        #{startYearSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="endYearSeason != null" >
+        #{endYearSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.CostComputeRule" >
+    UPDATE cost_compute_rule
+    <set >
+      <if test="ruleCode != null" >
+        rule_code = #{ruleCode,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="startYearCode != null" >
+        start_year_code = #{startYearCode,jdbcType=CHAR},
+      </if>
+      <if test="startYearName != null" >
+        start_year_name = #{startYearName,jdbcType=CHAR},
+      </if>
+      <if test="startSeasonCode != null" >
+        start_season_code = #{startSeasonCode,jdbcType=CHAR},
+      </if>
+      <if test="startSeasonName != null" >
+        start_season_name = #{startSeasonName,jdbcType=CHAR},
+      </if>
+      <if test="endYearCode != null" >
+        end_year_code = #{endYearCode,jdbcType=CHAR},
+      </if>
+      <if test="endYearName != null" >
+        end_year_name = #{endYearName,jdbcType=CHAR},
+      </if>
+      <if test="endSeasonCode != null" >
+        end_season_code = #{endSeasonCode,jdbcType=CHAR},
+      </if>
+      <if test="endSeasonName != null" >
+        end_season_name = #{endSeasonName,jdbcType=CHAR},
+      </if>
+      <if test="computeRule != null" >
+        compute_rule = #{computeRule,jdbcType=TINYINT},
+      </if>
+      <if test="weightedCostCoeff != null" >
+        weighted_cost_coeff = #{weightedCostCoeff,jdbcType=DECIMAL},
+      </if>
+      <if test="hqCostCoeff != null" >
+        hq_cost_coeff = #{hqCostCoeff,jdbcType=DECIMAL},
+      </if>
+      <if test="areaCostCoeff != null" >
+        area_cost_coeff = #{areaCostCoeff,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="startYearSeason != null" >
+        start_year_season = #{startYearSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="endYearSeason != null" >
+        end_year_season = #{endYearSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.CostComputeRule" >
+    UPDATE cost_compute_rule
+    SET rule_code = #{ruleCode,jdbcType=CHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      start_year_code = #{startYearCode,jdbcType=CHAR},
+      start_year_name = #{startYearName,jdbcType=CHAR},
+      start_season_code = #{startSeasonCode,jdbcType=CHAR},
+      start_season_name = #{startSeasonName,jdbcType=CHAR},
+      end_year_code = #{endYearCode,jdbcType=CHAR},
+      end_year_name = #{endYearName,jdbcType=CHAR},
+      end_season_code = #{endSeasonCode,jdbcType=CHAR},
+      end_season_name = #{endSeasonName,jdbcType=CHAR},
+      compute_rule = #{computeRule,jdbcType=TINYINT},
+      weighted_cost_coeff = #{weightedCostCoeff,jdbcType=DECIMAL},
+      hq_cost_coeff = #{hqCostCoeff,jdbcType=DECIMAL},
+      area_cost_coeff = #{areaCostCoeff,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      start_year_season = #{startYearSeason,jdbcType=VARCHAR},
+      end_year_season = #{endYearSeason,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

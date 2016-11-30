@@ -1,0 +1,1183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BLKPeriodBalanceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BLKPeriodBalance" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+    <result column="item_flag" property="itemFlag" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="store_no" property="storeNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="opening_qty" property="openingQty" jdbcType="INTEGER" />
+    <result column="opening_balance" property="openingBalance" jdbcType="DECIMAL" />
+    <result column="purchase_in_qty" property="purchaseInQty" jdbcType="INTEGER" />
+    <result column="purchase_in_amount" property="purchaseInAmount" jdbcType="DECIMAL" />
+    <result column="outer_transfer_in_qty" property="outerTransferInQty" jdbcType="INTEGER" />
+    <result column="outer_transfer_in_amount" property="outerTransferInAmount" jdbcType="DECIMAL" />
+    <result column="inner_transfer_in_qty" property="innerTransferInQty" jdbcType="INTEGER" />
+    <result column="inner_transfer_in_amount" property="innerTransferInAmount" jdbcType="DECIMAL" />
+    <result column="purchase_return_qty" property="purchaseReturnQty" jdbcType="INTEGER" />
+    <result column="purchase_return_amount" property="purchaseReturnAmount" jdbcType="DECIMAL" />
+    <result column="inv_surplus_qty" property="invSurplusQty" jdbcType="INTEGER" />
+    <result column="inv_surplus_amount" property="invSurplusAmount" jdbcType="DECIMAL" />
+    <result column="others_in_qty" property="othersInQty" jdbcType="INTEGER" />
+    <result column="others_in_amount" property="othersInAmount" jdbcType="DECIMAL" />
+    <result column="inner_way_qty" property="innerWayQty" jdbcType="INTEGER" />
+    <result column="inner_way_amount" property="innerWayAmount" jdbcType="DECIMAL" />
+    <result column="outer_way_qty" property="outerWayQty" jdbcType="INTEGER" />
+    <result column="outer_way_amount" property="outerWayAmount" jdbcType="DECIMAL" />
+    <result column="inner_diff_qty" property="innerDiffQty" jdbcType="INTEGER" />
+    <result column="inner_diff_amount" property="innerDiffAmount" jdbcType="DECIMAL" />
+    <result column="outer_diff_qty" property="outerDiffQty" jdbcType="INTEGER" />
+    <result column="outer_diff_amount" property="outerDiffAmount" jdbcType="DECIMAL" />
+    <result column="cost_adjustment_amount" property="costAdjustmentAmount" jdbcType="DECIMAL" />
+    <result column="sales_out_qty" property="salesOutQty" jdbcType="INTEGER" />
+    <result column="sales_out_amount" property="salesOutAmount" jdbcType="DECIMAL" />
+    <result column="outer_transfer_out_qty" property="outerTransferOutQty" jdbcType="INTEGER" />
+    <result column="outer_transfer_out_amount" property="outerTransferOutAmount" jdbcType="DECIMAL" />
+    <result column="inner_transfer_out_qty" property="innerTransferOutQty" jdbcType="INTEGER" />
+    <result column="inner_transfer_out_amount" property="innerTransferOutAmount" jdbcType="DECIMAL" />
+    <result column="inventory_loss_qty" property="inventoryLossQty" jdbcType="INTEGER" />
+    <result column="inventory_loss_amount" property="inventoryLossAmount" jdbcType="DECIMAL" />
+    <result column="others_out_qty" property="othersOutQty" jdbcType="INTEGER" />
+    <result column="others_out_amount" property="othersOutAmount" jdbcType="DECIMAL" />
+    <result column="during_net_qty" property="duringNetQty" jdbcType="INTEGER" />
+    <result column="during_net_amount" property="duringNetAmount" jdbcType="DECIMAL" />
+    <result column="closing_qty" property="closingQty" jdbcType="INTEGER" />
+    <result column="closing_balance" property="closingBalance" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    
+    <result column="during_net_inventory_qty" property="duringNetInventoryQty" jdbcType="INTEGER" />
+    <result column="during_net_inventory_amount" property="duringNetInventoryAmount" jdbcType="DECIMAL" />
+    
+    <result column="pre_sum_owe_qty" property="preSumOweQty" jdbcType="INTEGER" />
+    <result column="pre_accounting_qty" property="preAccountingQty" jdbcType="INTEGER" />
+    <result column="pre_sum_owe_amount" property="preSumOweAmount" jdbcType="DECIMAL" />
+    <result column="pre_accounting_amount" property="preAccountingAmount" jdbcType="DECIMAL" />
+    <result column="curr_sum_owe_qty" property="currSumOweQty" jdbcType="INTEGER" />
+    <result column="curr_accounting_qty" property="currAccountingQty" jdbcType="INTEGER" />
+    <result column="curr_sum_owe_amount" property="currSumOweAmount" jdbcType="DECIMAL" />
+    <result column="curr_accounting_amount" property="currAccountingAmount" jdbcType="DECIMAL" />
+    <result column="weighted_difference" property="weightedDifference" jdbcType="DECIMAL" />
+    <result column="closing_balance_reference" property="closingBalanceReference" jdbcType="DECIMAL" />
+    
+    <result column="sales_sum_qty" property="salesSumQty" jdbcType="INTEGER" />
+    <result column="sales_sum_amount" property="salesSumAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+  	id, company_no, year, month, style_no, item_no, item_code, brand_no, category_no, 
+    opening_qty, opening_balance, purchase_in_qty, purchase_in_amount, outer_transfer_in_qty, 
+    outer_transfer_in_amount, purchase_return_qty, purchase_return_amount, inv_surplus_qty, 
+    inv_surplus_amount, others_in_qty, others_in_amount, outer_way_qty, outer_way_amount, 
+    outer_diff_qty, outer_diff_amount, cost_adjustment_amount, sales_out_qty, sales_out_amount, 
+    outer_transfer_out_qty, outer_transfer_out_amount, inventory_loss_qty, inventory_loss_amount, 
+    others_out_qty, others_out_amount, during_net_qty, during_net_amount, closing_qty, 
+    closing_balance, unit_cost, region_cost, headquarter_cost, create_time, create_user, 
+    update_time, update_user, sharding_flag
+  </sql>
+  <sql id="condition">
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shardingFlag and ''!=params.shardingFlag">
+		   AND sharding_flag = #{params.shardingFlag,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.companyNo and ''!=params.companyNo">
+	  	AND company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.year and ''!=params.year">
+	  	AND year =  #{params.year,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.month and ''!=params.month">
+	  	AND month = #{params.month,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.itemNo and ''!=params.itemNo">
+	  	AND item_no = #{params.itemNo,jdbcType=CHAR}
+	  </if>
+	  
+	</if>
+  </sql>
+	
+	<select id="findBLKPeriodBalanceSubTotalCount" resultMap="BaseResultMap" parameterType="map">
+	SELECT COUNT(1) total,
+		'合计' company_no,SUM(IF(E.flag = 'true',E.opening_qty,0)) opening_qty, SUM(IF(E.flag = 'true',E.opening_balance,0)) opening_balance, 
+		SUM(IF(E.flag = 'true',E.purchase_in_qty,0)) purchase_in_qty, SUM(IF(E.flag = 'true',E.purchase_in_amount,0)) purchase_in_amount, 
+		SUM(IF(E.flag = 'true',E.outer_transfer_in_qty,0)) outer_transfer_in_qty, SUM(IF(E.flag = 'true',E.outer_transfer_in_amount,0)) outer_transfer_in_amount,
+		SUM(IF(E.flag = 'true',E.purchase_return_qty,0)) purchase_return_qty, SUM(IF(E.flag = 'true',E.purchase_return_amount,0)) purchase_return_amount,
+		SUM(IF(E.flag = 'true',E.inv_surplus_qty,0)) inv_surplus_qty, SUM(IF(E.flag = 'true',E.inv_surplus_amount,0)) inv_surplus_amount,
+		SUM(IF(E.flag = 'true',E.others_in_qty,0)) others_in_qty, SUM(IF(E.flag = 'true',E.others_in_amount,0)) others_in_amount, 
+		SUM(IF(E.flag = 'true',E.outer_way_qty,0)) outer_way_qty, SUM(IF(E.flag = 'true',E.outer_way_amount,0)) outer_way_amount, 
+		SUM(IF(E.flag = 'true',E.outer_diff_qty,0)) outer_diff_qty, SUM(IF(E.flag = 'true',E.outer_diff_amount,0)) outer_diff_amount, 
+		SUM(IF(E.flag = 'true',E.cost_adjustment_amount,0)) cost_adjustment_amount, SUM(IF(E.flag = 'true',E.sales_out_qty,0)) sales_out_qty, SUM(IF(E.flag = 'true',E.sales_out_amount,0)) sales_out_amount, 
+		SUM(IF(E.flag = 'true',E.outer_transfer_out_qty,0)) outer_transfer_out_qty, SUM(IF(E.flag = 'true',E.outer_transfer_out_amount,0)) outer_transfer_out_amount, 
+		SUM(IF(E.flag = 'true',E.inventory_loss_qty,0)) inventory_loss_qty, SUM(IF(E.flag = 'true',E.inventory_loss_amount,0)) inventory_loss_amount, 
+		SUM(IF(E.flag = 'true',E.others_out_qty,0)) others_out_qty, SUM(IF(E.flag = 'true',E.others_out_amount,0)) others_out_amount, 
+		SUM(IF(E.flag = 'true',E.during_net_qty,0)) during_net_qty, SUM(IF(E.flag = 'true',E.during_net_amount,0)) during_net_amount, 
+		SUM(IF(E.flag = 'true',E.inv_surplus_qty + E.inventory_loss_qty,0)) AS during_net_inventory_qty, SUM(IF(E.flag = 'true',E.inv_surplus_amount + E.inventory_loss_amount,0)) AS during_net_inventory_amount,
+		SUM(IF(E.flag = 'true',E.closing_qty,0)) closing_qty, SUM(IF(E.flag = 'true',E.closing_balance,0)) closing_balance,
+		SUM(IF(E.flag = 'true',E.opening_balance + E.purchase_in_amount + E.outer_transfer_in_amount + E.purchase_return_amount + E.inv_surplus_amount 
+		+ E.others_in_amount + E.cost_adjustment_amount + E.sales_out_amount+ E.outer_transfer_out_amount + E.inventory_loss_amount + E.others_out_amount,0)) AS closing_balance_reference,
+		SUM(IF(E.flag = 'true',E.closing_balance - (E.opening_balance + E.purchase_in_amount + E.outer_transfer_in_amount + E.purchase_return_amount + inv_surplus_amount 
+		+ E.others_in_amount + E.cost_adjustment_amount + E.sales_out_amount + E.outer_transfer_out_amount + E.inventory_loss_amount + E.others_out_amount),0)) AS weighted_difference,
+		SUM(IF(E.flag = 'true',E.pre_sum_owe_qty,0)) pre_sum_owe_qty,SUM(IF(E.flag = 'true',E.pre_sum_owe_amount,0)) pre_sum_owe_amount,
+		SUM(IF(E.flag = 'true',E.pre_accounting_qty,0)) pre_accounting_qty,SUM(IF(E.flag = 'true',E.pre_accounting_amount,0)) pre_accounting_amount,
+		SUM(IF(E.flag = 'true',E.curr_sum_owe_qty,0)) curr_sum_owe_qty,SUM(IF(E.flag = 'true',E.curr_sum_owe_amount,0)) curr_sum_owe_amount,
+		SUM(IF(E.flag = 'true',E.curr_accounting_qty,0)) curr_accounting_qty,SUM(IF(E.flag = 'true',E.curr_accounting_amount,0)) curr_accounting_amount,
+		SUM(IF(E.flag = 'true',E.sales_sum_qty,0)) sales_sum_qty,SUM(IF(E.flag = 'true',E.sales_sum_amount,0)) sales_sum_amount
+	FROM (
+		<if test="null!=params and ''!=params">
+		<if test="'true'==params.isSubTotal">
+		SELECT C.* FROM (
+			SELECT T.*,'false' flag,
+			 	IFNULL(L.sum_owe_qty, 0) AS pre_sum_owe_qty,IFNULL(L.sum_owe_cost, 0) AS pre_sum_owe_amount,
+			 	T.opening_qty-IFNULL(L.sum_owe_qty, 0) AS pre_accounting_qty, T.opening_balance-IFNULL(L.sum_owe_cost, 0) AS pre_accounting_amount,
+				IFNULL(M.sum_owe_qty, 0) AS curr_sum_owe_qty,IFNULL(M.sum_owe_cost, 0) AS curr_sum_owe_amount,
+			 	T.closing_qty-IFNULL(M.sum_owe_qty, 0) AS curr_accounting_qty, T.closing_balance-IFNULL(M.sum_owe_cost, 0) AS curr_accounting_amount,
+			 	IFNULL(cmss.qty,0) AS sales_sum_qty, IFNULL(cmss.unit_cost,0) AS sales_sum_amount
+			FROM 
+			(
+			SELECT 
+				p.id, p.company_no, p.year, p.month, p.item_no, i.style_no, p.item_code, p.item_name, p.brand_no, p.category_no, LEFT(p.category_no,2) category_1,
+				SUM(p.opening_qty) opening_qty, SUM(p.opening_balance) opening_balance, SUM(p.purchase_in_qty) purchase_in_qty, SUM(p.purchase_in_amount) purchase_in_amount, SUM(p.outer_transfer_in_qty) outer_transfer_in_qty, 
+				SUM(p.outer_transfer_in_amount) outer_transfer_in_amount, SUM(p.purchase_return_qty) purchase_return_qty, SUM(p.purchase_return_amount) purchase_return_amount, SUM(p.inv_surplus_qty) inv_surplus_qty, 
+				SUM(p.inv_surplus_amount) inv_surplus_amount, SUM(p.others_in_qty) others_in_qty, SUM(p.others_in_amount) others_in_amount, SUM(p.outer_way_qty) outer_way_qty, SUM(p.outer_way_amount) outer_way_amount, 
+				SUM(p.outer_diff_qty) outer_diff_qty, SUM(p.outer_diff_amount) outer_diff_amount, SUM(p.cost_adjustment_amount) cost_adjustment_amount, SUM(p.sales_out_qty) sales_out_qty, SUM(p.sales_out_amount) sales_out_amount, 
+				SUM(p.outer_transfer_out_qty) outer_transfer_out_qty, SUM(p.outer_transfer_out_amount) outer_transfer_out_amount, SUM(p.inventory_loss_qty) inventory_loss_qty, SUM(p.inventory_loss_amount) inventory_loss_amount, 
+				SUM(p.others_out_qty) others_out_qty, SUM(p.others_out_amount) others_out_amount, SUM(p.during_net_qty) during_net_qty, SUM(p.during_net_amount) during_net_amount, 
+				SUM(p.inv_surplus_qty + p.inventory_loss_qty) AS during_net_inventory_qty,
+				SUM(p.inv_surplus_amount + p.inventory_loss_amount) AS during_net_inventory_amount,
+				SUM(p.closing_qty) closing_qty, SUM(p.closing_balance) closing_balance, p.unit_cost, p.region_cost, p.headquarter_cost, p.create_time, p.create_user, 
+				p.update_time, p.update_user, p.sharding_flag,
+				SUM(ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+				+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount+ p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount) AS closing_balance_reference,
+				SUM(p.closing_balance - (ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+				+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount + p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount)) AS weighted_difference
+			FROM company_period_balance p
+			INNER JOIN item i ON p.item_no = i.item_no WHERE 1=1
+			AND i.style_no IS NOT NULL
+			AND TRIM(i.style_no) !=''
+			<if test="null!=params" >
+		      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+		        ${params.queryCondition}
+		      </if>
+			  <if test="null!=params.companyNo and ''!=params.companyNo">
+			  	AND p.company_no = #{params.companyNo,jdbcType=CHAR}
+			  </if>
+			  <if test="null!=params.year and ''!=params.year">
+			  	AND p.year =  #{params.year,jdbcType=CHAR}
+			  </if>
+			  <if test="null!=params.month and ''!=params.month">
+			  	AND p.month = #{params.month,jdbcType=CHAR}
+			  </if>
+			  <if test="null != params.brandNos and '' != params.brandNos">
+		   		AND p.brand_no in 
+		        <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+		      	 	#{brandNo}  
+		        </foreach>  
+		      </if>
+		      <if test="null != params.multiCategorys and '' != params.multiCategorys">
+		   		AND substring(p.category_no,1,2) in 
+				<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+				    #{categoryNo} 
+			 	</foreach>  
+			  </if>
+			  <if test="null!=params.styleNo and ''!=params.styleNo">
+		  		AND i.style_no = #{params.styleNo,jdbcType=CHAR}
+			  </if>
+			</if>
+		 	GROUP BY i.style_no
+			) T
+			LEFT JOIN (
+				SELECT
+					b.company_no, b.`year`, b.`month`, i.style_no,
+					SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+				FROM
+					back_order_sales b
+				INNER JOIN item i ON b.item_no = i.item_no
+				WHERE
+					b.company_no = #{params.companyNo}
+				AND b.`year` = #{params.year}
+				AND b.`month` = #{params.month}
+				GROUP BY i.style_no
+			) M ON T.company_no=M.company_no AND T.style_no=M.style_no AND T.year=M.year AND T.month=M.month
+			LEFT JOIN (
+				SELECT
+					b.company_no, b.`year`, b.`month`, i.style_no,
+					SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+				FROM
+					back_order_sales b
+				INNER JOIN item i ON b.item_no = i.item_no
+				WHERE
+					b.company_no = #{params.companyNo}
+				AND b.`year` = #{params.preYear}
+				AND b.`month` = #{params.preMonth}
+				GROUP BY i.style_no
+			) L ON T.company_no=L.company_no AND T.style_no=L.style_no AND L.year=#{params.preYear} AND L.month=#{params.preMonth}
+			LEFT JOIN (
+				SELECT
+					c.company_no, c.`year`, c.`month`, i.style_no,
+					SUM(c.qty) qty, SUM(c.unit_cost) unit_cost
+				FROM
+					company_period_sales_sum c
+				INNER JOIN item i ON c.item_no = i.item_no
+				WHERE
+					c.company_no = #{params.companyNo}
+				AND c.`year` = #{params.year}
+				AND c.`month` = #{params.month}
+				GROUP BY i.style_no
+			) cmss ON T.company_no=cmss.company_no AND T.year=cmss.year AND T.month=cmss.month AND T.style_no=cmss.style_no
+			) C
+			UNION ALL
+		</if>
+	</if>
+	SELECT D.* FROM (
+		SELECT T.id, T.company_no, T.year, T.month, T.flag, T.item_no, T.item_code, T.item_name, T.style_no, T.brand_no, CONCAT(LEFT(T.category_no,2),'zzzzzzzzzzzz') category_no,LEFT(T.category_no,2) category_1,
+			SUM(T.opening_qty) opening_qty, SUM(T.opening_balance) opening_balance, SUM(T.purchase_in_qty) purchase_in_qty, SUM(T.purchase_in_amount) purchase_in_amount, SUM(T.outer_transfer_in_qty) outer_transfer_in_qty, 
+			SUM(T.outer_transfer_in_amount) outer_transfer_in_amount, SUM(T.purchase_return_qty) purchase_return_qty, SUM(T.purchase_return_amount) purchase_return_amount, SUM(T.inv_surplus_qty) inv_surplus_qty, 
+			SUM(T.inv_surplus_amount) inv_surplus_amount, SUM(T.others_in_qty) others_in_qty, SUM(T.others_in_amount) others_in_amount, SUM(T.outer_way_qty) outer_way_qty, SUM(T.outer_way_amount) outer_way_amount, 
+			SUM(T.outer_diff_qty) outer_diff_qty, SUM(T.outer_diff_amount) outer_diff_amount, SUM(T.cost_adjustment_amount) cost_adjustment_amount, SUM(T.sales_out_qty) sales_out_qty, SUM(T.sales_out_amount) sales_out_amount, 
+			SUM(T.outer_transfer_out_qty) outer_transfer_out_qty, SUM(T.outer_transfer_out_amount) outer_transfer_out_amount, SUM(T.inventory_loss_qty) inventory_loss_qty, SUM(T.inventory_loss_amount) inventory_loss_amount, 
+			SUM(T.others_out_qty) others_out_qty, SUM(T.others_out_amount) others_out_amount, SUM(T.during_net_qty) during_net_qty, SUM(T.during_net_amount) during_net_amount, 
+			SUM(T.inv_surplus_qty + T.inventory_loss_qty) AS during_net_inventory_qty,
+			SUM(T.inv_surplus_amount + T.inventory_loss_amount) AS during_net_inventory_amount,
+			SUM(T.closing_qty) closing_qty, SUM(T.closing_balance) closing_balance, T.unit_cost, T.region_cost, T.headquarter_cost, T.create_time, T.create_user, 
+			T.update_time, T.update_user, T.sharding_flag,
+			SUM(T.opening_balance + T.purchase_in_amount + T.outer_transfer_in_amount + T.purchase_return_amount + T.inv_surplus_amount 
+			+ T.others_in_amount + T.cost_adjustment_amount + T.sales_out_amount+ T.outer_transfer_out_amount + T.inventory_loss_amount + T.others_out_amount) AS closing_balance_reference,
+			SUM(T.closing_balance - (T.opening_balance + T.purchase_in_amount + T.outer_transfer_in_amount + T.purchase_return_amount + inv_surplus_amount 
+			+ T.others_in_amount + T.cost_adjustment_amount + T.sales_out_amount + T.outer_transfer_out_amount + T.inventory_loss_amount + T.others_out_amount)) AS weighted_difference,
+			SUM(T.pre_sum_owe_qty) pre_sum_owe_qty,SUM(T.pre_sum_owe_amount) pre_sum_owe_amount,
+			SUM(T.pre_accounting_qty) pre_accounting_qty,SUM(T.pre_accounting_amount) pre_accounting_amount,
+			SUM(T.curr_sum_owe_qty) curr_sum_owe_qty,SUM(T.curr_sum_owe_amount) curr_sum_owe_amount,
+			SUM(T.curr_accounting_qty) curr_accounting_qty,SUM(T.curr_accounting_amount) curr_accounting_amount,
+			SUM(T.sales_sum_qty) sales_sum_qty,SUM(T.sales_sum_amount) sales_sum_amount
+			FROM (
+				SELECT T.*,'true' flag,
+				 	IFNULL(L.sum_owe_qty, 0) AS pre_sum_owe_qty,IFNULL(L.sum_owe_cost, 0) AS pre_sum_owe_amount,
+				 	T.opening_qty-IFNULL(L.sum_owe_qty, 0) AS pre_accounting_qty, T.opening_balance-IFNULL(L.sum_owe_cost, 0) AS pre_accounting_amount,
+					IFNULL(M.sum_owe_qty, 0) AS curr_sum_owe_qty,IFNULL(M.sum_owe_cost, 0) AS curr_sum_owe_amount,
+				 	T.closing_qty-IFNULL(M.sum_owe_qty, 0) AS curr_accounting_qty, T.closing_balance-IFNULL(M.sum_owe_cost, 0) AS curr_accounting_amount,
+				 	IFNULL(cmss.qty,0) AS sales_sum_qty, IFNULL(cmss.unit_cost,0) AS sales_sum_amount
+				FROM 
+				(
+				SELECT 
+					p.id, p.company_no, p.year, p.month, p.item_no, i.style_no, p.item_code, p.item_name, p.brand_no, p.category_no, 
+					SUM(p.opening_qty) opening_qty, SUM(p.opening_balance) opening_balance, SUM(p.purchase_in_qty) purchase_in_qty, SUM(p.purchase_in_amount) purchase_in_amount, SUM(p.outer_transfer_in_qty) outer_transfer_in_qty, 
+					SUM(p.outer_transfer_in_amount) outer_transfer_in_amount, SUM(p.purchase_return_qty) purchase_return_qty, SUM(p.purchase_return_amount) purchase_return_amount, SUM(p.inv_surplus_qty) inv_surplus_qty, 
+					SUM(p.inv_surplus_amount) inv_surplus_amount, SUM(p.others_in_qty) others_in_qty, SUM(p.others_in_amount) others_in_amount, SUM(p.outer_way_qty) outer_way_qty, SUM(p.outer_way_amount) outer_way_amount, 
+					SUM(p.outer_diff_qty) outer_diff_qty, SUM(p.outer_diff_amount) outer_diff_amount, SUM(p.cost_adjustment_amount) cost_adjustment_amount, SUM(p.sales_out_qty) sales_out_qty, SUM(p.sales_out_amount) sales_out_amount, 
+					SUM(p.outer_transfer_out_qty) outer_transfer_out_qty, SUM(p.outer_transfer_out_amount) outer_transfer_out_amount, SUM(p.inventory_loss_qty) inventory_loss_qty, SUM(p.inventory_loss_amount) inventory_loss_amount, 
+					SUM(p.others_out_qty) others_out_qty, SUM(p.others_out_amount) others_out_amount, SUM(p.during_net_qty) during_net_qty, SUM(p.during_net_amount) during_net_amount, 
+					SUM(p.inv_surplus_qty + p.inventory_loss_qty) AS during_net_inventory_qty,
+					SUM(p.inv_surplus_amount + p.inventory_loss_amount) AS during_net_inventory_amount,
+					SUM(p.closing_qty) closing_qty, SUM(p.closing_balance) closing_balance, p.unit_cost, p.region_cost, p.headquarter_cost, p.create_time, p.create_user, 
+					p.update_time, p.update_user, p.sharding_flag,
+					SUM(ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+					+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount+ p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount) AS closing_balance_reference,
+					SUM(p.closing_balance - (ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+					+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount + p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount)) AS weighted_difference
+				FROM company_period_balance p
+				INNER JOIN item i ON p.item_no = i.item_no WHERE 1=1
+				AND i.style_no IS NOT NULL
+				AND TRIM(i.style_no) !=''
+				<if test="null!=params" >
+			      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+			        ${params.queryCondition}
+			      </if>
+				  <if test="null!=params.companyNo and ''!=params.companyNo">
+				  	AND p.company_no = #{params.companyNo,jdbcType=CHAR}
+				  </if>
+				  <if test="null!=params.year and ''!=params.year">
+				  	AND p.year =  #{params.year,jdbcType=CHAR}
+				  </if>
+				  <if test="null!=params.month and ''!=params.month">
+				  	AND p.month = #{params.month,jdbcType=CHAR}
+				  </if>
+				  <if test="null != params.brandNos and '' != params.brandNos">
+			   		AND p.brand_no in 
+			        <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+			      	 	#{brandNo}  
+			        </foreach>  
+			      </if>
+			      <if test="null != params.multiCategorys and '' != params.multiCategorys">
+			   		AND substring(p.category_no,1,2) in 
+					<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+					    #{categoryNo} 
+				 	</foreach>  
+				  </if>
+				  <if test="null!=params.styleNo and ''!=params.styleNo">
+			  		AND i.style_no = #{params.styleNo,jdbcType=CHAR}
+				  </if>
+				</if>
+			 	GROUP BY i.style_no
+				) T
+				LEFT JOIN (
+					SELECT
+						b.company_no, b.`year`, b.`month`, i.style_no,
+						SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+					FROM
+						back_order_sales b
+					INNER JOIN item i ON b.item_no = i.item_no
+					WHERE
+						b.company_no = #{params.companyNo}
+					AND b.`year` = #{params.year}
+					AND b.`month` = #{params.month}
+					GROUP BY i.style_no
+				) M ON T.company_no=M.company_no AND T.style_no=M.style_no AND T.year=M.year AND T.month=M.month
+				LEFT JOIN (
+					SELECT
+						b.company_no, b.`year`, b.`month`, i.style_no,
+						SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+					FROM
+						back_order_sales b
+					INNER JOIN item i ON b.item_no = i.item_no
+					WHERE
+						b.company_no = #{params.companyNo}
+					AND b.`year` = #{params.preYear}
+					AND b.`month` = #{params.preMonth}
+					GROUP BY i.style_no
+				) L ON T.company_no=L.company_no AND T.style_no=L.style_no AND L.year=#{params.preYear} AND L.month=#{params.preMonth}
+				LEFT JOIN (
+					SELECT
+						c.company_no, c.`year`, c.`month`, i.style_no,
+						SUM(c.qty) qty, SUM(c.unit_cost) unit_cost
+					FROM
+						company_period_sales_sum c
+					INNER JOIN item i ON c.item_no = i.item_no
+					WHERE
+						c.company_no = #{params.companyNo}
+					AND c.`year` = #{params.year}
+					AND c.`month` = #{params.month}
+					GROUP BY i.style_no
+				) cmss ON T.company_no=cmss.company_no AND T.year=cmss.year AND T.month=cmss.month AND T.style_no=cmss.style_no
+			) T
+			GROUP BY T.company_no,T.brand_no,category_1
+		) D
+	) E
+	</select>
+	
+	<select id="findBLKPeriodBalanceSubTotalPages" resultMap="BaseResultMap" parameterType="map">
+	SELECT E.* FROM (
+	<if test="null!=params and ''!=params">
+		<if test="'true'==params.isSubTotal">
+		SELECT C.* FROM (
+			SELECT T.*,'false' flag,
+			 	IFNULL(L.sum_owe_qty, 0) AS pre_sum_owe_qty,IFNULL(L.sum_owe_cost, 0) AS pre_sum_owe_amount,
+			 	T.opening_qty-IFNULL(L.sum_owe_qty, 0) AS pre_accounting_qty, T.opening_balance-IFNULL(L.sum_owe_cost, 0) AS pre_accounting_amount,
+				IFNULL(M.sum_owe_qty, 0) AS curr_sum_owe_qty,IFNULL(M.sum_owe_cost, 0) AS curr_sum_owe_amount,
+			 	T.closing_qty-IFNULL(M.sum_owe_qty, 0) AS curr_accounting_qty, T.closing_balance-IFNULL(M.sum_owe_cost, 0) AS curr_accounting_amount,
+			 	IFNULL(cmss.qty,0) AS sales_sum_qty, IFNULL(cmss.unit_cost,0) AS sales_sum_amount
+			FROM 
+			(
+			SELECT 
+				p.id, p.company_no, p.year, p.month, p.item_no, i.style_no, p.item_code, p.item_name, p.brand_no, p.category_no, LEFT(p.category_no,2) category_1,
+				SUM(p.opening_qty) opening_qty, SUM(p.opening_balance) opening_balance, SUM(p.purchase_in_qty) purchase_in_qty, SUM(p.purchase_in_amount) purchase_in_amount, SUM(p.outer_transfer_in_qty) outer_transfer_in_qty, 
+				SUM(p.outer_transfer_in_amount) outer_transfer_in_amount, SUM(p.purchase_return_qty) purchase_return_qty, SUM(p.purchase_return_amount) purchase_return_amount, SUM(p.inv_surplus_qty) inv_surplus_qty, 
+				SUM(p.inv_surplus_amount) inv_surplus_amount, SUM(p.others_in_qty) others_in_qty, SUM(p.others_in_amount) others_in_amount, SUM(p.outer_way_qty) outer_way_qty, SUM(p.outer_way_amount) outer_way_amount, 
+				SUM(p.outer_diff_qty) outer_diff_qty, SUM(p.outer_diff_amount) outer_diff_amount, SUM(p.cost_adjustment_amount) cost_adjustment_amount, SUM(p.sales_out_qty) sales_out_qty, SUM(p.sales_out_amount) sales_out_amount, 
+				SUM(p.outer_transfer_out_qty) outer_transfer_out_qty, SUM(p.outer_transfer_out_amount) outer_transfer_out_amount, SUM(p.inventory_loss_qty) inventory_loss_qty, SUM(p.inventory_loss_amount) inventory_loss_amount, 
+				SUM(p.others_out_qty) others_out_qty, SUM(p.others_out_amount) others_out_amount, SUM(p.during_net_qty) during_net_qty, SUM(p.during_net_amount) during_net_amount, 
+				SUM(p.inv_surplus_qty + p.inventory_loss_qty) AS during_net_inventory_qty,
+				SUM(p.inv_surplus_amount + p.inventory_loss_amount) AS during_net_inventory_amount,
+				SUM(p.closing_qty) closing_qty, SUM(p.closing_balance) closing_balance, p.unit_cost, p.region_cost, p.headquarter_cost, p.create_time, p.create_user, 
+				p.update_time, p.update_user, p.sharding_flag,
+				SUM(ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+				+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount+ p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount) AS closing_balance_reference,
+				SUM(p.closing_balance - (ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+				+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount + p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount)) AS weighted_difference
+			FROM company_period_balance p
+			INNER JOIN item i ON p.item_no = i.item_no WHERE 1=1
+			AND i.style_no IS NOT NULL
+			AND TRIM(i.style_no) !=''
+			<if test="null!=params" >
+		      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+		        ${params.queryCondition}
+		      </if>
+			  <if test="null!=params.companyNo and ''!=params.companyNo">
+			  	AND p.company_no = #{params.companyNo,jdbcType=CHAR}
+			  </if>
+			  <if test="null!=params.year and ''!=params.year">
+			  	AND p.year =  #{params.year,jdbcType=CHAR}
+			  </if>
+			  <if test="null!=params.month and ''!=params.month">
+			  	AND p.month = #{params.month,jdbcType=CHAR}
+			  </if>
+			  <if test="null != params.brandNos and '' != params.brandNos">
+		   		AND p.brand_no in 
+		        <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+		      	 	#{brandNo}  
+		        </foreach>  
+		      </if>
+		      <if test="null != params.multiCategorys and '' != params.multiCategorys">
+		   		AND substring(p.category_no,1,2) in 
+				<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+				    #{categoryNo} 
+			 	</foreach>  
+			  </if>
+			  <if test="null!=params.styleNo and ''!=params.styleNo">
+		  		AND i.style_no = #{params.styleNo,jdbcType=CHAR}
+			  </if>
+			</if>
+		 	GROUP BY i.style_no
+			) T
+			LEFT JOIN (
+				SELECT
+					b.company_no, b.`year`, b.`month`, i.style_no,
+					SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+				FROM
+					back_order_sales b
+				INNER JOIN item i ON b.item_no = i.item_no
+				WHERE
+					b.company_no = #{params.companyNo}
+				AND b.`year` = #{params.year}
+				AND b.`month` = #{params.month}
+				GROUP BY i.style_no
+			) M ON T.company_no=M.company_no AND T.style_no=M.style_no AND T.year=M.year AND T.month=M.month
+			LEFT JOIN (
+				SELECT
+					b.company_no, b.`year`, b.`month`, i.style_no,
+					SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+				FROM
+					back_order_sales b
+				INNER JOIN item i ON b.item_no = i.item_no
+				WHERE
+					b.company_no = #{params.companyNo}
+				AND b.`year` = #{params.preYear}
+				AND b.`month` = #{params.preMonth}
+				GROUP BY i.style_no
+			) L ON T.company_no=L.company_no AND T.style_no=L.style_no AND L.year=#{params.preYear} AND L.month=#{params.preMonth}
+			LEFT JOIN (
+				SELECT
+					c.company_no, c.`year`, c.`month`, i.style_no,
+					SUM(c.qty) qty, SUM(c.unit_cost) unit_cost
+				FROM
+					company_period_sales_sum c
+				INNER JOIN item i ON c.item_no = i.item_no
+				WHERE
+					c.company_no = #{params.companyNo}
+				AND c.`year` = #{params.year}
+				AND c.`month` = #{params.month}
+				GROUP BY i.style_no
+			) cmss ON T.company_no=cmss.company_no AND T.year=cmss.year AND T.month=cmss.month AND T.style_no=cmss.style_no
+			) C
+			UNION ALL
+		</if>
+	</if>
+	SELECT D.* FROM (
+		SELECT T.id, T.company_no, T.year, T.month, T.item_no, T.item_code, T.item_name, T.style_no, T.brand_no, CONCAT(LEFT(T.category_no,2),'zzzzzzzzzzzz') category_no,LEFT(T.category_no,2) category_1,
+			SUM(T.opening_qty) opening_qty, SUM(T.opening_balance) opening_balance, SUM(T.purchase_in_qty) purchase_in_qty, SUM(T.purchase_in_amount) purchase_in_amount, SUM(T.outer_transfer_in_qty) outer_transfer_in_qty, 
+			SUM(T.outer_transfer_in_amount) outer_transfer_in_amount, SUM(T.purchase_return_qty) purchase_return_qty, SUM(T.purchase_return_amount) purchase_return_amount, SUM(T.inv_surplus_qty) inv_surplus_qty, 
+			SUM(T.inv_surplus_amount) inv_surplus_amount, SUM(T.others_in_qty) others_in_qty, SUM(T.others_in_amount) others_in_amount, SUM(T.outer_way_qty) outer_way_qty, SUM(T.outer_way_amount) outer_way_amount, 
+			SUM(T.outer_diff_qty) outer_diff_qty, SUM(T.outer_diff_amount) outer_diff_amount, SUM(T.cost_adjustment_amount) cost_adjustment_amount, SUM(T.sales_out_qty) sales_out_qty, SUM(T.sales_out_amount) sales_out_amount, 
+			SUM(T.outer_transfer_out_qty) outer_transfer_out_qty, SUM(T.outer_transfer_out_amount) outer_transfer_out_amount, SUM(T.inventory_loss_qty) inventory_loss_qty, SUM(T.inventory_loss_amount) inventory_loss_amount, 
+			SUM(T.others_out_qty) others_out_qty, SUM(T.others_out_amount) others_out_amount, SUM(T.during_net_qty) during_net_qty, SUM(T.during_net_amount) during_net_amount, 
+			SUM(T.inv_surplus_qty + T.inventory_loss_qty) AS during_net_inventory_qty,
+			SUM(T.inv_surplus_amount + T.inventory_loss_amount) AS during_net_inventory_amount,
+			SUM(T.closing_qty) closing_qty, SUM(T.closing_balance) closing_balance, T.unit_cost, T.region_cost, T.headquarter_cost, T.create_time, T.create_user, 
+			T.update_time, T.update_user, T.sharding_flag,
+			SUM(T.opening_balance + T.purchase_in_amount + T.outer_transfer_in_amount + T.purchase_return_amount + T.inv_surplus_amount 
+			+ T.others_in_amount + T.cost_adjustment_amount + T.sales_out_amount+ T.outer_transfer_out_amount + T.inventory_loss_amount + T.others_out_amount) AS closing_balance_reference,
+			SUM(T.closing_balance - (T.opening_balance + T.purchase_in_amount + T.outer_transfer_in_amount + T.purchase_return_amount + inv_surplus_amount 
+			+ T.others_in_amount + T.cost_adjustment_amount + T.sales_out_amount + T.outer_transfer_out_amount + T.inventory_loss_amount + T.others_out_amount)) AS weighted_difference, T.flag,
+			SUM(T.pre_sum_owe_qty) pre_sum_owe_qty,SUM(T.pre_sum_owe_amount) pre_sum_owe_amount,
+			SUM(T.pre_accounting_qty) pre_accounting_qty,SUM(T.pre_accounting_amount) pre_accounting_amount,
+			SUM(T.curr_sum_owe_qty) curr_sum_owe_qty,SUM(T.curr_sum_owe_amount) curr_sum_owe_amount,
+			SUM(T.curr_accounting_qty) curr_accounting_qty,SUM(T.curr_accounting_amount) curr_accounting_amount,
+			SUM(T.sales_sum_qty) sales_sum_qty,SUM(T.sales_sum_amount) sales_sum_amount 
+			FROM (
+				SELECT T.*,'true' flag,
+				 	IFNULL(L.sum_owe_qty, 0) AS pre_sum_owe_qty,IFNULL(L.sum_owe_cost, 0) AS pre_sum_owe_amount,
+				 	T.opening_qty-IFNULL(L.sum_owe_qty, 0) AS pre_accounting_qty, T.opening_balance-IFNULL(L.sum_owe_cost, 0) AS pre_accounting_amount,
+					IFNULL(M.sum_owe_qty, 0) AS curr_sum_owe_qty,IFNULL(M.sum_owe_cost, 0) AS curr_sum_owe_amount,
+				 	T.closing_qty-IFNULL(M.sum_owe_qty, 0) AS curr_accounting_qty, T.closing_balance-IFNULL(M.sum_owe_cost, 0) AS curr_accounting_amount,
+				 	IFNULL(cmss.qty,0) AS sales_sum_qty, IFNULL(cmss.unit_cost,0) AS sales_sum_amount
+				FROM 
+				(
+				SELECT 
+					p.id, p.company_no, p.year, p.month, p.item_no, i.style_no, p.item_code, p.item_name, p.brand_no, p.category_no, 
+					SUM(p.opening_qty) opening_qty, SUM(p.opening_balance) opening_balance, SUM(p.purchase_in_qty) purchase_in_qty, SUM(p.purchase_in_amount) purchase_in_amount, SUM(p.outer_transfer_in_qty) outer_transfer_in_qty, 
+					SUM(p.outer_transfer_in_amount) outer_transfer_in_amount, SUM(p.purchase_return_qty) purchase_return_qty, SUM(p.purchase_return_amount) purchase_return_amount, SUM(p.inv_surplus_qty) inv_surplus_qty, 
+					SUM(p.inv_surplus_amount) inv_surplus_amount, SUM(p.others_in_qty) others_in_qty, SUM(p.others_in_amount) others_in_amount, SUM(p.outer_way_qty) outer_way_qty, SUM(p.outer_way_amount) outer_way_amount, 
+					SUM(p.outer_diff_qty) outer_diff_qty, SUM(p.outer_diff_amount) outer_diff_amount, SUM(p.cost_adjustment_amount) cost_adjustment_amount, SUM(p.sales_out_qty) sales_out_qty, SUM(p.sales_out_amount) sales_out_amount, 
+					SUM(p.outer_transfer_out_qty) outer_transfer_out_qty, SUM(p.outer_transfer_out_amount) outer_transfer_out_amount, SUM(p.inventory_loss_qty) inventory_loss_qty, SUM(p.inventory_loss_amount) inventory_loss_amount, 
+					SUM(p.others_out_qty) others_out_qty, SUM(p.others_out_amount) others_out_amount, SUM(p.during_net_qty) during_net_qty, SUM(p.during_net_amount) during_net_amount, 
+					SUM(p.inv_surplus_qty + p.inventory_loss_qty) AS during_net_inventory_qty,
+					SUM(p.inv_surplus_amount + p.inventory_loss_amount) AS during_net_inventory_amount,
+					SUM(p.closing_qty) closing_qty, SUM(p.closing_balance) closing_balance, p.unit_cost, p.region_cost, p.headquarter_cost, p.create_time, p.create_user, 
+					p.update_time, p.update_user, p.sharding_flag,
+					SUM(ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+					+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount+ p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount) AS closing_balance_reference,
+					SUM(p.closing_balance - (ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+					+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount + p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount)) AS weighted_difference
+				FROM company_period_balance p
+				INNER JOIN item i ON p.item_no = i.item_no WHERE 1=1
+				AND i.style_no IS NOT NULL
+				AND TRIM(i.style_no) !=''
+				<if test="null!=params" >
+			      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+			        ${params.queryCondition}
+			      </if>
+				  <if test="null!=params.companyNo and ''!=params.companyNo">
+				  	AND p.company_no = #{params.companyNo,jdbcType=CHAR}
+				  </if>
+				  <if test="null!=params.year and ''!=params.year">
+				  	AND p.year =  #{params.year,jdbcType=CHAR}
+				  </if>
+				  <if test="null!=params.month and ''!=params.month">
+				  	AND p.month = #{params.month,jdbcType=CHAR}
+				  </if>
+				  <if test="null != params.brandNos and '' != params.brandNos">
+			   		AND p.brand_no in 
+			        <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+			      	 	#{brandNo}  
+			        </foreach>  
+			      </if>
+			      <if test="null != params.multiCategorys and '' != params.multiCategorys">
+			   		AND substring(p.category_no,1,2) in 
+					<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+					    #{categoryNo} 
+				 	</foreach>  
+				  </if>
+				  <if test="null!=params.styleNo and ''!=params.styleNo">
+			  		AND i.style_no = #{params.styleNo,jdbcType=CHAR}
+				  </if>
+				</if>
+			 	GROUP BY i.style_no
+				) T
+				LEFT JOIN (
+					SELECT
+						b.company_no, b.`year`, b.`month`, i.style_no,
+						SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+					FROM
+						back_order_sales b
+					INNER JOIN item i ON b.item_no = i.item_no
+					WHERE
+						b.company_no = #{params.companyNo}
+					AND b.`year` = #{params.year}
+					AND b.`month` = #{params.month}
+					GROUP BY i.style_no
+				) M ON T.company_no=M.company_no AND T.style_no=M.style_no AND T.year=M.year AND T.month=M.month
+				LEFT JOIN (
+					SELECT
+						b.company_no, b.`year`, b.`month`, i.style_no,
+						SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+					FROM
+						back_order_sales b
+					INNER JOIN item i ON b.item_no = i.item_no
+					WHERE
+						b.company_no = #{params.companyNo}
+					AND b.`year` = #{params.preYear}
+					AND b.`month` = #{params.preMonth}
+					GROUP BY i.style_no
+				) L ON T.company_no=L.company_no AND T.style_no=L.style_no AND L.year=#{params.preYear} AND L.month=#{params.preMonth}
+				LEFT JOIN (
+					SELECT
+						c.company_no, c.`year`, c.`month`, i.style_no,
+						SUM(c.qty) qty, SUM(c.unit_cost) unit_cost
+					FROM
+						company_period_sales_sum c
+					INNER JOIN item i ON c.item_no = i.item_no
+					WHERE
+						c.company_no = #{params.companyNo}
+					AND c.`year` = #{params.year}
+					AND c.`month` = #{params.month}
+					GROUP BY i.style_no
+				) cmss ON T.company_no=cmss.company_no AND T.year=cmss.year AND T.month=cmss.month AND T.style_no=cmss.style_no
+			) T
+			GROUP BY T.company_no,T.brand_no,category_1
+		) D
+	) E ORDER BY company_no,brand_no,left(category_no,2),left(category_no,4) LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</select>
+	
+	<select id="findBLKPeriodBalanceCount" resultMap="BaseResultMap" parameterType="map">
+	SELECT COUNT(1) total,
+		'合计' company_no,SUM(T.opening_qty) opening_qty, SUM(T.opening_balance) opening_balance, 
+			SUM(T.purchase_in_qty) purchase_in_qty, SUM(T.purchase_in_amount) purchase_in_amount, 
+			SUM(T.outer_transfer_in_qty) outer_transfer_in_qty, SUM(T.outer_transfer_in_amount) outer_transfer_in_amount,
+			SUM(T.purchase_return_qty) purchase_return_qty, SUM(T.purchase_return_amount) purchase_return_amount,
+			SUM(T.inv_surplus_qty) inv_surplus_qty, SUM(T.inv_surplus_amount) inv_surplus_amount,
+			SUM(T.others_in_qty) others_in_qty, SUM(T.others_in_amount) others_in_amount, 
+			SUM(T.outer_way_qty) outer_way_qty, SUM(T.outer_way_amount) outer_way_amount, 
+			SUM(T.outer_diff_qty) outer_diff_qty, SUM(T.outer_diff_amount) outer_diff_amount, 
+			SUM(T.cost_adjustment_amount) cost_adjustment_amount, SUM(T.sales_out_qty) sales_out_qty, SUM(T.sales_out_amount) sales_out_amount, 
+			SUM(T.outer_transfer_out_qty) outer_transfer_out_qty, SUM(T.outer_transfer_out_amount) outer_transfer_out_amount, 
+			SUM(T.inventory_loss_qty) inventory_loss_qty, SUM(T.inventory_loss_amount) inventory_loss_amount, 
+			SUM(T.others_out_qty) others_out_qty, SUM(T.others_out_amount) others_out_amount, 
+			SUM(T.during_net_qty) during_net_qty, SUM(T.during_net_amount) during_net_amount, 
+			SUM(T.inv_surplus_qty + T.inventory_loss_qty) AS during_net_inventory_qty, SUM(T.inv_surplus_amount + T.inventory_loss_amount) AS during_net_inventory_amount,
+			SUM(T.closing_qty) closing_qty, SUM(T.closing_balance) closing_balance, 
+			SUM(T.closing_balance_reference) AS closing_balance_reference,
+			SUM(T.weighted_difference) AS weighted_difference,
+			SUM(T.pre_sum_owe_qty) pre_sum_owe_qty,SUM(T.pre_sum_owe_amount) pre_sum_owe_amount,
+			SUM(T.pre_accounting_qty) pre_accounting_qty,SUM(T.pre_accounting_amount) pre_accounting_amount,
+			SUM(T.curr_sum_owe_qty) curr_sum_owe_qty,SUM(T.curr_sum_owe_amount) curr_sum_owe_amount,
+			SUM(T.curr_accounting_qty) curr_accounting_qty,SUM(T.curr_accounting_amount) curr_accounting_amount,
+			SUM(T.sales_sum_qty) sales_sum_qty,SUM(T.sales_sum_amount) sales_sum_amount
+	FROM (
+		SELECT T.*,
+	 	IFNULL(L.sum_owe_qty, 0) AS pre_sum_owe_qty,IFNULL(L.sum_owe_cost, 0) AS pre_sum_owe_amount,
+	 	T.opening_qty-IFNULL(L.sum_owe_qty, 0) AS pre_accounting_qty, T.opening_balance-IFNULL(L.sum_owe_cost, 0) AS pre_accounting_amount,
+		IFNULL(M.sum_owe_qty, 0) AS curr_sum_owe_qty,IFNULL(M.sum_owe_cost, 0) AS curr_sum_owe_amount,
+	 	T.closing_qty-IFNULL(M.sum_owe_qty, 0) AS curr_accounting_qty, T.closing_balance-IFNULL(M.sum_owe_cost, 0) AS curr_accounting_amount,
+	 	IFNULL(cmss.qty,0) AS sales_sum_qty, IFNULL(cmss.unit_cost,0) AS sales_sum_amount
+	FROM 
+	(
+		SELECT 
+			p.id, p.company_no, p.year, p.month, p.item_no, i.style_no, p.item_code, p.item_name, p.brand_no, p.category_no, 
+			SUM(p.opening_qty) opening_qty, SUM(p.opening_balance) opening_balance, SUM(p.purchase_in_qty) purchase_in_qty, SUM(p.purchase_in_amount) purchase_in_amount, SUM(p.outer_transfer_in_qty) outer_transfer_in_qty, 
+			SUM(p.outer_transfer_in_amount) outer_transfer_in_amount, SUM(p.purchase_return_qty) purchase_return_qty, SUM(p.purchase_return_amount) purchase_return_amount, SUM(p.inv_surplus_qty) inv_surplus_qty, 
+			SUM(p.inv_surplus_amount) inv_surplus_amount, SUM(p.others_in_qty) others_in_qty, SUM(p.others_in_amount) others_in_amount, SUM(p.outer_way_qty) outer_way_qty, SUM(p.outer_way_amount) outer_way_amount, 
+			SUM(p.outer_diff_qty) outer_diff_qty, SUM(p.outer_diff_amount) outer_diff_amount, SUM(p.cost_adjustment_amount) cost_adjustment_amount, SUM(p.sales_out_qty) sales_out_qty, SUM(p.sales_out_amount) sales_out_amount, 
+			SUM(p.outer_transfer_out_qty) outer_transfer_out_qty, SUM(p.outer_transfer_out_amount) outer_transfer_out_amount, SUM(p.inventory_loss_qty) inventory_loss_qty, SUM(p.inventory_loss_amount) inventory_loss_amount, 
+			SUM(p.others_out_qty) others_out_qty, SUM(p.others_out_amount) others_out_amount, SUM(p.during_net_qty) during_net_qty, SUM(p.during_net_amount) during_net_amount, 
+			SUM(p.inv_surplus_qty + p.inventory_loss_qty) AS during_net_inventory_qty,
+			SUM(p.inv_surplus_amount + p.inventory_loss_amount) AS during_net_inventory_amount,
+			SUM(p.closing_qty) closing_qty, SUM(p.closing_balance) closing_balance, p.unit_cost, p.region_cost, p.headquarter_cost, p.create_time, p.create_user, 
+			p.update_time, p.update_user, p.sharding_flag,
+			SUM(ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+			+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount+ p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount) AS closing_balance_reference,
+			SUM(p.closing_balance - (ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+			+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount + p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount)) AS weighted_difference
+		FROM company_period_balance p
+		INNER JOIN item i ON p.item_no = i.item_no WHERE 1=1
+		AND i.style_no IS NOT NULL
+		AND TRIM(i.style_no) !=''
+		<if test="null!=params" >
+	      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+		  <if test="null!=params.companyNo and ''!=params.companyNo">
+		  	AND p.company_no = #{params.companyNo,jdbcType=CHAR}
+		  </if>
+		  <if test="null!=params.year and ''!=params.year">
+		  	AND p.year =  #{params.year,jdbcType=CHAR}
+		  </if>
+		  <if test="null!=params.month and ''!=params.month">
+		  	AND p.month = #{params.month,jdbcType=CHAR}
+		  </if>
+		  <if test="null != params.brandNos and '' != params.brandNos">
+	   		AND p.brand_no in 
+	        <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+	      	 	#{brandNo}  
+	        </foreach>  
+	      </if>
+	      <if test="null != params.multiCategorys and '' != params.multiCategorys">
+	   		AND substring(p.category_no,1,2) in 
+			<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+			    #{categoryNo} 
+		 	</foreach>  
+		  </if>
+		  <if test="null!=params.styleNo and ''!=params.styleNo">
+	  		AND i.style_no = #{params.styleNo,jdbcType=CHAR}
+		  </if>
+		</if>
+	 	GROUP BY i.style_no
+		) T
+		LEFT JOIN (
+			SELECT
+				b.company_no, b.`year`, b.`month`, i.style_no,
+				SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+			FROM
+				back_order_sales b
+			INNER JOIN item i ON b.item_no = i.item_no
+			WHERE
+				b.company_no = #{params.companyNo}
+			AND b.`year` = #{params.year}
+			AND b.`month` = #{params.month}
+			GROUP BY i.style_no
+		) M ON T.company_no=M.company_no AND T.style_no=M.style_no AND T.year=M.year AND T.month=M.month
+		LEFT JOIN (
+			SELECT
+				b.company_no, b.`year`, b.`month`, i.style_no,
+				SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+			FROM
+				back_order_sales b
+			INNER JOIN item i ON b.item_no = i.item_no
+			WHERE
+				b.company_no = #{params.companyNo}
+			AND b.`year` = #{params.preYear}
+			AND b.`month` = #{params.preMonth}
+			GROUP BY i.style_no
+		) L ON T.company_no=L.company_no AND T.style_no=L.style_no AND L.year=#{params.preYear} AND L.month=#{params.preMonth}
+		LEFT JOIN (
+			SELECT
+				c.company_no, c.`year`, c.`month`, i.style_no,
+				SUM(c.qty) qty, SUM(c.unit_cost) unit_cost
+			FROM
+				company_period_sales_sum c
+			INNER JOIN item i ON c.item_no = i.item_no
+			WHERE
+				c.company_no = #{params.companyNo}
+			AND c.`year` = #{params.year}
+			AND c.`month` = #{params.month}
+			GROUP BY i.style_no
+		) cmss ON T.company_no=cmss.company_no AND T.year=cmss.year AND T.month=cmss.month AND T.style_no=cmss.style_no
+	) T
+	</select>
+	
+	<select id="findBLKPeriodBalancePages" resultMap="BaseResultMap" parameterType="map">
+	SELECT T.*,
+	 	IFNULL(L.sum_owe_qty, 0) AS pre_sum_owe_qty,IFNULL(L.sum_owe_cost, 0) AS pre_sum_owe_amount,
+	 	T.opening_qty-IFNULL(L.sum_owe_qty, 0) AS pre_accounting_qty, T.opening_balance-IFNULL(L.sum_owe_cost, 0) AS pre_accounting_amount,
+		IFNULL(M.sum_owe_qty, 0) AS curr_sum_owe_qty,IFNULL(M.sum_owe_cost, 0) AS curr_sum_owe_amount,
+	 	T.closing_qty-IFNULL(M.sum_owe_qty, 0) AS curr_accounting_qty, T.closing_balance-IFNULL(M.sum_owe_cost, 0) AS curr_accounting_amount,
+	 	IFNULL(cmss.qty,0) AS sales_sum_qty, IFNULL(cmss.unit_cost,0) AS sales_sum_amount
+	FROM 
+	(
+	SELECT 
+		p.id, p.company_no, p.year, p.month, p.item_no, i.style_no, p.item_code, p.item_name, p.brand_no, p.category_no, 
+		SUM(p.opening_qty) opening_qty, SUM(p.opening_balance) opening_balance, SUM(p.purchase_in_qty) purchase_in_qty, SUM(p.purchase_in_amount) purchase_in_amount, SUM(p.outer_transfer_in_qty) outer_transfer_in_qty, 
+		SUM(p.outer_transfer_in_amount) outer_transfer_in_amount, SUM(p.purchase_return_qty) purchase_return_qty, SUM(p.purchase_return_amount) purchase_return_amount, SUM(p.inv_surplus_qty) inv_surplus_qty, 
+		SUM(p.inv_surplus_amount) inv_surplus_amount, SUM(p.others_in_qty) others_in_qty, SUM(p.others_in_amount) others_in_amount, SUM(p.outer_way_qty) outer_way_qty, SUM(p.outer_way_amount) outer_way_amount, 
+		SUM(p.outer_diff_qty) outer_diff_qty, SUM(p.outer_diff_amount) outer_diff_amount, SUM(p.cost_adjustment_amount) cost_adjustment_amount, SUM(p.sales_out_qty) sales_out_qty, SUM(p.sales_out_amount) sales_out_amount, 
+		SUM(p.outer_transfer_out_qty) outer_transfer_out_qty, SUM(p.outer_transfer_out_amount) outer_transfer_out_amount, SUM(p.inventory_loss_qty) inventory_loss_qty, SUM(p.inventory_loss_amount) inventory_loss_amount, 
+		SUM(p.others_out_qty) others_out_qty, SUM(p.others_out_amount) others_out_amount, SUM(p.during_net_qty) during_net_qty, SUM(p.during_net_amount) during_net_amount, 
+		SUM(p.inv_surplus_qty + p.inventory_loss_qty) AS during_net_inventory_qty,
+		SUM(p.inv_surplus_amount + p.inventory_loss_amount) AS during_net_inventory_amount,
+		SUM(p.closing_qty) closing_qty, SUM(p.closing_balance) closing_balance, p.unit_cost, p.region_cost, p.headquarter_cost, p.create_time, p.create_user, 
+		p.update_time, p.update_user, p.sharding_flag,
+		SUM(ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+		+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount+ p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount) AS closing_balance_reference,
+		SUM(p.closing_balance - (ROUND(p.opening_balance,2) + p.purchase_in_amount + p.outer_transfer_in_amount + p.purchase_return_amount + p.inv_surplus_amount 
+		+ p.others_in_amount + p.cost_adjustment_amount + p.sales_out_amount + p.outer_transfer_out_amount + p.inventory_loss_amount + p.others_out_amount)) AS weighted_difference
+	FROM company_period_balance p
+	INNER JOIN item i ON p.item_no = i.item_no WHERE 1=1
+	AND i.style_no IS NOT NULL
+	AND TRIM(i.style_no) !=''
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.companyNo and ''!=params.companyNo">
+	  	AND p.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.year and ''!=params.year">
+	  	AND p.year =  #{params.year,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.month and ''!=params.month">
+	  	AND p.month = #{params.month,jdbcType=CHAR}
+	  </if>
+	  <if test="null != params.brandNos and '' != params.brandNos">
+   		AND p.brand_no in 
+        <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+      	 	#{brandNo}  
+        </foreach>  
+      </if>
+      <if test="null != params.multiCategorys and '' != params.multiCategorys">
+   		AND substring(p.category_no,1,2) in 
+		<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+		    #{categoryNo} 
+	 	</foreach>  
+	  </if>
+	  <if test="null!=params.styleNo and ''!=params.styleNo">
+  		AND i.style_no = #{params.styleNo,jdbcType=CHAR}
+	  </if>
+	</if>
+ 	GROUP BY i.style_no
+	) T
+	LEFT JOIN (
+		SELECT
+			b.company_no, b.`year`, b.`month`, i.style_no,
+			SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+		FROM
+			back_order_sales b
+		INNER JOIN item i ON b.item_no = i.item_no
+		WHERE
+			b.company_no = #{params.companyNo}
+		AND b.`year` = #{params.year}
+		AND b.`month` = #{params.month}
+		GROUP BY i.style_no
+	) M ON T.company_no=M.company_no AND T.style_no=M.style_no AND T.year=M.year AND T.month=M.month
+	LEFT JOIN (
+		SELECT
+			b.company_no, b.`year`, b.`month`, i.style_no,
+			SUM(sum_owe_qty) sum_owe_qty, SUM(sum_owe_cost) sum_owe_cost
+		FROM
+			back_order_sales b
+		INNER JOIN item i ON b.item_no = i.item_no
+		WHERE
+			b.company_no = #{params.companyNo}
+		AND b.`year` = #{params.preYear}
+		AND b.`month` = #{params.preMonth}
+		GROUP BY i.style_no
+	) L ON T.company_no=L.company_no AND T.style_no=L.style_no AND L.year=#{params.preYear} AND L.month=#{params.preMonth}
+	LEFT JOIN (
+		SELECT
+			c.company_no, c.`year`, c.`month`, i.style_no,
+			SUM(c.qty) qty, SUM(c.unit_cost) unit_cost
+		FROM
+			company_period_sales_sum c
+		INNER JOIN item i ON c.item_no = i.item_no
+		WHERE
+			c.company_no = #{params.companyNo}
+		AND c.`year` = #{params.year}
+		AND c.`month` = #{params.month}
+		GROUP BY i.style_no
+	) cmss ON T.company_no=cmss.company_no AND T.year=cmss.year AND T.month=cmss.month AND T.style_no=cmss.style_no
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	
+ <insert id="transferInventoryBookToPeriodBalance" parameterType="map" >
+ INSERT INTO period_balance
+    (id, sharding_flag, company_no, order_unit_no, 
+      store_no, brand_no, item_no, item_code, 
+      item_name, category_no, year, 
+      month, opening_qty, opening_balance, 
+      purchase_in_qty, purchase_in_amount,
+      purchase_return_qty, purchase_return_amount,
+      cost_adjustment_amount, outer_transfer_in_qty,
+      outer_transfer_in_amount,inv_surplus_qty,
+      outer_way_qty, outer_way_amount, outer_diff_qty, outer_diff_amount, 
+      inner_way_qty, inner_diff_qty, sales_out_qty, outer_transfer_out_qty, inner_transfer_in_qty, 
+      inner_transfer_out_qty, inventory_loss_qty, others_in_qty,
+      during_net_qty, closing_qty
+    )
+	SELECT replace(uuid(), '-', ''),T.sharding_flag,T.company_no,T.order_unit_no,T.store_no,T.brand_no,T.item_no,
+			T.item_code,T.item_name,T.category_no,T.YEAR,T.MONTH,
+			IF(ISNULL(p.closing_qty),0,p.closing_qty) AS opening_qty,
+			IF(ISNULL(p.closing_balance),0,p.closing_balance) AS opening_balance,
+			T.purchase_in_qty,T.purchase_in_amount,
+			T.purchase_return_qty,T.purchase_return_amount,
+			T.cost_adjustment_amount,T.outer_transfer_in_qty,
+			T.outer_transfer_in_amount,T.inv_surplus_qty,
+			T.outer_way_qty + IF(ISNULL(p.outer_way_qty),0,p.outer_way_qty) AS outer_way_qty,
+			T.outer_way_amount + IF(ISNULL(p.outer_way_amount),0,p.outer_way_amount) AS outer_way_amount,
+			T.outer_diff_qty + IF(ISNULL(p.outer_diff_qty),0,p.outer_diff_qty) AS outer_diff_qty,
+			T.outer_diff_amount+ IF(ISNULL(p.outer_diff_amount),0,p.outer_diff_amount) AS outer_diff_amount,
+			T.inner_way_qty,T.inner_diff_qty,T.sales_out_qty,
+			T.outer_transfer_out_qty,T.inner_transfer_in_qty,
+			T.inner_transfer_out_qty,T.inventory_loss_qty,
+			T.others_in_qty,T.during_net_qty,
+			IF(ISNULL(p.closing_qty),0,p.closing_qty) + T.during_net_qty AS closing_qty
+	 FROM
+   	 (SELECT ib.sharding_flag AS sharding_flag,
+       ib.order_unit_no AS order_unit_no,
+       ib.store_no AS store_no,
+       ib.brand_no AS brand_no,
+       ou.company_no company_no,
+       ib.item_no AS item_no,
+       ib.item_code AS item_code,
+       ib.item_name AS item_name,
+       ib.category_no AS category_no,
+       YEAR(ib.`bill_date`) AS YEAR,
+       MONTH(ib.`bill_date`) AS MONTH,       
+       SUM(IF(bic.fas_col_no ='purchase_in_qty', ib.balance_offset, 0))
+        + SUM(IF(bic.fas_col_no ='outer_transfer_in_qty' AND ou1.company_no IN (select fa.company_no from financial_account fa where fa.group_lead_role=1 and fa.status=1), ib.balance_offset, 0)) AS purchase_in_qty,
+       SUM(IF(bic.fas_col_no ='purchase_in_qty', ib.balance_offset*ib.cost, 0))
+       + SUM(IF(bic.fas_col_no ='outer_transfer_in_qty' AND ou1.company_no IN (select fa.company_no from financial_account fa where fa.group_lead_role=1 and fa.status=1), ib.balance_offset*ib.cost, 0)) AS purchase_in_amount,
+       SUM(IF(bic.fas_col_no ='purchase_return_qty', ib.balance_offset+ib.guest_bad_offset+ib.original_bad_offset, 0))
+       + SUM(IF(bic.fas_col_no ='outer_transfer_out_qty' and (ib.biz_type in (40,41) or ib.account_type =-1) AND ou2.company_no IN (select fa.company_no from financial_account fa where fa.group_lead_role=1 and fa.status=1), ib.balance_offset, 0)) AS  purchase_return_qty,
+       SUM(IF(bic.fas_col_no ='purchase_return_qty', (ib.balance_offset+ib.guest_bad_offset+ib.original_bad_offset)*ib.cost, 0)) 
+       + SUM(IF(bic.fas_col_no ='outer_transfer_out_qty' and (ib.biz_type in (40,41) or ib.account_type =-1) AND ou2.company_no IN (select fa.company_no from financial_account fa where fa.group_lead_role=1 and fa.status=1), ib.balance_offset*ib.cost, 0)) AS purchase_return_amount,
+       SUM(IF(ib.bill_type =2000, ib.cost, 0)) AS cost_adjustment_amount,  
+       SUM(IF(bic.fas_col_no ='outer_transfer_in_qty' AND  ou1.company_no NOT IN (select fa.company_no from financial_account fa where fa.group_lead_role=1 and fa.status=1), ib.balance_offset, 0)) AS outer_transfer_in_qty, 
+       SUM(IF(bic.fas_col_no ='outer_transfer_in_qty' AND  ou1.company_no NOT IN (select fa.company_no from financial_account fa where fa.group_lead_role=1 and fa.status=1), ib.balance_offset*ib.cost, 0)) AS outer_transfer_in_amount,
+       (SUM(IF(ib.bill_type =1350 AND ib.balance_offset &gt; 0, ib.balance_offset, 0))
+       + SUM(IF(ib.bill_type =1350 AND ib.guest_bad_offset &gt; 0, ib.guest_bad_offset, 0))
+       + SUM(IF(ib.bill_type =1350 AND ib.original_bad_offset &gt; 0, ib.original_bad_offset, 0)))
+       AS inv_surplus_qty, 
+       SUM(IF(bic.fas_col_no ='outer_way_qty', ib.transit_in_account_offset, 0))
+       + SUM(IF(bic.fas_col_no ='outer_way_qty', ib.factory_in_offset, 0)) AS outer_way_qty,
+       SUM(IF(bic.fas_col_no ='outer_way_qty', ib.transit_in_account_offset*ib.cost, 0))
+       + SUM(IF(bic.fas_col_no ='outer_way_qty', ib.factory_in_offset*ib.cost, 0)) AS outer_way_amount,
+       SUM(IF(bic.fas_col_no ='outer_diff_qty', ib.in_diff_account_offset, 0)) 
+       + SUM(IF(bic.fas_col_no ='outer_diff_qty', ib.factory_in_diff_offset, 0)) AS outer_diff_qty,
+       SUM(IF(bic.fas_col_no ='outer_diff_qty', ib.in_diff_account_offset*ib.cost, 0)) 
+       + SUM(IF(bic.fas_col_no ='outer_diff_qty', ib.factory_in_diff_offset*ib.cost, 0))AS outer_diff_amount,
+       SUM(CASE WHEN bic.fas_col_no ='inner_way_qty' THEN (ib.transit_in_offset+ib.bad_transit_offset)
+          ELSE 0 END) AS  inner_way_qty,
+       SUM(CASE WHEN bic.fas_col_no ='inner_diff_qty' THEN (ib.in_diff_offset+ib.bad_diff_offset)
+          ELSE 0 END) AS  inner_diff_qty,
+       SUM(CASE WHEN bic.fas_col_no ='sales_out_qty' THEN (ib.balance_offset+ib.guest_bad_offset) ELSE 0 END) 
+       + SUM(IF(bic.fas_col_no ='outer_transfer_out_qty' and  ib.biz_type not in (40,41)  and ib.account_type !=-1
+         AND ou2.company_no IN (select fa.company_no from financial_account fa where fa.group_lead_role=1 and fa.status=1), ib.balance_offset, 0))
+       AS  sales_out_qty,
+       SUM(IF(bic.fas_col_no ='outer_transfer_out_qty' AND ou2.company_no NOT IN (select fa.company_no from financial_account fa where fa.group_lead_role=1 and fa.status=1) , ib.balance_offset, 0)) AS outer_transfer_out_qty,
+       SUM(CASE WHEN bic.fas_col_no ='inner_transfer_in_qty' THEN (ib.balance_offset+ib.original_bad_offset+ib.guest_bad_offset)
+          ELSE 0 END) AS  inner_transfer_in_qty,
+       SUM(CASE WHEN bic.fas_col_no ='inner_transfer_out_qty' THEN (ib.balance_offset+ib.original_bad_offset+ib.guest_bad_offset)
+          ELSE 0 END) AS  inner_transfer_out_qty,
+       SUM(IF(ib.bill_type =1350 AND ib.balance_offset &lt; 0, ib.balance_offset, 0))
+       + SUM(IF(ib.bill_type =1350 AND ib.guest_bad_offset &lt; 0, ib.guest_bad_offset, 0))
+       + SUM(IF(ib.bill_type =1350 AND ib.original_bad_offset &lt; 0, ib.original_bad_offset, 0))
+       AS inventory_loss_qty,
+       SUM(CASE WHEN bic.fas_col_no ='others_in_qty' THEN (ib.balance_offset+ib.guest_bad_offset+ib.original_bad_offset)
+          ELSE 0 END) AS  others_in_qty,
+       SUM(CASE WHEN bic.fas_col_no NOT IN ('outer_way_qty','outer_diff_qty','inner_way_qty','inner_diff_qty','inner_transfer_in_qty','inner_transfer_out_qty') 
+         THEN (ib.balance_offset+ib.guest_bad_offset+ib.original_bad_offset)
+          ELSE 0 END) + SUM(CASE WHEN bic.fas_col_no ='inner_way_qty' THEN (ib.transit_in_offset+ib.bad_transit_offset)
+          ELSE 0 END) + SUM(CASE WHEN bic.fas_col_no ='inner_diff_qty' THEN (ib.in_diff_offset+ib.bad_diff_offset)
+          ELSE 0 END) + SUM(CASE WHEN bic.fas_col_no ='inner_transfer_in_qty' THEN (ib.balance_offset+ib.original_bad_offset+ib.guest_bad_offset)
+          ELSE 0 END) + SUM(CASE WHEN bic.fas_col_no ='inner_transfer_out_qty' THEN (ib.balance_offset+ib.original_bad_offset+ib.guest_bad_offset)
+          ELSE 0 END) AS  during_net_qty
+	 FROM inventory_financial_book ib force index(idx_ou_cost)
+	 LEFT JOIN (
+	 	SELECT ouc1.order_unit_no,ouc1.company_no FROM order_unit_company ouc1
+		INNER JOIN
+		(SELECT order_unit_no,MAX(effective_date) effective_date FROM order_unit_company
+		WHERE effective_date &lt;= DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND status=1 AND company_no = #{params.companyNo} 
+		GROUP BY order_unit_no
+		) ouc2 ON ouc1.order_unit_no=ouc2.order_unit_no AND ouc1.effective_date=ouc2.effective_date
+	 ) ou ON ib.order_unit_no = ou.order_unit_no 
+	 LEFT JOIN (
+	 	SELECT ouc1.order_unit_no,ouc1.company_no FROM order_unit_company ouc1
+		INNER JOIN
+		(SELECT order_unit_no,MAX(effective_date) effective_date FROM order_unit_company
+		WHERE effective_date &lt;= DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND status=1
+		GROUP BY order_unit_no
+		) ouc2 ON ouc1.order_unit_no=ouc2.order_unit_no AND ouc1.effective_date=ouc2.effective_date
+	 ) ou1 ON ib.order_unit_no_from = ou1.order_unit_no
+	 LEFT JOIN (
+	 	SELECT ouc1.order_unit_no,ouc1.company_no FROM order_unit_company ouc1
+		INNER JOIN
+		(SELECT order_unit_no,MAX(effective_date) effective_date FROM order_unit_company
+		WHERE effective_date &lt;= DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND status=1
+		GROUP BY order_unit_no
+		) ouc2 ON ouc1.order_unit_no=ouc2.order_unit_no AND ouc1.effective_date=ouc2.effective_date
+	 ) ou2 ON ib.order_unit_no_to = ou2.order_unit_no
+	 LEFT JOIN bill_inventory_control bic on ib.bill_type=bic.bill_type and ib.in_out_flag=bic.in_out_flag
+	WHERE ib.sharding_flag = #{params.shardingFlag} AND ib.bill_date &gt;= DATE_FORMAT(#{params.startDate},'%Y-%m-%d')
+       AND ib.bill_date &lt;= DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+       AND ou.company_no = #{params.companyNo}
+       <if test="null != params.orderUnitNos and '' != params.orderUnitNos">
+	   		AND ib.order_unit_no in 
+	     <foreach collection="params.orderUnitNos" item="orderUnitNo" separator="," open="(" close=")" index=""> 
+	      	#{orderUnitNo}  
+	     </foreach>   
+	     </if>
+	     <if test="null != params.brandNos and '' != params.brandNos">
+	   		AND ib.brand_no in 
+	     <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+	      	#{brandNo}  
+	     </foreach>  
+	    </if>
+       <if test="null != params.itemNos and '' != params.itemNos">
+       		AND ib.ITEM_NO in 
+	       <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+	        	#{itemNo}  
+	       </foreach>  
+       </if>
+       GROUP BY ib.store_no, ib.order_unit_no,ib.item_no
+      ) T
+       LEFT JOIN 
+       (SELECT * FROM period_balance WHERE company_no = #{params.companyNo} AND year=#{params.lastYear} 
+       	AND month=#{params.lastMonth} AND sharding_flag = #{params.shardingFlag}
+       	<if test="null != params.orderUnitNos and '' != params.orderUnitNos">
+			AND order_unit_no in 
+		 <foreach collection="params.orderUnitNos" item="orderUnitNo" separator="," open="(" close=")" index=""> 
+				#{orderUnitNo}  
+		 </foreach>   
+		 </if>
+       	<if test="null != params.brandNos and '' != params.brandNos">
+       		AND brand_no in 
+	       <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+	        	#{brandNo}  
+	       </foreach>  
+       	</if>
+      	<if test="null != params.itemNos and '' != params.itemNos">
+			AND ITEM_NO in 
+		 <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+				#{itemNo}  
+		 </foreach>  
+		 </if>
+       ) AS p
+       ON T.company_no=p.company_no AND T.order_unit_no=p.order_unit_no 
+       AND T.store_no=p.store_no AND T.item_no=p.item_no AND T.sharding_flag=p.sharding_flag
+ </insert>
+
+  <delete id="deleteCompanyMonthPeriodBalance" parameterType="map" >
+    DELETE FROM period_balance
+    	WHERE sharding_flag=#{params.shardingFlag} AND company_no = #{params.companyNo} AND year = #{params.currentYear} AND month= #{params.currentMonth}
+    	<if test="null != params.brandNos and '' != params.brandNos">
+			AND brand_no in 
+			<foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+			</foreach>  
+		</if>
+    	<if test="null != params.itemNos and '' != params.itemNos">
+			AND item_no in 
+			<foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+				#{itemNo}  
+			</foreach>  
+		</if>
+  </delete>
+  
+  <select id="selectStoreBanalceCount" resultType="java.lang.Integer" parameterType="map">
+  	SELECT COUNT(1) FROM (
+  		SELECT
+			p.id,i.style_no,p.item_no,p.item_code,p.item_name,p.brand_no,p.category_no,
+			p.company_no,p.order_unit_no,p.store_no,p.`year`,p.`month`,
+			SUM(p.opening_qty) opening_qty,SUM(p.purchase_in_qty) purchase_in_qty,SUM(p.purchase_return_qty) purchase_return_qty,
+			SUM(p.outer_transfer_in_qty) outer_transfer_in_qty,SUM(p.inner_transfer_in_qty) inner_transfer_in_qty,
+			SUM(p.inv_surplus_qty) inv_surplus_qty,SUM(p.others_in_qty) others_in_qty,
+			SUM(p.outer_way_qty) outer_way_qty,SUM(p.outer_diff_qty) outer_diff_qty,
+			SUM(p.inner_way_qty) inner_way_qty,SUM(p.inner_diff_qty) inner_diff_qty,
+			SUM(p.sales_out_qty) sales_out_qty,SUM(p.outer_transfer_out_qty) outer_transfer_out_qty,
+			SUM(p.inner_transfer_out_qty) inner_transfer_out_qty,SUM(p.inventory_loss_qty) inventory_loss_qty,
+			SUM(p.others_out_qty) others_out_qty,SUM(p.during_net_qty) during_net_qty,SUM(p.closing_qty) closing_qty
+		FROM
+			period_balance p
+		LEFT JOIN item i ON p.item_no = i.item_no
+		WHERE 1=1
+		-- AND @p.brand_no
+		AND i.style_no IS NOT NULL
+		AND TRIM(i.style_no) !=''
+		<if test="null!=params" >
+	      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+		  <if test="null!=params.companyNo and ''!=params.companyNo">
+		  	AND p.company_no = #{params.companyNo,jdbcType=CHAR}
+		  </if>
+		  <if test="null != params.multiYearAndMonth and '' != params.multiYearAndMonth">
+			<foreach collection="params.multiYearAndMonth" item="tempPeriod" separator="OR" open="AND ( 1=2 OR " close=")" index=""> 
+				( p.year = #{tempPeriod.year} AND p.month = #{tempPeriod.month} ) 
+			</foreach>  
+		</if>
+		  <if test="null!=params.styleNo and ''!=params.styleNo">
+		  	AND i.style_no = #{params.styleNo,jdbcType=CHAR}
+		  </if>
+		  <if test="null != params.multiBrands and '' != params.multiBrands">
+		  	AND p.brand_no in 
+	 	  <foreach collection="params.multiBrands" item="brandNo" separator="," open="(" close=")" index=""> 
+		 	#{brandNo}
+		  </foreach>  
+		  </if>
+		  <if test="null != params.multiCategorys and '' != params.multiCategorys">
+	  			AND substring(p.category_no,1,2) in 
+			<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+		    	#{categoryNo} 
+	 		</foreach>  
+		  </if>
+		  <if test="null!=params.orderUnitNo and ''!=params.orderUnitNo">
+			   AND p.order_unit_no = #{params.orderUnitNo,jdbcType=CHAR}
+		  </if>
+		  <if test="null!=params.storeNo and ''!=params.storeNo">
+			   AND p.store_no = #{params.storeNo,jdbcType=CHAR}
+		  </if>
+		</if>
+		GROUP BY p.company_no,p.store_no,i.style_no
+  	) A
+  </select>
+  
+  <select id="selectStoreBalanceList" resultMap="BaseResultMap" parameterType="map">
+  	SELECT
+		p.id,i.style_no,i.item_flag,p.item_no,p.item_code,p.item_name,p.brand_no,p.category_no,
+		p.company_no,p.order_unit_no,p.store_no,p.`year`,p.`month`,
+		SUM(p.opening_qty) opening_qty,SUM(p.purchase_in_qty) purchase_in_qty,SUM(p.purchase_return_qty) purchase_return_qty,
+		SUM(p.outer_transfer_in_qty) outer_transfer_in_qty,SUM(p.inner_transfer_in_qty) inner_transfer_in_qty,
+		SUM(p.inv_surplus_qty) inv_surplus_qty,SUM(p.others_in_qty) others_in_qty,
+		SUM(p.outer_way_qty) outer_way_qty,SUM(p.outer_diff_qty) outer_diff_qty,
+		SUM(p.inner_way_qty) inner_way_qty,SUM(p.inner_diff_qty) inner_diff_qty,
+		SUM(p.sales_out_qty) sales_out_qty,SUM(p.outer_transfer_out_qty) outer_transfer_out_qty,
+		SUM(p.inner_transfer_out_qty) inner_transfer_out_qty,SUM(p.inventory_loss_qty) inventory_loss_qty,
+		SUM(p.others_out_qty) others_out_qty,SUM(p.during_net_qty) during_net_qty,SUM(p.closing_qty) closing_qty
+	FROM
+		period_balance p
+	LEFT JOIN item i ON p.item_no = i.item_no
+	WHERE 1=1
+	-- AND @p.brand_no
+	AND i.style_no IS NOT NULL
+	AND TRIM(i.style_no) !=''
+	<if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+	  <if test="null!=params.companyNo and ''!=params.companyNo">
+	  	AND p.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null != params.multiYearAndMonth and '' != params.multiYearAndMonth">
+			<foreach collection="params.multiYearAndMonth" item="tempPeriod" separator="OR" open="AND ( 1=2 OR " close=")" index=""> 
+				( p.year = #{tempPeriod.year} AND p.month = #{tempPeriod.month} ) 
+			</foreach>  
+		</if>
+	  <if test="null!=params.styleNo and ''!=params.styleNo">
+	  	AND i.style_no = #{params.styleNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null != params.multiBrands and '' != params.multiBrands">
+	  	AND p.brand_no in 
+ 	  <foreach collection="params.multiBrands" item="brandNo" separator="," open="(" close=")" index=""> 
+	 	#{brandNo}
+	  </foreach>  
+	  </if>
+	  <if test="null != params.multiCategorys and '' != params.multiCategorys">
+  			AND substring(p.category_no,1,2) in 
+		<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+	    	#{categoryNo} 
+ 		</foreach>  
+	  </if>
+	  <if test="null!=params.orderUnitNo and ''!=params.orderUnitNo">
+		   AND p.order_unit_no = #{params.orderUnitNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.storeNo and ''!=params.storeNo">
+		   AND p.store_no = #{params.storeNo,jdbcType=CHAR}
+	  </if>
+	</if>
+	GROUP BY p.company_no,p.store_no,i.style_no
+	LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <insert id="transferLastPeriodBalanceToCurrent" parameterType="map" >
+    INSERT INTO period_balance
+    (id, company_no, order_unit_no, store_no, brand_no, item_no, item_code, 
+      item_name, category_no, year, month, opening_qty, opening_balance, outer_way_qty, 
+      outer_way_amount, outer_diff_qty, outer_diff_amount,closing_qty,closing_balance,create_time, create_user, 
+      update_time, update_user, sharding_flag
+    )
+	SELECT replace(uuid(), '-', ''),
+	  A.company_no, A.order_unit_no, A.store_no, A.brand_no, A.item_no, A.item_code, A.item_name, A.category_no, 
+      YEAR(date_add(CAST(CONCAT(A.year,'/',A.month,'/','01') AS DATE),interval 1 month)),
+      MONTH(date_add(CAST(CONCAT(A.year,'/',A.month,'/','01') AS DATE),interval 1 month)), 
+      A.closing_qty, A.closing_balance, A.outer_way_qty, A.outer_way_amount, A.outer_diff_qty, A.outer_diff_amount,
+      A.closing_qty, A.closing_balance, A.create_time, A.create_user, A.update_time, A.update_user, A.sharding_flag
+     FROM period_balance A
+     LEFT JOIN 
+	 (SELECT company_no, year, month, order_unit_no, store_no, item_no FROM period_balance 
+     	WHERE company_no=#{params.companyNo} AND year=#{params.currentYear} 
+     	AND month=#{params.currentMonth} AND sharding_flag=#{params.shardingFlag}
+     	<if test="null != params.brandNos and '' != params.brandNos">
+			   AND brand_no in 
+			   <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+					#{brandNo}  
+			   </foreach>  
+		</if>
+     	<if test="null != params.itemNos and '' != params.itemNos">
+			   AND item_no in 
+			   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+					#{itemNo}  
+			   </foreach>  
+		 </if>
+		 LIMIT 0,6255555
+     ) B ON A.company_no=B.company_no AND A.order_unit_no=B.order_unit_no AND A.store_no=B.store_no AND A.item_no=B.item_no 
+     WHERE B.company_no IS NULL AND A.company_no=#{params.companyNo} AND A.year=#{params.lastYear} AND A.month=#{params.lastMonth}
+      AND A.sharding_flag=#{params.shardingFlag}  
+       <if test="null != params.brandNos and '' != params.brandNos">
+			   AND A.brand_no in 
+			   <foreach collection="params.brandNos" item="brandNo" separator="," open="(" close=")" index=""> 
+					#{brandNo}  
+			   </foreach>  
+		</if>
+     	<if test="null != params.itemNos and '' != params.itemNos">
+			   AND A.item_no in 
+			   <foreach collection="params.itemNos" item="itemNo" separator="," open="(" close=")" index=""> 
+					#{itemNo}  
+			   </foreach>  
+		 </if>
+		   LIMIT 0,655535
+  </insert>
+ 
+</mapper>

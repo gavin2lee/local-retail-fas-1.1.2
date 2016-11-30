@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="cn.wonhigh.retail.fas.dal.database.DepositCashCumulativeDifferenceMapper">
+	<resultMap id="BaseResultMap"
+		type="cn.wonhigh.retail.fas.common.model.DepositCashCumulativeDifference">
+		<id column="id" property="id" jdbcType="CHAR" />
+		<result column="shop_no" property="shopNo" jdbcType="CHAR" />
+		<result column="shop_name" property="shopName" jdbcType="CHAR" />
+		<result column="company_no" property="comapnyNo" jdbcType="CHAR" />
+		<result column="company_name" property="companyName" jdbcType="CHAR" />
+		<result column="sale_out" property="saleOut" jdbcType="DATE" />
+		<result column="cash_amount" property="cashAmount" jdbcType="DECIMAL" />
+		<result column="cash_coupon_amount" property="cashCouponAmount"
+			jdbcType="DECIMAL" />
+		<result column="bank_card_amount" property="bankCardAmount"
+			jdbcType="DECIMAL" />
+		<result column="mall_card_amount" property="mallCardAmount"
+			jdbcType="DECIMAL" />
+		<result column="mall_coupon_amount" property="mallCouponAmount"
+			jdbcType="DECIMAL" />
+		<result column="expect_cash_amount" property="expectCashAmount"
+			jdbcType="DECIMAL" />
+		<result column="outside_card_amount" property="outsideCardAmount"
+			jdbcType="DECIMAL" />
+		<result column="other_amount" property="otherAmount" jdbcType="DECIMAL" />
+		<result column="sale_total_amount" property="saleTotalAmount"
+			jdbcType="DECIMAL" />
+		<result column="deposit_cash_total_amount" property="depositCashTotalAmount"
+			jdbcType="DECIMAL" />
+		<result column="amount" property="amount"
+			jdbcType="DECIMAL" />
+		<result column="out_date" property="outDate"
+			jdbcType="TIMESTAMP" />
+		<result column="current_deposit_cash_defference" property="currentDepositCashDifference"
+			jdbcType="DECIMAL" />
+		<result column="deposit_cash_difference" property="depositCashDifference"
+			jdbcType="DECIMAL" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ShopDayReportResultMap"
+		type="cn.wonhigh.retail.fas.common.model.IndependShopDayReport">
+		<id column="id" property="rowId" jdbcType="CHAR" />
+		<result column="shop_no" property="shopNo" jdbcType="CHAR" />
+		<result column="shop_name" property="shopName" jdbcType="CHAR" />
+		<result column="company_no" property="companyNo" jdbcType="CHAR" />
+		<result column="name" property="companyName" jdbcType="CHAR" />
+		<result column="sale_amount" property="saleAmount"
+			jdbcType="DECIMAL" />
+		<result column="amount" property="amount"
+			jdbcType="DECIMAL" />
+		<result column="out_date" property="outDate"
+			jdbcType="TIMESTAMP" />
+		<result column="pay_name" property="payName" jdbcType="VARCHAR" />
+		<result column="poundage" property="poundage"
+			jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, shop_no, shop_name, sale_out, cash_amount, cash_coupon_amount,
+		bank_card_amount,
+		mall_card_amount, mall_coupon_amount, expect_cash_amount, outside_card_amount,
+		other_amount,
+		sale_total_amount, deposit_cash_total_amount,
+		current_deposit_cash_defference,deposit_cash_difference, create_time
+	</sql>
+	<sql id="condition">
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+		</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM deposit_cash_cumulative_difference
+		WHERE id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) as s FROM deposit_cash_cumulative_difference WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<select id="selectByPage" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM deposit_cash_cumulative_difference WHERE 1=1
+		<include refid="condition" />
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		ORDER BY sale_out DESC
+		<if test="page.startRowNum != 0">
+			LIMIT #{page.startRowNum} ,#{page.pageSize}
+		</if>
+	</select>
+	<select id="selectCumulativeDifferenceByShopNo" parameterType="String"
+		resultType="BIGDECIMAL">
+		SELECT SUM(deposit_cash_difference) FROM deposit_cash_cumulative_difference
+		WHERE 1=1
+		AND shop_no = #{shopNo,jdbcType=CHAR}
+	</select>
+	<select id="selectByParams" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM deposit_cash_cumulative_difference WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<!-- 按照支付方式查找金额 -->
+	<select id="findByPayName" parameterType="map" resultMap="ShopDayReportResultMap">
+		SELECT
+		op.id,
+		om.shop_name,
+		om.shop_no,
+		c. NAME,
+		c.company_no,
+		op.out_date,
+		op.pay_name,
+		op.amount sale_amount,
+		IFNULL(
+			op.poundage,
+			op.amount * ssta.credit_card_rate
+		) poundage		
+		FROM
+		order_payway op
+		LEFT JOIN order_main om ON op.order_no = om.order_no
+		LEFT JOIN self_shop_terminal_account ssta ON om.shop_no = ssta.shop_no
+		AND op.pay_name = ssta.credit_card_type
+		LEFT JOIN shop s ON om.shop_no = s.shop_no
+		LEFT JOIN company c ON s.company_no = c.company_no
+		WHERE 1 = 1
+		AND op.`status` = '0'
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.shopNo and ''!=params.shopNo">
+				and om.shop_no = #{params.shopNo,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.companyNo and ''!=params.companyNo">
+				and c.company_no = #{params.companyNo,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.payName and ''!=params.payName">
+				and op.pay_name = #{params.payName,jdbcType=VARCHAR}
+			</if>
+			<!--  
+			<if test="null!=params.createTimeStart and ''!=params.createTimeStart">
+				and op.out_date &gt;= #{params.createTimeStart} 00:00:00 and op.out_date &lt;= #{params.createTimeEnd} 23:59:59
+			</if>-->
+		</if>
+		ORDER BY op.out_date
+		<if test="orderByField != null and ''!=orderByField">
+			,${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		DESC
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	<!-- 其他支付方式 -->
+	<select id="findByPayNameOther" parameterType="map" resultMap="ShopDayReportResultMap">
+	
+	SELECT
+		op.id,
+		om.shop_name,
+		om.shop_no,
+		c. NAME,
+		c.company_no,
+		op.out_date,
+		'其它' as pay_name,
+		op.amount sale_amount,
+		IFNULL(
+			op.poundage,
+			op.amount * ssta.credit_card_rate
+		) poundage
+	FROM
+		order_payway op
+	LEFT JOIN order_main om ON op.order_no = om.order_no
+	LEFT JOIN self_shop_terminal_account ssta ON om.shop_no = ssta.shop_no
+	AND op.pay_name = ssta.credit_card_type
+	LEFT JOIN shop s ON om.shop_no = s.shop_no
+	LEFT JOIN company c ON s.company_no = c.company_no
+	WHERE
+		1 = 1
+	AND op.`status` = '0'
+	<![CDATA[
+	AND op.pay_name <> '现金券'
+	AND op.pay_name <> '银行卡'
+	AND op.pay_name <> '商场卡'
+	AND op.pay_name <> '商场券'
+	AND op.pay_name <> '预收款'
+	AND op.pay_name <> '现金'
+	]]>
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.shopNo and ''!=params.shopNo">
+			and om.shop_no = #{params.shopNo,jdbcType=CHAR}
+		</if>
+		<if test="null!=params.companyNo and ''!=params.companyNo">
+			and c.company_no = #{params.companyNo,jdbcType=CHAR}
+		</if>
+		<!--  
+		<if test="null!=params.createTimeStart and ''!=params.createTimeStart">
+			and op.out_date &gt;= #{params.createTimeStart} 00:00:00 and op.out_date &lt;= #{params.createTimeEnd} 23:59:59
+		</if>-->
+	</if>
+	ORDER BY op.out_date
+	<if test="orderByField != null and ''!=orderByField">
+		,${orderByField}
+		<if test="orderByField">
+			${orderBy}
+		</if>
+	</if>
+	DESC
+	LIMIT #{page.startRowNum} ,#{page.pageSize}	
+	
+	</select>
+	<!-- 现金支付方式 -->
+	<select id="findByPayNameFromPOS" parameterType="map" resultMap="ShopDayReportResultMap">
+	SELECT
+		dc.id,
+		dc.shop_name,
+		dc.shop_no,
+		c. NAME,
+		c.company_no,
+		dc.start_out_date out_date,
+		'现金' as pay_name,
+		dc.sale_amount,
+		dc.amount
+	FROM
+		deposit_cash dc
+		LEFT JOIN shop s ON dc.shop_no = s.shop_no
+		LEFT JOIN company c ON s.company_no = c.company_no
+	WHERE 1=1
+	AND dc.`status` = '0'
+	AND dc.start_out_date = dc.end_out_date
+	<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.shopNo and ''!=params.shopNo">
+				and dc.shop_no = #{params.shopNo,jdbcType=CHAR}
+			</if>
+			<if test="null!=params.companyNo and ''!=params.companyNo">
+				and c.company_no = #{params.companyNo,jdbcType=CHAR}
+			</if>
+			<!-- <if test="null!=params.payName and ''!=params.payName">
+				and op.pay_name = #{params.payName,jdbcType=VARCHAR}
+			</if>
+			 
+			<if test="null!=params.createTimeStart and ''!=params.createTimeStart">
+				and op.out_date &gt;= #{params.createTimeStart} 00:00:00 and op.out_date &lt;= #{params.createTimeEnd} 23:59:59
+			</if>-->
+		</if>
+		ORDER BY dc.start_out_date
+		<if test="orderByField != null and ''!=orderByField">
+			,${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		DESC
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		DELETE FROM deposit_cash_cumulative_difference
+		WHERE id = #{id,jdbcType=CHAR}
+	</delete>
+	<delete id="deleteByPrimarayKeyForModel"
+		parameterType="cn.wonhigh.retail.fas.common.model.DepositCashCumulativeDifference">
+		DELETE FROM deposit_cash_cumulative_difference
+		WHERE id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="cn.wonhigh.retail.fas.common.model.DepositCashCumulativeDifference">
+		INSERT INTO deposit_cash_cumulative_difference (id, shop_no,
+		shop_name,
+		sale_out, cash_amount, cash_coupon_amount,
+		bank_card_amount, mall_card_amount, mall_coupon_amount,
+		expect_cash_amount, outside_card_amount, other_amount,
+		sale_total_amount, deposit_cash_total_amount, current_deposit_cash_defference,
+		deposit_cash_difference, create_time)
+		VALUES (#{id,jdbcType=CHAR}, #{shopNo,jdbcType=CHAR},
+		#{shopName,jdbcType=CHAR},
+		#{saleOut,jdbcType=DATE}, #{cashAmount,jdbcType=DECIMAL}, #{cashCouponAmount,jdbcType=DECIMAL},
+		#{bankCardAmount,jdbcType=DECIMAL},
+		#{mallCardAmount,jdbcType=DECIMAL},
+		#{mallCouponAmount,jdbcType=DECIMAL},
+		#{expectCashAmount,jdbcType=DECIMAL},
+		#{outsideCardAmount,jdbcType=DECIMAL},
+		#{otherAmount,jdbcType=DECIMAL},
+		#{saleTotalAmount,jdbcType=DECIMAL}, #{depositCashTotalAmount,jdbcType=DECIMAL},
+		#{currentDepositCashDifference,jdbcType=DECIMAL}
+		#{depositCashDifference,jdbcType=DECIMAL},
+		#{createTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="cn.wonhigh.retail.fas.common.model.DepositCashCumulativeDifference">
+		INSERT INTO deposit_cash_cumulative_difference
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="shopNo != null">
+				shop_no,
+			</if>
+			<if test="shopName != null">
+				shop_name,
+			</if>
+			<if test="saleOut != null">
+				sale_out,
+			</if>
+			<if test="cashAmount != null">
+				cash_amount,
+			</if>
+			<if test="cashCouponAmount != null">
+				cash_coupon_amount,
+			</if>
+			<if test="bankCardAmount != null">
+				bank_card_amount,
+			</if>
+			<if test="mallCardAmount != null">
+				mall_card_amount,
+			</if>
+			<if test="mallCouponAmount != null">
+				mall_coupon_amount,
+			</if>
+			<if test="expectCashAmount != null">
+				expect_cash_amount,
+			</if>
+			<if test="outsideCardAmount != null">
+				outside_card_amount,
+			</if>
+			<if test="otherAmount != null">
+				other_amount,
+			</if>
+			<if test="saleTotalAmount != null">
+				sale_total_amount,
+			</if>
+			<if test="depositCashTotalAmount != null">
+				deposit_cash_total_amount,
+			</if>
+			<if test="currentDepositCashDifference != null">
+				current_deposit_cash_defference,
+			</if>
+			<if test="depositCashDifference != null">
+				deposit_cash_difference,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=CHAR},
+			</if>
+			<if test="shopNo != null">
+				#{shopNo,jdbcType=CHAR},
+			</if>
+			<if test="shopName != null">
+				#{shopName,jdbcType=CHAR},
+			</if>
+			<if test="saleOut != null">
+				#{saleOut,jdbcType=DATE},
+			</if>
+			<if test="cashAmount != null">
+				#{cashAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="cashCouponAmount != null">
+				#{cashCouponAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="bankCardAmount != null">
+				#{bankCardAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="mallCardAmount != null">
+				#{mallCardAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="mallCouponAmount != null">
+				#{mallCouponAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="expectCashAmount != null">
+				#{expectCashAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="outsideCardAmount != null">
+				#{outsideCardAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="otherAmount != null">
+				#{otherAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="saleTotalAmount != null">
+				#{saleTotalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="depositCashTotalAmount != null">
+				#{depositCashTotalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="currentDepositCashDifference != null">
+				#{currentDepositCashDifference,jdbcType=DECIMAL},
+			</if>
+			<if test="depositCashDifference != null">
+				#{depositCashDifference,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="cn.wonhigh.retail.fas.common.model.DepositCashCumulativeDifference">
+		UPDATE deposit_cash_cumulative_difference
+		<set>
+			<if test="shopNo != null">
+				shop_no = #{shopNo,jdbcType=CHAR},
+			</if>
+			<if test="shopName != null">
+				shop_name = #{shopName,jdbcType=CHAR},
+			</if>
+			<if test="saleOut != null">
+				sale_out = #{saleOut,jdbcType=DATE},
+			</if>
+			<if test="cashAmount != null">
+				cash_amount = #{cashAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="cashCouponAmount != null">
+				cash_coupon_amount = #{cashCouponAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="bankCardAmount != null">
+				bank_card_amount = #{bankCardAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="mallCardAmount != null">
+				mall_card_amount = #{mallCardAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="mallCouponAmount != null">
+				mall_coupon_amount = #{mallCouponAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="expectCashAmount != null">
+				expect_cash_amount = #{expectCashAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="outsideCardAmount != null">
+				outside_card_amount = #{outsideCardAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="otherAmount != null">
+				other_amount = #{otherAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="saleTotalAmount != null">
+				sale_total_amount = #{saleTotalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="depositCashTotalAmount != null">
+				deposit_cash_total_amount =
+				#{depositCashTotalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="depositCashDifference != null">
+				current_deposit_cash_defference = #{currentDepositCashDifference,jdbcType=DECIMAL},
+			</if>
+			<if test="depositCashDifference != null">
+				deposit_cash_difference = #{depositCashDifference,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=CHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="cn.wonhigh.retail.fas.common.model.DepositCashCumulativeDifference">
+		UPDATE deposit_cash_cumulative_difference
+		SET shop_no = #{shopNo,jdbcType=CHAR},
+		shop_name = #{shopName,jdbcType=CHAR},
+		sale_out = #{saleOut,jdbcType=DATE},
+		cash_amount = #{cashAmount,jdbcType=DECIMAL},
+		cash_coupon_amount = #{cashCouponAmount,jdbcType=DECIMAL},
+		bank_card_amount = #{bankCardAmount,jdbcType=DECIMAL},
+		mall_card_amount = #{mallCardAmount,jdbcType=DECIMAL},
+		mall_coupon_amount = #{mallCouponAmount,jdbcType=DECIMAL},
+		expect_cash_amount = #{expectCashAmount,jdbcType=DECIMAL},
+		outside_card_amount = #{outsideCardAmount,jdbcType=DECIMAL},
+		other_amount = #{otherAmount,jdbcType=DECIMAL},
+		sale_total_amount = #{saleTotalAmount,jdbcType=DECIMAL},
+		deposit_cash_total_amount = #{depositCashTotalAmount,jdbcType=DECIMAL},
+		current_deposit_cash_defference =
+		#{currentDepositCashDifference,jdbcType=DECIMAL},
+		deposit_cash_difference = #{depositCashDifference,jdbcType=DECIMAL},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		WHERE id = #{id,jdbcType=CHAR}
+	</update>
+</mapper>

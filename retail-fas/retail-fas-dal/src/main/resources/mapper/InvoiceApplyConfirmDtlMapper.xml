@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.InvoiceApplyConfirmDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.InvoiceApplyConfirmDtl" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="order_dtl_id" property="orderDtlId" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="bill_type" property="billType" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="CHAR" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="TIMESTAMP" />
+    <result column="invoice_amount" property="invoiceAmount" jdbcType="DECIMAL" />
+    <result column="out_start_date" property="outStartDate" jdbcType="DATE" />
+    <result column="out_end_date" property="outEndDate" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_no, order_dtl_id, item_no, balance_type, bill_type, company_no, shop_no, 
+    status, invoice_apply_no, invoice_apply_date, invoice_amount, out_start_date, out_end_date, 
+    create_user, create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null != params.orderDtlId and '' != params.orderDtlId">
+      	and order_dtl_id  = #{params.orderDtlId}
+      </if>
+      <if test="null != params.orderNO and '' != params.orderNo">
+      	and order_no = #{params.orderNO}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM invoice_apply_confirm_dtl
+    WHERE (id = #{id,jdbcType=CHAR} or (order_dtl_id  = #{orderDtlId,jdbcType=CHAR} and item_no = #{itemNo,jdbcType=CHAR}))
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM invoice_apply_confirm_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM invoice_apply_confirm_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM invoice_apply_confirm_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM invoice_apply_confirm_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceApplyConfirmDtl" >
+    DELETE FROM invoice_apply_confirm_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceApplyConfirmDtl" >
+    INSERT INTO invoice_apply_confirm_dtl (id, order_no, order_dtl_id, 
+      item_no, balance_type, bill_type, 
+      company_no, shop_no, status, 
+      invoice_apply_no, invoice_apply_date, invoice_amount, 
+      out_start_date, out_end_date, create_user, 
+      create_time, update_user, update_time,sharding_flag)
+    VALUES (#{id,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR}, #{orderDtlId,jdbcType=CHAR}, 
+      #{itemNo,jdbcType=CHAR}, #{balanceType,jdbcType=TINYINT}, #{billType,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=CHAR}, #{shopNo,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
+      #{invoiceApplyNo,jdbcType=CHAR}, #{invoiceApplyDate,jdbcType=TIMESTAMP}, #{invoiceAmount,jdbcType=DECIMAL}, 
+      #{outStartDate,jdbcType=DATE}, #{outEndDate,jdbcType=DATE}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{shardingFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceApplyConfirmDtl" >
+    INSERT INTO invoice_apply_confirm_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shardingFlag != null" >
+   		sharding_flag,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="orderDtlId != null" >
+        order_dtl_id,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="invoiceApplyNo != null" >
+        invoice_apply_no,
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date,
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount,
+      </if>
+      <if test="outStartDate != null" >
+        out_start_date,
+      </if>
+      <if test="outEndDate != null" >
+        out_end_date,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="shardingFlag != null" >
+       	#{shardingFlag,jdbcType=CHAR},
+       </if> 
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="orderDtlId != null" >
+        #{orderDtlId,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="invoiceApplyNo != null" >
+        #{invoiceApplyNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        #{invoiceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invoiceAmount != null" >
+        #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="outStartDate != null" >
+        #{outStartDate,jdbcType=DATE},
+      </if>
+      <if test="outEndDate != null" >
+        #{outEndDate,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceApplyConfirmDtl" >
+    UPDATE invoice_apply_confirm_dtl
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="orderDtlId != null" >
+        order_dtl_id = #{orderDtlId,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="invoiceApplyNo != null" >
+        invoice_apply_no = #{invoiceApplyNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date = #{invoiceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="outStartDate != null" >
+        out_start_date = #{outStartDate,jdbcType=DATE},
+      </if>
+      <if test="outEndDate != null" >
+        out_end_date = #{outEndDate,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceApplyConfirmDtl" >
+    UPDATE invoice_apply_confirm_dtl
+    SET order_no = #{orderNo,jdbcType=CHAR},
+      order_dtl_id = #{orderDtlId,jdbcType=CHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      balance_type = #{balanceType,jdbcType=TINYINT},
+      bill_type = #{billType,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      invoice_apply_no = #{invoiceApplyNo,jdbcType=CHAR},
+      invoice_apply_date = #{invoiceApplyDate,jdbcType=TIMESTAMP},
+      invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      out_start_date = #{outStartDate,jdbcType=DATE},
+      out_end_date = #{outEndDate,jdbcType=DATE},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+   <!-- 修改状态或开票申请号 -->
+  <update id="updateByOrderNo" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceApplyConfirmDtl">
+  	update invoice_apply_confirm_dtl
+    <set >
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="invoiceApplyNo != null and orderDtlId != null" >
+        invoice_apply_no = #{invoiceApplyNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date = #{invoiceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where (order_dtl_id = #{orderDtlId,jdbcType=CHAR} and order_no = #{orderNo,jdbcType=CHAR})
+  </update>
+  <!-- 根据开票申请号,清空开票申请信息 -->
+  <update id="updateByInvoiceApplyNo" parameterType="java.lang.String">
+  	update invoice_apply_confirm_dtl set invoice_apply_no = '' ,invoice_apply_date = null ,invoice_amount = 0
+  	where invoice_apply_no = #{invoiceApplyNo}
+  </update>
+
+	<!-- 根据开票申请号信息开票日期及金额 -->
+  <update id="updateConfirmDtlByApplyNo" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceApplyConfirmDtl">
+  	update invoice_apply_confirm_dtl
+    <set >
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date = #{invoiceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where invoice_apply_no = #{invoiceApplyNo,jdbcType=CHAR}
+  </update>
+</mapper>

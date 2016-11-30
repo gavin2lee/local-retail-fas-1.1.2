@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SettlePathBrandRelMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SettlePathBrandRel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    T.id, T.path_no, T.brand_unit_no, B.name brand_unit_name
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.pathNo and ''!=params.pathNo" >
+         and T.path_no = #{params.pathNo,jdbcType=CHAR}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM settle_path_brand_rel T LEFT JOIN brand_unit B ON T.brand_unit_no = B.brand_unit_no
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM settle_path_brand_rel WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_path_brand_rel T LEFT JOIN brand_unit B ON T.brand_unit_no = B.brand_unit_no 
+     WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM settle_path_brand_rel T LEFT JOIN brand_unit B ON T.brand_unit_no = B.brand_unit_no 
+     WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <delete id="deleteBySettlePathNo" parameterType="java.lang.String" >
+    DELETE FROM settle_path_brand_rel
+    WHERE path_no = #{pathNo,jdbcType=CHAR}
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM settle_path_brand_rel
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.SettlePathBrandRel" >
+    DELETE FROM settle_path_brand_rel
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SettlePathBrandRel" >
+    INSERT INTO settle_path_brand_rel (id, path_no, brand_unit_no
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{pathNo,jdbcType=CHAR}, #{brandUnitNo,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SettlePathBrandRel" >
+    INSERT INTO settle_path_brand_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pathNo != null" >
+        path_no,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pathNo != null" >
+        #{pathNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SettlePathBrandRel" >
+    UPDATE settle_path_brand_rel
+    <set >
+      <if test="pathNo != null" >
+        path_no = #{pathNo,jdbcType=INTEGER},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SettlePathBrandRel" >
+    UPDATE settle_path_brand_rel
+    SET path_no = #{pathNo,jdbcType=CHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <delete id="deleteByPathNo" parameterType="java.lang.String">
+  		delete from settle_path_brand_rel where path_no = #{pathNo,jdbcType=VARCHAR}
+  </delete>
+</mapper>

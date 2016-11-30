@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.ShopSettlementMapper">
+	
+	<resultMap type="cn.wonhigh.retail.fas.common.model.ShopBalanceDate" id="BaseResultMapShopBalanceDate">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+	    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+	    <result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+	    <result column="bsgroups_name" property="bsgroupsName" jdbcType="VARCHAR" />
+	    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+	    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+	    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+	    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+	    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+	    <result column="retail_type" property="retailType" jdbcType="VARCHAR" />
+	    <result column="month" property="month" jdbcType="CHAR" />
+	    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+	    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+	    <result column="balance_flag" property="balanceFlag" jdbcType="TINYINT" />
+	</resultMap>
+	
+	<resultMap type="cn.wonhigh.retail.fas.common.model.MallDeductionSetting" id="BaseResultMapMallDeductionSetting">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="deduction_no" property="deductionNo" jdbcType="CHAR" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="cost_name" property="costName" jdbcType="VARCHAR" />
+	    <result column="cost_code" property="costCode" jdbcType="VARCHAR" />
+	    <result column="type" property="type" jdbcType="TINYINT" />
+	</resultMap>
+	
+	<sql id="Base_Column_List_shopBalanceDate" >
+    	id, company_no, company_name, bsgroups_no, bsgroups_name, mall_no, mall_name, shop_no, 
+    	short_name, full_name, retail_type, month, balance_start_date, balance_end_date,balance_flag
+    </sql>
+    
+    <sql id="Base_Column_List_mallDeductionSetting">
+    	id,deduction_no,code,name,cost_code,cost_name,type
+    </sql>
+	
+	<select id="getAllShopBalanceDateInfo" resultMap="BaseResultMapShopBalanceDate" parameterType="map">
+		SELECT 
+		<include refid="Base_Column_List_shopBalanceDate"/>
+		FROM shop_balance_date where balance_flag = 2
+		<if test="shopNo != null and ''!=shopNo">
+			and shop_no = #{shopNo}
+		</if>
+		
+	</select>
+	
+	<select id="getAllMallDeductionSettingInfo" resultMap="BaseResultMapMallDeductionSetting" parameterType="java.lang.String">
+		SELECT 
+		<include refid="Base_Column_List_mallDeductionSetting"/>
+		FROM mall_deduction_set   WHERE  STATUS  =1 AND debited_rental !=1 
+               AND company_no =(SELECT company_no  FROM shop WHERE shop_no=#{shopNo})
+	</select>
+	
+	<select id="getShopBalanceEndDate" resultType="java.util.Date" parameterType="java.lang.String">	
+	SELECT MAX(balance_end_date) FROM shop_balance_date WHERE MONTH=
+       (SELECT MAX(MONTH) FROM shop_balance_date WHERE balance_flag=2 AND SHOP_NO=#{shopNo}) AND balance_flag=2 AND SHOP_NO=#{shopNo}
+	</select>
+	
+	<select id="getInsidePurchaseBalanceEndDate" resultType="java.util.Date" parameterType="java.lang.String">
+		SELECT  balance_end_date  FROM  inside_purchase_balance_date WHERE balance_month=
+		(SELECT MAX(balance_month)  FROM  inside_purchase_balance_date  WHERE invoice_flag=1 
+		AND company_no=(SELECT company_no  FROM SHOP WHERE SHOP_NO=#{shopNo}))  
+		AND invoice_flag=1 AND company_no=(SELECT company_no FROM SHOP WHERE SHOP_NO=#{shopNo})	
+	</select>
+</mapper>

@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BaroqueItemCostMapper" >
+   <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.BaroqueItemCostDto" >
+   		<result column="id" property="id" jdbcType="CHAR" />
+   		<result column="item_no" property="itemNo" jdbcType="CHAR" />
+   		<result column="item_code" property="itemCode" jdbcType="CHAR" />
+   		<result column="month" property="month" jdbcType="CHAR" />
+   		<result column="year" property="year" jdbcType="CHAR" />
+   		<result column="style_no" property="styleNo" jdbcType="CHAR" />
+   		<result column="item_no" property="itemNo" jdbcType="CHAR" />
+   		<result column="item_code" property="itemCode" jdbcType="CHAR" />
+		<result column="item_name" property="itemName" jdbcType="CHAR" />
+		<result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+		<result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+		<result column="brand_no" property="brandNo" jdbcType="CHAR" />
+		<result column="brand_name" property="brandName" jdbcType="CHAR" />
+		<result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+		<result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+		<result column="category_name" property="categoryName" jdbcType="CHAR" />
+		<result column="category_no" property="categoryNo" jdbcType="CHAR" />
+		<result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+		<result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+   		<result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+   		<result column="brand_season" property="brandSeason" jdbcType="CHAR" />
+   		<result column="effective_time" property="effectiveTime" jdbcType="CHAR" />
+   </resultMap>
+    <sql id="condition" >
+	    <if test="null!=params" >
+	      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+	      <if test="null!=params.effectiveTime and ''!=params.effectiveTime" >
+	        AND hcm.effective_time = #{params.effectiveTime}
+	      </if>
+	      <if test="null!=params.styleNo and ''!=params.styleNo" >
+	         AND item.style_No = #{params.styleNo}
+	      </if>
+	     </if>
+     </sql>
+     <sql id="generateCondition" >
+	    <if test="null!=params" >
+	      <if test="null!=params.billType and ''!=params.billType" >
+	        AND bbb.bill_type = #{params.billType}
+	      </if>
+	      <if test="null!=params.HQCompanyNo and ''!=params.HQCompanyNo" >
+	        AND bbb.buyer_no IN (${params.HQCompanyNo})
+	      </if>
+	      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+	        AND brd.sys_no = #{params.brandUnitNo}
+	      </if>
+	      <if test="null!=params.effectiveTimeLst and ''!=params.effectiveTimeLst" >
+	        AND bbb.receive_date BETWEEN '2016-07-01' AND #{params.effectiveTimeLst}
+	      </if>  
+	     </if>
+     </sql>
+     <sql id="generateCondition2" >
+	    <if test="null!=params" >
+	      <if test="null!=params.billType and ''!=params.billType" >
+	        AND bbb.bill_type = #{params.billType}
+	      </if>
+	        <if test="null!=params.HQCompanyNo and ''!=params.HQCompanyNo" >
+	        AND bbb.buyer_no IN (${params.HQCompanyNo})
+	      </if>
+	      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+	        AND brd.sys_no = #{params.brandUnitNo}
+	      </if>
+	      <if test="null!=params.effectiveTimeLst and ''!=params.effectiveTimeLst" >
+	        AND bbb.receive_date BETWEEN '2016-07-01' AND #{params.effectiveTimeLst}
+	      </if>  
+	     </if>
+     </sql>
+     <select id="generateBaroqueRegionHeadquarterCostForFF" resultMap="BaseResultMap" parameterType="map">
+     	SELECT
+			IP.item_no,
+			IP.item_code,
+			IP.item_name,
+			IP.brand_no,
+			IP.brand_name,
+			IP.supplier_no,
+			IF (
+				SWA.style_weight_avg_cost = 0,
+				SWA.headquarter_cost,
+				ifnull(
+					SWA.style_weight_avg_cost,
+					SWA.headquarter_cost
+				)
+			) headquarter_cost,
+			#{params.effectiveTime} as effective_time
+		FROM
+			(
+				SELECT
+					CB.company_no,
+					CB.item_no,
+					CB.item_code,
+					CB.item_name,
+					CB.brand_no,
+					im.style_no,
+					br. NAME AS brand_name,
+					im.supplier_no,
+					im. NAME
+				FROM
+					company_period_balance CB
+				LEFT JOIN item im ON CB.item_no = im.item_no
+				LEFT JOIN brand br ON CB.brand_no = br.brand_no
+				WHERE
+					1 = 1
+				<if test="null!=params.regionCompany and ''!=params.regionCompany" > 
+						AND	company_no IN
+						     <foreach collection="params.regionCompany" item="item" index="index"   
+						        open="(" separator="," close=")">  
+						            #{item}  
+						    </foreach>
+			    </if> 
+				AND YEAR = #{params.year}
+				AND MONTH = #{params.month}
+			) IP
+		LEFT JOIN (
+			SELECT
+				PB.company_no,
+				PB.style_no,
+				PB.headquarter_cost,
+		    pb.item_no,
+				(
+					IFNULL(PB.style_opening_balance, 0) + ifnull(
+						PQ.style_period_in_balance,
+						0
+					)
+				) / (
+					ifnull(PB.style_opening_qty, 0) + ifnull(PQ.style_period_in_qty, 0)
+				) style_weight_avg_cost
+			FROM
+				(
+					SELECT
+						cpb.company_no company_no,
+						im.style_no style_no,
+		        IM.item_no,
+						sum(ifnull(cpb.opening_qty, 0)) style_opening_qty,
+						hcm.headquarter_cost,
+						sum(
+							ifnull(cpb.opening_qty, 0) * ifnull(hcm.headquarter_cost, 0)
+						) style_opening_balance
+					FROM
+						company_period_balance cpb
+					LEFT JOIN headquarter_cost_maintain hcm ON cpb.item_no = hcm.item_no
+					AND hcm.effective_time = #{params.preMonthFirstDay}
+					LEFT JOIN item im ON cpb.item_no = im.item_no
+					WHERE
+						1 = 1
+					<if test="null!=params.regionCompany and ''!=params.regionCompany" > 
+						AND	cpb.company_no IN  
+						     <foreach collection="params.regionCompany" item="item" index="index"   
+						        open="(" separator="," close=")">  
+						            #{item}  
+						    </foreach>
+			    		</if>
+					AND cpb. YEAR = #{params.year}
+					AND cpb. MONTH = #{params.month}
+					GROUP BY
+						cpb.company_no,
+						im.item_no
+				) PB
+			LEFT JOIN (
+				SELECT
+					buyer_no company_no,
+					bbb.brand_no brand_no,
+					im.style_no style_no,
+		      		IM.item_no,
+					sum(ifnull(bbb.receive_qty, 0)) style_period_in_qty,
+					sum(
+						ifnull(bbb.receive_qty, 0) * (
+							ifnull(bbb.headquarter_cost, 0)
+						)
+					) style_period_in_balance
+				FROM
+					bill_buy_balance bbb
+				LEFT JOIN item im ON bbb.item_no = im.item_no
+				WHERE
+					1 = 1
+				<if test="null!=params.regionCompany and ''!=params.regionCompany" > 
+						AND	bbb.buyer_no IN 
+						     <foreach collection="params.regionCompany" item="item" index="index"   
+						        open="(" separator="," close=")">  
+						            #{item}  
+						    </foreach>
+			    	</if>
+				AND bbb.bill_type IN (1304,1372,1333)
+				AND bbb.receive_date BETWEEN #{params.effectiveTime}
+				AND #{params.effectiveTimeLst}
+				GROUP BY
+					bbb.buyer_no,
+					im.item_no
+			) PQ ON PB.company_no = PQ.company_no
+			AND PB.item_no = PQ.item_no
+		) SWA ON IP.item_no = SWA.item_no
+     </select>
+   <select id="generateBaroqueRegionHeadquarterCost" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+			IP.company_no,
+			IP.item_no,
+			IP.item_code,
+			IP.brand_no,
+			IP.brand_name,
+			IP.style_no,
+			IP.item_name,
+			IF (
+				SWA.style_weight_avg_cost = 0,
+				SWA.headquarter_cost,
+				ifnull(
+					SWA.style_weight_avg_cost,
+					SWA.headquarter_cost
+				)
+			) headquarter_cost,
+			#{params.effectiveTime} as effective_time
+		FROM
+			(
+				SELECT
+					CB.company_no,
+					CB.item_no,
+					CB.item_code,
+					CB.item_name,
+					CB.brand_no,
+					br. NAME AS brand_name,
+					im.style_no
+				FROM
+					company_period_balance CB
+				LEFT JOIN item im ON CB.item_no = im.item_no
+				LEFT JOIN brand br ON CB.brand_no = br.brand_no
+				WHERE 1=1
+			    <if test="null!=params.regionCompany and ''!=params.regionCompany" > 
+						AND	company_no IN
+						     <foreach collection="params.regionCompany" item="item" index="index"   
+						        open="(" separator="," close=")">  
+						            #{item}  
+						    </foreach>
+			    </if> 
+				AND YEAR = #{params.year}
+				AND MONTH = #{params.month}
+			) IP
+		LEFT JOIN (
+			SELECT
+				PB.company_no,
+				PB.style_no,
+				PB.headquarter_cost,
+				(
+					IFNULL(PB.style_opening_balance, 0) + ifnull(
+						PQ.style_period_in_balance,
+						0
+					)
+				) / (
+					ifnull(PB.style_opening_qty, 0) + ifnull(PQ.style_period_in_qty, 0)
+				) style_weight_avg_cost
+			FROM
+				(
+					SELECT
+						cpb.company_no company_no,
+						im.style_no style_no,
+						sum(ifnull(cpb.opening_qty, 0)) style_opening_qty,
+						hcm.headquarter_cost,
+						sum(
+							ifnull(cpb.opening_qty, 0) * ifnull(hcm.headquarter_cost, 0)
+						) style_opening_balance
+					FROM
+						company_period_balance cpb
+					LEFT JOIN headquarter_cost_maintain hcm ON cpb.item_no = hcm.item_no
+					AND hcm.effective_time = #{params.preMonthFirstDay} 
+					LEFT JOIN item im ON cpb.item_no = im.item_no
+					WHERE 1=1
+						<if test="null!=params.regionCompany and ''!=params.regionCompany" > 
+						AND	cpb.company_no IN  
+						     <foreach collection="params.regionCompany" item="item" index="index"   
+						        open="(" separator="," close=")">  
+						            #{item}  
+						    </foreach>
+			    		</if>
+					AND cpb. YEAR = #{params.year}
+					AND cpb. MONTH = #{params.month}
+					GROUP BY
+						cpb.company_no,
+						im.style_no
+				) PB
+			LEFT JOIN (
+				SELECT
+					buyer_no company_no,
+					bbb.brand_no brand_no,
+					im.style_no style_no,
+					sum(ifnull(bbb.receive_qty, 0)) style_period_in_qty,
+					sum(
+						ifnull(bbb.receive_qty, 0) * round((
+							ifnull(bbb.purchase_price, 0) * ifnull(bbba.exchange_rate, 1) * (1 + ifnull(bbba.vat_rate, 0)) * (
+								1 + ifnull(bbba.tariff_rate, 0)
+							)
+						),2)
+					) style_period_in_balance
+				FROM
+					bill_buy_balance bbb
+				LEFT JOIN item im ON bbb.item_no = im.item_no
+				LEFT JOIN bill_buy_balance_additional bbba ON bbb.original_bill_no = bbba.original_bill_no
+				AND bbb.item_no = bbba.item_code
+				WHERE 1=1
+					<if test="null!=params.regionCompany and ''!=params.regionCompany" > 
+						AND	bbb.buyer_no IN 
+						     <foreach collection="params.regionCompany" item="item" index="index"   
+						        open="(" separator="," close=")">  
+						            #{item}  
+						    </foreach>
+			    	</if>
+				AND bbb.bill_type IN (1304,1372,1333)
+				AND bbb.receive_date BETWEEN #{params.effectiveTime}
+				AND #{params.effectiveTimeLst}
+				GROUP BY
+					bbb.buyer_no,
+					im.style_no
+			) PQ ON PB.company_no = PQ.company_no
+			AND PB.style_no = PQ.style_no
+		) SWA ON IP.style_no = SWA.style_no;
+   </select>  
+   <select id="generateBaroqueHeadquarterCost" resultMap="BaseResultMap" parameterType="map">
+   		SELECT
+			T1.brand_no,
+			T1.brand_name,
+			T1.item_no,
+			T1.item_code,
+			T1.item_name,
+			T1.style_no,
+			T1.supplier_no,
+			T1.supplier_name,
+			T1.effective_time,
+			T1.weight_average_cost AS factory_price,
+			T2.weight_average_cost AS headquarter_cost
+		FROM
+			(
+				SELECT
+					bbb.buyer_no,
+					bbb.buyer_name,
+					bbb.brand_no,
+					bbb.brand_name,
+					bbb.item_no,
+					bbb.item_code,
+					bbb.item_name,
+					bbb.supplier_no,
+					bbb.supplier_name,
+					im.style_no,
+					#{params.effectiveTime} as effective_time,
+					sum(ifnull(bbb.receive_qty, 0)) sum_qty,
+					sum(
+						ifnull(bbb.receive_qty, 0) * (
+							ifnull(bbb.cost, 0) * ifnull(bbba.exchange_rate, 0) * (1 + ifnull(bbba.vat_rate, 0)) * (
+								1 + ifnull(bbba.tariff_rate, 0)
+							)
+						)
+					) sum_cost,
+					sum(
+						ifnull(bbb.receive_qty, 0) * (
+							ifnull(bbb.cost, 0) * ifnull(bbba.exchange_rate, 0) * (1 + ifnull(bbba.vat_rate, 0)) * (
+								1 + ifnull(bbba.tariff_rate, 0)
+							)
+						)
+					) / sum(ifnull(bbb.receive_qty, 0)) weight_average_cost
+				FROM
+					bill_buy_balance bbb
+				LEFT JOIN item im ON bbb.item_no = im.item_no
+				LEFT JOIN bill_buy_balance_additional bbba ON bbb.original_bill_no = bbba.original_bill_no
+				LEFT JOIN brand brd ON im.brand_no = brd.brand_no
+				AND bbb.item_no = bbba.item_code
+				WHERE
+					1 = 1
+				<include refid="generateCondition" />
+				GROUP BY
+					bbb.buyer_no,
+					bbb.item_no,
+					im.style_no
+			) T1
+		LEFT JOIN (
+			SELECT
+				bbb.brand_no,
+				im.style_no,
+				sum(
+					ifnull(bbb.receive_qty, 0) * (
+						ifnull(bbb.cost, 0) * ifnull(bbba.exchange_rate, 0) * (1 + ifnull(bbba.vat_rate, 0)) * (
+							1 + ifnull(bbba.tariff_rate, 0)
+						)
+					)
+				) / sum(ifnull(bbb.receive_qty, 0)) weight_average_cost
+			FROM
+				bill_buy_balance bbb
+			LEFT JOIN item im ON bbb.item_no = im.item_no
+			LEFT JOIN bill_buy_balance_additional bbba ON bbb.original_bill_no = bbba.original_bill_no
+			LEFT JOIN brand brd ON im.brand_no = brd.brand_no
+			AND bbb.item_no = bbba.item_code
+			WHERE
+				1 = 1
+				<include refid="generateCondition2" /> 
+			GROUP BY
+				bbb.buyer_no,
+				im.style_no
+		) T2 ON T1.style_no = T2.style_no
+		AND T1.brand_no = T2.brand_no
+		ORDER BY
+			T1.brand_no,
+			T1.style_no,
+			T1.item_no  
+   </select>   
+   <select id="getBaroqueHeadquarterCostList" resultMap="BaseResultMap" parameterType="map">
+   		SELECT
+			MONTH (hcm.effective_time) AS MONTH, 
+			YEAR (hcm.effective_time) AS YEAR,
+			item.style_no,
+			item.item_no,
+			item.code as item_code,
+		    hcm.brand_unit_no,
+		    hcm.brand_unit_name,
+			hcm.supplier_no,
+			hcm.supplier_name,
+			item. NAME AS item_name,
+			hcm.effective_time,
+			hcm.brand_no,
+			hcm.brand_name1 as brand_name,
+			item.brand_season,
+			item.category_no,
+			C.name as category_name,
+			C1. NAME one_level_category_name,
+			C2. NAME two_level_category_name,
+			hcm.headquarter_cost
+		FROM
+			(
+				SELECT
+					head.*,b.sys_no as brand_unit_no,bu.name as brand_unit_name,b.name as brand_name1
+				FROM
+					headquarter_cost_maintain head
+				LEFT JOIN brand b ON head.brand_no = b.brand_no
+		    	LEFT JOIN brand_unit bu on b.sys_no = bu.brand_unit_no
+				WHERE 1=1
+				 <if test="null!=params" >
+			      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+			        AND b.sys_no = #{params.brandUnitNo}
+			      </if>
+			     </if>
+			) hcm
+		LEFT JOIN item item ON hcm.item_no = item.item_no
+		INNER JOIN category C1 ON C1.category_no = LEFT (item.category_no, 2)
+		INNER JOIN category C2 ON C2.category_no = LEFT (item.category_no, 4)
+		INNER JOIN category C ON C.category_no = item.category_no
+		WHERE
+			1 = 1
+		 <include refid="condition" />
+		 <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+	    <if test="orderByField == null or  ''==orderByField " >
+	      ORDER BY item.style_no,hcm.effective_time DESC
+	    </if>
+     	LIMIT #{page.startRowNum} ,#{page.pageSize}     
+   </select>
+   <select id="getBaroqueHeadquarterCostListCount" resultType="java.lang.Integer" parameterType="map">
+   		SELECT
+			count(0)
+		FROM
+			(
+				SELECT
+					head.*,b.sys_no as brand_unit_no,bu.name as brand_unit_name
+				FROM
+					headquarter_cost_maintain head
+				LEFT JOIN brand b ON head.brand_no = b.brand_no
+		    LEFT JOIN brand_unit bu on b.sys_no = bu.brand_unit_no
+				WHERE 1=1
+				 <if test="null!=params" >
+			      <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo" >
+			        AND b.sys_no = #{params.brandUnitNo}
+			      </if>
+			     </if>
+			) hcm
+		LEFT JOIN item item ON hcm.item_no = item.item_no
+		INNER JOIN category C1 ON C1.category_no = LEFT (item.category_no, 2)
+		INNER JOIN category C2 ON C2.category_no = LEFT (item.category_no, 4)
+		WHERE
+			1 = 1
+		 <include refid="condition" />
+   </select>
+    <select id="getDiffHeadquarterCostForFF" resultMap="BaseResultMap" parameterType="map">
+ 		SELECT hcm.headquarter_cost,bbb.id
+		from 
+		(
+		     select * 
+			 FROM
+			 bill_buy_balance buy
+			 where buy.receive_date between #{params.receiveTime}
+			 AND #{params.receiveTimeLst}
+			 and buy.brand_unit_no = 'FF' 
+			 and buy.bill_type = 1304
+		)bbb LEFT JOIN 
+		(
+			select *
+			from
+			(select item_no, headquarter_cost,effective_time
+			from headquarter_cost_maintain where headquarter_cost is not null
+			order by effective_time desc) t
+			group by item_no
+	   ) hcm on bbb.item_no = hcm.item_no
+	   where bbb.headquarter_cost != hcm.headquarter_cost																																																																																																																			
+   </select>
+  <update id="updateHeadquarterCost" parameterType="cn.wonhigh.retail.fas.common.dto.BaroqueItemCostDto">
+	 	UPDATE bill_buy_balance 
+		SET headquarter_cost = #{headquarterCost,jdbcType=DECIMAL}
+		WHERE id = #{id}
+  </update>
+</mapper>

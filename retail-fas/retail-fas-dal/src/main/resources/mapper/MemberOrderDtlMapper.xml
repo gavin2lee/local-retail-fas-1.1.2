@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.MemberOrderDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.MemberOrderDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="invoice_amount" property="invoiceAmount" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="out_start_date" property="outStartDate" jdbcType="DATE" />
+    <result column="out_end_date" property="outEndDate" jdbcType="DATE" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_no, shop_no, status, invoice_amount, create_user, create_time, out_start_date, 
+    out_end_date, company_no
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+       AND shop_no = #{params.shopNo} 
+      </if>
+      <if test="null!=params.outStartDate and ''!=params.outStartDate" >
+       AND out_start_date &gt;= #{params.outStartDate}
+      </if>
+      <if test="null!=params.outEndDate and ''!=params.outEndDate" >
+       AND out_end_date &lt;= #{params.outEndDate} 
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+       AND company_no = #{params.companyNo} 
+      </if>
+      <if test="null!=params.orderNo and ''!=params.orderNo" >
+       AND order_no = #{params.orderNo} 
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+       AND status = #{params.status} 
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM member_order_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM member_order_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM member_order_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM member_order_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM member_order_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.MemberOrderDtl" >
+    DELETE FROM member_order_dtl
+    WHERE 1=1 <if test="orderNo != null" >
+        AND order_no = #{orderNo,jdbcType=CHAR}
+      </if>
+      <if test="shopNo != null" >
+        AND shop_no = #{shopNo,jdbcType=CHAR}
+      </if>
+      <if test="companyNo != null" >
+        AND company_no = #{companyNo,jdbcType=CHAR}
+      </if>
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.MemberOrderDtl" >
+    INSERT INTO member_order_dtl (id, order_no, shop_no, 
+      status, invoice_amount, create_user, 
+      create_time, out_start_date, out_end_date, 
+      company_no)
+    VALUES (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=CHAR}, #{shopNo,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{invoiceAmount,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{outStartDate,jdbcType=DATE}, #{outEndDate,jdbcType=DATE}, 
+      #{companyNo,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.MemberOrderDtl" >
+    INSERT INTO member_order_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="outStartDate != null" >
+        out_start_date,
+      </if>
+      <if test="outEndDate != null" >
+        out_end_date,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="invoiceAmount != null" >
+        #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outStartDate != null" >
+        #{outStartDate,jdbcType=DATE},
+      </if>
+      <if test="outEndDate != null" >
+        #{outEndDate,jdbcType=DATE},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.MemberOrderDtl" >
+    UPDATE member_order_dtl
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="invoiceAmount != null" >
+        invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outStartDate != null" >
+        out_start_date = #{outStartDate,jdbcType=DATE},
+      </if>
+      <if test="outEndDate != null" >
+        out_end_date = #{outEndDate,jdbcType=DATE},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.MemberOrderDtl" >
+    UPDATE member_order_dtl
+    SET order_no = #{orderNo,jdbcType=CHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      out_start_date = #{outStartDate,jdbcType=DATE},
+      out_end_date = #{outEndDate,jdbcType=DATE},
+      company_no = #{companyNo,jdbcType=CHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+</mapper>

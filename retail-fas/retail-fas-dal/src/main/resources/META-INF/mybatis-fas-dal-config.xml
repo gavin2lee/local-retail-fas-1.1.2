@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- changes from the defaults -->
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<!-- JdbcType enumeration. Most common are: NULL, VARCHAR and OTHER -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="defaultStatementTimeout" value="600"/>
+	</settings>
+	<plugins>
+		<plugin interceptor="cn.wonhigh.retail.backend.data.core.DataAccessInspector">
+		</plugin>
+		<plugin interceptor="cn.wonhigh.retail.backend.data.core.ShardingInterceptor">
+		  <property name="table" value="bill_shop_balance"/>
+		  <property name="enable" value="true"/>
+		</plugin>
+		<plugin interceptor="cn.wonhigh.retail.fas.dal.database.ShardingFlagInterceptor">
+		</plugin>
+	</plugins>
+	<mappers>
+		<mapper resource="mapper/SystemUserMapper.xml"/>
+		
+		<!-- 基础数据 -->
+	  	<mapper resource="mapper/BrandMapper.xml"/>
+	  	<mapper resource="mapper/CategoryMapper.xml"/>
+	  	<mapper resource="mapper/CompanyMapper.xml"/>
+	  	<mapper resource="mapper/CustomerMapper.xml"/>
+	  	<mapper resource="mapper/RegionMapper.xml"/>
+	  	<mapper resource="mapper/ShopMapper.xml"/>
+	  	<mapper resource="mapper/StoreMapper.xml"/>
+	  	<mapper resource="mapper/SupplierMapper.xml"/>
+	  	<mapper resource="mapper/ZoneInfoMapper.xml"/>
+  		<mapper resource="mapper/AccountingSubjectMapper.xml"/>
+  		<mapper resource="mapper/FinancialAccountMapper.xml"/>
+  		<mapper resource="mapper/LookupMapper.xml"/>
+  		<mapper resource="mapper/LookupRelMapper.xml"/>
+  		<mapper resource="mapper/LookupEntryMapper.xml"/>
+  		<mapper resource="mapper/AssistProjectMapper.xml"/>
+		<mapper resource="mapper/AssistProjectTypeMapper.xml"/>
+		<mapper resource="mapper/SettleMethodMapper.xml"/>
+		<mapper resource="mapper/CurrencyManagementMapper.xml"/>
+		<mapper resource="mapper/PaymentTermMapper.xml"/>
+		<mapper resource="mapper/ExchangeRateSetupMapper.xml"/>
+        <mapper resource="mapper/ItemMapper.xml"/>
+        <mapper resource="mapper/CommonUtilMapper.xml"/>
+        <mapper resource="mapper/VoucherTypeMapper.xml"/>
+	    <mapper resource="mapper/OrderUnitMapper.xml"/>
+	    <mapper resource="mapper/InvoiceInfoMapper.xml"/>
+		
+  		<!-- 结算路径 -->
+  		<mapper resource="mapper/SettleCategoryMapper.xml"/>
+  		<mapper resource="mapper/SettleCategoryDtlMapper.xml"/>
+		<mapper resource="mapper/SettleBrandGroupMapper.xml"/>
+		<mapper resource="mapper/SettleBrandGroupRelMapper.xml"/>
+		<mapper resource="mapper/SettleNewStyleMapper.xml"/>
+	    <mapper resource="mapper/SettleNewStyleDtlMapper.xml"/>
+	    <mapper resource="mapper/SettlePathMapper.xml"/>
+  		<mapper resource="mapper/SettlePathBrandRelMapper.xml"/>
+  		<mapper resource="mapper/SettlePathDtlMapper.xml"/>
+  		<mapper resource="mapper/BillSplitDataMapper.xml"/>
+  		<mapper resource="mapper/BillSplitDataDtlMapper.xml"/>
+  		<mapper resource="mapper/BillSplitMapper.xml"/>
+  		<mapper resource="mapper/BillSplitDtlMapper.xml"/>
+  		<mapper resource="mapper/BillSplitLogMapper.xml"/>
+  		
+	  	<!-- 成本核算 -->
+	  	<mapper resource="mapper/SupplierGroupMapper.xml"/>
+  		<mapper resource="mapper/SupplierGroupRelMapper.xml"/>
+		<mapper resource="mapper/CompanySettlePeriodMapper.xml"/>
+		<mapper resource="mapper/PeriodBalanceMapper.xml"/>
+  		<mapper resource="mapper/HeadquarterCostMaintainMapper.xml"/>
+		<mapper resource="mapper/HeadquarterPriceRuleMapper.xml"/>
+		<mapper resource="mapper/RegionCostMaintainMapper.xml"/>
+		<mapper resource="mapper/RegionPriceRuleMapper.xml"/>
+		<mapper resource="mapper/RuleMatchFailMapper.xml"/>
+		<mapper resource="mapper/PurchasePriceMapper.xml"/>
+		
+  		<!-- 应收模块 -->
+  		<mapper resource="mapper/BillAskPaymentMapper.xml"/>
+	  	<mapper resource="mapper/BillAskPaymentDtlMapper.xml"/>
+  		<mapper resource="mapper/BalanceDateMapper.xml"/>
+		
+ 		<!-- 商场门店结算 -->
+		<mapper resource="mapper/CostCategorySettingMapper.xml"/>
+		<mapper resource="mapper/BillMallDeductionCostMapper.xml"/>
+		<mapper resource="mapper/BillShopSaleOrderMapper.xml"/>
+		<mapper resource="mapper/BillShopBalanceMapper.xml"/>
+		<mapper resource="mapper/MallBalanceDiffTypeMapper.xml"/>
+		<mapper resource="mapper/BizCityMapper.xml"/>
+		<mapper resource="mapper/MallMapper.xml"/>
+		<mapper resource="mapper/SaleSettlementDeductionMapper.xml"/>
+		<mapper resource="mapper/InvoiceTemplateSetMapper.xml"/>
+		<mapper resource="mapper/InvoiceTemplateSetDtlMapper.xml"/>
+		<mapper resource="mapper/BillBacksectionSplitMapper.xml"/>
+		<mapper resource="mapper/BillBacksectionSplitDtlMapper.xml"/>		
+		<mapper resource="mapper/BillShopBalanceInvoiceApplyMapper.xml"/>
+	    <mapper resource="mapper/BillShopBalanceInvoiceInfoMapper.xml"/>
+	    <mapper resource="mapper/BillShopBalanceInvoiceSourceMapper.xml"/>
+	    <mapper resource="mapper/InvoiceRuleSetMapper.xml"/>
+	   
+	    <mapper resource="mapper/BillShopBalanceCateSumMapper.xml"/>
+		<mapper resource="mapper/BillShopBalancePaySumMapper.xml"/>
+		<mapper resource="mapper/BillShopBalanceProSumMapper.xml"/>
+		<mapper resource="mapper/BillShopBalanceDaysaleSumMapper.xml"/>
+        <mapper resource="mapper/BillShopBalanceWildsaleSumMapper.xml"/>
+		
+		<mapper resource="mapper/RateBasicMapper.xml"/>
+		<mapper resource="mapper/RateExpenseOperateMapper.xml"/>
+		<mapper resource="mapper/RateExpenseRemindMapper.xml"/>
+		<mapper resource="mapper/RateExpenseSporadicMapper.xml"/>
+		<mapper resource="mapper/BillShopBalanceDeductMapper.xml"/>
+   
+	   <mapper resource="mapper/BillBalanceMapper.xml"/>
+	   <mapper resource="mapper/BillBalanceCashPaymentMapper.xml"/>
+	   <mapper resource="mapper/BillBalanceInvoiceMapper.xml"/>
+       <mapper resource="mapper/BillShopBalanceDiffMapper.xml"/>
+       
+       
+       <!-- 地区批发 -->
+  	   <mapper resource="mapper/BillInvoiceApplyMapper.xml"/>
+  	   <mapper resource="mapper/BillInvoiceApplyDtlMapper.xml"/>
+	   <mapper resource="mapper/WholesaleReceTermMapper.xml"/>
+	   <mapper resource="mapper/WholesaleReceTermDtlMapper.xml"/>
+  	   <mapper resource="mapper/WholesaleMarginInitMapper.xml"/>
+  	   <mapper resource="mapper/BillCustMarginNtMapper.xml"/>
+  	   <mapper resource="mapper/BillCustFineNtMapper.xml"/>
+       <mapper resource="mapper/BillPrePaymentNtMapper.xml"/>
+       <mapper resource="mapper/WholesalePrepayWarnMapper.xml"/>
+       <mapper resource="mapper/SplitDataSourceMapper.xml"/>
+	   <mapper resource="mapper/BillDifferencesMapper.xml"/>
+	   <mapper resource="mapper/CustomerReceRelMapper.xml"/>
+  	   <mapper resource="mapper/CustomerReceRelDtlMapper.xml"/>
+	  <!-- 独立店铺管理 -->
+	  <mapper resource="mapper/CreditCardTransactionDtlMapper.xml"/>
+  	  <mapper resource="mapper/CashTransactionDtlMapper.xml"/>
+  	  <mapper resource="mapper/SelfShopBankInfoMapper.xml"/>
+	  
+	   <!-- 应收开票申请 -->
+	  <mapper resource="mapper/BillBalanceInvoiceApplyMapper.xml"/>
+	  <mapper resource="mapper/BillBalanceInvoiceInfoMapper.xml"/>
+	  <mapper resource="mapper/BillBalanceInvoiceSourceMapper.xml"/>
+      <mapper resource="mapper/BsgroupsMapper.xml"/>
+      <mapper resource="mapper/OrganMapper.xml"/>
+	  <mapper resource="mapper/InvoiceRuleShopSetMapper.xml"/>
+	  <mapper resource="mapper/ShopBalanceDateMapper.xml"/>
+	  <mapper resource="mapper/BillBuyBalanceMapper.xml"/>
+	  <mapper resource="mapper/BillSaleBalanceMapper.xml"/>
+	  <mapper resource="mapper/BillBalanceHqMapper.xml"/>
+      <mapper resource="mapper/InitialAmountMapper.xml"/>
+  
+  
+	  <mapper resource="mapper/DepositCashMapper.xml"/>
+	  <mapper resource="mapper/ExpectCashMapper.xml"/>
+	  <mapper resource="mapper/RegisterInvoiceMapper.xml"/>
+	  <mapper resource="mapper/CustomImperfectMapper.xml"/>
+  
+  	 <!-- 地区间结算 -->
+  	 <mapper resource="mapper/AreaAmongTransferMapper.xml"/>
+  	 <mapper resource="mapper/AreaAmongStorageMapper.xml"/>
+     <mapper resource="mapper/BillAreaBalanceMapper.xml"/>	
+      <!--地区自购结算 -->
+     <mapper resource="mapper/AreaPrivatePurchaseMapper.xml"/>	
+     <mapper resource="mapper/AreaPrivatePurchaseBalanceMapper.xml"/>
+     <!-- 地区其他出库结算 -->
+     <mapper resource="mapper/AreaOtherStockOutDtlMapper.xml"/>	
+     <mapper resource="mapper/BillAreaOtherBalanceMapper.xml"/>	
+     <mapper resource="mapper/HqOtherEntryMapper.xml"/>	
+     <!-- 总部代采结算 -->
+     <mapper resource="mapper/HqInsteadOfBuyMapper.xml"/>	
+     <mapper resource="mapper/HqInsteadOfBuyBalanceMapper.xml"/>	
+     
+     <mapper resource="mapper/CodingRuleMapper.xml"/>
+	  <mapper resource="mapper/MallDeductionSetMapper.xml"/>
+	  <mapper resource="mapper/BillCommonInvoiceRegisterMapper.xml"/>
+	  <mapper resource="mapper/BillCommonRegisterDtlMapper.xml"/>
+	  <mapper resource="mapper/OperateLogMapper.xml"/>
+	  <mapper resource="mapper/OtherDeductionMapper.xml"/>
+	
+	  <mapper resource="mapper/BillInvoiceMapper.xml"/>
+	  <mapper resource="mapper/BillInvoiceDtlMapper.xml"/>
+	  <mapper resource="mapper/BillPaymentMapper.xml"/>
+	  <mapper resource="mapper/BillPaymentDtlMapper.xml"/>
+	  <mapper resource="mapper/InvoiceConfirmMapper.xml"/>
+	  
+	 
+	  <mapper resource="mapper/BrandUnitMapper.xml"/>
+	  <mapper resource="mapper/RateProMapper.xml"/>
+	  <mapper resource="mapper/FinancialCategoryMapper.xml"/>
+	  <mapper resource="mapper/FinancialCategoryDtlMapper.xml"/>
+	  <mapper resource="mapper/BillShopBalanceSetMapper.xml"/>
+	  <mapper resource="mapper/BillBalanceInvoiceDtlMapper.xml"/>
+	  <mapper resource="mapper/MemberOrderDtlMapper.xml"/>
+	  <mapper resource="mapper/BillShopBalanceBackMapper.xml"/>
+	  <mapper resource="mapper/ShopBrandMapper.xml"/>
+	  <mapper resource="mapper/ShopGroupMapper.xml"/>
+	  <mapper resource="mapper/ShopGroupDtlMapper.xml"/>
+	  <mapper resource="mapper/GroupSaleApplyInvoiceRelMapper.xml"/>
+	  <mapper resource="mapper/InsidePurchaseBalanceDateMapper.xml"/>
+	  <mapper resource="mapper/ItemCostMapper.xml"/>
+	  <mapper resource="mapper/ExceptionPriceBillMapper.xml"/>
+	  
+	  <!-- 总部报表 -->
+	  <mapper resource="mapper/HqAreaReconciliationDtlMapper.xml"/>
+	  <mapper resource="mapper/ReportMapper.xml"/>	
+	  <mapper resource="mapper/BillSalesSumMapper.xml"/>
+	  <mapper resource="mapper/OrderAssistantMapper.xml"/>
+	  <mapper resource="mapper/OrderDtlMapper.xml"/>
+	  <mapper resource="mapper/OrderMainMapper.xml"/>
+	  <mapper resource="mapper/OrderPaywayMapper.xml"/>
+	  <mapper resource="mapper/OrderPromotionDtlMapper.xml"/>
+	  <mapper resource="mapper/OrderSaleWildcardRecordMapper.xml"/>
+	  <mapper resource="mapper/ReturnExchangeDtlMapper.xml"/>
+	  <mapper resource="mapper/ReturnExchangeMainMapper.xml"/>
+	  <mapper resource="mapper/InsideBizTypeMapper.xml"/>
+	  <mapper resource="mapper/SpecialZoneInfoMapper.xml"/>
+	  <mapper resource="mapper/BillSalesOutstandingAnalysisMapper.xml"/>
+	  <mapper resource="mapper/DepositCashCumulativeDifferenceMapper.xml"/>
+	  <mapper resource="mapper/InvoiceBaseReportMapper.xml"/>
+	  <!-- 收发货对账 -->
+	  <mapper resource="mapper/TransferingCheckMapper.xml"/>
+	  <mapper resource="mapper/SystemParamSetMapper.xml"/>
+	  <mapper resource="mapper/CostComputeRuleMapper.xml"/>
+	  <mapper resource="mapper/InvoiceApplyConfirmDtlMapper.xml"/>
+	  <mapper resource="mapper/BillShopBalanceCodeSumMapper.xml"/>
+	  <mapper resource="mapper/BillBalanceQueryMapper.xml"/>
+	  <mapper resource="mapper/WholesaleCustomerRemainingDtlMapper.xml"/>
+	  <mapper resource="mapper/WholesaleCustomerRemainingSumMapper.xml"/>
+  
+	  <mapper resource="mapper/ComodityPriceInquiryMapper.xml"/>
+	  <mapper resource="mapper/InsideBizTypeDetailMapper.xml"/>
+	  <!--店铺自收银管理  -->
+	  <mapper resource="mapper/SelfShopDepositAccountMapper.xml"/>
+	  <mapper resource="mapper/SelfShopTerminalAccountMapper.xml"/>
+	  <mapper resource="mapper/PaySaleCheckMapper.xml"/>
+	  <mapper resource="mapper/CardReturnCheckMapper.xml"/>
+	  <mapper resource="mapper/ShopCheckSetMapper.xml"/>
+  	  <mapper resource="mapper/ShopCheckMapper.xml"/>
+  	  <mapper resource="mapper/DepositSetMapper.xml"/>
+  	  <!-- 欠客销售跟踪报表 -->
+	  <mapper resource="mapper/OweTheGuestMapper.xml"/>
+	  <mapper resource="mapper/MemorandumMapper.xml"/>
+	  <mapper resource="mapper/SalesSummaryMapper.xml"/>  
+  	  <mapper resource="mapper/BackOrderSalesMapper.xml"/>
+  
+	  <mapper resource="mapper/PreWarnMessageMapper.xml"/>
+	  <mapper resource="mapper/PreWarnTemplateMapper.xml"/>
+
+  	  <mapper resource="mapper/TransferBalanceDateMapper.xml"/>
+  
+  	  <mapper resource="mapper/OftenUseMenuMapper.xml"/>
+  	  
+  	  <mapper resource="mapper/HqOtherStockOutBalanceMapper.xml"/>
+  	  <mapper resource="mapper/HqOtherStockOutDtlMapper.xml"/>
+  	  <mapper resource="mapper/AreaOtherStockInEntryMapper.xml"/>
+
+  	  <mapper resource="mapper/CompanyBrandSettlePeriodMapper.xml"/>
+  	  <mapper resource="mapper/ReportFinanceMapper.xml"/>
+  	  
+	  <mapper resource="mapper/BillShopBalanceBrandMapper.xml"/>
+	
+	  <mapper resource="mapper/ParamDtlMapper.xml"/>
+	  <mapper resource="mapper/ParamMainMapper.xml"/>
+	  
+  	  <mapper resource="mapper/PriceQuotationListMapper.xml"/>
+  	  
+      <mapper resource="mapper/BillStatusMapper.xml"/>
+      
+	  <mapper resource="mapper/BrandOnlineMapper.xml"/>
+	  <mapper resource="mapper/CompanyPeriodBalanceMapper.xml"/>
+	  <mapper resource="mapper/BLKPeriodBalanceMapper.xml"/>
+	  <mapper resource="mapper/BLKCompanyPeriodBalanceMapper.xml"/>
+	  <mapper resource="mapper/CompanyPeriodSalesSumMapper.xml"/>
+	  <mapper resource="mapper/ShopCompanyMapper.xml"/>
+	  <mapper resource="mapper/POSRedundanceMapper.xml"/>
+	  <mapper resource="mapper/PeriodBalanceAuditMapper.xml"/>
+  	  <mapper resource="mapper/OrderUnitCompanyMapper.xml"/>
+  	  <mapper resource="mapper/PrintMapper.xml"/>
+  	  <mapper resource="mapper/SettlementBodyChangeRecordMapper.xml"/>
+	  <mapper resource="mapper/BillInvCostAdjustMapper.xml"/>
+	  <mapper resource="mapper/BillInvCostAdjustDtlMapper.xml"/>
+	  
+	  	<mapper resource="mapper/ShopNameReplaceMapper.xml"/>
+
+  		<mapper resource="mapper/BillShopBalanceOperatelogMapper.xml"/>
+  		<mapper resource="mapper/ConBalanceTypeMapper.xml"/>
+  		<mapper resource="mapper/ConBillTypeMapper.xml"/>
+  		<mapper resource="mapper/CompanyBalanceBillMapper.xml"/>
+  		<mapper resource="mapper/DataHqAreaExchangeMapper.xml"/>
+  
+  		<!-- 价格生效日期 -->
+  		<mapper resource="mapper/PriceEffectiveDateMapper.xml"/>
+  		<!-- 休闲品牌对账报表 -->
+  		<mapper resource="mapper/LeisureBrandMapper.xml"/>
+  		<mapper resource="mapper/OfficialItemMapper.xml"/>
+		<mapper resource="mapper/PayRelationshipMapper.xml"/>
+		<mapper resource="mapper/PayTermMapper.xml"/>
+		<mapper resource="mapper/PayTermSupplierMapper.xml"/>
+		<mapper resource="mapper/ContractDiscountMapper.xml"/>
+		<mapper resource="mapper/PEReportMapper.xml"/>
+		<mapper resource="mapper/PEUtilMapper.xml"/>
+    	<mapper resource="mapper/InventoryBookMapper.xml"/>
+     	<mapper resource="mapper/SupplierReturnProfitMapper.xml"/>
+     	<mapper resource="mapper/PhysicalBrandMapper.xml"/>
+      	<mapper resource="mapper/HolidayMapper.xml"/>
+        <!-- 对账容差设置 -->
+  		<mapper resource="mapper/CheckTolerMapper.xml"/>
+ 		<mapper resource="mapper/ToRegisterMapper.xml"/>
+ 		<mapper resource="mapper/OrgUnitBrandRelMapper.xml"/> 		
+	 	<mapper resource="mapper/BillPurchaseAdjustMapper.xml"/>
+ 		<mapper resource="mapper/BillPurchaseAdjustDtlMapper.xml"/>
+   		
+  		<mapper resource="mapper/SupplierRateSetMapper.xml"/>
+  		<mapper resource="mapper/CreditCardCheckMapper.xml"/>
+  		<mapper resource="mapper/CashCheckMapper.xml"/>
+  		<mapper resource="mapper/CashBalanceMapper.xml"/>
+		<mapper resource="mapper/NcFinishedGoodsMapper.xml"/>
+  		<mapper resource="mapper/WholesaleCustomerOrderRemainingMapper.xml"/>
+  		<mapper resource="mapper/HqSportReportMapper.xml"/>
+  		<mapper resource="mapper/BillBuyBalanceAdditionalMapper.xml"/>
+  		<mapper resource="mapper/BAReceiptMapper.xml"/>
+  		<mapper resource="mapper/CustomerOrderRemainMapper.xml"/>
+  		<mapper resource="mapper/BaroqueBillBalanceMapper.xml"/>
+  		<mapper resource="mapper/SupplierTariffSetMapper.xml"/>
+        <mapper resource="mapper/HeadquarterPeriodMapper.xml"/>
+		<mapper resource="mapper/BaroqueItemCostMapper.xml" />
+  		<mapper resource="mapper/PricingRangeMapper.xml"/>
+  		<mapper resource="mapper/BillSaleBalanceNetMapper.xml"/>
+  		<mapper resource="mapper/PriceCheckAndUpdateMapper.xml"/>
+  		<mapper resource="mapper/ReceiveAndSendMapper.xml"/>
+  		
+  		<mapper resource="mapper/SaleproxyBalanceRelationshopMapper.xml"/>
+        <mapper resource="mapper/SaleproxyBalanceSettlepriceMapper.xml"/>
+  		<mapper resource="mapper/InventoryClassifyMapper.xml"/>
+  		<mapper resource="mapper/BaroqueCompanyPeriodBalanceMapper.xml"/>
+  		
+  		<!-- 扩展 -->
+  		<mapper resource="cost-mapper/ItemCostMapperExt.xml"/>  		
+  </mappers>
+</configuration>

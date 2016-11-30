@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.DepositSetMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.DepositSet" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="prepare_cash" property="prepareCash" jdbcType="DECIMAL" />
+    <result column="init_date" property="initDate" jdbcType="TIMESTAMP" />
+    <result column="start_amount" property="startAmount" jdbcType="DECIMAL" />
+    <result column="beyond_last_deposit_date" property="beyondLastDepositDate" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="deposit_diff" property="depositDiff" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_no, shop_name, prepare_cash, init_date, start_amount, beyond_last_deposit_date, amount, 
+    deposit_diff, create_user, create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="params.shopNoList!=null and params.shopNoList!=''" >
+	   	<foreach collection="params.shopNoList" item="shopNo" open="AND shop_no in(" separator="," close=")">
+	      '${shopNo}'
+	   	</foreach>
+  	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from deposit_set
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from deposit_set where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM deposit_set WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from deposit_set where 1=1 
+    <include refid="condition" />
+  </select>
+  <!-- 根据shop_no查询存现设置信息 -->
+  <select id="getDepositSet" parameterType="map" resultMap="BaseResultMap">
+  	SELECT
+		*
+	FROM
+		deposit_set ds
+	WHERE
+		1 = 1
+	<if test="null!=params" >
+        <if test="params.shopNo != null and params.shopNo!=''">  
+     		AND ds.shop_no = #{params.shopNo}
+    	</if>
+    </if>
+	LIMIT 0,1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from deposit_set
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.String" >
+    delete from deposit_set
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.DepositSet" >
+    insert into deposit_set (id, shop_no, shop_name, 
+      prepare_cash, init_date, start_amount, beyond_last_deposit_date, 
+      amount, deposit_diff, create_user, 
+      create_time, update_user, update_time
+      )
+    values (#{id,jdbcType=CHAR}, #{shopNo,jdbcType=CHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{prepareCash,jdbcType=DECIMAL}, #{initDate,jdbcType=TIMESTAMP}, #{startAmount,jdbcType=DECIMAL}, #{beyondLastDepositDate,jdbcType=INTEGER}, 
+      #{amount,jdbcType=DECIMAL}, #{depositDiff,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.DepositSet" >
+    insert into deposit_set
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="prepareCash != null" >
+        prepare_cash,
+      </if>
+      <if test="initDate != null">
+      	init_date,
+      </if>
+      <if test="startAmount != null" >
+        start_amount,
+      </if>
+      <if test="beyondLastDepositDate != null" >
+        beyond_last_deposit_date,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="depositDiff != null" >
+        deposit_diff,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="prepareCash != null" >
+        #{prepareCash,jdbcType=DECIMAL},
+      </if>
+      <if test="initDate != null">
+      	#{initDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startAmount != null" >
+        #{startAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="beyondLastDepositDate != null" >
+        #{beyondLastDepositDate,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="depositDiff != null" >
+        #{depositDiff,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.DepositSet" >
+    update deposit_set
+    <set >
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="prepareCash != null" >
+        prepare_cash = #{prepareCash,jdbcType=DECIMAL},
+      </if>
+      <if test="initDate != null" >
+        init_date = #{initDate,jdbcType=TIMESTAMP},
+      </if>
+        start_amount = #{startAmount,jdbcType=DECIMAL},
+      	beyond_last_deposit_date = #{beyondLastDepositDate,jdbcType=INTEGER},
+       	amount = #{amount,jdbcType=DECIMAL},
+       	deposit_diff = #{depositDiff,jdbcType=DECIMAL},
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.DepositSet" >
+    update deposit_set
+    set shop_no = #{shopNo,jdbcType=CHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      prepare_cash = #{prepareCash,jdbcType=DECIMAL},
+      init_date = #{initDate,jdbcType=TIMESTAMP},
+      start_amount = #{startAmount,jdbcType=DECIMAL},
+      beyond_last_deposit_date = #{beyondLastDepositDate,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      deposit_diff = #{depositDiff,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

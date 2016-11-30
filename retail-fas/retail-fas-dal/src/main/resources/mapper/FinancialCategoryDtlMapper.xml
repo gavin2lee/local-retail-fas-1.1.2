@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.FinancialCategoryDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.FinancialCategoryDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="financial_category_no" property="financialCategoryNo" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="qty_control_flag" property="qtyControlFlag" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    D.id, D.financial_category_no, category.name, D.category_no, D.create_user, D.create_time, D.update_user, D.update_time, D.qty_control_flag
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.financialCategoryNo and ''!=params.financialCategoryNo" >
+        AND D.financial_category_no = #{params.financialCategoryNo}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+       	AND D.category_no = #{params.categoryNo}
+      </if>
+      <if test="null!=params.name and ''!=params.name" >
+        AND category.name LIKE CONCAT('%',#{params.name},'%')
+      </if>
+       <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND EXISTS(SELECT 'X' FROM financial_category T WHERE T.financial_category_no = D.financial_category_no AND T.company_no = #{params.companyNo})
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM financial_category_dtl D LEFT JOIN category ON D.category_no = category.category_no
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM financial_category_dtl D LEFT JOIN category ON D.category_no = category.category_no 
+    WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM financial_category_dtl D LEFT JOIN category ON D.category_no = category.category_no 
+     WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM financial_category_dtl D LEFT JOIN category ON D.category_no = category.category_no
+     WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <delete id="deleteByFinancialCategoryNo" parameterType="java.lang.String">
+  	DELETE FROM financial_category_dtl WHERE financial_category_no = #{financialCategoryNo}
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM financial_category_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.FinancialCategoryDtl" >
+    DELETE FROM financial_category_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.FinancialCategoryDtl" >
+    INSERT INTO financial_category_dtl (id, financial_category_no, category_no, 
+      create_user, create_time, update_user, 
+      update_time,qty_control_flag)
+    VALUES (#{id,jdbcType=INTEGER}, #{financialCategoryNo,jdbcType=CHAR}, #{categoryNo,jdbcType=CHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP},#{qtyControlFlag,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.FinancialCategoryDtl" >
+    INSERT INTO financial_category_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="financialCategoryNo != null" >
+        financial_category_no,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="qtyControlFlag != null" >
+        qty_control_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="financialCategoryNo != null" >
+        #{financialCategoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qtyControlFlag != null" >
+        #{qtyControlFlag,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.FinancialCategoryDtl" >
+    UPDATE financial_category_dtl
+    <set >
+      <if test="financialCategoryNo != null" >
+        financial_category_no = #{financialCategoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qtyControlFlag != null" >
+        qty_control_flag = #{qtyControlFlag,jdbcType=TINYINT},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.FinancialCategoryDtl" >
+    UPDATE financial_category_dtl
+    SET financial_category_no = #{financialCategoryNo,jdbcType=CHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      qty_control_flag = #{qtyControlFlag,jdbcType=TINYINT}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

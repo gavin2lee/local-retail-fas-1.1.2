@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CategoryMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.Category" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="levelid" property="levelid" jdbcType="INTEGER" />
+    <result column="opcode" property="opcode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="sys_no" property="sysNo" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, category_no, code, levelid, opcode, name, parent_id, path, status, search_code, 
+    sys_no, type, create_user, create_time, update_user, update_time, remark
+  </sql>
+  <sql id="condition" >
+  	/*sys_no*/
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.sysNo and ''!=params.sysNo" >
+        AND sys_no = #{params.sysNo}
+      </if>
+      <if test="null!=params.rootCategoryNo and ''!=params.rootCategoryNo" >
+        AND LEFT(category_no,2) =  #{params.rootCategoryNo}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+        AND category_no = #{params.categoryNo}
+      </if>
+      <if test="null!=params.levelid and ''!=params.levelid" >
+        AND levelid = #{params.levelid}
+      </if>
+      <if test="null!=params.organTypeNo and ''!=params.organTypeNo" >
+        AND organ_type_no = #{params.organTypeNo}
+      </if>
+      <if test="null!=params.categoryName and ''!=params.categoryName" >
+        AND name = #{params.categoryName}
+      </if>
+      <if test="null!=params.name and ''!=params.name" >
+        AND name like '%${params.name}%'
+      </if>
+       <if test="null!=params.queryLevel and ''!=params.queryLevel" >
+        AND levelid &lt;= #{params.queryLevel}
+      </if>
+      <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (UPPER(category_no) LIKE UPPER(CONCAT(#{params.q},'%')) OR UPPER(name) LIKE UPPER(CONCAT('%',#{params.q},'%'))) 
+	  </if>
+      <if test="null!=params.existCategoryNos and ''!=params.existCategoryNos" >
+       AND category_no NOT IN
+       		<foreach collection="params.existCategoryNos" index="index" item="item" open="(" separator="," close=")"> 
+				#{item} 
+			</foreach> 
+      </if>
+       <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+		AND (category_no LIKE CONCAT('%',#{params.q},'%') OR name LIKE CONCAT('%',#{params.q},'%')) 
+	  </if>
+      <!-- combogrid自动完成功能  多选-->
+	  <if test="null!=params.multiq and ''!=params.multiq">
+		AND category_no IN ${params.multiq} OR name IN ${params.multiq} ) 
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM category
+    WHERE id = #{id,jdbcType=INTEGER}
+    or category_no = #{categoryNo,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM category WHERE 1=1 AND levelid != 0
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM category WHERE 1=1 AND levelid != 0
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM category WHERE 1=1 AND levelid != 0
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM category
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.Category" >
+    DELETE FROM category
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.Category" >
+    INSERT INTO category (id, category_no, code, 
+      levelid, opcode, name, 
+      parent_id, path, status, 
+      search_code, sys_no, type, 
+      create_user, create_time, update_user, 
+      update_time, remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{categoryNo,jdbcType=CHAR}, #{code,jdbcType=VARCHAR}, 
+      #{levelid,jdbcType=INTEGER}, #{opcode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=INTEGER}, #{path,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{searchCode,jdbcType=VARCHAR}, #{sysNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.Category" >
+    INSERT INTO category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="levelid != null" >
+        levelid,
+      </if>
+      <if test="opcode != null" >
+        opcode,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="searchCode != null" >
+        search_code,
+      </if>
+      <if test="sysNo != null" >
+        sys_no,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="levelid != null" >
+        #{levelid,jdbcType=INTEGER},
+      </if>
+      <if test="opcode != null" >
+        #{opcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="searchCode != null" >
+        #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sysNo != null" >
+        #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.Category" >
+    UPDATE category
+    <set >
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="levelid != null" >
+        levelid = #{levelid,jdbcType=INTEGER},
+      </if>
+      <if test="opcode != null" >
+        opcode = #{opcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="searchCode != null" >
+        search_code = #{searchCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sysNo != null" >
+        sys_no = #{sysNo,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.Category" >
+    UPDATE category
+    SET category_no = #{categoryNo,jdbcType=CHAR},
+      code = #{code,jdbcType=VARCHAR},
+      levelid = #{levelid,jdbcType=INTEGER},
+      opcode = #{opcode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      path = #{path,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      search_code = #{searchCode,jdbcType=VARCHAR},
+      sys_no = #{sysNo,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getCategoryByItemCode" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	SELECT
+		t.id,
+		t.category_no,
+		t.code,
+		t.levelid,
+		t.opcode,
+		t.name,
+		t.parent_id,
+		t.path,
+		t.status,
+		t.search_code,
+		t.sys_no,
+		t.type,
+		t.create_user,
+		t.create_time,
+		t.update_user,
+		t.update_time,
+		t.remark
+	FROM
+		category t
+	INNER JOIN (
+		SELECT
+			category_no
+		FROM
+			item
+		WHERE 1=1
+      <if test="null!=params.code and ''!=params.code" >
+        AND code = #{params.code}
+      </if>
+	) t1 ON t.category_no = t1.category_no
+  </select>
+  
+</mapper>

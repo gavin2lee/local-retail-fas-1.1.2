@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ShopGroupMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ShopGroup" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_group_no" property="shopGroupNo" jdbcType="CHAR" />
+    <result column="shop_group_name" property="shopGroupName" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="client_no" property="clientNo" jdbcType="CHAR" />
+    <result column="client_name" property="clientName" jdbcType="VARCHAR" />
+    <result column="invoice_name" property="invoiceName" jdbcType="VARCHAR" />
+    <result column="template_no" property="templateNo" jdbcType="CHAR" />
+    <result column="template_name" property="templateName" jdbcType="VARCHAR" />
+    <result column="value_date" property="valueDate" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="search_name" property="searchName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMapDto" type="cn.wonhigh.retail.fas.common.dto.ShopGroupDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_group_no" property="shopGroupNo" jdbcType="CHAR" />
+    <result column="shop_group_name" property="shopGroupName" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="client_no" property="clientNo" jdbcType="CHAR" />
+    <result column="client_name" property="clientName" jdbcType="VARCHAR" />
+    <result column="invoice_name" property="invoiceName" jdbcType="VARCHAR" />
+    <result column="template_no" property="templateNo" jdbcType="CHAR" />
+    <result column="template_name" property="templateName" jdbcType="VARCHAR" />
+    <result column="value_date" property="valueDate" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="search_code" property="searchCode" jdbcType="VARCHAR" />
+    <result column="search_name" property="searchName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_group_no, shop_group_name, company_no, company_name, client_no, client_name, 
+    invoice_name, template_no, template_name, value_date, create_time, create_user, remark, 
+    status
+  </sql>
+  <sql id="condition" >
+    -- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.shopNo and ''!=params.shopNo" >
+       		and shop_no in  (#{params.shopNo})	
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+       		and shop_no in 
+       		<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+   				#{shopNos, jdbcType=CHAR}
+  			</foreach>
+      </if>
+      <if test="null!=params.shopGroupNos and ''!=params.shopGroupNos" >
+       		and shop_group_no in  (${params.shopGroupNos})
+      </if>
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.templateNo and ''!=params.templateNo" >
+        AND template_no = #{params.templateNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.clientNo and ''!=params.clientNo" >
+        AND client_no = #{params.clientNo}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+      <if test="null!=params.shopGroupNameUnique and ''!=params.shopGroupNameUnique">
+       	   and shop_group_name = #{params.shopGroupNameUnique}
+      </if>
+      <if test="null!=params.shopGroupNo and ''!=params.shopGroupNo" >
+        AND UPPER(shop_group_no) like CONCAT('%',#{params.shopGroupNo},'%')
+      </if>
+      <if test="null!=params.shopGroupName and ''!=params.shopGroupName" >
+        AND UPPER(shop_group_name) like CONCAT('%',#{params.shopGroupName},'%')
+      </if>
+       <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+			AND (shop_group_no LIKE CONCAT(#{params.q},'%') OR shop_group_name LIKE CONCAT('%',#{params.q},'%')) 
+	  </if>
+    </if>
+  </sql>
+  
+   <sql id="pageCondition" >
+    -- AND @company_no
+    <if test="null!=params" >
+       <if test="null!=params.shopNo and ''!=params.shopNo" >
+       		and shop_no in  (#{params.shopNo})	
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >
+       		and shop_no in 
+       		<foreach collection="params.shopNos" index="index" item="shopNos" open="(" separator="," close=")">
+   				#{shopNos, jdbcType=CHAR}
+  			</foreach>
+      </if>
+      <if test="null!=params.shopGroupNos and ''!=params.shopGroupNos" >
+       		and sg.shop_group_no in  (${params.shopGroupNos})
+      </if>
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.templateNo and ''!=params.templateNo" >
+        AND template_no = #{params.templateNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.clientNo and ''!=params.clientNo" >
+        AND client_no = #{params.clientNo}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+      <if test="null!=params.shopGroupNameUnique and ''!=params.shopGroupNameUnique">
+       	   and shop_group_name = #{params.shopGroupNameUnique}
+      </if>
+      <if test="null!=params.shopGroupNo and ''!=params.shopGroupNo" >
+        AND UPPER(sg.shop_group_no) like CONCAT('%',#{params.shopGroupNo},'%')
+      </if>
+      <if test="null!=params.shopGroupName and ''!=params.shopGroupName" >
+        AND UPPER(shop_group_name) like CONCAT('%',#{params.shopGroupName},'%')
+      </if>
+       <!-- combogrid自动完成功能 -->
+	  <if test="null!=params.q and ''!=params.q">
+			AND (sg.shop_group_no LIKE CONCAT(#{params.q},'%') OR shop_group_name LIKE CONCAT('%',#{params.q},'%')) 
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM shop_group
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+  	SELECT count(*) from (
+	 	SELECT DISTINCT sg.id FROM shop_group sg
+	 	<if test="null!=params.shopNos and ''!=params.shopNos" >
+	 		INNER JOIN shop_group_dtl sgd ON sg.shop_group_no = sgd.shop_group_no
+	 	</if>
+	 	 WHERE 1=1 
+	   <include refid="pageCondition" />
+   ) datas
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+  	SELECT DISTINCT sg.* FROM shop_group sg
+  	<if test="null!=params.shopNos and ''!=params.shopNos" >
+ 		INNER JOIN shop_group_dtl sgd ON sg.shop_group_no = sgd.shop_group_no
+ 	</if>
+ 	 WHERE 1=1
+    <include refid="pageCondition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     ORDER BY create_time DESC,id DESC
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+   <select id="selectByExportCount" resultType="java.lang.Integer" >
+  SELECT COUNT(*) FROM(
+	    SELECT
+		  	sg.*,
+	  		sqd.shop_name,
+	  		sqd.shop_no
+		FROM shop_group sg
+	 	LEFT JOIN shop_group_dtl sqd
+	    ON sg.shop_group_no = sqd.shop_group_no 
+   ) datas
+   WHERE 1=1 
+   <include refid="condition" />
+  </select>
+  <select id="selectByExport" resultMap="BaseResultMapDto" parameterType="map" >
+  SELECT * FROM(
+     SELECT
+	  	sg.*,
+	  	sqd.shop_name,
+	  	sqd.shop_no
+		FROM shop_group sg
+ 	LEFT JOIN shop_group_dtl sqd
+    ON sg.shop_group_no = sqd.shop_group_no 
+   ) datas
+    WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     ORDER BY create_time DESC,id DESC
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM shop_group WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM shop_group
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.ShopGroup" >
+    DELETE FROM shop_group
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ShopGroup" >
+    INSERT INTO shop_group (id, shop_group_no, shop_group_name, 
+      company_no, company_name, client_no, 
+      client_name, invoice_name, template_no, 
+      template_name, value_date, create_time, 
+      create_user, remark, status
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{shopGroupNo,jdbcType=CHAR}, #{shopGroupName,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{clientNo,jdbcType=CHAR}, 
+      #{clientName,jdbcType=VARCHAR}, #{invoiceName,jdbcType=VARCHAR}, #{templateNo,jdbcType=CHAR}, 
+      #{templateName,jdbcType=VARCHAR}, #{valueDate,jdbcType=DATE}, #{createTime,jdbcType=DATE}, 
+      #{createUser,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ShopGroup" >
+    INSERT INTO shop_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopGroupNo != null" >
+        shop_group_no,
+      </if>
+      <if test="shopGroupName != null" >
+        shop_group_name,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="clientNo != null" >
+        client_no,
+      </if>
+      <if test="clientName != null" >
+        client_name,
+      </if>
+      <if test="invoiceName != null" >
+        invoice_name,
+      </if>
+      <if test="templateNo != null" >
+        template_no,
+      </if>
+      <if test="templateName != null" >
+        template_name,
+      </if>
+      <if test="valueDate != null" >
+        value_date,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="shopGroupNo != null" >
+        #{shopGroupNo,jdbcType=CHAR},
+      </if>
+      <if test="shopGroupName != null" >
+        #{shopGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientNo != null" >
+        #{clientNo,jdbcType=CHAR},
+      </if>
+      <if test="clientName != null" >
+        #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceName != null" >
+        #{invoiceName,jdbcType=VARCHAR},
+      </if>
+      <if test="templateNo != null" >
+        #{templateNo,jdbcType=CHAR},
+      </if>
+      <if test="templateName != null" >
+        #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="valueDate != null" >
+        #{valueDate,jdbcType=DATE},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ShopGroup" >
+    UPDATE shop_group
+    <set >
+      <if test="shopGroupNo != null" >
+        shop_group_no = #{shopGroupNo,jdbcType=CHAR},
+      </if>
+      <if test="shopGroupName != null" >
+        shop_group_name = #{shopGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientNo != null" >
+        client_no = #{clientNo,jdbcType=CHAR},
+      </if>
+      <if test="clientName != null" >
+        client_name = #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceName != null" >
+        invoice_name = #{invoiceName,jdbcType=VARCHAR},
+      </if>
+      <if test="templateNo != null" >
+        template_no = #{templateNo,jdbcType=CHAR},
+      </if>
+      <if test="templateName != null" >
+        template_name = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="valueDate != null" >
+        value_date = #{valueDate,jdbcType=DATE},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ShopGroup" >
+    UPDATE shop_group
+    SET shop_group_no = #{shopGroupNo,jdbcType=CHAR},
+      shop_group_name = #{shopGroupName,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      client_no = #{clientNo,jdbcType=CHAR},
+      client_name = #{clientName,jdbcType=VARCHAR},
+      invoice_name = #{invoiceName,jdbcType=VARCHAR},
+      template_no = #{templateNo,jdbcType=CHAR},
+      template_name = #{templateName,jdbcType=VARCHAR},
+      value_date = #{valueDate,jdbcType=DATE},
+      create_time = #{createTime,jdbcType=DATE},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getShopGroupNoByShopNo" resultMap="BaseResultMap" parameterType="map" >
+	SELECT
+		t.id,
+		t.shop_group_no,
+		t.shop_group_name,
+		t.company_no,
+		t.company_name,
+		t.client_no,
+		t.client_name,
+		t.invoice_name,
+		t.template_no,
+		t.template_name,
+		t.value_date,
+		t.create_time,
+		t.create_user,
+		t.remark,
+		t.status
+	FROM
+		shop_group t
+	INNER JOIN (
+		SELECT
+			shop_group_no
+		FROM
+			shop_group_dtl
+		WHERE
+			shop_no = #{params.shopNo}
+	) t1 ON t.shop_group_no = t1.shop_group_no
+	AND t.status = '1'
+	<if test="null != params.companyNo and '' != params.companyNo">
+		AND t.company_no = #{params.companyNo}
+	</if>
+	
+	<if test="null != params.validDate and '' != params.validDate">
+		AND t.value_date &lt;= #{params.validDate}
+	</if>
+	order by t.value_date desc limit 1
+  </select>
+  
+  <select id="findBizByDtlShopNo" resultMap="BaseResultMap" parameterType="map" >
+    SELECT a.id, a.shop_group_no, a.shop_group_name, a.company_no, a.company_name,
+    a.client_no, a.client_name, a.invoice_name, a.template_no, a.template_name,
+     a.value_date, a.create_time, a.create_user, a.remark, a.status
+	    FROM shop_group a 
+	    INNER JOIN shop_group_dtl b
+	    ON a.shop_group_no = b.shop_group_no 
+	    WHERE b.shop_no = #{params.shopNo}
+  </select>
+  
+  <sql id="findClientCondition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.searchCode and ''!=params.searchCode" >
+        AND T.search_code LIKE CONCAT('%',#{params.searchCode},'%')
+      </if>
+      <if test="null!=params.searchName and ''!=params.searchName" >
+        AND T.search_name LIKE CONCAT('%',#{params.searchName},'%')
+      </if>
+    </if>
+  </sql>
+  
+  <select id="findClientQueryCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) AS s FROM
+	   (SELECT mall_no AS search_code, name AS search_name FROM mall 
+		UNION ALL
+		SELECT bsgroups_no AS search_code, name AS search_name FROM bsgroups 
+		) T
+		WHERE 1=1 
+	    <include refid="findClientCondition" />
+  </select>
+  
+  <select id="findClientQueryByPage" resultMap="BaseResultMap" parameterType="map" >
+  SELECT search_code, search_name FROM
+   (SELECT mall_no AS search_code, name AS search_name FROM mall 
+	UNION ALL
+	SELECT bsgroups_no AS search_code, name AS search_name FROM bsgroups 
+	) T
+	WHERE 1=1 
+    <include refid="findClientCondition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+</mapper>

@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.AccountingSubjectMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.AccountingSubject" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="subject_code" property="subjectCode" jdbcType="CHAR" />
+    <result column="subject_level" property="subjectLevel" jdbcType="TINYINT" />
+    <result column="subject_name" property="subjectName" jdbcType="VARCHAR" />
+    <result column="subject_type" property="subjectType" jdbcType="TINYINT" />
+    <result column="subject_en_name" property="subjectEnName" jdbcType="VARCHAR" />
+    <result column="balance_direction" property="balanceDirection" jdbcType="TINYINT" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="display_name" property="displayName" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="balance_flag" property="balanceFlag" jdbcType="TINYINT" />
+    <result column="mnemonic_code" property="mnemonicCode" jdbcType="VARCHAR" />
+    <result column="cancel_flag" property="cancelFlag" jdbcType="TINYINT" />
+    <result column="begin_period" property="beginPeriod" jdbcType="CHAR" />
+    <result column="begin_year" property="beginYear" jdbcType="CHAR" />
+    <result column="both_direction" property="bothDirection" jdbcType="CHAR" />
+    <result column="cash_bank_flag" property="cashBankFlag" jdbcType="TINYINT" />
+    <result column="incur_flag" property="incurFlag" jdbcType="TINYINT" />
+    <result column="glorg_book_creation" property="glorgBookCreation" jdbcType="VARCHAR" />
+    <result column="create_year" property="createYear" jdbcType="CHAR" />
+    <result column="create_period" property="createPeriod" jdbcType="CHAR" />
+    <result column="control_system" property="controlSystem" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="TINYINT" />
+    <result column="end_flag" property="endFlag" jdbcType="TINYINT" />
+    <result column="end_period" property="endPeriod" jdbcType="CHAR" />
+    <result column="end_year" property="endYear" jdbcType="CHAR" />
+    <result column="recorded_flag" property="recordedFlag" jdbcType="TINYINT" />
+    <result column="inner_subject" property="innerSubject" jdbcType="CHAR" />
+    <result column="out_flag" property="outFlag" jdbcType="TINYINT" />
+    <result column="glorg_book" property="glorgBook" jdbcType="CHAR" />
+    <result column="group_subject" property="groupSubject" jdbcType="CHAR" />
+    <result column="subject_scheme" property="subjectScheme" jdbcType="CHAR" />
+    <result column="seal_flag" property="sealFlag" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="print_level" property="printLevel" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  	<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, subject_code, subject_level, subject_name, subject_type, subject_en_name, balance_direction, 
+    currency, display_name, unit, company_no, balance_flag, mnemonic_code, cancel_flag, 
+    begin_period, begin_year, both_direction, cash_bank_flag, incur_flag, glorg_book_creation, 
+    create_year, create_period, control_system, del_flag, end_flag, end_period, end_year, 
+    recorded_flag, inner_subject, out_flag, glorg_book, group_subject, subject_scheme, 
+    seal_flag, status, print_level, create_user, create_time, update_user, update_time
+  </sql>
+  
+  <sql id="Conn_Column_List">
+	A.id,
+	A.subject_code,
+	A.subject_level,
+	A.subject_name,
+	A.subject_type,
+	A.subject_en_name,
+	A.balance_direction,
+	A.currency,
+	A.display_name,
+	A.unit,
+	A.company_no,
+	A.balance_flag,
+	A.mnemonic_code,
+	A.cancel_flag,
+	A.begin_period,
+	A.begin_year,
+	A.both_direction,
+	A.cash_bank_flag,
+	A.incur_flag,
+	A.glorg_book_creation,
+	A.create_year,
+	A.create_period,
+	A.control_system,
+	A.del_flag,
+	A.end_flag,
+	A.end_period,
+	A.end_year,
+	A.recorded_flag,
+	A.inner_subject,
+	A.out_flag,
+	A.glorg_book,
+	A.group_subject,
+	A.subject_scheme,
+	A.seal_flag,
+	A.status,
+	A.print_level,
+	A.create_user,
+	A.create_time,
+	A.update_user,
+	A.update_time,
+	B.`name` company_name 
+  </sql>
+  
+  <sql id="condition">
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.subjectCode and ''!=params.subjectCode">
+			and A.subject_code = ${params.subjectCode}
+		</if>
+		<if test="null!=params.subjectName and ''!=params.subjectName">
+			and A.subject_name like '%${params.subjectName}%'
+		</if>
+		<if test="null!=params.subjectType and ''!=params.subjectType">
+			and A.subject_type like '%${params.subjectType}%'
+		</if>
+		<if test="null!=params.subjectLevel and ''!=params.subjectLevel">
+			and A.subject_level like '%${params.subjectLevel}%'
+		</if>
+		<if test="null!=params.companyNo and ''!=params.companyNo">
+			and A.company_no = #{params.companyNo}
+		</if>
+	</if>
+</sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM accounting_subject
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+	SELECT COUNT(1) as s 
+	FROM accounting_subject A
+	LEFT JOIN company B
+	ON A.`company_no` = B.`company_no` 
+	WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Conn_Column_List" />
+    FROM accounting_subject A
+	LEFT JOIN company B
+	ON A.`company_no` = B.`company_no` 
+	WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Conn_Column_List" />
+	FROM accounting_subject A
+	LEFT JOIN company B
+	ON A.`company_no` = B.`company_no`
+	WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM accounting_subject
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.AccountingSubject" >
+    DELETE FROM accounting_subject
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.AccountingSubject" >
+    INSERT INTO accounting_subject (id, subject_code, subject_level, 
+      subject_name, subject_type, subject_en_name, 
+      balance_direction, currency, display_name, 
+      unit, company_no, balance_flag, 
+      mnemonic_code, cancel_flag, begin_period, 
+      begin_year, both_direction, cash_bank_flag, 
+      incur_flag, glorg_book_creation, create_year, 
+      create_period, control_system, del_flag, 
+      end_flag, end_period, end_year, 
+      recorded_flag, inner_subject, out_flag, 
+      glorg_book, group_subject, subject_scheme, 
+      seal_flag, status, print_level, 
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{id,jdbcType=INTEGER}, #{subjectCode,jdbcType=CHAR}, #{subjectLevel,jdbcType=TINYINT}, 
+      #{subjectName,jdbcType=VARCHAR}, #{subjectType,jdbcType=TINYINT}, #{subjectEnName,jdbcType=VARCHAR}, 
+      #{balanceDirection,jdbcType=TINYINT}, #{currency,jdbcType=VARCHAR}, #{displayName,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{companyNo,jdbcType=CHAR}, #{balanceFlag,jdbcType=TINYINT}, 
+      #{mnemonicCode,jdbcType=VARCHAR}, #{cancelFlag,jdbcType=TINYINT}, #{beginPeriod,jdbcType=CHAR}, 
+      #{beginYear,jdbcType=CHAR}, #{bothDirection,jdbcType=CHAR}, #{cashBankFlag,jdbcType=TINYINT}, 
+      #{incurFlag,jdbcType=TINYINT}, #{glorgBookCreation,jdbcType=VARCHAR}, #{createYear,jdbcType=CHAR}, 
+      #{createPeriod,jdbcType=CHAR}, #{controlSystem,jdbcType=VARCHAR}, #{delFlag,jdbcType=TINYINT}, 
+      #{endFlag,jdbcType=TINYINT}, #{endPeriod,jdbcType=CHAR}, #{endYear,jdbcType=CHAR}, 
+      #{recordedFlag,jdbcType=TINYINT}, #{innerSubject,jdbcType=CHAR}, #{outFlag,jdbcType=TINYINT}, 
+      #{glorgBook,jdbcType=CHAR}, #{groupSubject,jdbcType=CHAR}, #{subjectScheme,jdbcType=CHAR}, 
+      #{sealFlag,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{printLevel,jdbcType=TINYINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.AccountingSubject" >
+    INSERT INTO accounting_subject
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="subjectCode != null" >
+        subject_code,
+      </if>
+      <if test="subjectLevel != null" >
+        subject_level,
+      </if>
+      <if test="subjectName != null" >
+        subject_name,
+      </if>
+      <if test="subjectType != null" >
+        subject_type,
+      </if>
+      <if test="subjectEnName != null" >
+        subject_en_name,
+      </if>
+      <if test="balanceDirection != null" >
+        balance_direction,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="displayName != null" >
+        display_name,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="balanceFlag != null" >
+        balance_flag,
+      </if>
+      <if test="mnemonicCode != null" >
+        mnemonic_code,
+      </if>
+      <if test="cancelFlag != null" >
+        cancel_flag,
+      </if>
+      <if test="beginPeriod != null" >
+        begin_period,
+      </if>
+      <if test="beginYear != null" >
+        begin_year,
+      </if>
+      <if test="bothDirection != null" >
+        both_direction,
+      </if>
+      <if test="cashBankFlag != null" >
+        cash_bank_flag,
+      </if>
+      <if test="incurFlag != null" >
+        incur_flag,
+      </if>
+      <if test="glorgBookCreation != null" >
+        glorg_book_creation,
+      </if>
+      <if test="createYear != null" >
+        create_year,
+      </if>
+      <if test="createPeriod != null" >
+        create_period,
+      </if>
+      <if test="controlSystem != null" >
+        control_system,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="endFlag != null" >
+        end_flag,
+      </if>
+      <if test="endPeriod != null" >
+        end_period,
+      </if>
+      <if test="endYear != null" >
+        end_year,
+      </if>
+      <if test="recordedFlag != null" >
+        recorded_flag,
+      </if>
+      <if test="innerSubject != null" >
+        inner_subject,
+      </if>
+      <if test="outFlag != null" >
+        out_flag,
+      </if>
+      <if test="glorgBook != null" >
+        glorg_book,
+      </if>
+      <if test="groupSubject != null" >
+        group_subject,
+      </if>
+      <if test="subjectScheme != null" >
+        subject_scheme,
+      </if>
+      <if test="sealFlag != null" >
+        seal_flag,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="printLevel != null" >
+        print_level,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="subjectCode != null" >
+        #{subjectCode,jdbcType=CHAR},
+      </if>
+      <if test="subjectLevel != null" >
+        #{subjectLevel,jdbcType=TINYINT},
+      </if>
+      <if test="subjectName != null" >
+        #{subjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectType != null" >
+        #{subjectType,jdbcType=TINYINT},
+      </if>
+      <if test="subjectEnName != null" >
+        #{subjectEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceDirection != null" >
+        #{balanceDirection,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="displayName != null" >
+        #{displayName,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceFlag != null" >
+        #{balanceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="mnemonicCode != null" >
+        #{mnemonicCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelFlag != null" >
+        #{cancelFlag,jdbcType=TINYINT},
+      </if>
+      <if test="beginPeriod != null" >
+        #{beginPeriod,jdbcType=CHAR},
+      </if>
+      <if test="beginYear != null" >
+        #{beginYear,jdbcType=CHAR},
+      </if>
+      <if test="bothDirection != null" >
+        #{bothDirection,jdbcType=CHAR},
+      </if>
+      <if test="cashBankFlag != null" >
+        #{cashBankFlag,jdbcType=TINYINT},
+      </if>
+      <if test="incurFlag != null" >
+        #{incurFlag,jdbcType=TINYINT},
+      </if>
+      <if test="glorgBookCreation != null" >
+        #{glorgBookCreation,jdbcType=VARCHAR},
+      </if>
+      <if test="createYear != null" >
+        #{createYear,jdbcType=CHAR},
+      </if>
+      <if test="createPeriod != null" >
+        #{createPeriod,jdbcType=CHAR},
+      </if>
+      <if test="controlSystem != null" >
+        #{controlSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=TINYINT},
+      </if>
+      <if test="endFlag != null" >
+        #{endFlag,jdbcType=TINYINT},
+      </if>
+      <if test="endPeriod != null" >
+        #{endPeriod,jdbcType=CHAR},
+      </if>
+      <if test="endYear != null" >
+        #{endYear,jdbcType=CHAR},
+      </if>
+      <if test="recordedFlag != null" >
+        #{recordedFlag,jdbcType=TINYINT},
+      </if>
+      <if test="innerSubject != null" >
+        #{innerSubject,jdbcType=CHAR},
+      </if>
+      <if test="outFlag != null" >
+        #{outFlag,jdbcType=TINYINT},
+      </if>
+      <if test="glorgBook != null" >
+        #{glorgBook,jdbcType=CHAR},
+      </if>
+      <if test="groupSubject != null" >
+        #{groupSubject,jdbcType=CHAR},
+      </if>
+      <if test="subjectScheme != null" >
+        #{subjectScheme,jdbcType=CHAR},
+      </if>
+      <if test="sealFlag != null" >
+        #{sealFlag,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="printLevel != null" >
+        #{printLevel,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.AccountingSubject" >
+    UPDATE accounting_subject
+    <set >
+      <if test="subjectCode != null" >
+        subject_code = #{subjectCode,jdbcType=CHAR},
+      </if>
+      <if test="subjectLevel != null" >
+        subject_level = #{subjectLevel,jdbcType=TINYINT},
+      </if>
+      <if test="subjectName != null" >
+        subject_name = #{subjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectType != null" >
+        subject_type = #{subjectType,jdbcType=TINYINT},
+      </if>
+      <if test="subjectEnName != null" >
+        subject_en_name = #{subjectEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceDirection != null" >
+        balance_direction = #{balanceDirection,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="displayName != null" >
+        display_name = #{displayName,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceFlag != null" >
+        balance_flag = #{balanceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="mnemonicCode != null" >
+        mnemonic_code = #{mnemonicCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelFlag != null" >
+        cancel_flag = #{cancelFlag,jdbcType=TINYINT},
+      </if>
+      <if test="beginPeriod != null" >
+        begin_period = #{beginPeriod,jdbcType=CHAR},
+      </if>
+      <if test="beginYear != null" >
+        begin_year = #{beginYear,jdbcType=CHAR},
+      </if>
+      <if test="bothDirection != null" >
+        both_direction = #{bothDirection,jdbcType=CHAR},
+      </if>
+      <if test="cashBankFlag != null" >
+        cash_bank_flag = #{cashBankFlag,jdbcType=TINYINT},
+      </if>
+      <if test="incurFlag != null" >
+        incur_flag = #{incurFlag,jdbcType=TINYINT},
+      </if>
+      <if test="glorgBookCreation != null" >
+        glorg_book_creation = #{glorgBookCreation,jdbcType=VARCHAR},
+      </if>
+      <if test="createYear != null" >
+        create_year = #{createYear,jdbcType=CHAR},
+      </if>
+      <if test="createPeriod != null" >
+        create_period = #{createPeriod,jdbcType=CHAR},
+      </if>
+      <if test="controlSystem != null" >
+        control_system = #{controlSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=TINYINT},
+      </if>
+      <if test="endFlag != null" >
+        end_flag = #{endFlag,jdbcType=TINYINT},
+      </if>
+      <if test="endPeriod != null" >
+        end_period = #{endPeriod,jdbcType=CHAR},
+      </if>
+      <if test="endYear != null" >
+        end_year = #{endYear,jdbcType=CHAR},
+      </if>
+      <if test="recordedFlag != null" >
+        recorded_flag = #{recordedFlag,jdbcType=TINYINT},
+      </if>
+      <if test="innerSubject != null" >
+        inner_subject = #{innerSubject,jdbcType=CHAR},
+      </if>
+      <if test="outFlag != null" >
+        out_flag = #{outFlag,jdbcType=TINYINT},
+      </if>
+      <if test="glorgBook != null" >
+        glorg_book = #{glorgBook,jdbcType=CHAR},
+      </if>
+      <if test="groupSubject != null" >
+        group_subject = #{groupSubject,jdbcType=CHAR},
+      </if>
+      <if test="subjectScheme != null" >
+        subject_scheme = #{subjectScheme,jdbcType=CHAR},
+      </if>
+      <if test="sealFlag != null" >
+        seal_flag = #{sealFlag,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="printLevel != null" >
+        print_level = #{printLevel,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.AccountingSubject" >
+    UPDATE accounting_subject
+    SET subject_code = #{subjectCode,jdbcType=CHAR},
+      subject_level = #{subjectLevel,jdbcType=TINYINT},
+      subject_name = #{subjectName,jdbcType=VARCHAR},
+      subject_type = #{subjectType,jdbcType=TINYINT},
+      subject_en_name = #{subjectEnName,jdbcType=VARCHAR},
+      balance_direction = #{balanceDirection,jdbcType=TINYINT},
+      currency = #{currency,jdbcType=VARCHAR},
+      display_name = #{displayName,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      balance_flag = #{balanceFlag,jdbcType=TINYINT},
+      mnemonic_code = #{mnemonicCode,jdbcType=VARCHAR},
+      cancel_flag = #{cancelFlag,jdbcType=TINYINT},
+      begin_period = #{beginPeriod,jdbcType=CHAR},
+      begin_year = #{beginYear,jdbcType=CHAR},
+      both_direction = #{bothDirection,jdbcType=CHAR},
+      cash_bank_flag = #{cashBankFlag,jdbcType=TINYINT},
+      incur_flag = #{incurFlag,jdbcType=TINYINT},
+      glorg_book_creation = #{glorgBookCreation,jdbcType=VARCHAR},
+      create_year = #{createYear,jdbcType=CHAR},
+      create_period = #{createPeriod,jdbcType=CHAR},
+      control_system = #{controlSystem,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=TINYINT},
+      end_flag = #{endFlag,jdbcType=TINYINT},
+      end_period = #{endPeriod,jdbcType=CHAR},
+      end_year = #{endYear,jdbcType=CHAR},
+      recorded_flag = #{recordedFlag,jdbcType=TINYINT},
+      inner_subject = #{innerSubject,jdbcType=CHAR},
+      out_flag = #{outFlag,jdbcType=TINYINT},
+      glorg_book = #{glorgBook,jdbcType=CHAR},
+      group_subject = #{groupSubject,jdbcType=CHAR},
+      subject_scheme = #{subjectScheme,jdbcType=CHAR},
+      seal_flag = #{sealFlag,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      print_level = #{printLevel,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

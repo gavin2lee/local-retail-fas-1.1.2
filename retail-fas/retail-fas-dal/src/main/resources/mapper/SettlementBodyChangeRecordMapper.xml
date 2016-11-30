@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SettlementBodyChangeRecordMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SettlementBodyChangeRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="stock_type" property="stockType" jdbcType="INTEGER" />
+    <result column="stock_cost" property="stockCost" jdbcType="DECIMAL" />
+    <result column="change_price" property="changePrice" jdbcType="DECIMAL" />
+    <result column="stock_cost_sum" property="stockCostSum" jdbcType="DECIMAL" />
+    <result column="change_price_sum" property="changePriceSum" jdbcType="DECIMAL" />
+    <result column="original_company_no" property="originalCompanyNo" jdbcType="CHAR" />
+    <result column="original_company_name" property="originalCompanyName" jdbcType="VARCHAR" />
+    <result column="original_order_unit_no" property="originalOrderUnitNo" jdbcType="CHAR" />
+    <result column="original_order_unit_name" property="originalOrderUnitName" jdbcType="VARCHAR" />
+    <result column="original_store_no" property="originalStoreNo" jdbcType="CHAR" />
+    <result column="original_store_name" property="originalStoreName" jdbcType="VARCHAR" />
+    <result column="target_company_no" property="targetCompanyNo" jdbcType="CHAR" />
+    <result column="target_company_name" property="targetCompanyName" jdbcType="VARCHAR" />
+    <result column="target_order_unit_no" property="targetOrderUnitNo" jdbcType="CHAR" />
+    <result column="target_order_unit_name" property="targetOrderUnitName" jdbcType="VARCHAR" />
+    <result column="target_store_no" property="targetStoreNo" jdbcType="CHAR" />
+    <result column="target_store_name" property="targetStoreName" jdbcType="VARCHAR" />
+    <result column="change_date" property="changeDate" jdbcType="DATE" />
+    <result column="target_price" property="targetPrice" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    s.id,s.item_no, s.item_code,s.item_name, s.brand_no, s.brand_name, s.brand_unit_no, s.brand_unit_name,i.category_no, s.qty, 
+    s.stock_type, s.stock_cost, s.change_price, (s.qty*s.stock_cost) as stock_cost_sum, (s.qty*s.change_price) as change_price_sum, s.original_company_no, s.original_company_name, 
+    s.original_order_unit_no, s.original_order_unit_name, s.original_store_no, s.original_store_name, 
+    s.target_company_no, s.target_company_name, s.target_order_unit_no, s.target_order_unit_name, 
+    s.target_store_no, s.target_store_name, s.change_date, s.target_price, s.remark, s.create_time, 
+    s.create_user, s.update_time, s.update_user
+  </sql>
+  <sql id="condition" >
+  -- AND @S.brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.itemSql and ''!=params.itemSql" >
+		AND s.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+	  </if>
+	  <if test="null != params.brandNo and '' != params.brandNo">
+		   AND s.brand_no in 
+		    <foreach collection="params.brandNo" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+			</foreach>  
+	   </if>
+	   <if test="null != params.categoryNo and '' != params.categoryNo">
+		   AND substring(i.category_no,1,2) in 
+			<foreach collection="params.categoryNo" item="categoryNo" separator="," open="(" close=")" index=""> 
+			    #{categoryNo} 
+			 </foreach>  
+		</if>
+	   <if test="null != params.stockType and '' != params.stockType">
+		  AND s.stock_type = #{params.stockType}
+	   </if>
+	   <if test="null != params.originalCompanyNo and '' != params.originalCompanyNo">
+		  AND s.original_company_no = #{params.originalCompanyNo}
+	   </if>
+	   <if test="null != params.targetCompanyNo and '' != params.targetCompanyNo">
+		  AND s.target_company_no = #{params.targetCompanyNo}
+	   </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from settlement_body_change_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from settlement_body_change_record s
+    inner join item i on s.item_no=i.item_no
+    where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from settlement_body_change_record s
+     inner join item i on s.item_no=i.item_no
+      where 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      order by ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField" >
+      order by s.create_time desc,s.item_no
+    </if>
+    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByPageSum" resultMap="BaseResultMap" parameterType="map" >
+    select '合计' as item_code, 
+    	SUM(qty) as qty,
+		SUM(stock_cost) as stock_cost,
+		SUM(change_price) as change_price,
+		SUM(stock_cost_sum)  as stock_cost_sum,
+		SUM(change_price_sum) as change_price_sum
+     from(
+			select qty, stock_cost, change_price, (qty*stock_cost) as stock_cost_sum, (qty*change_price) as change_price_sum
+			from settlement_body_change_record s
+			inner join item i on s.item_no=i.item_no
+			where 1=1 
+			<include refid="condition" />
+		) data 
+    
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from settlement_body_change_record s
+     inner join item i on s.item_no=i.item_no
+     where 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from settlement_body_change_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.Integer" >
+    delete from settlement_body_change_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SettlementBodyChangeRecord" >
+    insert into settlement_body_change_record (id, item_no, item_code, item_name,
+      brand_no, brand_name, brand_unit_no, 
+      brand_unit_name, qty, stock_type, 
+      stock_cost, change_price, original_company_no, 
+      original_company_name, original_order_unit_no, 
+      original_order_unit_name, original_store_no, original_store_name, 
+      target_company_no, target_company_name, target_order_unit_no, 
+      target_order_unit_name, target_store_no, target_store_name, 
+      change_date, target_price, remark, 
+      create_time, create_user, update_time, 
+      update_user)
+    values (#{id,jdbcType=INTEGER}, #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=CHAR}, #{itemName,jdbcType=CHAR}, 
+      #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=CHAR}, #{brandUnitNo,jdbcType=CHAR}, 
+      #{brandUnitName,jdbcType=CHAR}, #{qty,jdbcType=INTEGER}, #{stockType,jdbcType=INTEGER}, 
+      #{stockCost,jdbcType=DECIMAL}, #{changePrice,jdbcType=DECIMAL}, #{originalCompanyNo,jdbcType=CHAR}, 
+      #{originalCompanyName,jdbcType=VARCHAR}, #{originalOrderUnitNo,jdbcType=CHAR}, 
+      #{originalOrderUnitName,jdbcType=VARCHAR}, #{originalStoreNo,jdbcType=CHAR}, #{originalStoreName,jdbcType=VARCHAR}, 
+      #{targetCompanyNo,jdbcType=CHAR}, #{targetCompanyName,jdbcType=VARCHAR}, #{targetOrderUnitNo,jdbcType=CHAR}, 
+      #{targetOrderUnitName,jdbcType=VARCHAR}, #{targetStoreNo,jdbcType=CHAR}, #{targetStoreName,jdbcType=VARCHAR}, 
+      #{changeDate,jdbcType=DATE}, #{targetPrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SettlementBodyChangeRecord" >
+    insert into settlement_body_change_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="stockType != null" >
+        stock_type,
+      </if>
+      <if test="stockCost != null" >
+        stock_cost,
+      </if>
+      <if test="changePrice != null" >
+        change_price,
+      </if>
+      <if test="originalCompanyNo != null" >
+        original_company_no,
+      </if>
+      <if test="originalCompanyName != null" >
+        original_company_name,
+      </if>
+      <if test="originalOrderUnitNo != null" >
+        original_order_unit_no,
+      </if>
+      <if test="originalOrderUnitName != null" >
+        original_order_unit_name,
+      </if>
+      <if test="originalStoreNo != null" >
+        original_store_no,
+      </if>
+      <if test="originalStoreName != null" >
+        original_store_name,
+      </if>
+      <if test="targetCompanyNo != null" >
+        target_company_no,
+      </if>
+      <if test="targetCompanyName != null" >
+        target_company_name,
+      </if>
+      <if test="targetOrderUnitNo != null" >
+        target_order_unit_no,
+      </if>
+      <if test="targetOrderUnitName != null" >
+        target_order_unit_name,
+      </if>
+      <if test="targetStoreNo != null" >
+        target_store_no,
+      </if>
+      <if test="targetStoreName != null" >
+        target_store_name,
+      </if>
+      <if test="changeDate != null" >
+        change_date,
+      </if>
+      <if test="targetPrice != null" >
+        target_price,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="stockType != null" >
+        #{stockType,jdbcType=INTEGER},
+      </if>
+      <if test="stockCost != null" >
+        #{stockCost,jdbcType=DECIMAL},
+      </if>
+      <if test="changePrice != null" >
+        #{changePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="originalCompanyNo != null" >
+        #{originalCompanyNo,jdbcType=CHAR},
+      </if>
+      <if test="originalCompanyName != null" >
+        #{originalCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="originalOrderUnitNo != null" >
+        #{originalOrderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="originalOrderUnitName != null" >
+        #{originalOrderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="originalStoreNo != null" >
+        #{originalStoreNo,jdbcType=CHAR},
+      </if>
+      <if test="originalStoreName != null" >
+        #{originalStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="targetCompanyNo != null" >
+        #{targetCompanyNo,jdbcType=CHAR},
+      </if>
+      <if test="targetCompanyName != null" >
+        #{targetCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="targetOrderUnitNo != null" >
+        #{targetOrderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="targetOrderUnitName != null" >
+        #{targetOrderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="targetStoreNo != null" >
+        #{targetStoreNo,jdbcType=CHAR},
+      </if>
+      <if test="targetStoreName != null" >
+        #{targetStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="changeDate != null" >
+        #{changeDate,jdbcType=DATE},
+      </if>
+      <if test="targetPrice != null" >
+        #{targetPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SettlementBodyChangeRecord" >
+    update settlement_body_change_record
+    <set >
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="stockType != null" >
+        stock_type = #{stockType,jdbcType=INTEGER},
+      </if>
+      <if test="stockCost != null" >
+        stock_cost = #{stockCost,jdbcType=DECIMAL},
+      </if>
+      <if test="changePrice != null" >
+        change_price = #{changePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="originalCompanyNo != null" >
+        original_company_no = #{originalCompanyNo,jdbcType=CHAR},
+      </if>
+      <if test="originalCompanyName != null" >
+        original_company_name = #{originalCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="originalOrderUnitNo != null" >
+        original_order_unit_no = #{originalOrderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="originalOrderUnitName != null" >
+        original_order_unit_name = #{originalOrderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="originalStoreNo != null" >
+        original_store_no = #{originalStoreNo,jdbcType=CHAR},
+      </if>
+      <if test="originalStoreName != null" >
+        original_store_name = #{originalStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="targetCompanyNo != null" >
+        target_company_no = #{targetCompanyNo,jdbcType=CHAR},
+      </if>
+      <if test="targetCompanyName != null" >
+        target_company_name = #{targetCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="targetOrderUnitNo != null" >
+        target_order_unit_no = #{targetOrderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="targetOrderUnitName != null" >
+        target_order_unit_name = #{targetOrderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="targetStoreNo != null" >
+        target_store_no = #{targetStoreNo,jdbcType=CHAR},
+      </if>
+      <if test="targetStoreName != null" >
+        target_store_name = #{targetStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="changeDate != null" >
+        change_date = #{changeDate,jdbcType=DATE},
+      </if>
+      <if test="targetPrice != null" >
+        target_price = #{targetPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SettlementBodyChangeRecord" >
+    update settlement_body_change_record
+    set item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=CHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=CHAR},
+      qty = #{qty,jdbcType=INTEGER},
+      stock_type = #{stockType,jdbcType=INTEGER},
+      stock_cost = #{stockCost,jdbcType=DECIMAL},
+      change_price = #{changePrice,jdbcType=DECIMAL},
+      original_company_no = #{originalCompanyNo,jdbcType=CHAR},
+      original_company_name = #{originalCompanyName,jdbcType=VARCHAR},
+      original_order_unit_no = #{originalOrderUnitNo,jdbcType=CHAR},
+      original_order_unit_name = #{originalOrderUnitName,jdbcType=VARCHAR},
+      original_store_no = #{originalStoreNo,jdbcType=CHAR},
+      original_store_name = #{originalStoreName,jdbcType=VARCHAR},
+      target_company_no = #{targetCompanyNo,jdbcType=CHAR},
+      target_company_name = #{targetCompanyName,jdbcType=VARCHAR},
+      target_order_unit_no = #{targetOrderUnitNo,jdbcType=CHAR},
+      target_order_unit_name = #{targetOrderUnitName,jdbcType=VARCHAR},
+      target_store_no = #{targetStoreNo,jdbcType=CHAR},
+      target_store_name = #{targetStoreName,jdbcType=VARCHAR},
+      change_date = #{changeDate,jdbcType=DATE},
+      target_price = #{targetPrice,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

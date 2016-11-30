@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.InventoryClassifyMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PeriodBalance" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="store_no" property="storeNo" jdbcType="CHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="first_level_category_no" property="firstLevelCategoryNo" jdbcType="CHAR" />
+    <result column="first_level_category_name" property="firstLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="second_level_category_no" property="secondLevelCategoryNo" jdbcType="CHAR" />
+    <result column="second_level_category_name" property="secondLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="opening_qty" property="openingQty" jdbcType="INTEGER" />
+    <result column="opening_balance" property="openingBalance" jdbcType="DECIMAL" />
+    <result column="purchase_in_qty" property="purchaseInQty" jdbcType="INTEGER" />
+    <result column="purchase_in_amount" property="purchaseInAmount" jdbcType="DECIMAL" />
+    <result column="outer_transfer_in_qty" property="outerTransferInQty" jdbcType="INTEGER" />
+    <result column="outer_transfer_in_amount" property="outerTransferInAmount" jdbcType="DECIMAL" />
+    <result column="inner_transfer_in_qty" property="innerTransferInQty" jdbcType="INTEGER" />
+    <result column="inner_transfer_in_amount" property="innerTransferInAmount" jdbcType="DECIMAL" />
+    <result column="purchase_return_qty" property="purchaseReturnQty" jdbcType="INTEGER" />
+    <result column="purchase_return_amount" property="purchaseReturnAmount" jdbcType="DECIMAL" />
+    <result column="inv_surplus_qty" property="invSurplusQty" jdbcType="INTEGER" />
+    <result column="inv_surplus_amount" property="invSurplusAmount" jdbcType="DECIMAL" />
+    <result column="others_in_qty" property="othersInQty" jdbcType="INTEGER" />
+    <result column="others_in_amount" property="othersInAmount" jdbcType="DECIMAL" />
+    <result column="outer_way_qty" property="outerWayQty" jdbcType="INTEGER" />
+    <result column="outer_way_amount" property="outerWayAmount" jdbcType="DECIMAL" />
+    <result column="outer_diff_qty" property="outerDiffQty" jdbcType="INTEGER" />
+    <result column="outer_diff_amount" property="outerDiffAmount" jdbcType="DECIMAL" />
+    <result column="inner_way_qty" property="innerWayQty" jdbcType="INTEGER" />
+    <result column="inner_diff_qty" property="innerDiffQty" jdbcType="INTEGER" />
+    <result column="cost_adjustment_amount" property="costAdjustmentAmount" jdbcType="DECIMAL" />
+    <result column="sales_out_qty" property="salesOutQty" jdbcType="INTEGER" />
+    <result column="sales_out_amount" property="salesOutAmount" jdbcType="DECIMAL" />
+    <result column="inner_transfer_out_qty" property="innerTransferOutQty" jdbcType="INTEGER" />
+    <result column="inner_transfer_out_amount" property="innerTransferOutAmount" jdbcType="DECIMAL" />
+    <result column="outer_transfer_out_qty" property="outerTransferOutQty" jdbcType="INTEGER" />
+    <result column="outer_transfer_out_amount" property="outerTransferOutAmount" jdbcType="DECIMAL" />
+    <result column="inventory_loss_qty" property="inventoryLossQty" jdbcType="INTEGER" />
+    <result column="inventory_loss_amount" property="inventoryLossAmount" jdbcType="DECIMAL" />
+    <result column="others_out_qty" property="othersOutQty" jdbcType="INTEGER" />
+    <result column="others_out_amount" property="othersOutAmount" jdbcType="DECIMAL" />
+    <result column="during_net_qty" property="duringNetQty" jdbcType="INTEGER" />
+    <result column="during_net_amount" property="duringNetAmount" jdbcType="DECIMAL" />
+    <result column="during_net_inventory_qty" property="duringNetInventoryQty" jdbcType="INTEGER" />
+    <result column="during_net_inventory_amount" property="duringNetInventoryAmount" jdbcType="DECIMAL" />
+    <result column="closing_qty" property="closingQty" jdbcType="INTEGER" />
+    <result column="closing_balance" property="closingBalance" jdbcType="DECIMAL" />
+    <result column="closing_unit_cost_amount" property="closingUnitCostAmount" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    
+    <result column="pre_sum_owe_qty" property="preSumOweQty" jdbcType="INTEGER" />
+    <result column="pre_accounting_qty" property="preAccountingQty" jdbcType="INTEGER" />
+    <result column="pre_sum_owe_amount" property="preSumOweAmount" jdbcType="DECIMAL" />
+    <result column="pre_accounting_amount" property="preAccountingAmount" jdbcType="DECIMAL" />
+    <result column="curr_sum_owe_qty" property="currSumOweQty" jdbcType="INTEGER" />
+    <result column="curr_accounting_qty" property="currAccountingQty" jdbcType="INTEGER" />
+    <result column="curr_sum_owe_amount" property="currSumOweAmount" jdbcType="DECIMAL" />
+    <result column="curr_accounting_amount" property="currAccountingAmount" jdbcType="DECIMAL" />
+    <result column="weighted_difference" property="weightedDifference" jdbcType="DECIMAL" />
+    <result column="closing_balance_reference" property="closingBalanceReference" jdbcType="DECIMAL" />
+    
+    <result column="sales_sum_qty" property="salesSumQty" jdbcType="INTEGER" />
+    <result column="sales_sum_amount" property="salesSumAmount" jdbcType="DECIMAL" />
+    
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    
+    <result column="years_name" property="yearsName" jdbcType="VARCHAR" />
+    <result column="sell_season" property="sellSeason" jdbcType="VARCHAR" />
+    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    
+     <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="inner_way_amount" property="innerWayAmount" jdbcType="DECIMAL" />
+    <result column="inner_diff_amount" property="innerDiffAmount" jdbcType="DECIMAL" />
+    
+  </resultMap>
+  
+  <resultMap id="InventoryMap" type="cn.wonhigh.retail.fas.common.model.PeriodBalance" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="sell_season" property="sellSeason" jdbcType="VARCHAR" />
+    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+    <result column="order_from" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="closing_qty" property="closingQty" jdbcType="INTEGER" />
+    <result column="closing_balance" property="closingBalance" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    p.id, p.company_no, p.order_unit_no, p.store_no, p.brand_no, p.item_no, p.item_code, p.item_name, 
+    p.category_no, p.year, p.month, p.opening_qty, p.opening_balance, p.purchase_in_qty, p.purchase_in_amount, 
+    p.outer_transfer_in_qty, p.outer_transfer_in_amount, p.inner_transfer_in_qty, p.inner_transfer_in_amount, 
+    p.purchase_return_qty, p.purchase_return_amount, p.inv_surplus_qty, p.inv_surplus_amount, 
+    p.others_in_qty, p.others_in_amount, p.outer_way_qty, p.outer_way_amount, p.outer_diff_qty, 
+    p.outer_diff_amount, p.inner_way_qty, p.inner_diff_qty, p.cost_adjustment_amount, p.sales_out_qty, 
+    p.sales_out_amount, p.inner_transfer_out_qty, p.inner_transfer_out_amount, p.outer_transfer_out_qty, 
+    p.outer_transfer_out_amount, p.inventory_loss_qty, p.inventory_loss_amount, p.others_out_qty, 
+    p.others_out_amount, p.during_net_qty, p.during_net_amount, p.closing_qty, p.closing_balance, 
+    p.unit_cost, p.region_cost, p.headquarter_cost, p.create_time, p.create_user, p.update_time, 
+    p.update_user, LEFT(p.category_no,2) AS category_1, IFNULL(p.closing_qty*p.unit_cost, 0) AS closingUnitCostAmount,
+    o.organ_no, o.name organ_name, ou.name AS order_unit_name 
+  </sql>
+  
+  <sql id="InventoryCondition" >
+  -- AND @PB.brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo">
+		   AND pb.company_no = #{params.companyNo,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.year and ''!=params.year">
+		   AND pb.year = #{params.year,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.month and ''!=params.month">
+		   AND pb.month = #{params.month,jdbcType=CHAR}
+	  </if>
+	  <if test="null!=params.years and ''!=params.years">
+		   AND le3.name = #{params.years,jdbcType=CHAR}
+	  </if>
+	  <if test="null != params.multiBrands and '' != params.multiBrands">
+		   AND pb.brand_no in 
+		    <foreach collection="params.multiBrands" item="brandNo" separator="," open="(" close=")" index=""> 
+				#{brandNo}  
+			</foreach>  
+	   </if>
+	   <if test="null != params.multiCategorys and '' != params.multiCategorys">
+		   AND substring(pb.category_no,1,2) in 
+			<foreach collection="params.multiCategorys" item="categoryNo" separator="," open="(" close=")" index=""> 
+			    #{categoryNo} 
+			 </foreach>  
+		</if>
+		<if test="null!=params.orderForm and ''!=params.orderForm">
+		   AND im.orderfrom = #{params.orderForm,jdbcType=CHAR}
+	  </if>
+    </if>
+  </sql>
+  
+  <select id="selectInventoryClassInicationCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM
+		(
+			SELECT LEFT(pb.brand_no,2) as brand_no
+			FROM
+				period_balance pb 
+			INNER JOIN item im ON pb.item_no = im.item_no
+			LEFT JOIN lookup_entry le1 ON le1.code=im.orderfrom and le1.lookup_id = 29
+			LEFT JOIN lookup_entry le2 ON le2.code=im.sell_season and le2.lookup_id = 72
+			LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+			LEFT JOIN category C1 ON LEFT(pb.category_no,2) = C1.category_no
+			left join brand_unit on brand_unit.brand_unit_no=LEFT(pb.brand_no,2)
+			WHERE 1=1
+			<include refid="InventoryCondition" />
+			GROUP BY left(pb.brand_no,2),pb.`year`,pb.`month`,im.years,im.sell_season
+			UNION ALL
+			SELECT LEFT(pb.brand_no,2) as brand_no
+			FROM
+				period_balance pb 
+			INNER JOIN item im ON pb.item_no = im.item_no
+			LEFT JOIN lookup_entry le1 ON le1.code=im.orderfrom and le1.lookup_id = 29
+			LEFT JOIN lookup_entry le2 ON le2.code=im.sell_season and le2.lookup_id = 72
+			LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+			LEFT JOIN category C1 ON LEFT(pb.category_no,2) = C1.category_no
+			left join brand_unit on brand_unit.brand_unit_no=LEFT(pb.brand_no,2)
+			WHERE 1=1
+			<include refid="InventoryCondition" />	
+			GROUP BY left(pb.brand_no,2)
+			) A
+  </select>
+  
+  <select id="selectInventoryClassInicationByPage" resultType="java.util.HashMap" parameterType="map" >
+    SELECT LEFT(pb.brand_no,2) as brand_no,
+			brand_unit.name AS brand_name,
+			pb.`year`,
+			pb.`month`,
+			le3.name as years,
+			im.sell_season,
+			le2.`name` AS season_name,
+			LEFT(pb.category_no,2) AS category_no,
+			C1.name AS category_name,
+			im.orderfrom AS order_from,
+			le1.name AS gender
+			<include refid="queryCategoryOrderFromSql" />
+		FROM
+			period_balance pb 
+		INNER JOIN item im ON pb.item_no = im.item_no
+		LEFT JOIN lookup_entry le1 ON le1.code=im.orderfrom and le1.lookup_id = 29
+		LEFT JOIN lookup_entry le2 ON le2.code=im.sell_season and le2.lookup_id = 72
+		LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+		LEFT JOIN category C1 ON LEFT(pb.category_no,2) = C1.category_no
+		LEFT JOIN brand_unit on brand_unit.brand_unit_no=LEFT(pb.brand_no,2)
+		WHERE 1=1
+		<include refid="InventoryCondition" />
+		GROUP BY left(pb.brand_no,2),pb.`year`,pb.`month`,im.years,im.sell_season
+		UNION ALL
+		SELECT LEFT(pb.brand_no,2) as brand_no,
+			CONCAT(brand_unit.name,'合计') AS brand_name,
+			'' AS year, 
+			'' AS month,
+			'' AS years,
+			'zzzzzz' AS sell_season,
+			'' AS season_name,
+			'' AS category_no,
+			'' AS category_name,
+			'' AS order_from,
+			'' AS gender
+			 <include refid="queryCategoryOrderFromSql" />
+		FROM
+			period_balance pb 
+		INNER JOIN item im ON pb.item_no = im.item_no
+		LEFT JOIN lookup_entry le1 ON le1.code=im.orderfrom and le1.lookup_id = 29
+		LEFT JOIN lookup_entry le2 ON le2.code=im.sell_season and le2.lookup_id = 72
+		LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+		LEFT JOIN category C1 ON LEFT(pb.category_no,2) = C1.category_no
+		LEFT JOIN brand_unit on brand_unit.brand_unit_no=LEFT(pb.brand_no,2)
+		WHERE 1=1
+		<include refid="InventoryCondition" />
+		GROUP BY left(pb.brand_no,2)
+		ORDER BY brand_name,year,month,years,sell_season
+<!-- 	    <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if> -->
+     	<if test="null != page and '' != page">
+			LIMIT #{page.startRowNum} ,#{page.pageSize} 
+		</if>
+  </select>
+  <select id="selectCateGoryCloumn" resultMap="InventoryMap" parameterType="map">
+  		SELECT 
+			LEFT(pb.category_no,2) as category_no,
+			C1.name as category_name,
+			im.orderfrom as order_from,
+			le1.name as gender
+		FROM
+			period_balance pb 
+		INNER JOIN item im ON pb.item_no = im.item_no
+		LEFT JOIN lookup_entry le1 ON le1.code=im.orderfrom and le1.lookup_id = 29
+		LEFT JOIN lookup_entry le2 ON le2.code=im.sell_season and le2.lookup_id = 72
+		LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+		LEFT JOIN category C1 ON LEFT(pb.category_no,2) = C1.category_no
+		WHERE 1=1
+		<include refid="InventoryCondition" />
+		GROUP BY 	LEFT(pb.category_no,2),im.orderfrom
+		<if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+  </select>
+  
+  <select id="selectInventoryClassInicationTotal" resultType="java.util.HashMap" parameterType="map">
+  	SELECT '合计' as brand_name
+  		<foreach collection="params.CateGoryColumn" item="category" index="index">
+				<foreach collection="params.OrderFromColumn" item="orderfrom" index="index">
+					,IFNULL(
+						SUM(
+							${category.categoryNo}_${orderfrom.orderfrom}_qty
+						),
+						0
+					) AS ${category.categoryNo}_${orderfrom.orderfrom}_qty,
+					IFNULL(
+						SUM(
+							${category.categoryNo}_${orderfrom.orderfrom}_amount
+						),
+						0.00
+					) AS ${category.categoryNo}_${orderfrom.orderfrom}_amount	
+				</foreach>
+					,IFNULL(
+							SUM(
+								${category.categoryNo}_qty
+							),
+							0
+						) AS ${category.categoryNo}_qty,
+						IFNULL(
+							SUM(
+								${category.categoryNo}_amount
+							),
+							0.00
+						) AS ${category.categoryNo}_amount
+		</foreach>
+  	 from (
+  		SELECT LEFT(pb.brand_no,2) as brand_no,
+			pb.year,
+			im.sell_season,
+			LEFT(pb.category_no,2) AS category_no,
+			im.orderfrom AS order_from
+			<include refid="queryCategoryOrderFromSql" /> 
+		FROM
+			period_balance pb 
+		INNER JOIN item im ON pb.item_no = im.item_no
+		LEFT JOIN lookup_entry le1 ON le1.code=im.orderfrom and le1.lookup_id = 29
+		LEFT JOIN lookup_entry le2 ON le2.code=im.sell_season and le2.lookup_id = 72
+		LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+		LEFT JOIN category C1 ON LEFT(pb.category_no,2) = C1.category_no
+		LEFT JOIN brand_unit on brand_unit.brand_unit_no=LEFT(pb.brand_no,2)
+		WHERE 1=1
+		<include refid="InventoryCondition" />
+		GROUP BY LEFT(pb.brand_no,2),pb.year,pb.month,im.years,im.sell_season
+  	)A
+  </select>
+  
+  <sql id="queryCategoryOrderFromSql">
+  	<foreach collection="params.CateGoryColumn" item="category" index="index">
+		<foreach collection="params.OrderFromColumn" item="orderfrom" index="index">
+			,IFNULL(
+				SUM(
+					IF (
+						LEFT(pb.category_no,2) = #{category.categoryNo}
+						AND im.orderfrom = #{orderfrom.orderfrom},
+						pb.closing_qty,
+						NULL
+					)
+				),
+				0
+			) AS ${category.categoryNo}_${orderfrom.orderfrom}_qty,
+			IFNULL(
+				SUM(
+					IF (
+						LEFT(pb.category_no,2) = #{category.categoryNo}
+						AND im.orderfrom = #{orderfrom.orderfrom},
+						pb.closing_balance,
+						NULL
+					)
+				),
+				0.00
+			) AS ${category.categoryNo}_${orderfrom.orderfrom}_amount
+		</foreach>
+		,IFNULL(
+				SUM(
+
+					IF (
+						LEFT(pb.category_no,2) = #{category.categoryNo},
+						pb.closing_qty,
+						NULL
+					)
+				),
+				0
+			) AS ${category.categoryNo}_qty,
+			IFNULL(
+				SUM(
+
+					IF (
+						LEFT(pb.category_no,2) = #{category.categoryNo},
+						pb.closing_balance,
+						NULL
+					)
+				),
+				0.00
+			) AS ${category.categoryNo}_amount
+	</foreach>
+  </sql>
+  
+  <!-- 以下为体育存货分类汇总查询 wangyj -->
+  <select id="findPeInventoryClassInicationCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM
+		(
+			SELECT LEFT(pb.brand_no,2) as brand_no
+			FROM
+				company_period_balance pb 
+			INNER JOIN item im ON pb.item_no = im.item_no
+			LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+			WHERE 1=1
+			<include refid="InventoryCondition" />
+			GROUP BY left(pb.brand_no,2),pb.`year`,pb.`month`,im.years,im.sell_season
+			UNION ALL
+			SELECT LEFT(pb.brand_no,2) as brand_no
+			FROM
+				company_period_balance pb 
+			INNER JOIN item im ON pb.item_no = im.item_no
+			LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+			WHERE 1=1
+			<include refid="InventoryCondition" />	
+			GROUP BY left(pb.brand_no,2)
+			) A
+  </select>
+  
+  <!-- 查询体育存货分类汇总的列表底部合计 -->
+  <select id="findPeInventoryClassInicationTotal" resultType="java.util.HashMap" parameterType="map">
+  	SELECT '合计' as brand_name 
+  		<foreach collection="params.CateGoryColumn" item="category" index="index">
+			,IFNULL(
+				SUM(
+					${category.categoryNo}_qty
+				),
+				0
+			) AS ${category.categoryNo}_qty,
+			IFNULL(
+				SUM(
+					${category.categoryNo}_amount
+				),
+				0.00
+			) AS ${category.categoryNo}_amount
+		</foreach>
+  	 from (
+  		SELECT LEFT(pb.brand_no,2) as brand_no,
+			pb.year,
+			LEFT(pb.category_no,2) AS category_no
+			<include refid="queryCategorySql" />
+		FROM
+			company_period_balance pb 
+		INNER JOIN item im ON pb.item_no = im.item_no
+		LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+		LEFT JOIN brand_unit on brand_unit.brand_unit_no=LEFT(pb.brand_no,2)
+		WHERE 1=1
+		<include refid="InventoryCondition" />
+		GROUP BY LEFT(pb.brand_no,2),pb.year,pb.month,im.years,im.sell_season
+  	)A
+  </select>
+  
+  <!-- 查询体育存货分类汇总的信息 -->
+  <select id="findPeInventoryClassInicationByPage" resultType="java.util.HashMap" parameterType="map" >
+    SELECT LEFT(pb.brand_no,2) as brand_no,
+		brand_unit.name AS brand_name,
+		pb.`year`,
+		pb.`month`,
+		le3.name as years,
+		im.sell_season,
+		le2.`name` AS season_name,
+		LEFT(pb.category_no,2) AS category_no,
+		C1.name AS category_name,
+		le1.name AS gender
+		<include refid="queryCategorySql" />
+		FROM
+			company_period_balance pb 
+		INNER JOIN item im ON pb.item_no = im.item_no
+		LEFT JOIN lookup_entry le1 ON le1.code=im.orderfrom and le1.lookup_id = 29
+		LEFT JOIN lookup_entry le2 ON le2.code=im.sell_season and le2.lookup_id = 72
+		LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+		LEFT JOIN category C1 ON LEFT(pb.category_no,2) = C1.category_no
+		LEFT JOIN brand_unit on brand_unit.brand_unit_no = left(pb.brand_no,2)
+		WHERE 1=1
+		<include refid="InventoryCondition" />
+		GROUP BY left(pb.brand_no,2),pb.`year`,pb.`month`,im.years,im.sell_season
+		UNION ALL
+		SELECT 
+			LEFT(pb.brand_no,2) as brand_no,
+			CONCAT(brand_unit.name,'合计') AS brand_name,
+			'' AS year, 
+			'' AS month,
+			'' AS years,
+			'zzzzzz' AS sell_season,
+			'' AS season_name,
+			'' AS category_no,
+			'' AS category_name,
+			'' AS gender
+			<include refid="queryCategorySql" />
+		FROM
+			company_period_balance pb 
+		INNER JOIN item im ON pb.item_no = im.item_no
+		LEFT JOIN lookup_entry le3 ON le3.code=im.years and le3.lookup_id = 5
+		LEFT JOIN brand_unit ON brand_unit.brand_unit_no = LEFT(pb.brand_no,2)
+		WHERE 1=1
+		<include refid="InventoryCondition" />
+		GROUP BY left(pb.brand_no,2)
+		ORDER BY brand_name,year,month,years,sell_season
+<!-- 	    <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if> -->
+     	<if test="null != page and '' != page">
+			LIMIT #{page.startRowNum} ,#{page.pageSize} 
+		</if>
+  </select>
+  <sql id="queryCategorySql">
+  	<foreach collection="params.CateGoryColumn" item="category" index="index">
+		,IFNULL(
+			SUM(
+
+				IF (
+					LEFT(pb.category_no,2) = #{category.categoryNo},
+					pb.closing_qty,
+					NULL
+				)
+			),
+			0
+		) AS ${category.categoryNo}_qty,
+		IFNULL(
+			SUM(
+
+				IF (
+					LEFT(pb.category_no,2) = #{category.categoryNo},
+					pb.closing_balance,
+					NULL
+				)
+			),
+			0.00
+		) AS ${category.categoryNo}_amount
+	</foreach> 
+  </sql>
+</mapper>

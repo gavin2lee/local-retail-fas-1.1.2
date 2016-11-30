@@ -1,0 +1,1301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillBalanceQueryMapper" >
+	
+	<!-- ******************明细查询SQL START ************** -->
+	 <select id="selectDetailCount" resultType="java.lang.Integer"  parameterType="map" >
+		SELECT 
+		  COUNT(1)
+		FROM
+		  ${params.tableName} B
+		  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.`category_no` 
+		  LEFT JOIN category C2 ON LEFT(B.`category_no`,4) = C2.`category_no` 
+		  LEFT JOIN order_unit OU ON OU.order_unit_no = B.order_unit_no 
+		  LEFT JOIN company C ON OU.company_no = C.company_no 
+		WHERE 1 = 1 
+		<include refid="DetailQueryCondition" />
+	 </select>
+	 <select id="selectDetailList" resultMap="BalanceDetailMap"  parameterType="map" >
+		SELECT 
+		  B.id,
+		  B.bill_type,
+		  B.biz_type,
+		  B.original_bill_no,
+		  B.buyer_no,
+		  B.buyer_name,
+		  B.saler_no,
+		  B.saler_name,
+		  B.send_date,
+		  B.receive_date,
+		  B.supplier_no,
+		  B.supplier_name,
+		  B.order_unit_no,
+		  B.organ_no,
+		  B.zone_no,
+		  B.order_unit_no_from,
+		  B.organ_no_from,
+		  B.zone_no_from,
+		  B.order_unit_name,
+		  B.organ_name,
+		  B.zone_name,
+		  B.order_unit_name_from,
+		  B.organ_name_from,
+		  B.zone_name_from,
+		  B.item_no,
+		  B.item_code,
+		  B.item_name,
+		  B.brand_no,
+		  B.brand_name,
+		  B.cost,
+		  B.order_no,
+		  B.balance_no,
+		  B.balance_type,
+		  B.cost_checked,
+		  IFNULL(send_qty, 0) send_qty,
+		  IFNULL(receive_qty, 0) receive_qty,
+		  IFNULL(cost * send_qty, 0) send_amount,
+		  IFNULL(cost * receive_qty, 0) receive_amount,
+		  C1.category_no one_level_category_no,
+		  C1.name one_level_category_name,
+		  C2.category_no two_level_category_no,
+		  C2.name two_level_category_name,
+		  B.category_no,
+		  B.category_name,
+		  C.company_no company_no,
+		  C.name company_name 
+		FROM
+		  ${params.tableName} B
+		  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.`category_no` 
+		  LEFT JOIN category C2 ON LEFT(B.`category_no`,4) = C2.`category_no` 
+		  LEFT JOIN order_unit OU ON OU.order_unit_no = B.order_unit_no 
+		  LEFT JOIN company C ON OU.company_no = C.company_no 
+		WHERE 1 = 1 
+		<include refid="DetailQueryCondition" />
+		<if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+	    <if test="orderByField == null or  ''==orderByField " >
+	      ORDER BY send_date DESC
+	    </if>
+	     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</select>	
+	<select id="selectDetailFooter" resultMap="BalanceDetailMap"  parameterType="map" >
+		SELECT 
+		  '合计' buyerName,
+		  IFNULL(SUM(send_qty), 0) send_qty,
+		  IFNULL(SUM(receive_qty), 0) receive_qty,
+		  IFNULL(SUM(cost * send_qty), 0) send_amount,
+		  IFNULL(SUM(cost * receive_qty), 0) receive_amount
+		FROM
+		  ${params.tableName} B
+		  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.`category_no` 
+		  LEFT JOIN category C2 ON LEFT(B.`category_no`,4) = C2.`category_no` 
+		  LEFT JOIN order_unit OU ON OU.order_unit_no = B.order_unit_no 
+		  LEFT JOIN company C ON OU.company_no = C.company_no 
+		WHERE 1 = 1 
+		<include refid="DetailQueryCondition" />
+	</select>	
+	<!-- ******************明细查询SQL END ************** -->
+	
+	<!-- ******************汇总SQL START ************** -->
+	 <select id="selectGatherCount" resultType="java.lang.Integer"  parameterType="map" >
+	 	SELECT 
+		 COUNT(1)
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty 
+		  FROM
+		    ${params.tableName} 
+		    LEFT JOIN category C1 ON LEFT(${params.tableName}.`category_no`,2) = C1.`category_no` 
+		  WHERE 1 = 1 
+		  <include refid="GatherQueryCondition" />
+		  GROUP BY buyer_no,saler_no,brand_no,C1.category_no) T1 
+		  LEFT JOIN 
+		    (SELECT 
+		      saler_no,
+		      buyer_no,
+		      brand_no,
+		      category_no,
+		      SUM(deduction_amount) deduction_amount,
+		      SUM(deduction_qty) deduction_qty 
+		    FROM
+		      other_deduction 
+		    WHERE 1 = 1 
+		    <include refid="DeductionQueryCondition" />
+		    GROUP BY saler_no, buyer_no, brand_no, category_no) T2 
+		    ON T1.saler_no = T2.saler_no 
+		    AND T1.buyer_no = T2.buyer_no 
+		    AND T1.brand_no = T2.brand_no 
+		    AND T1.category_no = T2.category_no 
+	 </select>
+	 <select id="selectGatherList" resultMap="BalanceGatherMap"  parameterType="map" >
+		 SELECT 
+		  T1.saler_no,
+		  T1.saler_name,
+		  T1.buyer_no,
+		  T1.buyer_name,
+		  T1.brand_no,
+		  T1.brand_name,
+		  T1.category_no,
+		  T1.category_name,
+		  T1.out_amount,
+		  T1.entry_amount,
+		  T1.return_amount,
+		  T1.out_qty,
+		  T1.entry_qty,
+		  T1.return_qty,
+		  IFNULL(T2.deduction_qty, 0) deduction_qty,
+		  T1.out_qty + T1.return_qty - IFNULL(T2.deduction_qty, 0) balance_qty,
+		  IFNULL(T2.deduction_amount, 0) deduction_amount,
+		  T1.out_amount + T1.return_amount - IFNULL(T2.deduction_amount, 0) balance_amount 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty 
+		  FROM
+		    ${params.tableName} 
+		    LEFT JOIN category C1 ON LEFT(${params.tableName}.`category_no`,2) = C1.`category_no` 
+		  WHERE 1 = 1 
+		  <include refid="GatherQueryCondition" />
+		  GROUP BY buyer_no,saler_no,brand_no,C1.category_no) T1 
+		  LEFT JOIN 
+		    (SELECT 
+		      saler_no,
+		      buyer_no,
+		      brand_no,
+		      category_no,
+		      SUM(deduction_amount) deduction_amount,
+		      SUM(deduction_qty) deduction_qty 
+		    FROM
+		      other_deduction 
+		    WHERE 1 = 1 
+		    <include refid="DeductionQueryCondition" />
+		    GROUP BY saler_no, buyer_no, brand_no, category_no) T2 
+		    ON T1.saler_no = T2.saler_no 
+		    AND T1.buyer_no = T2.buyer_no 
+		    AND T1.brand_no = T2.brand_no 
+		    AND T1.category_no = T2.category_no 
+		    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	 </select>
+	 <select id="selectGatherFooter" resultMap="BalanceGatherMap"  parameterType="map" >   
+	 	SELECT 
+	 	  '合计' buyerName,
+		  SUM(T1.out_amount) out_amount,
+		  SUM(T1.entry_amount) entry_amount,
+		  SUM(T1.return_amount) return_amount,
+		  SUM(T1.out_qty) out_qty,
+		  SUM(T1.entry_qty) entry_qty,
+		  SUM(T1.return_qty) return_qty,
+		  SUM(IFNULL(T2.deduction_qty, 0)) deduction_qty,
+		  SUM(T1.out_qty + T1.return_qty - IFNULL(T2.deduction_qty, 0)) balance_qty,
+		  SUM(IFNULL(T2.deduction_amount, 0)) deduction_amount,
+		  SUM(T1.out_amount + T1.return_amount - IFNULL(T2.deduction_amount, 0)) balance_amount 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty 
+		  FROM
+		    ${params.tableName} 
+		    LEFT JOIN category C1 ON LEFT(${params.tableName}.`category_no`,2) = C1.`category_no` 
+		  WHERE 1 = 1 
+		  <include refid="GatherQueryCondition" />
+		  GROUP BY buyer_no,saler_no,brand_no,C1.category_no) T1 
+		  LEFT JOIN 
+		    (SELECT 
+		      saler_no,
+		      buyer_no,
+		      brand_no,
+		      category_no,
+		      SUM(deduction_amount) deduction_amount,
+		      SUM(deduction_qty) deduction_qty 
+		    FROM
+		      other_deduction 
+		    WHERE 1 = 1 
+		    <include refid="DeductionQueryCondition" />
+		    GROUP BY saler_no, buyer_no, brand_no, category_no) T2 
+		    ON T1.saler_no = T2.saler_no 
+		    AND T1.buyer_no = T2.buyer_no 
+		    AND T1.brand_no = T2.brand_no 
+		    AND T1.category_no = T2.category_no 
+	 </select>
+	<!-- ******************汇总SQL END ************** -->
+	<!-- ******************入库汇总SQL START ************** -->
+	 <select id="selectEntryGatherCount" resultType="java.lang.Integer"  parameterType="map" >
+	 	SELECT 
+		 COUNT(1)
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty 
+		  FROM
+		    ${params.tableName} 
+		    LEFT JOIN category C1 ON LEFT(${params.tableName}.`category_no`,2) = C1.`category_no` 
+		  WHERE 1 = 1 
+		  <include refid="GatherQueryCondition" />
+		  GROUP BY buyer_no,saler_no,brand_no,C1.category_no) T1 
+	 </select>
+	 <select id="selectEntryGatherList" resultMap="BalanceGatherMap"  parameterType="map" >
+		 SELECT 
+		  T1.saler_no,
+		  T1.saler_name,
+		  T1.buyer_no,
+		  T1.buyer_name,
+		  T1.brand_no,
+		  T1.brand_name,
+		  T1.category_no,
+		  T1.category_name,
+		  T1.out_amount,
+		  T1.entry_amount,
+		  T1.return_amount,
+		  T1.out_qty,
+		  T1.entry_qty,
+		  T1.return_qty,
+		  T1.out_qty + T1.return_qty out_balance_qty,
+		  T1.out_amount + T1.return_amount out_balance_amount, 
+		  T1.entry_qty + T1.return_qty entry_balance_qty,
+		  T1.entry_amount + T1.return_amount entry_balance_amount 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty 
+		  FROM
+		    ${params.tableName} 
+		    LEFT JOIN category C1 ON LEFT(${params.tableName}.`category_no`,2) = C1.`category_no` 
+		  WHERE 1 = 1 
+		  <include refid="GatherQueryCondition" />
+		  GROUP BY buyer_no,saler_no,brand_no,C1.category_no) T1 
+		    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	 </select>
+	 <select id="selectEntryGatherFooter" resultMap="BalanceGatherMap"  parameterType="map" >   
+	 	SELECT 
+	 	  '合计' buyerName,
+		  SUM(T1.out_amount) out_amount,
+		  SUM(T1.entry_amount) entry_amount,
+		  SUM(T1.return_amount) return_amount,
+		  SUM(T1.out_qty) out_qty,
+		  SUM(T1.entry_qty) entry_qty,
+		  SUM(T1.return_qty) return_qty,
+		  SUM(T1.out_qty + T1.return_qty) out_balance_qty,
+		  SUM(T1.out_amount + T1.return_amount) out_balance_amount, 
+		  SUM(T1.entry_qty + T1.return_qty) entry_balance_qty,
+		  SUM(T1.entry_amount + T1.return_amount) entry_balance_amount 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty 
+		  FROM
+		    ${params.tableName} 
+		    LEFT JOIN category C1 ON LEFT(${params.tableName}.`category_no`,2) = C1.`category_no` 
+		  WHERE 1 = 1 
+		  <include refid="GatherQueryCondition" />
+		  GROUP BY buyer_no,saler_no,brand_no,C1.category_no) T1 
+	 </select>
+	<!-- ******************入库汇总SQL END ************** -->
+	 <!-- ******************结算单列表SQL START ************** -->
+	 <select id="selectBalanceCount" resultType="java.lang.Integer"  parameterType="map" >
+	 	SELECT 
+		  COUNT(1)
+		FROM
+		  bill_balance 
+		WHERE 1 = 1 
+		<include refid="BalanceQueryCondition" />
+	 </select>
+	 <select id="selectBalanceList" resultMap="BalanceMap"  parameterType="map" >
+		SELECT 
+		  id,
+		  bill_no,
+		  bill_name,
+		  extend_status,
+		  status,
+		  balance_type,
+		  buyer_no,
+		  buyer_name,
+		  saler_no,
+		  saler_name,
+		  brand_no,
+		  brand_name,
+		  category_no,
+		  category_name,
+		  balance_date,
+		  balance_start_date,
+		  balance_end_date,
+		  currency,
+		  out_amount,
+		  entry_amount,
+		  return_amount,
+		  deduction_amount,
+		  balance_amount,
+		  create_user,
+		  create_time,
+		  update_user,
+		  update_time,
+		  auditor,
+		  audit_time,
+		  remark,
+		  out_qty,
+		  entry_qty,
+		  return_qty,
+		  deduction_qty,
+		  balance_qty,
+		  ask_payment_no,
+		  invoice_apply_no,
+		  invoice_no 
+		FROM
+		  bill_balance 
+		WHERE 1 = 1 
+		<include refid="BalanceQueryCondition" />
+		<if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+	    <if test="orderByField == null || ''==orderByField" >
+	      ORDER BY create_time DESC
+	    </if>
+	     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	 </select>
+	 <select id="selectBalanceFooter" resultMap="BalanceMap"  parameterType="map" >   
+	 	SELECT 
+	 	  '合计' buyerName,
+		  SUM(out_amount) out_amount,
+		  SUM(entry_amount) entry_amount,
+		  SUM(return_amount) return_amount,
+		  SUM(deduction_amount) deduction_amount,
+		  SUM(balance_amount) balance_amount,
+		  SUM(out_qty) out_qty,
+		  SUM(entry_qty) entry_qty,
+		  SUM(return_qty) return_qty,
+		  SUM(deduction_qty) deduction_qty,
+		  SUM(balance_qty) balance_qty
+		FROM
+		  bill_balance 
+		WHERE 1 = 1 
+		<include refid="BalanceQueryCondition" /> 
+	 </select>
+	<!-- ******************结算单列表SQL END ************** -->
+	<!-- ******************明细汇总查询SQL START ************** -->	 
+	<select id="selectItemGatherCount" resultType="java.lang.Integer"  parameterType="map" > 
+		SELECT COUNT(1) FROM (
+			SELECT 
+			  B.item_no,
+			  B.item_code,
+			  B.item_name,
+			  B.zone_no,
+			  B.zone_name,
+			  C.company_no,
+			  C.name company_name,
+			  B.organ_no,
+			  B.organ_name,
+			  B.brand_no,
+			  B.brand_name,
+			  B.cost,
+			  IFNULL(SUM(send_qty), 0) send_qty,
+			  IFNULL(SUM(receive_qty), 0) receive_qty,
+			  IFNULL(SUM(send_qty * cost), 0) send_amount,
+			  IFNULL(SUM(receive_qty * cost), 0) receive_amount,
+			  C1.category_no one_level_category_no,
+			  C1.name one_level_category_name,
+			  C2.category_no two_level_category_no,
+			  C2.name two_level_category_name,
+			  B.category_no,
+			  B.category_name
+			FROM
+			  ${params.tableName} B
+			  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.`category_no`
+			  LEFT JOIN category C2 ON LEFT(B.`category_no`,4) = C2.`category_no`
+			  LEFT JOIN order_unit OU ON OU.order_unit_no = B.order_unit_no 
+			  LEFT JOIN company C ON OU.company_no = C.company_no 
+			WHERE 1 = 1 
+			AND balance_no = #{params.balanceNo}
+			GROUP BY item_no, organ_no) G
+	</select>	
+	<select id="selectItemGatherList" resultMap="BalanceDetailMap"  parameterType="map" > 
+		SELECT 
+		  B.item_no,
+		  B.item_code,
+		  B.item_name,
+		  B.zone_no,
+		  B.zone_name,
+		  C.company_no,
+		  C.name company_name,
+		  B.organ_no,
+		  B.organ_name,
+		  B.brand_no,
+		  B.brand_name,
+		  B.supplier_no,
+		  B.supplier_name,
+		  B.cost,
+		  IFNULL(SUM(send_qty), 0) send_qty,
+		  IFNULL(SUM(receive_qty), 0) receive_qty,
+		  IFNULL(SUM(send_qty * cost), 0) send_amount,
+		  IFNULL(SUM(receive_qty * cost), 0) receive_amount,
+		  C1.category_no one_level_category_no,
+		  C1.name one_level_category_name,
+		  C2.category_no two_level_category_no,
+		  C2.name two_level_category_name,
+		  B.category_no,
+		  B.category_name,
+		  '' remark
+		FROM
+		  ${params.tableName} B
+		  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.`category_no`
+		  LEFT JOIN category C2 ON LEFT(B.`category_no`,4) = C2.`category_no`
+		  LEFT JOIN order_unit OU ON OU.order_unit_no = B.order_unit_no 
+		  LEFT JOIN company C ON OU.company_no = C.company_no 
+		WHERE 1 = 1 
+		AND balance_no = #{params.balanceNo}
+		GROUP BY item_no, organ_no 
+		<if test="null!=params.exportFlag and ''!=params.exportFlag" >
+	    UNION
+		ALL 
+		SELECT 
+		  '' item_no,
+		  '其他扣项' item_code,
+		  '' item_name,
+		  '' zone_no,
+		  '' zone_name,
+		  '' company_no,
+		  '' company_name,
+		  '' organ_no,
+		  '' organ_name,
+		  brand_no,
+		  brand_name,
+		  '' supplier_no,
+		  '' supplier_name,
+		  0 cost,
+		  deduction_qty send_qty,
+		  0 receive_qty,
+		  deduction_amount send_amount,
+		  0 receive_amount,
+		  category_no one_level_category_no,
+		  category_name one_level_category_name,
+		  '' two_level_category_no,
+		  '' two_level_category_name,
+		  '' category_no,
+		  '' category_name,
+		  remark 
+		FROM
+		  other_deduction 
+		WHERE 1 = 1 
+	 	AND balance_no = #{params.balanceNo}  
+	  </if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+	</select>	
+	<select id="selectItemGatherFooter" resultMap="BalanceDetailMap"  parameterType="map" > 
+		SELECT '合计' item_code, SUM(send_qty) send_qty, SUM(receive_qty) receive_qty, SUM(send_amount) send_amount, SUM(receive_amount) receive_amount FROM (
+			SELECT 
+			  B.item_no,
+			  B.item_code,
+			  B.item_name,
+			  B.zone_no,
+			  B.zone_name,
+			  C.company_no,
+			  C.name company_name,
+			  B.organ_no,
+			  B.organ_name,
+			  B.brand_no,
+			  B.brand_name,
+			  B.cost,
+			  IFNULL(SUM(send_qty), 0) send_qty,
+			  IFNULL(SUM(receive_qty), 0) receive_qty,
+			  IFNULL(SUM(send_qty * cost), 0) send_amount,
+			  IFNULL(SUM(receive_qty * cost), 0) receive_amount,
+			  C1.category_no one_level_category_no,
+			  C1.name one_level_category_name,
+			  C2.category_no two_level_category_no,
+			  C2.name two_level_category_name,
+			  B.category_no,
+			  B.category_name
+			FROM
+			  ${params.tableName} B
+			  LEFT JOIN category C1 ON LEFT(B.`category_no`,2) = C1.`category_no`
+			  LEFT JOIN category C2 ON LEFT(B.`category_no`,4) = C2.`category_no`
+			  LEFT JOIN order_unit OU ON OU.order_unit_no = B.order_unit_no 
+			  LEFT JOIN company C ON OU.company_no = C.company_no 
+			WHERE 1 = 1 
+			AND balance_no = #{params.balanceNo}
+			GROUP BY item_no, organ_no ) G
+	</select>	
+	<select id="queryBalance" resultMap="BalanceMap"  parameterType="map" >
+		 SELECT 
+		  T1.saler_no,
+		  T1.saler_name,
+		  T1.buyer_no,
+		  T1.buyer_name,
+		  T1.brand_no,
+		  T1.brand_name,
+		  T1.category_no,
+		  T1.category_name,
+		  T1.out_amount,
+		  T1.entry_amount,
+		  T1.return_amount,
+		  T1.out_qty,
+		  T1.entry_qty,
+		  T1.return_qty,
+		  IFNULL(T2.deduction_qty, 0) deduction_qty,
+		  T1.out_qty + T1.return_qty - IFNULL(T2.deduction_qty, 0) balance_qty,
+		  IFNULL(T2.deduction_amount, 0) deduction_amount,
+		  T1.out_amount + T1.return_amount - IFNULL(T2.deduction_amount, 0) balance_amount 
+		FROM
+		  (SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    brand_no,
+		    brand_name,
+		    C1.category_no,
+		    C1.name category_name,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) out_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty * cost, 0) 
+		        ELSE 0 
+		      END
+		    ) return_amount,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) out_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type != 1333 
+		        THEN IFNULL(receive_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) entry_qty,
+		    SUM(
+		      CASE
+		        WHEN bill_type = 1333 
+		        THEN IFNULL(send_qty, 0) 
+		        ELSE 0 
+		      END
+		    ) return_qty 
+		  FROM
+		    ${params.tableName} 
+		    LEFT JOIN category C1 ON LEFT(${params.tableName}.`category_no`,2) = C1.`category_no` 
+		  WHERE 1 = 1 
+		  <include refid="GatherQueryCondition" />
+		  GROUP BY buyer_no,saler_no,brand_no,C1.category_no) T1 
+		  LEFT JOIN 
+		    (SELECT 
+		      saler_no,
+		      buyer_no,
+		      brand_no,
+		      category_no,
+		      SUM(deduction_amount) deduction_amount,
+		      SUM(deduction_qty) deduction_qty 
+		    FROM
+		      other_deduction 
+		    WHERE 1 = 1 
+		     AND (balance_no IS NULL OR balance_no = '')
+		    <include refid="DeductionQueryCondition" />
+		    GROUP BY saler_no, buyer_no, brand_no, category_no) T2 
+		    ON T1.saler_no = T2.saler_no 
+		    AND T1.buyer_no = T2.buyer_no 
+		    AND T1.brand_no = T2.brand_no 
+		    AND T1.category_no = T2.category_no 
+	 </select>
+	<!-- ******************明细汇总查询SQL END ************** -->	
+	<!-- ******************resultMap  START ************** -->	
+	<resultMap id="BalanceDetailMap" type="cn.wonhigh.retail.fas.common.dto.BalanceDetailDto" >
+		<id column="id" property="id" jdbcType="CHAR" />
+	    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+	    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+	    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+	    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+	    <result column="send_date" property="sendDate" jdbcType="DATE" />
+	    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+	    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+	    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+	    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+	    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+	    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+	    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+	    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+	    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+	    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+	    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+	    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+	    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+	    <result column="organ_no_from" property="organNo" jdbcType="CHAR" />
+	    <result column="organ_name_from" property="organName" jdbcType="VARCHAR" />
+	    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+	    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+	    <result column="cost" property="cost" jdbcType="DECIMAL" />
+	    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+	    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+	    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+	    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+	    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+	    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+	    <result column="item_name" property="itemName" jdbcType="CHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+	    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="CHAR" />
+	    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+	    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="CHAR" />
+	    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+	    <result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+	    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+	    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+	    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+	    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+	    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+	    <result column="cost_checked" property="costChecked" jdbcType="INTEGER"/>
+	    <result column="remark" property="remark" jdbcType="CHAR"/>
+	</resultMap>
+	<resultMap id="BalanceGatherMap" type="cn.wonhigh.retail.fas.common.dto.BalanceGatherDto" >
+		<result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+	    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+	    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+	    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+		<result column="entry_qty" property="entryQty" jdbcType="INTEGER" />
+	    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+	    <result column="out_qty" property="outQty" jdbcType="INTEGER" />
+	    <result column="deduction_qty" property="deductionQty" jdbcType="INTEGER" />
+	    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+	    <result column="entry_amount" property="entryAmount" jdbcType="DECIMAL" />
+	    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+	    <result column="out_amount" property="outAmount" jdbcType="DECIMAL" />
+	    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+	    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+	    <result column="out_balance_qty" property="outBalanceQty" jdbcType="DECIMAL" />
+	    <result column="entry_balance_qty" property="entryBalanceQty" jdbcType="DECIMAL" />
+	    <result column="out_balance_amount" property="outBalanceAmount" jdbcType="DECIMAL" />
+	    <result column="entry_balance_amount" property="entryBalanceAmount" jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap id="BalanceMap" type="cn.wonhigh.retail.fas.common.model.BillBalance" >
+	    <result column="id" property="id" jdbcType="CHAR" />
+	    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+	    <result column="bill_name" property="billName" jdbcType="VARCHAR" />
+	    <result column="status" property="status" jdbcType="TINYINT" />
+	    <result column="extend_status" property="extendStatus" jdbcType="TINYINT" />
+	    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+	    <result column="balance_date" property="balanceDate" jdbcType="DATE" />
+	    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+	    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+	    <result column="currency" property="currency" jdbcType="VARCHAR" />
+		<result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+	    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+	    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+	    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+		<result column="entry_qty" property="entryQty" jdbcType="INTEGER" />
+	    <result column="return_qty" property="returnQty" jdbcType="INTEGER" />
+	    <result column="out_qty" property="outQty" jdbcType="INTEGER" />
+	    <result column="deduction_qty" property="deductionQty" jdbcType="INTEGER" />
+	    <result column="balance_qty" property="balanceQty" jdbcType="INTEGER" />
+	    <result column="entry_amount" property="entryAmount" jdbcType="DECIMAL" />
+	    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+	    <result column="out_amount" property="outAmount" jdbcType="DECIMAL" />
+	    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+	    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+	    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+	    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+	    <result column="ask_payment_no" property="askPaymentNo" jdbcType="VARCHAR" />
+	    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="VARCHAR" />
+	    <result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- ******************resultMap  END ************** -->	
+		
+	<!-- ******************查询条件  START ************** -->	
+	<sql id="DetailQueryCondition" >
+		  -- AND @B.brand_no
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+		  <if test="null!=params.balanceType and (1==params.balanceType or 4==params.balanceType)" >
+	         -- AND @B.company_no!buyer_no
+	      </if>
+	      <if test="null!=params.balanceType and 2==params.balanceType" >
+	      	 <if test="null==params.isArea or ''==params.isArea" >
+	      	 	-- AND @B.company_no!saler_no
+	      	 </if>
+	      	 <if test="null!=params.isArea and 'true'==params.isArea" >
+	      	 	-- AND @B.company_no!buyer_no
+	      	 </if>
+	      </if>
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+	      <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND B.saler_no = #{params.salerNo}
+	      </if>    
+		  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND B.buyer_no = #{params.buyerNo}
+	      </if>
+	      <if test="null!=params.brandNo and ''!=params.brandNo" >
+	        AND B.brand_no = #{params.brandNo}
+	      </if>    
+		  <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+	        AND C1.category_no = #{params.categoryNo}
+	      </if>
+	      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+	        AND B.saler_no IN ${params.multiSalerNo}
+	      </if>    
+		  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+	        AND B.buyer_no IN ${params.multiBuyerNo}
+	      </if>
+	      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+	        AND B.brand_no IN ${params.multiBrandNo}
+	      </if>  
+	      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+	        AND C1.`category_no` IN ${params.multiCategoryNo}
+	      </if>   
+	      <if test="null!=params.billType and ''!=params.billType" >
+	        AND B.bill_type = #{params.billType}
+	      </if>  
+	      <if test="null!=params.multiBillType and ''!=params.multiBillType" >
+	        AND B.bill_type IN ${params.multiBillType}
+	      </if>  
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	    	AND	B.send_date &gt;= '${params.sendDateStart} 00:00:00'
+		  </if>
+		  <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	  		AND	B.send_date &lt;= '${params.sendDateEnd} 23:59:59'
+		  </if> 
+		  <if test="null!=params.receiveDateStart and ''!=params.receiveDateStart" >
+	    	AND	B.receive_date &gt;= '${params.receiveDateStart} 00:00:00'
+		  </if>
+		  <if test="null!=params.receiveDateEnd and ''!=params.receiveDateEnd" >
+	  		AND	B.receive_date &lt;= '${params.receiveDateEnd} 23:59:59'
+		  </if> 
+		  <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+	    	AND	B.send_date &gt;= '${params.balanceStartDate} 00:00:00'
+		  </if>
+		  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+	  		AND	B.send_date &lt;= '${params.balanceEndDate} 23:59:59'
+		  </if> 
+	      <if test="null!=params.multiOrganNo and ''!=params.multiOrganNo" >
+	        AND B.organ_no IN ${params.multiOrganNo}
+	      </if>    
+	      <if test="null!=params.multiOrderUnitNo and ''!=params.multiOrderUnitNo" >
+	        AND B.order_unit_no IN ${params.multiOrderUnitNo}
+	      </if>   
+	      <if test="null!=params.multiOrganNoFrom and ''!=params.multiOrganNoFrom" >
+	        AND B.organ_no_from IN ${params.multiOrganNoFrom}
+	      </if>    
+	      <if test="null!=params.multiOrderUnitNoFrom and ''!=params.multiOrderUnitNoFrom" >
+	        AND B.order_unit_no_from IN ${params.multiOrderUnitNoFrom}
+	      </if>   
+	      <if test="null!=params.originalBillNo and ''!=params.originalBillNo" >
+	        AND B.original_bill_no = #{params.originalBillNo}
+	      </if> 
+	      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+	        AND B.balance_no = #{params.balanceNo}
+	      </if> 
+	      <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+	        AND B.item_code IN ${params.multiItemCode}
+	      </if>  
+	</sql>
+	<sql id="GatherQueryCondition" >
+		  -- AND @brand_no
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+		  <if test="null!=params.balanceType and (1==params.balanceType or 4==params.balanceType)" >
+	         -- AND @company_no!buyer_no
+	      </if>
+	      <if test="null!=params.balanceType and 2==params.balanceType" >
+	      	 <if test="null==params.isArea or ''==params.isArea" >
+	      	 	-- AND @company_no!saler_no
+	      	 </if>
+	      	 <if test="null!=params.isArea and 'true'==params.isArea" >
+	      	 	-- AND @company_no!buyer_no
+	      	 </if>
+	      </if>
+	      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+	        AND saler_no IN ${params.multiSalerNo}
+	      </if>    
+		  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+	        AND buyer_no IN ${params.multiBuyerNo}
+	      </if>
+	      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+	        AND brand_no IN ${params.multiBrandNo}
+	      </if>  
+	      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+	        AND C1.category_no IN ${params.multiCategoryNo}
+	      </if>  
+	      <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if>    
+		  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if> 
+	      <if test="null!=params.brandNo and ''!=params.brandNo" >
+	        AND brand_no = #{params.brandNo}
+	      </if>    
+		  <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+	        AND C1.category_no = #{params.categoryNo}
+	      </if> 
+	      <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+	    	AND	send_date &gt;= '${params.balanceStartDate} 00:00:00'
+		  </if>
+		  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+	  		AND	send_date &lt;= '${params.balanceEndDate} 23:59:59'
+		  </if> 
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	    	AND	send_date &gt;= '${params.sendDateStart} 00:00:00'
+		  </if>
+		  <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	  		AND	send_date &lt;= '${params.sendDateEnd} 23:59:59'
+		  </if> 
+		  <if test="null!=params.receiveDateStart and ''!=params.receiveDateStart" >
+	    	AND	receive_date &gt;= '${params.receiveDateStart} 00:00:00'
+		  </if>
+		  <if test="null!=params.receiveDateEnd and ''!=params.receiveDateEnd" >
+	  		AND	receive_date &lt;= '${params.receiveDateEnd} 23:59:59'
+		  </if> 
+	</sql>
+	<sql id="DeductionQueryCondition" >
+		  -- AND @brand_no
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        	${params.queryCondition}
+	      </if>
+		  <if test="null!=params.balanceType and ''!=params.balanceType" >
+	         AND balance_type = #{params.balanceType}
+	      </if>
+	      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+	        AND saler_no IN ${params.multiSalerNo}
+	      </if>    
+		  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+	        AND buyer_no IN ${params.multiBuyerNo}
+	      </if>
+	      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+	        AND brand_no IN ${params.multiBrandNo}
+	      </if>  
+	      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+	        AND category_no IN ${params.multiCategoryNo}
+	      </if>  
+	      <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if>    
+		  <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if> 
+	      <if test="null!=params.brandNo and ''!=params.brandNo" >
+	        AND brand_no = #{params.brandNo}
+	      </if>    
+		  <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+	        AND category_no = #{params.categoryNo}
+	      </if> 
+	      <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+	    	AND	deduction_date &gt;= '${params.balanceStartDate} 00:00:00'
+		  </if>
+		  <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+	  		AND	deduction_date &lt;= '${params.balanceEndDate} 23:59:59'
+		  </if> 
+	      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+	    	AND	deduction_date &gt;= '${params.sendDateStart} 00:00:00'
+		  </if>
+		  <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+	  		AND	deduction_date &lt;= '${params.sendDateEnd} 23:59:59'
+		  </if> 
+	</sql>
+	<sql id="BalanceQueryCondition" >
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        	${params.queryCondition}
+	      </if>
+		  <if test="null!=params.balanceType and 1==params.balanceType" >
+	         -- AND @company_no!buyer_no
+	      </if>
+	      <if test="null!=params.balanceType and 2==params.balanceType" >
+	         <if test="null!=params.isArea and 'true'==params.isArea" >
+	         -- AND @company_no!buyer_no
+	         </if>
+	         <if test="null==params.isArea or ''==params.isArea" >
+	         -- AND @company_no!saler_no
+	         </if>
+	      </if>
+	      <if test="null!=params.balanceType and ''!=params.balanceType ">
+	        AND balance_type = #{params.balanceType}
+	      </if> 
+		  <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+	      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+	        AND saler_no IN ${params.multiSalerNo}
+	      </if>    
+		  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+	        AND buyer_no IN ${params.multiBuyerNo}
+	      </if>
+	      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+	        AND brand_no IN ${params.multiBrandNo}
+	      </if>  
+	      <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+	        AND category_no IN ${params.multiCategoryNo}
+	      </if>   
+	      <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if>   
+	      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if>   
+	      <if test="null!=params.brandNo and ''!=params.brandNo" >
+	        AND brand_no = #{params.brandNo}
+	      </if> 
+	      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+	        AND category_no = #{params.categoryNo}
+	      </if>   
+	      <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+	        AND balance_start_date &gt;= '${params.balanceStartDate} 00:00:00'
+	      </if>  
+	       <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+	        AND balance_end_date &lt;= '${params.balanceEndDate} 23:59:59'
+	      </if>  
+	      <if test="null!=params.createUser and ''!=params.createUser" >
+	        AND create_user = #{params.createUser}
+	      </if>  
+	       <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+	        AND create_time &gt;= '${params.createTimeStart} 00:00:00'
+	      </if>  
+	       <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+	        AND create_time &lt;= '${params.createTimeEnd} 23:59:59'
+	      </if>  
+	      <if test="null!=params.auditor and ''!=params.auditor" >
+	        AND auditor = #{params.auditor}
+	      </if>  
+	       <if test="null!=params.auditTimeStart and ''!=params.auditTimeStart" >
+	        AND audit_time &gt;= '${params.auditTimeStart} 00:00:00'
+	      </if>  
+	       <if test="null!=params.auditTimeEnd and ''!=params.auditTimeEnd" >
+	        AND audit_time &lt;= '${params.auditTimeEnd}  23:59:59'
+	      </if>  
+	      <if test="null!=params.askPaymentNo and ''!=params.askPaymentNo ">
+	        AND ask_payment_no = #{params.askPaymentNo}
+	      </if> 
+	      <if test="null!=params.invoiceNo and ''!=params.invoiceNo ">
+	        AND invoice_no = #{params.invoiceNo}
+	      </if> 
+	      <if test="null!=params.billNo and ''!=params.billNo ">
+	        AND bill_no = #{params.billNo}
+	      </if> 
+	</sql>
+	<!-- ******************查询条件  END ************** -->	
+	
+</mapper>

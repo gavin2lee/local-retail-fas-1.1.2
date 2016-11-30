@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.WholesaleCustomerRemainingDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="main_id" property="mainId" jdbcType="INTEGER" />
+    <result column="pre_payment_id" property="prePaymentId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="remaining_amount" property="remainingAmount" jdbcType="DECIMAL" />
+    <result column="ref_no" property="refNo" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="TINYINT" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="rebate_amount" property="rebateAmount" jdbcType="DECIMAL" />
+    <result column="frozen_amount" property="frozenAmount" jdbcType="DECIMAL" />
+    <result column="other_price" property="otherPrice" jdbcType="DECIMAL" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, main_id, pre_payment_id, type, money, remaining_amount, ref_no, create_time, 
+    remark, position, update_time, bill_type, biz_type, bill_no, rebate_amount, frozen_amount, 
+    other_price, bill_date
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+    <if test="null!=params.mainId and ''!=params.mainId" >
+        AND main_id = #{params.mainId,jdbcType=INTEGER}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo,jdbcType=CHAR}
+      </if>
+       <if test="null!=params.prePaymentId and ''!=params.prePaymentId" >
+        AND pre_payment_id = #{params.prePaymentId,jdbcType=INTEGER}
+      </if>
+      <if test="null!=params.createTime and ''!=params.createTime">
+	  		AND create_time = #{params.createTime}
+	  </if> 
+  </sql>
+  
+  <insert id="batchInsertRemainingDtl" parameterType="java.util.List" >
+    INSERT INTO wholesale_customer_remaining_dtl (
+		main_id,
+		money,
+		ref_no,
+		remark,
+		position,
+		bill_type,
+		biz_type,
+		bill_no,
+		bill_date
+	)
+    VALUES
+    <foreach collection="list" item="item" index="index" separator="," >  
+    (
+       	#{item.mainId},
+        #{item.money},
+        #{item.refNo},
+        #{item.remark},
+        #{item.position},
+        #{item.billType},
+        #{item.bizType},
+        #{item.billNo},
+        #{item.billDate}
+    )  
+    </foreach>  
+  </insert>
+  
+  
+  <select id="selectDtlByPage" resultMap="BaseResultMap" parameterType="map" >
+	  SELECT
+		d.id,
+		d.main_id,
+		d.pre_payment_id,
+		d.type,
+		d.money,
+		d.ref_no,
+		d.create_time,
+		d.remark,
+		d.position,
+		d.update_time,
+		d.bill_type,
+		d.biz_type,
+		d.bill_no,
+		d.rebate_amount,
+		d.other_price,
+		d.bill_date,
+	    SUM(IF(t.biz_type in (30,43) and t.bill_date&gt;='2016-07-01',0,t.money)) remaining_amount,
+	    SUM(IF(t.biz_type = 6 ,- 1, 1) * IF(t.biz_type in (30,43,6) and t.bill_date &gt;='2016-07-01',t.money,0)) frozen_amount
+	  FROM
+			wholesale_customer_remaining_dtl d
+	  JOIN wholesale_customer_remaining_dtl t ON t.main_id=d.main_id AND (t.bill_date&lt;d.bill_date or (t.bill_date=d.bill_date and t.id &lt;=d.id))
+		WHERE 
+      d.main_id = #{params.mainId,jdbcType=INTEGER}
+	  GROUP BY d.id
+		ORDER BY
+			d.bill_date desc,
+			d.id desc
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+    <!-- 获取传入日期的客户余额，或者之前的一笔余额 -->
+  <select id="selectCustomerRemainingTotalByDate" resultMap="BaseResultMap" parameterType="map">
+  	SELECT 
+		d.id,
+		d.main_id,
+		d.pre_payment_id,
+		d.type,
+		d.money,
+		d.ref_no,
+		d.create_time,
+		d.remark,
+		d.position,
+		d.update_time,
+		d.bill_type,
+		d.biz_type,
+		d.bill_no,
+		d.rebate_amount,
+		d.other_price,
+		d.bill_date,
+	    SUM(IF(t.biz_type in (30,43) and t.bill_date&gt;='2016-07-01',0,t.money)) remaining_amount,
+	    SUM(IF(t.biz_type = 6 ,- 1, 1) * IF(t.biz_type in (30,43,6) and t.bill_date &gt;='2016-07-01',t.money,0)) frozen_amount
+	  FROM
+			wholesale_customer_remaining_dtl d
+	  JOIN wholesale_customer_remaining_dtl t ON t.main_id=d.main_id AND (t.bill_date&lt;d.bill_date or (t.bill_date=d.bill_date and t.id &lt;=d.id))
+  	  WHERE d.main_id IN (
+  			SELECT id FROM wholesale_customer_remaining_sum 
+  			WHERE company_no=#{params.companyNo} AND customer_no=#{params.customerNo} ) 
+		<choose>
+			<when test="null!=params.flag and params.flag==1">
+				AND d.bill_date &lt; #{params.createTime} 
+			</when>
+			<otherwise>
+				AND d.bill_date &lt;= #{params.createTime}  
+			</otherwise>
+		</choose>
+		GROUP BY d.id
+  		ORDER BY d.bill_date DESC, d.id DESC
+  		LIMIT 0,1 
+  </select>
+  
+  <!-- updatePosition -->
+  <update id="updatePositionOne">
+  	UPDATE wholesale_customer_remaining_dtl 
+  	SET POSITION=CONCAT(DATE_FORMAT(create_time,'%Y%m%d%H%i%s'),'0001') 
+  	WHERE 1=1 AND POSITION IS NULL;
+  </update>
+  <select id="selectPositionTwo" resultMap="BaseResultMap">
+  	SELECT 
+  		main_id,create_time 
+  	FROM wholesale_customer_remaining_dtl 
+  	WHERE POSITION IS NULL
+  	GROUP BY create_time,main_id 
+  	HAVING COUNT(create_time) &gt; 1;
+  </select>
+  <select id="selectPositionThree" resultMap="BaseResultMap" parameterType="map">
+  	SELECT 
+  		<include refid="Base_Column_List" /> 
+  	FROM wholesale_customer_remaining_dtl 
+  	WHERE 1=1 
+  	<if test="null!=params">
+	  	<if test="null!=params.mainId and ''!=params.mainId">
+	  		AND main_id = #{params.mainId}
+	  	</if>  
+	  	<if test="null!=params.createTime and ''!=params.createTime">
+	  		AND create_time = #{params.createTime}
+	  	</if> 
+  	</if>
+  	ORDER BY id;
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM wholesale_customer_remaining_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM wholesale_customer_remaining_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM wholesale_customer_remaining_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM wholesale_customer_remaining_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM wholesale_customer_remaining_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingDtl" >
+    DELETE FROM wholesale_customer_remaining_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingDtl" >
+    INSERT INTO wholesale_customer_remaining_dtl ( main_id, pre_payment_id, 
+      type, money, remaining_amount, 
+      ref_no, create_time, remark, 
+      position, update_time, bill_type, 
+      biz_type, bill_no, rebate_amount, 
+      frozen_amount, other_price, bill_date
+      )
+    VALUES ( #{mainId,jdbcType=INTEGER}, #{prePaymentId,jdbcType=INTEGER}, 
+      #{type,jdbcType=TINYINT}, #{money,jdbcType=DECIMAL}, #{remainingAmount,jdbcType=DECIMAL}, 
+      #{refNo,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{position,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{billType,jdbcType=INTEGER}, 
+      #{bizType,jdbcType=TINYINT}, #{billNo,jdbcType=CHAR}, #{rebateAmount,jdbcType=DECIMAL}, 
+      #{frozenAmount,jdbcType=DECIMAL}, #{otherPrice,jdbcType=DECIMAL}, #{billDate,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingDtl" >
+    INSERT INTO wholesale_customer_remaining_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mainId != null" >
+        main_id,
+      </if>
+      <if test="prePaymentId != null" >
+        pre_payment_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount,
+      </if>
+      <if test="refNo != null" >
+        ref_no,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="bizType != null" >
+        biz_type,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount,
+      </if>
+      <if test="frozenAmount != null" >
+        frozen_amount,
+      </if>
+      <if test="otherPrice != null" >
+        other_price,
+      </if>
+      <if test="billDate != null" >
+        bill_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mainId != null" >
+        #{mainId,jdbcType=INTEGER},
+      </if>
+      <if test="prePaymentId != null" >
+        #{prePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="remainingAmount != null" >
+        #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refNo != null" >
+        #{refNo,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="bizType != null" >
+        #{bizType,jdbcType=TINYINT},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="rebateAmount != null" >
+        #{rebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="frozenAmount != null" >
+        #{frozenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="otherPrice != null" >
+        #{otherPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="billDate != null" >
+        #{billDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingDtl" >
+    UPDATE wholesale_customer_remaining_dtl
+    <set >
+      <if test="mainId != null" >
+        main_id = #{mainId,jdbcType=INTEGER},
+      </if>
+      <if test="prePaymentId != null" >
+        pre_payment_id = #{prePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="remainingAmount != null" >
+        remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refNo != null" >
+        ref_no = #{refNo,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="bizType != null" >
+        biz_type = #{bizType,jdbcType=TINYINT},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="rebateAmount != null" >
+        rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="frozenAmount != null" >
+        frozen_amount = #{frozenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="otherPrice != null" >
+        other_price = #{otherPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="billDate != null" >
+        bill_date = #{billDate,jdbcType=DATE},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleCustomerRemainingDtl" >
+    UPDATE wholesale_customer_remaining_dtl
+    SET main_id = #{mainId,jdbcType=INTEGER},
+      pre_payment_id = #{prePaymentId,jdbcType=INTEGER},
+      type = #{type,jdbcType=TINYINT},
+      money = #{money,jdbcType=DECIMAL},
+      remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      ref_no = #{refNo,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      position = #{position,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      bill_type = #{billType,jdbcType=INTEGER},
+      biz_type = #{bizType,jdbcType=TINYINT},
+      bill_no = #{billNo,jdbcType=CHAR},
+      rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+      frozen_amount = #{frozenAmount,jdbcType=DECIMAL},
+      other_price = #{otherPrice,jdbcType=DECIMAL},
+      bill_date = #{billDate,jdbcType=DATE}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

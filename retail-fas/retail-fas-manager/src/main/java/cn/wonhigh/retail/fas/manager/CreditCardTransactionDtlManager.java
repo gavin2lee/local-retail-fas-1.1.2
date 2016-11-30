@@ -1,0 +1,33 @@
+package cn.wonhigh.retail.fas.manager;
+
+import java.util.List;
+import java.util.Map;
+
+import cn.wonhigh.retail.fas.common.dto.CreditCardCensusDto;
+import cn.wonhigh.retail.fas.common.model.CreditCardTransactionDtl;
+
+import com.yougou.logistics.base.common.exception.ManagerException;
+import com.yougou.logistics.base.manager.BaseCrudManager;
+
+/**
+ * 请写出类的用途 
+ * @author zhouxm
+ * @date  2014-10-13 11:40:01
+ * @version 1.0.0
+ * @copyright (C) 2013 YouGou Information Technology Co.,Ltd 
+ * All Rights Reserved. 
+ * 
+ * The software for the YouGou technology development, without the 
+ * company's written consent, and any other individuals and 
+ * organizations shall not be used, Copying, Modify or distribute 
+ * the software.
+ * 
+ */
+public interface CreditCardTransactionDtlManager extends BaseCrudManager {
+	
+	
+	public boolean uploadListTransactionDtl(List<CreditCardTransactionDtl> list)throws ManagerException;
+	
+	public Map<String,Object> getCreditCardCensus(Map<String,Object> maps)throws ManagerException;
+	
+}

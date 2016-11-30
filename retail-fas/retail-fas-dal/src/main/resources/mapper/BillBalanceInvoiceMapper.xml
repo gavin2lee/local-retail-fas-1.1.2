@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillBalanceInvoiceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillBalanceInvoice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="express" property="express" jdbcType="VARCHAR" />
+    <result column="express_date" property="expressDate" jdbcType="TIMESTAMP" />
+    <result column="express_bill_no" property="expressBillNo" jdbcType="VARCHAR" />
+    <result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="invoice_date" property="invoiceDate" jdbcType="TIMESTAMP" />
+    <result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, express, express_date, express_bill_no, invoice_no, balance_no, balance_type, 
+    amount, invoice_date, receive_date, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND balance_no = #{params.balanceNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_balance_invoice
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_balance_invoice WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_balance_invoice WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_balance_invoice WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM bill_balance_invoice
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoice" >
+    DELETE FROM bill_balance_invoice
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoice" >
+    INSERT INTO bill_balance_invoice (id, express, express_date, 
+      express_bill_no, invoice_no, balance_no, 
+      balance_type, amount, invoice_date, 
+      receive_date, remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{express,jdbcType=VARCHAR}, #{expressDate,jdbcType=TIMESTAMP}, 
+      #{expressBillNo,jdbcType=VARCHAR}, #{invoiceNo,jdbcType=VARCHAR}, #{balanceNo,jdbcType=CHAR}, 
+      #{balanceType,jdbcType=TINYINT}, #{amount,jdbcType=DECIMAL}, #{invoiceDate,jdbcType=TIMESTAMP}, 
+      #{receiveDate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoice" >
+    INSERT INTO bill_balance_invoice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="express != null" >
+        express,
+      </if>
+      <if test="expressDate != null" >
+        express_date,
+      </if>
+      <if test="expressBillNo != null" >
+        express_bill_no,
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date,
+      </if>
+      <if test="receiveDate != null" >
+        receive_date,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="express != null" >
+        #{express,jdbcType=VARCHAR},
+      </if>
+      <if test="expressDate != null" >
+        #{expressDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expressBillNo != null" >
+        #{expressBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        #{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceDate != null" >
+        #{invoiceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveDate != null" >
+        #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoice" >
+    UPDATE bill_balance_invoice
+    <set >
+      <if test="express != null" >
+        express = #{express,jdbcType=VARCHAR},
+      </if>
+      <if test="expressDate != null" >
+        express_date = #{expressDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expressBillNo != null" >
+        express_bill_no = #{expressBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date = #{invoiceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveDate != null" >
+        receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoice" >
+    UPDATE bill_balance_invoice
+    SET express = #{express,jdbcType=VARCHAR},
+      express_date = #{expressDate,jdbcType=TIMESTAMP},
+      express_bill_no = #{expressBillNo,jdbcType=VARCHAR},
+      invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      balance_type = #{balanceType,jdbcType=TINYINT},
+      amount = #{amount,jdbcType=DECIMAL},
+      invoice_date = #{invoiceDate,jdbcType=TIMESTAMP},
+      receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByBillNo" parameterType="java.lang.String" >
+    DELETE FROM bill_balance_invoice
+    WHERE balance_no = #{balanceNo,jdbcType=CHAR}
+  </delete> 
+  
+</mapper>

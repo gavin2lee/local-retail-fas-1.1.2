@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillBacksectionSplitDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillBacksectionSplitDtl" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="backsection_dtl_no" property="backsectionDtlNo" jdbcType="CHAR" />
+    <result column="backsection_no" property="backsectionNo" jdbcType="CHAR" />
+    <result column="back_no" property="backNo" jdbcType="CHAR" />
+    <result column="back_name" property="backName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="billing_amount" property="billingAmount" jdbcType="DECIMAL" />
+    <result column="ticket_deduction_amount" property="ticketDeductionAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="already_receive_amount" property="alreadyReceiveAmount" jdbcType="DECIMAL" />
+    <result column="not_receive_amount" property="notReceiveAmount" jdbcType="DECIMAL" />
+    <result column="the_payment_amount" property="thePaymentAmount" jdbcType="DECIMAL" />
+    <result column="back_date" property="backDate" jdbcType="DATE" />
+    <result column="diff_amount" property="diffAmount" jdbcType="DECIMAL" />
+    <result column="diff_reason" property="diffReason" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="bsgroups_no" property="bsgroupsNo" jdbcType="CHAR" />
+    <result column="bsgroups_name" property="bsgroupsName" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="system_sales_amount" property="systemSalesAmount" jdbcType="DECIMAL" />
+    <result column="bank_back_date" property="bankBackDate" jdbcType="DATE" />
+    <result column="bank_back_amount" property="bankBackAmount" jdbcType="DECIMAL" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="DATE" />
+     <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, backsection_dtl_no, backsection_no, shop_no, short_name, month, balance_no, billing_amount, 
+    ticket_deduction_amount, receive_amount, already_receive_amount, not_receive_amount, 
+    the_payment_amount, back_date, diff_amount, diff_reason, mall_no, mall_name, bsgroups_no, 
+    bsgroups_name, zone_no, zone_name, organ_no, organ_name, company_no, company_name, 
+    remark, brand_no, brand_name,system_sales_amount,bank_back_date,bank_back_amount,invoice_apply_date,balance_start_date, balance_end_date  
+  </sql>
+  <sql id="condition" >
+  	-- AND @dtl.company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.backsectionNo and ''!=params.backsectionNo" >
+        AND dtl.backsection_no = #{params.backsectionNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >    
+        AND main.company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.backNo and ''!=params.backNo" >    
+        AND main.back_no = #{params.backNo}
+      </if>
+      <if test="null!=params.backSectionDateStart and ''!=params.backSectionDateStart" >
+        AND main.back_date  &gt;= #{params.backSectionDateStart}
+      </if>  
+      <if test="null!=params.backSectionDateEnd and ''!=params.backSectionDateEnd" >
+        AND main.back_date  &lt;= #{params.backSectionDateEnd}
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo" >    
+        AND dtl.shop_no = #{params.shopNo}
+      </if>
+      <if test="null!=params.shopNos and ''!=params.shopNos" >    
+        AND dtl.shop_no IN (${params.shopNos})
+      </if>
+      <if test="null!=params.month and ''!=params.month" >
+        AND dtl.month = #{params.month}
+      </if> 
+       <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND dtl.balance_no = #{params.balanceNo}
+      </if> 
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+		temp.*,
+		billing_amount - ticket_deduction_amount - already_receive_amount AS not_receive_amount,
+		billing_amount - ticket_deduction_amount - already_receive_amount - the_payment_amount AS diff_amount
+	FROM (
+		SELECT 
+			dtl.id, dtl.backsection_dtl_no, dtl.backsection_no, dtl.shop_no, dtl.short_name, dtl.month, dtl.balance_no, dtl.billing_amount, 
+			dtl.ticket_deduction_amount, dtl.receive_amount, dtl.the_payment_amount, dtl.diff_reason, 
+			dtl.mall_no, dtl.mall_name, dtl.bsgroups_no, dtl.bsgroups_name, 
+			dtl.zone_no, dtl.zone_name, dtl.organ_no, dtl.organ_name, dtl.company_no, dtl.company_name, 
+			dtl.remark, main.back_date, 
+			SUM(IFNULL(history.`the_payment_amount`,0)) AS already_receive_amount
+	
+		FROM bill_backsection_split_dtl AS dtl
+		JOIN bill_backsection_split AS main ON dtl.`backsection_no` = main.`backsection_no`
+		LEFT JOIN (
+			SELECT 
+				main.`backsection_no`,main.`back_date`,main.`create_time`,dtl.`balance_no`,dtl.`the_payment_amount` 
+			FROM bill_backsection_split AS main
+			JOIN bill_backsection_split_dtl AS dtl 
+				ON main.`backsection_no` = dtl.`backsection_no`
+			) AS history
+			ON dtl.`balance_no` = history.balance_no 
+			AND ((main.`back_date` > history.back_date)
+				OR (main.`back_date` = history.back_date AND main.`create_time` > history.create_time)
+			)
+		WHERE dtl.id = #{id,jdbcType=CHAR}
+		GROUP BY dtl.`id`) AS temp
+
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+	SELECT 
+		COUNT(1)
+	FROM bill_backsection_split_dtl AS dtl
+	JOIN bill_backsection_split AS main ON dtl.`backsection_no` = main.`backsection_no`
+	WHERE 1=1
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+		temp.*,
+		billing_amount - ticket_deduction_amount - already_receive_amount AS not_receive_amount,
+		billing_amount - ticket_deduction_amount - already_receive_amount - the_payment_amount AS diff_amount
+	FROM (
+		SELECT 
+			dtl.id, dtl.backsection_dtl_no, dtl.backsection_no, dtl.shop_no, dtl.short_name, dtl.month, dtl.balance_no, dtl.billing_amount, 
+			dtl.ticket_deduction_amount, dtl.receive_amount, dtl.the_payment_amount, dtl.diff_reason, 
+			dtl.mall_no, dtl.mall_name, dtl.bsgroups_no, dtl.bsgroups_name, 
+			dtl.zone_no, dtl.zone_name, dtl.organ_no, dtl.organ_name,     
+			dtl.remark, dtl.system_sales_amount,dtl.bank_back_date,dtl.bank_back_amount,dtl.invoice_apply_date,
+			dtl.balance_start_date, dtl.balance_end_date,dtl.brand_no,dtl.brand_name,  
+			main.company_no, main.company_name, main.back_no, main.back_name, main.back_amount, main.back_date, 
+			SUM(IFNULL(history.`the_payment_amount`,0)) AS already_receive_amount
+		FROM bill_backsection_split_dtl AS dtl
+		JOIN bill_backsection_split AS main ON dtl.`backsection_no` = main.`backsection_no`
+		LEFT JOIN (
+			SELECT 
+				main.`backsection_no`,main.`back_date`,main.`create_time`,dtl.`balance_no`,dtl.`the_payment_amount` 
+			FROM bill_backsection_split AS main
+			JOIN bill_backsection_split_dtl AS dtl 
+				ON main.`backsection_no` = dtl.`backsection_no`
+			) AS history
+			ON dtl.`balance_no` = history.balance_no 
+			AND ((main.`back_date` > history.back_date)
+				OR (main.`back_date` = history.back_date AND main.`create_time` > history.create_time))
+		WHERE 1=1
+	    <include refid="condition" />
+		GROUP BY dtl.`id`) AS temp 
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField">
+    	ORDER BY temp.back_date DESC, temp.backsection_no DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectTotalSum" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+		SUM(temp.billing_amount) AS billing_amount,
+		SUM(temp.ticket_deduction_amount) AS ticket_deduction_amount,
+		SUM(temp.receive_amount) AS receive_amount,
+		SUM(temp.the_payment_amount) AS the_payment_amount,
+		SUM(temp.already_receive_amount) AS already_receive_amount,
+		SUM(billing_amount - ticket_deduction_amount - already_receive_amount) AS not_receive_amount,
+		SUM(billing_amount - ticket_deduction_amount - already_receive_amount - the_payment_amount) AS diff_amount
+	FROM (
+		SELECT 
+			dtl.id, dtl.backsection_dtl_no, dtl.backsection_no, dtl.shop_no, dtl.short_name, dtl.month, dtl.balance_no, dtl.billing_amount, 
+			dtl.ticket_deduction_amount, dtl.receive_amount, dtl.the_payment_amount, dtl.diff_reason, 
+			dtl.mall_no, dtl.mall_name, dtl.bsgroups_no, dtl.bsgroups_name, 
+			dtl.zone_no, dtl.zone_name, dtl.organ_no, dtl.organ_name, 
+			dtl.remark, 
+			main.company_no, main.company_name, main.back_no, main.back_name, main.back_amount, main.back_date, 
+			SUM(IFNULL(history.`the_payment_amount`,0)) AS already_receive_amount
+		FROM bill_backsection_split_dtl AS dtl
+		JOIN bill_backsection_split AS main ON dtl.`backsection_no` = main.`backsection_no`
+		LEFT JOIN (
+			SELECT 
+				main.`backsection_no`,main.`back_date`,main.`create_time`,dtl.`balance_no`,dtl.`the_payment_amount` 
+			FROM bill_backsection_split AS main
+			JOIN bill_backsection_split_dtl AS dtl 
+				ON main.`backsection_no` = dtl.`backsection_no`
+			) AS history
+			ON dtl.`balance_no` = history.balance_no 
+			AND ((main.`back_date` > history.back_date)
+				OR (main.`back_date` = history.back_date AND main.`create_time` > history.create_time))
+		WHERE 1=1
+	    <include refid="condition" />
+		GROUP BY dtl.`id`) AS temp
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+		temp.*,
+		billing_amount - ticket_deduction_amount - already_receive_amount AS not_receive_amount,
+		billing_amount - ticket_deduction_amount - already_receive_amount - the_payment_amount AS diff_amount
+	FROM (
+		SELECT 
+			dtl.id, dtl.backsection_dtl_no, dtl.backsection_no, dtl.shop_no, dtl.short_name, dtl.month, dtl.balance_no, dtl.billing_amount, 
+			dtl.ticket_deduction_amount, dtl.receive_amount, dtl.the_payment_amount, dtl.diff_reason, 
+			dtl.mall_no, dtl.mall_name, dtl.bsgroups_no, dtl.bsgroups_name, 
+			dtl.zone_no, dtl.zone_name, dtl.organ_no, dtl.organ_name, dtl.company_no, dtl.company_name, 
+			dtl.remark, main.back_date, 
+			SUM(IFNULL(history.`the_payment_amount`,0)) AS already_receive_amount
+	
+		FROM bill_backsection_split_dtl AS dtl
+		JOIN bill_backsection_split AS main ON dtl.`backsection_no` = main.`backsection_no`
+		LEFT JOIN (
+			SELECT 
+				main.`backsection_no`,main.`back_date`,main.`create_time`,dtl.`balance_no`,dtl.`the_payment_amount` 
+			FROM bill_backsection_split AS main
+			JOIN bill_backsection_split_dtl AS dtl 
+				ON main.`backsection_no` = dtl.`backsection_no`
+			) AS history
+			ON dtl.`balance_no` = history.balance_no 
+			AND ((main.`back_date` > history.back_date)
+				OR (main.`back_date` = history.back_date AND main.`create_time` > history.create_time))
+		WHERE 1=1
+	    <include refid="condition" />
+		GROUP BY dtl.`id`) AS temp 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_backsection_split_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplitDtl" >
+    DELETE FROM bill_backsection_split_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByBacksectionNo" parameterType="java.lang.String" >
+    DELETE FROM bill_backsection_split_dtl
+    WHERE backsection_no = #{backsectionNo,jdbcType=CHAR}
+  </delete>
+  
+    <select id="selectShopBlanaceAccountCount" resultType="java.lang.Integer">
+		SELECT   count(1)  as  s  FROM  bill_backsection_split s    LEFT JOIN   bill_backsection_split_dtl  a
+               ON   a.backsection_no  =  s.backsection_no  WHERE 1 = 1 
+			<if test="null!=params.shopNo and ''!=params.shopNo" >    
+	        AND a.shop_no = #{params.shopNo}
+	      </if>
+	       <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+	        AND a.balance_no = #{params.balanceNo}
+	      </if> 
+	      <if test="null!=params.month and ''!=params.month" >
+	        AND a.month = #{params.month}
+	      </if>  
+	</select>
+	
+	<select id="selectShopBlanaceAccountByPage" resultMap="BaseResultMap" parameterType="map">
+		SELECT   a.backsection_no,a.the_payment_amount,s.back_date, s.remark FROM  bill_backsection_split s   
+		 LEFT JOIN   bill_backsection_split_dtl  a
+          ON   a.backsection_no  =  s.backsection_no  WHERE 1 = 1
+		<if test="null!=params.shopNo and ''!=params.shopNo" >    
+	        AND a.shop_no = #{params.shopNo}
+	      </if>
+	       <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+	        AND a.balance_no = #{params.balanceNo}
+	      </if> 
+	      <if test="null!=params.month and ''!=params.month" >
+	        AND a.month = #{params.month}
+	      </if> 
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplitDtl" >
+    INSERT INTO bill_backsection_split_dtl (sharding_flag, id, backsection_dtl_no, backsection_no, 
+      shop_no, short_name, month, 
+      balance_no, billing_amount, ticket_deduction_amount, 
+      receive_amount, already_receive_amount, not_receive_amount, 
+      the_payment_amount, back_date, diff_amount, 
+      diff_reason, mall_no, mall_name, 
+      bsgroups_no, bsgroups_name, zone_no, 
+      zone_name, organ_no, organ_name, 
+      company_no, company_name, remark,brand_no, brand_name,system_sales_amount,bank_back_date,bank_back_amount,invoice_apply_date,balance_start_date, balance_end_date  
+      )
+    VALUES (#{shardingFlag,jdbcType=CHAR}, #{id,jdbcType=CHAR}, #{backsectionDtlNo,jdbcType=CHAR}, #{backsectionNo,jdbcType=CHAR}, 
+      #{shopNo,jdbcType=CHAR}, #{shortName,jdbcType=VARCHAR}, #{month,jdbcType=CHAR}, 
+      #{balanceNo,jdbcType=CHAR}, #{billingAmount,jdbcType=DECIMAL}, #{ticketDeductionAmount,jdbcType=DECIMAL}, 
+      #{receiveAmount,jdbcType=DECIMAL}, #{alreadyReceiveAmount,jdbcType=DECIMAL}, #{notReceiveAmount,jdbcType=DECIMAL}, 
+      #{thePaymentAmount,jdbcType=DECIMAL}, #{backDate,jdbcType=DATE}, #{diffAmount,jdbcType=DECIMAL}, 
+      #{diffReason,jdbcType=VARCHAR}, #{mallNo,jdbcType=CHAR}, #{mallName,jdbcType=VARCHAR}, 
+      #{bsgroupsNo,jdbcType=CHAR}, #{bsgroupsName,jdbcType=VARCHAR}, #{zoneNo,jdbcType=CHAR}, 
+      #{zoneName,jdbcType=VARCHAR}, #{organNo,jdbcType=CHAR}, #{organName,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR},
+      #{systemSalesAmount,jdbcType=DECIMAL},#{bankBackDate,jdbcType=DATE},#{bankBackAmount,jdbcType=DECIMAL},#{invoiceApplyDate,jdbcType=DATE},
+       #{balanceStartDate,jdbcType=DATE}, #{balanceEndDate,jdbcType=DATE} 
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplitDtl" >
+    INSERT INTO bill_backsection_split_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="backsectionDtlNo != null" >
+        backsection_dtl_no,
+      </if>
+      <if test="backsectionNo != null" >
+        backsection_no,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="billingAmount != null" >
+        billing_amount,
+      </if>
+      <if test="ticketDeductionAmount != null" >
+        ticket_deduction_amount,
+      </if>
+      <if test="receiveAmount != null" >
+        receive_amount,
+      </if>
+      <if test="alreadyReceiveAmount != null" >
+        already_receive_amount,
+      </if>
+      <if test="notReceiveAmount != null" >
+        not_receive_amount,
+      </if>
+      <if test="thePaymentAmount != null" >
+        the_payment_amount,
+      </if>
+      <if test="backDate != null" >
+        back_date,
+      </if>
+      <if test="diffAmount != null" >
+        diff_amount,
+      </if>
+      <if test="diffReason != null" >
+        diff_reason,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="mallName != null" >
+        mall_name,
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no,
+      </if>
+      <if test="bsgroupsName != null" >
+        bsgroups_name,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="zoneName != null" >
+        zone_name,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+      <if test="organName != null" >
+        organ_name,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>  
+      <if test="systemSalesAmount != null" >
+        system_sales_amount,
+      </if>
+       <if test="bankBackDate != null" >
+        bank_back_date,
+      </if>
+       <if test="bankBackAmount != null" >
+        bank_back_amount,
+      </if>
+       <if test="invoiceApplyDate != null" >
+        invoice_apply_date, 
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date,
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date 
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>      
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="backsectionDtlNo != null" >
+        #{backsectionDtlNo,jdbcType=CHAR},
+      </if>
+      <if test="backsectionNo != null" >
+        #{backsectionNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="billingAmount != null" >
+        #{billingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="ticketDeductionAmount != null" >
+        #{ticketDeductionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveAmount != null" >
+        #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="alreadyReceiveAmount != null" >
+        #{alreadyReceiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="notReceiveAmount != null" >
+        #{notReceiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="thePaymentAmount != null" >
+        #{thePaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="backDate != null" >
+        #{backDate,jdbcType=DATE},
+      </if>
+      <if test="diffAmount != null" >
+        #{diffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffReason != null" >
+        #{diffReason,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="bsgroupsName != null" >
+        #{bsgroupsName,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+       <if test="systemSalesAmount != null" >
+        #{systemSalesAmount,jdbcType=DECIMAL},
+      </if>
+       <if test="bankBackDate != null" >
+        #{bankBackDate,jdbcType=DATE},
+      </if>
+       <if test="bankBackAmount != null" >
+        #{bankBackAmount,jdbcType=DECIMAL},
+      </if>
+       <if test="invoiceApplyDate != null" >
+        #{invoiceApplyDate,jdbcType=DATE}, 
+      </if>      
+       <if test="balanceStartDate != null" >
+        #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        #{balanceEndDate,jdbcType=DATE}  
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplitDtl" >
+    UPDATE bill_backsection_split_dtl
+    <set >
+      <if test="backsectionDtlNo != null" >
+        backsection_dtl_no = #{backsectionDtlNo,jdbcType=CHAR},
+      </if>
+      <if test="backsectionNo != null" >
+        backsection_no = #{backsectionNo,jdbcType=CHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="billingAmount != null" >
+        billing_amount = #{billingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="ticketDeductionAmount != null" >
+        ticket_deduction_amount = #{ticketDeductionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiveAmount != null" >
+        receive_amount = #{receiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="alreadyReceiveAmount != null" >
+        already_receive_amount = #{alreadyReceiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="notReceiveAmount != null" >
+        not_receive_amount = #{notReceiveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="thePaymentAmount != null" >
+        the_payment_amount = #{thePaymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="backDate != null" >
+        back_date = #{backDate,jdbcType=DATE},
+      </if>
+      <if test="diffAmount != null" >
+        diff_amount = #{diffAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="diffReason != null" >
+        diff_reason = #{diffReason,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        mall_name = #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="bsgroupsNo != null" >
+        bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      </if>
+      <if test="bsgroupsName != null" >
+        bsgroups_name = #{bsgroupsName,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="organName != null" >
+        organ_name = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="systemSalesAmount != null" >
+        system_sales_amount =  #{systemSalesAmount,jdbcType=DECIMAL},
+      </if>
+       <if test="bankBackDate != null" >
+        bank_back_date = #{bankBackDate,jdbcType=DATE},
+      </if>
+       <if test="bankBackAmount != null" >
+        bank_back_amount = #{bankBackAmount,jdbcType=DECIMAL},
+      </if>
+       <if test="invoiceApplyDate != null" >
+        invoice_apply_date = #{invoiceApplyDate,jdbcType=DATE},  
+      </if>
+        <if test="balanceStartDate != null" >
+        balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillBacksectionSplitDtl" >
+    UPDATE bill_backsection_split_dtl
+    SET backsection_dtl_no = #{backsectionDtlNo,jdbcType=CHAR},
+      backsection_no = #{backsectionNo,jdbcType=CHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      month = #{month,jdbcType=CHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      billing_amount = #{billingAmount,jdbcType=DECIMAL},
+      ticket_deduction_amount = #{ticketDeductionAmount,jdbcType=DECIMAL},
+      receive_amount = #{receiveAmount,jdbcType=DECIMAL},
+      already_receive_amount = #{alreadyReceiveAmount,jdbcType=DECIMAL},
+      not_receive_amount = #{notReceiveAmount,jdbcType=DECIMAL},
+      the_payment_amount = #{thePaymentAmount,jdbcType=DECIMAL},
+      back_date = #{backDate,jdbcType=DATE},
+      diff_amount = #{diffAmount,jdbcType=DECIMAL},
+      diff_reason = #{diffReason,jdbcType=VARCHAR},
+      mall_no = #{mallNo,jdbcType=CHAR},
+      mall_name = #{mallName,jdbcType=VARCHAR},
+      bsgroups_no = #{bsgroupsNo,jdbcType=CHAR},
+      bsgroups_name = #{bsgroupsName,jdbcType=VARCHAR},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      organ_no = #{organNo,jdbcType=CHAR},
+      organ_name = #{organName,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      system_sales_amount =  #{systemSalesAmount,jdbcType=DECIMAL},
+      bank_back_date = #{bankBackDate,jdbcType=DATE},
+      bank_back_amount = #{bankBackAmount,jdbcType=DECIMAL},
+      invoice_apply_date = #{invoiceApplyDate,jdbcType=DATE},
+       balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      balance_end_date = #{balanceEndDate,jdbcType=DATE}  
+      WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <!-- 通过结算单号汇总本次回款金额 -->
+  <select id="sumPaymentAmount" parameterType="map" resultType="java.math.BigDecimal">
+  	SELECT SUM(the_payment_amount) FROM bill_backsection_split_dtl WHERE 1 = 1
+  	<if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND balance_no = #{params.balanceNo}
+    </if>
+  </select>
+  
+  <!-- 批量查询出新增明细数据 -->
+  <select id="selectAddInsertDtl" resultMap="BaseResultMap" parameterType="map" >
+	SELECT 
+		temp.*,
+		billing_amount - ticket_deduction_amount AS receive_amount,
+		billing_amount - ticket_deduction_amount - already_receive_amount AS not_receive_amount
+	FROM (
+		SELECT a1.*,SUM(IFNULL(history.`the_payment_amount`,0)) AS already_receive_amount 
+		FROM (
+			SELECT 
+				bsb.`shop_no`,bsb.`short_name`,
+				bsb.`balance_no`,bsb.`month`,bsb.`balance_start_date`,bsb.`mall_billing_amount` AS billing_amount,
+				bsb.`mall_no`,bsb.`mall_name`,bsb.`bsgroups_no`,bsb.`bsgroups_name`,
+				bsb.`organ_no`,bsb.`organ_name`,bsb.`company_no`,bsb.`company_name`,
+				SUM(IFNULL(bsbd.`actual_amount`,0)) AS ticket_deduction_amount
+			FROM `bill_balance_invoice_apply` AS bbia
+			JOIN `bill_balance_invoice_source` AS bbis
+				ON bbia.`bill_no` = bbis.`bill_no`
+			JOIN `bill_shop_balance` AS bsb
+				ON bbis.`balance_no` = bsb.`balance_no`
+			LEFT JOIN `bill_shop_balance_deduct` AS bsbd
+				ON bsb.`shop_no` = bsbd.`shop_no` AND bsb.`month` = bsbd.`month` 
+				AND bsb.`balance_start_date` = bsbd.`balance_start_date`
+				AND bsb.`balance_end_date` = bsbd.`balance_end_date`
+				AND bsbd.`cost_deduct_type` = 2
+				AND bsbd.`cost_pay_type` = 1
+				AND bsbd.`process_status` = 2
+			WHERE 1=1
+				-- AND @bbia.company_no!saler_no
+	   			<if test="null != params.companyNo and '' != params.companyNo">
+			        AND bbia.`saler_no` = #{params.companyNo} 
+		        </if>
+		        <if test="null != params.backNo and '' != params.backNo">
+			        AND bbia.`buyer_no` = #{params.backNo} 
+		        </if>
+		        <!-- combogrid自动完成功能 -->
+				<if test="null!=params.q and ''!=params.q">
+					AND bsb.balance_no LIKE CONCAT('%',#{params.q},'%')
+				</if>
+			GROUP BY bsb.`balance_no`) AS a1
+		LEFT JOIN (
+			SELECT 
+				main.`backsection_no`,main.`back_date`,dtl.`balance_no`,dtl.`the_payment_amount` 
+			FROM bill_backsection_split AS main
+			JOIN bill_backsection_split_dtl AS dtl 
+				ON main.`backsection_no` = dtl.`backsection_no`
+			WHERE 1=1 
+				<if test="null != params.companyNo and '' != params.companyNo">
+			        AND main.`company_no` = #{params.companyNo} 
+		        </if>
+		        <if test="null != params.backNo and '' != params.backNo">
+			        AND main.`back_no` = #{params.backNo} 
+		        </if>
+			) AS history
+			ON a1.`balance_no` = history.balance_no AND '${params.backDate}' >= history.back_date
+		GROUP BY a1.`balance_no` HAVING billing_amount - ticket_deduction_amount - already_receive_amount != 0) AS temp
+	ORDER BY temp.month,temp.balance_start_date
+  </select>
+</mapper>

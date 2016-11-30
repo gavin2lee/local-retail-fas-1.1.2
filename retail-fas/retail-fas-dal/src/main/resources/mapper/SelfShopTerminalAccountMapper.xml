@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SelfShopTerminalAccountMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SelfShopTerminalAccount" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="merchants_no" property="merchantsNo" jdbcType="CHAR" />
+    <result column="terminal_number" property="terminalNumber" jdbcType="CHAR" />
+    <result column="credit_card_bank" property="creditCardBank" jdbcType="VARCHAR" />
+    <result column="credit_card_account" property="creditCardAccount" jdbcType="VARCHAR" />
+    <result column="credit_card_type" property="creditCardType" jdbcType="VARCHAR" />
+    <result column="credit_card_rate" property="creditCardRate" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_no, shop_name, company_no, company_name, mall_no, mall_name, merchants_no, 
+    terminal_number, credit_card_bank, credit_card_account, credit_card_type, credit_card_rate, status,
+    create_user, create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+  -- AND @company_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo">
+       	   and company_no = #{params.companyNo,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.mallNo and ''!=params.mallNo">
+       	   and mall_no = #{params.mallNo,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.shopNoLists and ''!=params.shopNoLists" >
+	       and shop_no in ${params.shopNoLists} 
+	  </if>
+      <if test="null!=params.terminalNumber and ''!=params.terminalNumber">
+       	   and terminal_number = #{params.terminalNumber,jdbcType=CHAR}
+      </if>
+      <if test="null!=params.creditCardBank and ''!=params.creditCardBank">
+       	   and credit_card_bank = #{params.creditCardBank,jdbcType=VARCHAR}
+      </if>
+      <if test="null!=params.creditCardAccount and ''!=params.creditCardAccount">
+       	   and credit_card_account = #{params.creditCardAccount,jdbcType=VARCHAR}
+      </if>
+      <if test="null != params.shopNoList and '' != params.shopNoList">
+		<foreach collection="params.shopNoList" item="shopNo" separator="," open="AND shop_no in (" close=")" index=""> 
+			#{shopNo} 
+		</foreach>  
+   	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM self_shop_terminal_account
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM self_shop_terminal_account WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM self_shop_terminal_account WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM self_shop_terminal_account WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="queryListByShopNos" resultMap="BaseResultMap" parameterType="map">
+  	SELECT 
+    <include refid="Base_Column_List" />
+     FROM self_shop_terminal_account WHERE 1=1 and shop_no in 
+    <foreach collection="listShopNos" index="index" item="shopNo" open="(" separator="," close=")">
+   		#{shopNo}
+  	</foreach>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM self_shop_terminal_account
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.SelfShopTerminalAccount" >
+    DELETE FROM self_shop_terminal_account
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.SelfShopTerminalAccount" >
+    INSERT INTO self_shop_terminal_account (id, shop_no, shop_name, 
+      company_no, company_name, mall_no, 
+      mall_name, merchants_no, terminal_number, 
+      credit_card_bank, credit_card_account, credit_card_type, 
+      credit_card_rate, status, create_user, create_time, 
+      update_user, update_time)
+    VALUES (#{id,jdbcType=INTEGER}, #{shopNo,jdbcType=CHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{mallNo,jdbcType=CHAR}, 
+      #{mallName,jdbcType=VARCHAR}, #{merchantsNo,jdbcType=CHAR}, #{terminalNumber,jdbcType=CHAR}, 
+      #{creditCardBank,jdbcType=VARCHAR}, #{creditCardAccount,jdbcType=VARCHAR}, #{creditCardType,jdbcType=VARCHAR}, 
+      #{creditCardRate,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.SelfShopTerminalAccount" >
+    INSERT INTO self_shop_terminal_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        id,
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="mallName != null" >
+        mall_name,
+      </if>
+      <if test="merchantsNo != null" >
+        merchants_no,
+      </if>
+      <if test="terminalNumber != null" >
+        terminal_number,
+      </if>
+      <if test="creditCardBank != null" >
+        credit_card_bank,
+      </if>
+      <if test="creditCardAccount != null" >
+        credit_card_account,
+      </if>
+      <if test="creditCardType != null" >
+        credit_card_type,
+      </if>
+      <if test="creditCardRate != null" >
+        credit_card_rate,
+      </if>
+      <if test="status != null">
+      	status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      (
+      	SELECT
+			IFNULL(MIN(a.id),0) + 1
+		FROM
+			self_shop_terminal_account a
+		LEFT JOIN self_shop_terminal_account b ON a.id = b.id - 1
+		WHERE
+			b.id IS NULL
+      ),
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantsNo != null" >
+        #{merchantsNo,jdbcType=CHAR},
+      </if>
+      <if test="terminalNumber != null" >
+        #{terminalNumber,jdbcType=CHAR},
+      </if>
+      <if test="creditCardBank != null" >
+        #{creditCardBank,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCardAccount != null" >
+        #{creditCardAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCardType != null" >
+        #{creditCardType,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCardRate != null" >
+        #{creditCardRate,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+      	#{status,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.SelfShopTerminalAccount" >
+    UPDATE self_shop_terminal_account
+    <set >
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        mall_name = #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantsNo != null" >
+        merchants_no = #{merchantsNo,jdbcType=CHAR},
+      </if>
+      <if test="terminalNumber != null" >
+        terminal_number = #{terminalNumber,jdbcType=CHAR},
+      </if>
+      <if test="creditCardBank != null" >
+        credit_card_bank = #{creditCardBank,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCardAccount != null" >
+        credit_card_account = #{creditCardAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCardType != null" >
+        credit_card_type = #{creditCardType,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCardRate != null" >
+        credit_card_rate = #{creditCardRate,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+      	status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.SelfShopTerminalAccount" >
+    UPDATE self_shop_terminal_account
+    SET shop_no = #{shopNo,jdbcType=CHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      mall_no = #{mallNo,jdbcType=CHAR},
+      mall_name = #{mallName,jdbcType=VARCHAR},
+      merchants_no = #{merchantsNo,jdbcType=CHAR},
+      terminal_number = #{terminalNumber,jdbcType=CHAR},
+      credit_card_bank = #{creditCardBank,jdbcType=VARCHAR},
+      credit_card_account = #{creditCardAccount,jdbcType=VARCHAR},
+      credit_card_type = #{creditCardType,jdbcType=VARCHAR},
+      credit_card_rate = #{creditCardRate,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateData">
+		UPDATE self_shop_terminal_account ssta SET
+		ssta.credit_card_rate=#{creditCardRate,jdbcType=DECIMAL}
+		WHERE 
+		ssta.shop_no=#{shopNo,jdbcType=CHAR}
+		and ssta.terminal_number=#{terminalNumber,jdbcType=VARCHAR}
+	</update>
+</mapper>

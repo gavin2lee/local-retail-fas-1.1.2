@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.InvoiceBaseReportMapper" >
+  
+	<sql id="base_sql">
+		SELECT a.*,LEFT(dtl.`brand_no`,2) AS brand_unit_no,LEFT(dtl.category_no, 2) AS category_no,dtl.qty,dtl.amount,dtl.unit_cost * dtl.qty AS sum_unit_cost,
+			dtl.discount,ROUND(IFNULL(dtl.discount,0) / 100 * dtl.amount,2) AS deductions
+		FROM (
+			SELECT sbd.company_no,sbd.company_name,o.parent_no AS organ_no,s.shop_no,s.short_name,s.shop_level,
+				YEAR(LAST_DAY(CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01') - INTERVAL 1 MONTH)) AS sale_year,
+				MONTH(LAST_DAY(CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01') - INTERVAL 1 MONTH)) AS sale_month,
+				LEFT(sbd.`month`,4) AS `year`,RIGHT(sbd.`month`,2) AS `month`,
+				CONCAT(DATE_FORMAT(sbd.balance_start_date,'%m/%d'),'-',DATE_FORMAT(LAST_DAY(CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01') - INTERVAL 1 MONTH),'%m/%d')) AS balance_date,
+				CONCAT(DATE_FORMAT(sbd.balance_start_date,'%m/%d'),'-',DATE_FORMAT(sbd.balance_end_date,'%m/%d')) AS rel_balance_date,
+				sbd.balance_start_date,
+				LAST_DAY(CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01') - INTERVAL 1 MONTH) AS balance_end_date,
+				sbd.balance_start_date AS rel_balance_start_date,
+				sbd.balance_end_date AS rel_balance_end_date,
+				sb.system_sales_amount,sb.mall_billing_amount
+			FROM shop_balance_date AS sbd
+			JOIN shop AS s 
+				ON sbd.shop_no = s.shop_no
+			JOIN organ AS o
+				ON s.biz_city_no = o.organ_no
+			LEFT JOIN (
+				SELECT 
+					a.* 
+				FROM `bill_shop_balance` a 
+				JOIN (
+					SELECT 
+						shop_no,
+						balance_start_date,
+						balance_end_date,
+						MIN(balance_type) balance_type,
+						MAX(create_time) create_time 
+					FROM
+						`bill_shop_balance`
+					WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.startMonth and ''!=params.startMonth" >
+							AND `month` &gt;= #{params.startMonth}
+						</if>
+						<if test="null!=params.endMonth and ''!=params.endMonth" >    
+							AND `month` &lt;= #{params.endMonth}
+						</if>
+					</if> 
+					GROUP BY
+						shop_no,
+						balance_start_date,
+						balance_end_date
+				) b 
+				ON a.`shop_no` = b.shop_no 
+				AND a.`balance_start_date` = b.balance_start_date 
+				AND a.`balance_end_date` = b.balance_end_date 
+				AND a.`balance_type` = b.balance_type 
+				AND a.`create_time` = b.create_time
+			) AS sb
+				ON sbd.`shop_no` = sb.shop_no AND sbd.`balance_start_date` = sb.balance_start_date AND sbd.`balance_end_date` = sb.balance_end_date
+			WHERE 1=1
+				AND sbd.balance_start_date &lt; CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01')
+				-- AND @sbd.company_no
+				<if test="null!=params" >
+					<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+					  ${params.queryCondition}
+					</if>
+					<if test="null!=params.companyNos and ''!=params.companyNos" >
+					  AND sbd.company_no In ${params.companyNos}
+					</if>
+					<if test="null!=params.startMonth and ''!=params.startMonth" >
+					  AND sbd.month &gt;= #{params.startMonth}
+					</if>
+					<if test="null!=params.endMonth and ''!=params.endMonth" >
+					  AND sbd.month &lt;= #{params.endMonth}
+					</if>
+					<if test="null!=params.organNos and ''!=params.organNos" > 
+					  AND o.parent_no IN ${params.organNos}
+					</if>
+					<if test="null!=params.shopNos and ''!=params.shopNos" >
+					  AND sbd.shop_no In ${params.shopNos}
+					</if>
+				</if>
+			UNION ALL 
+			SELECT sbd.company_no,sbd.company_name,o.parent_no AS organ_no,s.shop_no,s.short_name,s.shop_level,
+				YEAR(sbd.balance_end_date) AS sale_year,
+				MONTH(sbd.balance_end_date) AS sale_month,
+				LEFT(sbd.`month`,4) AS `year`,RIGHT(sbd.`month`,2) AS `month`,
+				CONCAT(DATE_FORMAT(IF(sbd.balance_start_date &lt; CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01'),CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01'),sbd.balance_start_date),'%m/%d'),'-',DATE_FORMAT(sbd.balance_end_date,'%m/%d')) AS balance_date,
+				CONCAT(DATE_FORMAT(sbd.balance_start_date,'%m/%d'),'-',DATE_FORMAT(sbd.balance_end_date,'%m/%d')) AS rel_balance_date,
+				IF(sbd.balance_start_date &lt; CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01'),CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01'),sbd.balance_start_date) AS balance_start_date,
+				sbd.balance_end_date,
+				sbd.balance_start_date AS rel_balance_start_date,
+				sbd.balance_end_date AS rel_balance_end_date,
+				sb.system_sales_amount,sb.mall_billing_amount
+			FROM shop_balance_date AS sbd
+			JOIN shop AS s 
+				ON sbd.shop_no = s.shop_no
+			JOIN organ AS o
+				ON s.biz_city_no = o.organ_no
+			LEFT JOIN (
+				SELECT 
+					a.* 
+				FROM `bill_shop_balance` a 
+				JOIN (
+					SELECT 
+						shop_no,
+						balance_start_date,
+						balance_end_date,
+						MIN(balance_type) balance_type,
+						MAX(create_time) create_time 
+					FROM
+						`bill_shop_balance`
+					WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.startMonth and ''!=params.startMonth" >
+							AND `month` &gt;= #{params.startMonth}
+						</if>
+						<if test="null!=params.endMonth and ''!=params.endMonth" >    
+							AND `month` &lt;= #{params.endMonth}
+						</if>
+					</if> 
+					GROUP BY
+						shop_no,
+						balance_start_date,
+						balance_end_date
+				) b 
+				ON a.`shop_no` = b.shop_no 
+				AND a.`balance_start_date` = b.balance_start_date 
+				AND a.`balance_end_date` = b.balance_end_date 
+				AND a.`balance_type` = b.balance_type 
+				AND a.`create_time` = b.create_time
+			) AS sb
+				ON sbd.`shop_no` = sb.shop_no AND sbd.`balance_start_date` = sb.balance_start_date AND sbd.`balance_end_date` = sb.balance_end_date
+			WHERE 1=1
+				-- AND @sbd.company_no
+				<if test="null!=params" >
+					<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+					  ${params.queryCondition}
+					</if>
+					<if test="null!=params.companyNos and ''!=params.companyNos" >
+					  AND sbd.company_no In ${params.companyNos}
+					</if>
+					<if test="null!=params.startMonth and ''!=params.startMonth" >
+					  AND sbd.month &gt;= #{params.startMonth}
+					</if>
+					<if test="null!=params.endMonth and ''!=params.endMonth" >
+					  AND sbd.month &lt;= #{params.endMonth}
+					</if>
+					<if test="null!=params.organNos and ''!=params.organNos" > 
+					  AND o.parent_no IN ${params.organNos}
+					</if>
+					<if test="null!=params.shopNos and ''!=params.shopNos" >
+					  AND sbd.shop_no In ${params.shopNos}
+					</if>
+				</if>
+		) AS a
+		JOIN order_main main ON main.shop_no = a.shop_no
+			AND main.out_date BETWEEN a.balance_start_date AND a.balance_end_date
+		JOIN order_dtl dtl ON main.order_no = dtl.order_no
+		WHERE 1=1
+			AND main.status IN ('30', '41') 
+			AND main.business_type IN ('0', '1', '2', '6') 
+			<if test="null!=params" >
+				<if test="null!=params.brandNos and ''!=params.brandNos" >
+					AND dtl.brand_no IN ${params.brandNos}
+				</if>
+			</if>
+		UNION ALL
+		SELECT a.*,LEFT(dtl.`brand_no`,2) AS brand_unit_no,LEFT(dtl.category_no, 2) AS category_no,dtl.qty,dtl.amount,dtl.unit_cost * dtl.qty AS sum_unit_cost,
+			dtl.discount,ROUND(IFNULL(dtl.discount,0) / 100 * dtl.amount,2) AS deductions
+		FROM (
+			SELECT sbd.company_no,sbd.company_name,o.parent_no AS organ_no,s.shop_no,s.short_name,s.shop_level,
+				YEAR(LAST_DAY(CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01') - INTERVAL 1 MONTH)) AS sale_year,
+				MONTH(LAST_DAY(CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01') - INTERVAL 1 MONTH)) AS sale_month,
+				LEFT(sbd.`month`,4) AS `year`,RIGHT(sbd.`month`,2) AS `month`,
+				CONCAT(DATE_FORMAT(sbd.balance_start_date,'%m/%d'),'-',DATE_FORMAT(LAST_DAY(CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01') - INTERVAL 1 MONTH),'%m/%d')) AS balance_date,
+				CONCAT(DATE_FORMAT(sbd.balance_start_date,'%m/%d'),'-',DATE_FORMAT(sbd.balance_end_date,'%m/%d')) AS rel_balance_date,
+				sbd.balance_start_date,
+				LAST_DAY(CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01') - INTERVAL 1 MONTH) AS balance_end_date,
+				sbd.balance_start_date AS rel_balance_start_date,
+				sbd.balance_end_date AS rel_balance_end_date,
+				sb.system_sales_amount,sb.mall_billing_amount
+			FROM shop_balance_date AS sbd
+			JOIN shop AS s 
+				ON sbd.shop_no = s.shop_no
+			JOIN organ AS o
+				ON s.biz_city_no = o.organ_no
+			LEFT JOIN (
+				SELECT 
+					a.* 
+				FROM `bill_shop_balance` a 
+				JOIN (
+					SELECT 
+						shop_no,
+						balance_start_date,
+						balance_end_date,
+						MIN(balance_type) balance_type,
+						MAX(create_time) create_time 
+					FROM
+						`bill_shop_balance`
+					WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.startMonth and ''!=params.startMonth" >
+							AND `month` &gt;= #{params.startMonth}
+						</if>
+						<if test="null!=params.endMonth and ''!=params.endMonth" >    
+							AND `month` &lt;= #{params.endMonth}
+						</if>
+					</if> 
+					GROUP BY
+						shop_no,
+						balance_start_date,
+						balance_end_date
+				) b 
+				ON a.`shop_no` = b.shop_no 
+				AND a.`balance_start_date` = b.balance_start_date 
+				AND a.`balance_end_date` = b.balance_end_date 
+				AND a.`balance_type` = b.balance_type 
+				AND a.`create_time` = b.create_time
+			) AS sb
+				ON sbd.`shop_no` = sb.shop_no AND sbd.`balance_start_date` = sb.balance_start_date AND sbd.`balance_end_date` = sb.balance_end_date
+			WHERE 1=1
+				AND sbd.balance_start_date &lt; CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01')
+				-- AND @sbd.company_no
+				<if test="null!=params" >
+					<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+					  ${params.queryCondition}
+					</if>
+					<if test="null!=params.companyNos and ''!=params.companyNos" >
+					  AND sbd.company_no In ${params.companyNos}
+					</if>
+					<if test="null!=params.startMonth and ''!=params.startMonth" >
+					  AND sbd.month &gt;= #{params.startMonth}
+					</if>
+					<if test="null!=params.endMonth and ''!=params.endMonth" >
+					  AND sbd.month &lt;= #{params.endMonth}
+					</if>
+					<if test="null!=params.organNos and ''!=params.organNos" > 
+					  AND o.parent_no IN ${params.organNos}
+					</if>
+					<if test="null!=params.shopNos and ''!=params.shopNos" >
+					  AND sbd.shop_no In ${params.shopNos}
+					</if>
+				</if>
+			UNION ALL 
+			SELECT sbd.company_no,sbd.company_name,o.parent_no AS organ_no,s.shop_no,s.short_name,s.shop_level,
+				YEAR(sbd.balance_end_date) AS sale_year,
+				MONTH(sbd.balance_end_date) AS sale_month,
+				LEFT(sbd.`month`,4) AS `year`,RIGHT(sbd.`month`,2) AS `month`,
+				CONCAT(DATE_FORMAT(IF(sbd.balance_start_date &lt; CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01'),CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01'),sbd.balance_start_date),'%m/%d'),'-',DATE_FORMAT(sbd.balance_end_date,'%m/%d')) AS balance_date,
+				CONCAT(DATE_FORMAT(sbd.balance_start_date,'%m/%d'),'-',DATE_FORMAT(sbd.balance_end_date,'%m/%d')) AS rel_balance_date,
+				IF(sbd.balance_start_date &lt; CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01'),CONCAT(LEFT(sbd.`month`,4),'-',RIGHT(sbd.`month`,2),'-01'),sbd.balance_start_date) AS balance_start_date,
+				sbd.balance_end_date,
+				sbd.balance_start_date AS rel_balance_start_date,
+				sbd.balance_end_date AS rel_balance_end_date,
+				sb.system_sales_amount,sb.mall_billing_amount
+			FROM shop_balance_date AS sbd
+			JOIN shop AS s 
+				ON sbd.shop_no = s.shop_no
+			JOIN organ AS o
+				ON s.biz_city_no = o.organ_no
+			LEFT JOIN (
+				SELECT 
+					a.* 
+				FROM `bill_shop_balance` a 
+				JOIN (
+					SELECT 
+						shop_no,
+						balance_start_date,
+						balance_end_date,
+						MIN(balance_type) balance_type,
+						MAX(create_time) create_time 
+					FROM
+						`bill_shop_balance`
+					WHERE 1=1
+					<if test="null!=params" >
+						<if test="null!=params.startMonth and ''!=params.startMonth" >
+							AND `month` &gt;= #{params.startMonth}
+						</if>
+						<if test="null!=params.endMonth and ''!=params.endMonth" >    
+							AND `month` &lt;= #{params.endMonth}
+						</if>
+					</if> 
+					GROUP BY
+						shop_no,
+						balance_start_date,
+						balance_end_date
+				) b 
+				ON a.`shop_no` = b.shop_no 
+				AND a.`balance_start_date` = b.balance_start_date 
+				AND a.`balance_end_date` = b.balance_end_date 
+				AND a.`balance_type` = b.balance_type 
+				AND a.`create_time` = b.create_time
+			) AS sb
+				ON sbd.`shop_no` = sb.shop_no AND sbd.`balance_start_date` = sb.balance_start_date AND sbd.`balance_end_date` = sb.balance_end_date
+			WHERE 1=1
+				-- AND @sbd.company_no
+				<if test="null!=params" >
+					<if test="null!=params.queryCondition and ''!=params.queryCondition" >
+					  ${params.queryCondition}
+					</if>
+					<if test="null!=params.companyNos and ''!=params.companyNos" >
+					  AND sbd.company_no In ${params.companyNos}
+					</if>
+					<if test="null!=params.startMonth and ''!=params.startMonth" >
+					  AND sbd.month &gt;= #{params.startMonth}
+					</if>
+					<if test="null!=params.endMonth and ''!=params.endMonth" >
+					  AND sbd.month &lt;= #{params.endMonth}
+					</if>
+					<if test="null!=params.organNos and ''!=params.organNos" > 
+					  AND o.parent_no IN ${params.organNos}
+					</if>
+					<if test="null!=params.shopNos and ''!=params.shopNos" >
+					  AND sbd.shop_no In ${params.shopNos}
+					</if>
+				</if>
+		) AS a
+		JOIN return_exchange_main main ON main.shop_no = a.shop_no
+			AND main.out_date BETWEEN a.balance_start_date AND a.balance_end_date
+		JOIN return_exchange_dtl dtl ON main.business_no = dtl.business_no
+		WHERE 1=1
+			AND main.status IN ('30', '41') 
+			AND main.business_type IN ('0', '1', '2', '6') 
+			<if test="null!=params" >
+				<if test="null!=params.brandNos and ''!=params.brandNos" >
+					AND dtl.brand_no IN ${params.brandNos}
+				</if>
+			</if>
+	</sql>
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+  	SELECT COUNT(1) as s FROM (
+		SELECT a1.company_no FROM (
+			<include refid="base_sql" />
+		) AS a1
+		GROUP BY a1.company_no,a1.organ_no,a1.shop_no,a1.balance_date,a1.brand_unit_no
+	) AS a
+  </select>
+  
+  <select id="selectTotal" resultType="java.util.HashMap" parameterType="map">
+	SELECT
+		SUM(a1.qty) AS qty_count,SUM(a1.amount) AS amount_count,SUM(a1.sum_unit_cost) AS unit_cost_count,
+		<foreach collection="params.categoryList" index="index" item="category" >
+			SUM(IF(a1.category_no = '${category.categoryNo}',a1.qty,0)) AS ${category.categoryNo}_qty,
+			SUM(IF(a1.category_no = '${category.categoryNo}',a1.amount,0)) AS ${category.categoryNo}_amount,
+			SUM(IF(a1.category_no = '${category.categoryNo}',a1.sum_unit_cost,0)) AS ${category.categoryNo}_unit_cost,
+		</foreach>
+		SUM(a1.deductions) AS deductions,
+		SUM(a1.amount - a1.deductions) AS bill_amount,
+		SUM(a1.amount) - ROUND(SUM((a1.amount/a1.system_sales_amount)*a1.mall_billing_amount),2) AS rel_deductions,
+		ROUND(SUM((a1.amount/a1.system_sales_amount)*a1.mall_billing_amount),2) AS rel_bill_amount
+	FROM (
+		<include refid="base_sql" />
+	) AS a1
+  </select>
+  
+  <select id="selectData" resultType="java.util.HashMap" parameterType="map">
+	SELECT a2.*,g.name AS organ_name,le4.`name` AS level_name1,
+		IFNULL((SELECT rate FROM `rate_basic` AS rb 
+		WHERE rb.shop_no = a2.shop_no AND (rate_type = 1 OR (rate_type = 2 AND end_disc = 100))
+			AND ((a2.`balance_start_date` BETWEEN rb.start_date AND rb.end_date)
+				OR(a2.`balance_end_date` BETWEEN rb.start_date AND rb.end_date)
+				OR(rb.start_date &gt; a2.`balance_start_date` AND rb.end_date &lt; a2.`balance_end_date`)) 
+		ORDER BY rate_type
+		LIMIT 1),0) AS contract_rate,
+		bu.name AS brand_unit_name,
+		a2.amount_count - ROUND((a2.amount_count/a2.system_sales_amount)*a2.mall_billing_amount,2) AS rel_deductions,
+		ROUND((a2.amount_count/a2.system_sales_amount)*a2.mall_billing_amount,2) AS rel_bill_amount
+	FROM (
+		SELECT a1.company_no,a1.company_name,a1.organ_no,a1.shop_no,a1.short_name,a1.shop_level,a1.sale_year,a1.sale_month,a1.year,a1.month,a1.balance_date,a1.rel_balance_date,a1.brand_unit_no,
+			a1.balance_start_date,a1.balance_end_date,
+			a1.rel_balance_start_date,
+			a1.rel_balance_end_date,
+			a1.system_sales_amount,a1.mall_billing_amount,
+			SUM(a1.qty) AS qty_count,SUM(a1.amount) AS amount_count,SUM(a1.sum_unit_cost) AS unit_cost_count,
+			<foreach collection="params.categoryList" index="index" item="category" >
+				SUM(IF(a1.category_no = '${category.categoryNo}',a1.qty,0)) AS ${category.categoryNo}_qty,
+				SUM(IF(a1.category_no = '${category.categoryNo}',a1.amount,0)) AS ${category.categoryNo}_amount,
+				SUM(IF(a1.category_no = '${category.categoryNo}',a1.sum_unit_cost,0)) AS ${category.categoryNo}_unit_cost,
+			</foreach>
+			SUM(a1.deductions) AS deductions,
+			SUM(a1.amount - a1.deductions) AS bill_amount
+		FROM ( 
+			<include refid="base_sql" />
+		) AS a1
+		GROUP BY a1.company_no,a1.organ_no,a1.shop_no,a1.balance_date,a1.brand_unit_no
+		<if test="page != null and '' != page" >
+			limit #{page.startRowNum} ,#{page.pageSize}
+		</if>
+	) AS a2
+	LEFT JOIN organ g ON a2.organ_no=g.organ_no
+	LEFT JOIN brand_unit bu ON a2.brand_unit_no = bu.`brand_unit_no`
+	LEFT JOIN lookup_entry le4 ON a2.shop_level = le4.`code` AND le4.lookup_id IN (SELECT lk.id FROM lookup lk WHERE lk.code = 'SHOP_LEVEL')
+  </select>
+  
+</mapper>

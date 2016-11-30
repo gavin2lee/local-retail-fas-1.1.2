@@ -1,0 +1,1 @@
+var bill_sale_out_dtl = {};

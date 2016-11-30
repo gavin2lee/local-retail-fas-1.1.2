@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.ItemCostMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ItemCost" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="store_no" property="storeNo" jdbcType="CHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="lot" property="lot" jdbcType="VARCHAR" />
+    <result column="cost_method" property="costMethod" jdbcType="VARCHAR" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="getItemCost" resultMap="BaseResultMap" parameterType="map" >
+	SELECT
+		id, company_no, company_name, item_no, item_code, item_name, brand_no, store_no, location, 
+		lot, cost_method, unit_cost, unit, `year`, `month`, create_user, create_time, update_user, update_time
+	FROM item_cost
+	WHERE 1=1
+		AND company_no = #{params.companyNo, jdbcType=CHAR}
+		AND item_no = #{params.itemNo, jdbcType=CHAR}
+		AND `year` = DATE_FORMAT(#{params.date,jdbcType=DATE}, '%Y')
+		AND `month` = DATE_FORMAT(#{params.date,jdbcType=DATE}, '%c')
+  </select>
+  
+</mapper>

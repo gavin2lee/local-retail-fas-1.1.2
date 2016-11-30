@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.SalesSummaryMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.SalesSummary" >
+  	<result column="total" property="total" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo1" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="biz_type" property="bizType" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="VARCHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="brand_no1" property="brandNo1" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="total_qty" property="totalQty" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+     <result column="total_tag_Price" property="totalTagPrice" jdbcType="DECIMAL" />
+    <result column="total_amount_unit_cost" property="totalAmountUnitCost" jdbcType="DECIMAL" />
+    <result column="total_amount_region_cost" property="totalAmountRegionCost" jdbcType="DECIMAL" />
+    <result column="total_amount_headquarter_cost" property="totalAmountHeadquarterCost" jdbcType="DECIMAL" />
+    <result column="total_qty_01" property="totalQty01" jdbcType="INTEGER" />
+    <result column="total_amount_01" property="totalAmount01" jdbcType="DECIMAL" />
+    <result column="total_tag_Price_01" property="totalTagPrice01" jdbcType="DECIMAL" />
+    <result column="total_amount_unit_cost_01" property="totalAmountUnitCost01" jdbcType="DECIMAL" />
+    <result column="total_amount_region_cost_01" property="totalAmountRegionCost01" jdbcType="DECIMAL" />
+    <result column="total_amount_headquarter_cost_01" property="totalAmountHeadquarterCost01" jdbcType="DECIMAL" />
+	 <result column="total_qty_02" property="totalQty02" jdbcType="INTEGER" />
+    <result column="total_amount_02" property="totalAmount02" jdbcType="DECIMAL" />
+     <result column="total_tag_Price_02" property="totalTagPrice02" jdbcType="DECIMAL" />
+    <result column="total_amount_unit_cost_02" property="totalAmountUnitCost02" jdbcType="DECIMAL" />
+    <result column="total_amount_region_cost_02" property="totalAmountRegionCost02" jdbcType="DECIMAL" />
+    <result column="total_amount_headquarter_cost_02" property="totalAmountHeadquarterCost02" jdbcType="DECIMAL" />
+	 <result column="total_qty_03" property="totalQty03" jdbcType="INTEGER" />
+    <result column="total_amount_03" property="totalAmount03" jdbcType="DECIMAL" />
+     <result column="total_tag_Price_03" property="totalTagPrice03" jdbcType="DECIMAL" />
+    <result column="total_amount_unit_cost_03" property="totalAmountUnitCost03" jdbcType="DECIMAL" />
+    <result column="total_amount_region_cost_03" property="totalAmountRegionCost03" jdbcType="DECIMAL" />
+    <result column="total_amount_headquarter_cost_03" property="totalAmountHeadquarterCost03" jdbcType="DECIMAL" />
+	 <result column="total_qty_04" property="totalQty04" jdbcType="INTEGER" />
+    <result column="total_amount_04" property="totalAmount04" jdbcType="DECIMAL" />
+     <result column="total_tag_Price_04" property="totalTagPrice04" jdbcType="DECIMAL" />
+    <result column="total_amount_unit_cost_04" property="totalAmountUnitCost04" jdbcType="DECIMAL" />
+    <result column="total_amount_region_cost_04" property="totalAmountRegionCost04" jdbcType="DECIMAL" />
+    <result column="total_amount_headquarter_cost_04" property="totalAmountHeadquarterCost04" jdbcType="DECIMAL" />
+	 <result column="total_qty_05" property="totalQty05" jdbcType="INTEGER" />
+    <result column="total_amount_05" property="totalAmount05" jdbcType="DECIMAL" />
+     <result column="total_tag_Price_05" property="totalTagPrice05" jdbcType="DECIMAL" />
+    <result column="total_amount_unit_cost_05" property="totalAmountUnitCost05" jdbcType="DECIMAL" />
+    <result column="total_amount_region_cost_05" property="totalAmountRegionCost05" jdbcType="DECIMAL" />
+    <result column="total_amount_headquarter_cost_05" property="totalAmountHeadquarterCost05" jdbcType="DECIMAL" />
+	 <result column="total_qty_06" property="totalQty06" jdbcType="INTEGER" />
+    <result column="total_amount_06" property="totalAmount06" jdbcType="DECIMAL" />
+     <result column="total_tag_Price_06" property="totalTagPrice06" jdbcType="DECIMAL" />
+    <result column="total_amount_unit_cost_06" property="totalAmountUnitCost06" jdbcType="DECIMAL" />
+    <result column="total_amount_region_cost_06" property="totalAmountRegionCost06" jdbcType="DECIMAL" />
+    <result column="total_amount_headquarter_cost_06" property="totalAmountHeadquarterCost06" jdbcType="DECIMAL" />
+	 <result column="total_qty_07" property="totalQty07" jdbcType="INTEGER" />
+    <result column="total_amount_07" property="totalAmount07" jdbcType="DECIMAL" />
+     <result column="total_tag_Price_07" property="totalTagPrice07" jdbcType="DECIMAL" />
+    <result column="total_amount_unit_cost_07" property="totalAmountUnitCost07" jdbcType="DECIMAL" />
+    <result column="total_amount_region_cost_07" property="totalAmountRegionCost07" jdbcType="DECIMAL" />
+    <result column="total_amount_headquarter_cost_07" property="totalAmountHeadquarterCost07" jdbcType="DECIMAL" />
+  </resultMap>
+   <sql id="condition" >
+   	-- AND @company_no
+    <if test="null!=params" >
+    	<if test="null!=params.companyNos and ''!=params.companyNos">
+			AND company_no IN
+			<foreach collection="params.companyNos" index="index" item="companyNo" open="(" separator="," close=")">
+				#{companyNo, jdbcType=CHAR}
+			</foreach>
+		</if>
+      <if test="null!=params.shopNo and ''!=params.shopNo">
+       	   and shop_no1 in ${params.shopNo}
+      </if>
+        <if test="null!=params.bizType and ''!=params.bizType">
+       	   and biz_type in ${params.bizType}
+      </if>
+      <!--  <if test="null != params.month and '' != params.month">
+			<include refid="monthCondition" /> 
+	  </if> -->
+	  
+    </if>
+  </sql>
+    
+    <!-- 总部职能结算公司 -->
+  <sql id="headquaters_company_data">
+    <if test="null!=params" >
+   		<if test="null!=params.hqCompanyData and ''!=params.hqCompanyData" >
+       		  (${params.hqCompanyData})
+     	 </if>
+     </if>
+  </sql>
+  
+ <!-- <sql id="monthCondition">
+  WHERE 
+		(CASE WHEN om.business_type = 3 
+		THEN(
+			EXISTS(
+				SELECT sbd.balance_month FROM inside_purchase_balance_date sbd 
+				WHERE sbd.balance_month = #{params.month}
+					AND sp.company_no = sbd.company_no
+					AND odr.out_date BETWEEN sbd.`balance_start_date` AND sbd.`balance_end_date` 
+					AND sbd.bill_type = 1)
+			)
+		ELSE(
+			EXISTS(
+				SELECT 1 FROM shop_balance_date sbd 
+				WHERE sbd.month = #{params.month}
+					AND odr.shop_no1 = sbd.shop_no 
+					AND odr.out_date BETWEEN sbd.`balance_start_date` AND sbd.`balance_end_date`)
+			)
+		END )
+  </sql>-->
+  <sql id="salesBaseSql">
+  	SELECT 
+	  company_no,
+	  company_name,
+	  organ_no,
+	  organ_name,
+	  shop_no,
+	  TRIM(short_name) shop_name,
+	  biz_type,
+	  brand_unit_no,
+	  brand_unit_name,
+	  brand_no1,
+	  brand_name,
+  <foreach item="item" index="index" collection="params.categories" open="" close="">
+  	 <!-- <if test="'00' != item"> -->
+  	 	SUM(IF(LEFT(category_no,2) IN (${item}),qty,0)) total_qty_0${index+1},
+  		SUM(IF(LEFT(category_no,2) IN (${item}),amount,0)) total_amount_0${index+1},
+  		SUM(IF(LEFT(category_no,2) IN (${item}),tag_Price,0)) total_tag_Price_0${index+1},
+  		SUM(IF(LEFT(category_no,2) IN (${item}),unit_cost,0)) total_amount_unit_cost_0${index+1},
+  		SUM(IF(LEFT(category_no,2) IN (${item}),region_cost,0)) total_amount_region_cost_0${index+1},
+  		SUM(IF(LEFT(category_no,2) IN (${item}),headquarter_cost,0)) total_amount_headquarter_cost_0${index+1},
+  	 <!-- </if> -->
+  	 <!-- <if test="'07' == item and '00' != item">
+  	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),qty,0)) total_qty_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),amount,0)) total_amount_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),tag_Price,0)) total_tag_Price_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),unit_cost,0)) total_amount_unit_cost_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),region_cost,0)) total_amount_region_cost_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),headquarter_cost,0)) total_amount_headquarter_cost_07,
+  	 </if> -->
+  </foreach>
+  <if test="null!= params.otherCategoryNo and ''!=params.otherCategoryNo">
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),qty,0)) total_qty_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),amount,0)) total_amount_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),tag_Price,0)) total_tag_Price_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),unit_cost,0)) total_amount_unit_cost_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),region_cost,0)) total_amount_region_cost_07,
+	  SUM(IF(LEFT(category_no,2) NOT IN (${params.notInNo}),headquarter_cost,0)) total_amount_headquarter_cost_07,
+  </if>
+  SUM(qty) total_qty,
+  SUM(amount) total_amount,
+  SUM(tag_Price) total_tag_Price,
+  SUM(unit_cost) total_amount_unit_cost,
+  SUM(region_cost) total_amount_region_cost,
+  SUM(headquarter_cost) total_amount_headquarter_cost
+  <!-- 
+  SUM(IF(LEFT(category_no,2)='01',qty,0)) total_qty_01,
+  SUM(IF(LEFT(category_no,2)='01',amount,0)) total_amount_01,
+  SUM(IF(LEFT(category_no,2)='01',tag_Price,0)) total_tag_Price_01,
+  SUM(IF(LEFT(category_no,2)='01',unit_cost,0)) total_amount_unit_cost_01,
+  SUM(IF(LEFT(category_no,2)='01',region_cost,0)) total_amount_region_cost_01,
+  SUM(IF(LEFT(category_no,2)='01',headquarter_cost,0)) total_amount_headquarter_cost_01,
+  SUM(IF(LEFT(category_no,2)='02',qty,0)) total_qty_02,
+  SUM(IF(LEFT(category_no,2)='02',amount,0)) total_amount_02,
+  SUM(IF(LEFT(category_no,2)='02',tag_Price,0)) total_tag_Price_02,
+  SUM(IF(LEFT(category_no,2)='02',unit_cost,0)) total_amount_unit_cost_02,
+  SUM(IF(LEFT(category_no,2)='02',region_cost,0)) total_amount_region_cost_02,
+  SUM(IF(LEFT(category_no,2)='02',headquarter_cost,0)) total_amount_headquarter_cost_02,
+  SUM(IF(LEFT(category_no,2)='03',qty,0)) total_qty_03,
+  SUM(IF(LEFT(category_no,2)='03',amount,0)) total_amount_03,
+  SUM(IF(LEFT(category_no,2)='03',tag_Price,0)) total_tag_Price_03,
+  SUM(IF(LEFT(category_no,2)='03',unit_cost,0)) total_amount_unit_cost_03,
+  SUM(IF(LEFT(category_no,2)='03',region_cost,0)) total_amount_region_cost_03,
+  SUM(IF(LEFT(category_no,2)='03',headquarter_cost,0)) total_amount_headquarter_cost_03,
+  SUM(IF(LEFT(category_no,2)='04',qty,0)) total_qty_04,
+  SUM(IF(LEFT(category_no,2)='04',amount,0)) total_amount_04,
+  SUM(IF(LEFT(category_no,2)='04',tag_Price,0)) total_tag_Price_04,
+  SUM(IF(LEFT(category_no,2)='04',unit_cost,0)) total_amount_unit_cost_04,
+  SUM(IF(LEFT(category_no,2)='04',region_cost,0)) total_amount_region_cost_04,
+  SUM(IF(LEFT(category_no,2)='04',headquarter_cost,0)) total_amount_headquarter_cost_04,
+  SUM(IF(LEFT(category_no,2)='05',qty,0)) total_qty_05,
+  SUM(IF(LEFT(category_no,2)='05',amount,0)) total_amount_05,
+  SUM(IF(LEFT(category_no,2)='05',tag_Price,0)) total_tag_Price_05,
+  SUM(IF(LEFT(category_no,2)='05',unit_cost,0)) total_amount_unit_cost_05,
+  SUM(IF(LEFT(category_no,2)='05',region_cost,0)) total_amount_region_cost_05,
+  SUM(IF(LEFT(category_no,2)='05',headquarter_cost,0)) total_amount_headquarter_cost_05,
+  SUM(IF(LEFT(category_no,2)='06',qty,0)) total_qty_06,
+  SUM(IF(LEFT(category_no,2)='06',amount,0)) total_amount_06,
+  SUM(IF(LEFT(category_no,2)='06',tag_Price,0)) total_tag_Price_06,
+  SUM(IF(LEFT(category_no,2)='06',unit_cost,0)) total_amount_unit_cost_06,
+  SUM(IF(LEFT(category_no,2)='06',region_cost,0)) total_amount_region_cost_06,
+  SUM(IF(LEFT(category_no,2)='06',headquarter_cost,0)) total_amount_headquarter_cost_06,
+  SUM(IF(LEFT(category_no,2) NOT IN ('01','02','03','04','05','06'),qty,0)) total_qty_07,
+  SUM(IF(LEFT(category_no,2) NOT IN ('01','02','03','04','05','06'),amount,0)) total_amount_07,
+  SUM(IF(LEFT(category_no,2) NOT IN ('01','02','03','04','05','06'),tag_Price,0)) total_tag_Price_07,
+  SUM(IF(LEFT(category_no,2) NOT IN ('01','02','03','04','05','06'),unit_cost,0)) total_amount_unit_cost_07,
+  SUM(IF(LEFT(category_no,2) NOT IN ('01','02','03','04','05','06'),region_cost,0)) total_amount_region_cost_07,
+  SUM(IF(LEFT(category_no,2) NOT IN ('01','02','03','04','05','06'),headquarter_cost,0)) total_amount_headquarter_cost_07
+   --> 
+FROM
+  (
+  	<if test="null != params.queryType and '' != params.queryType and 1 == params.queryType">
+		<include refid="queryGmsListSql" />
+	</if>
+	<if test="null != params.queryType and '' != params.queryType and 2 == params.queryType">
+		<include refid="queryPosListSql" />
+	</if>
+	<if test="null != params.queryType and '' != params.queryType and 3 == params.queryType">
+		<include refid="queryPosListSql" />
+		UNION ALL 
+		<include refid="queryGmsListSql" />
+	</if>
+    ) TOTAL_SALE where 1=1 <include refid="condition" />
+	GROUP BY company_no, organ_no, shop_no, biz_type,brand_unit_no 
+  </sql>
+ <select id="selectSalesSummary" resultMap="BaseResultMap" parameterType="map">
+	 <include refid="salesBaseSql" />
+ 	 LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+ 	<select id="selectCount" resultType="java.lang.Integer">
+		select count(*) from (
+		<include refid="salesBaseSql" />
+		     ) a	
+	</select>
+<select id="selectSalesSummaryCount" resultMap="BaseResultMap" parameterType="map" >
+ 	SELECT  COUNT(*) total,
+ 		<foreach item="item" index="index" collection="params.categories" open="" close="">
+	  	 <!-- <if test="'00' != item"> -->
+	  		IFNULL(SUM(total_qty_0${index+1}),0)AS total_qty_0${index+1},
+			IFNULL(SUM(total_amount_0${index+1}),0)AS total_amount_0${index+1},
+			IFNULL(SUM(total_tag_Price_0${index+1}),0)AS total_tag_Price_0${index+1},
+			IFNULL(SUM(total_amount_unit_cost_0${index+1}),0)AS total_amount_unit_cost_0${index+1},
+			IFNULL(SUM(total_amount_region_cost_0${index+1}),0)AS total_amount_region_cost_0${index+1},
+			IFNULL(SUM(total_amount_headquarter_cost_0${index+1}),0)AS total_amount_headquarter_cost_0${index+1},
+	  	 <!-- </if> -->
+	  	 <!-- <if test="'07' == item and '00' != item">
+	  	  	IFNULL(SUM(total_qty_07),0)AS total_qty_07,
+		  	IFNULL(SUM(total_amount_07),0)AS total_amount_07,
+		  	IFNULL(SUM(total_tag_Price_07),0)AS total_tag_Price_07,
+		  	IFNULL(SUM(total_amount_unit_cost_07),0)AS total_amount_unit_cost_07,
+		  	IFNULL(SUM(total_amount_region_cost_07),0)AS total_amount_region_cost_07,
+		  	IFNULL(SUM(total_amount_headquarter_cost_07),0)AS total_amount_headquarter_cost_07,
+	  	 </if> -->
+	  	</foreach>
+	  	<if test="null!= params.otherCategoryNo and ''!=params.otherCategoryNo">
+	  		IFNULL(SUM(total_qty_07),0)AS total_qty_07,
+		  	IFNULL(SUM(total_amount_07),0)AS total_amount_07,
+		  	IFNULL(SUM(total_tag_Price_07),0)AS total_tag_Price_07,
+		  	IFNULL(SUM(total_amount_unit_cost_07),0)AS total_amount_unit_cost_07,
+		  	IFNULL(SUM(total_amount_region_cost_07),0)AS total_amount_region_cost_07,
+		  	IFNULL(SUM(total_amount_headquarter_cost_07),0)AS total_amount_headquarter_cost_07,
+	  	</if>
+	  	IFNULL(SUM(total_qty),0)AS total_qty,
+	  	IFNULL(SUM(total_amount),0)AS total_amount,
+	  	IFNULL(SUM(total_tag_Price),0)AS total_tag_Price,
+	  	IFNULL(SUM(total_amount_unit_cost),0)AS total_amount_unit_cost,
+	  	IFNULL(SUM(total_amount_region_cost),0)AS total_amount_region_cost,
+	  	IFNULL(SUM(total_amount_headquarter_cost),0)AS total_amount_headquarter_cost
+		  <!-- IFNULL(SUM(total_qty),0)AS total_qty,
+		  IFNULL(SUM(total_amount),0)AS total_amount,
+		  IFNULL(SUM(total_tag_Price),0)AS total_tag_Price,
+		  IFNULL(SUM(total_amount_unit_cost),0)AS total_amount_unit_cost,
+		  IFNULL(SUM(total_amount_region_cost),0)AS total_amount_region_cost,
+		  IFNULL(SUM(total_amount_headquarter_cost),0)AS total_amount_headquarter_cost,
+
+		  IFNULL(SUM(total_qty_01),0)AS total_qty_01,
+		  IFNULL(SUM(total_amount_01),0)AS total_amount_01,
+		  IFNULL(SUM(total_tag_Price_01),0)AS total_tag_Price_01,
+		  IFNULL(SUM(total_amount_unit_cost_01),0)AS total_amount_unit_cost_01,
+		  IFNULL(SUM(total_amount_region_cost_01),0)AS total_amount_region_cost_01,
+		  IFNULL(SUM(total_amount_headquarter_cost_01),0)AS total_amount_headquarter_cost_01,
+		  
+		  IFNULL(SUM(total_qty_02),0)AS total_qty_02,
+		  IFNULL(SUM(total_amount_02),0)AS total_amount_02,
+		  IFNULL(SUM(total_tag_Price_02),0)AS total_tag_Price_02,
+		  IFNULL(SUM(total_amount_unit_cost_02),0)AS total_amount_unit_cost_02,
+		  IFNULL(SUM(total_amount_region_cost_02),0)AS total_amount_region_cost_02,
+		  IFNULL(SUM(total_amount_headquarter_cost_02),0)AS total_amount_headquarter_cost_02,
+		  
+		  IFNULL(SUM(total_qty_03),0)AS total_qty_03,
+		  IFNULL(SUM(total_amount_03),0)AS total_amount_03,
+		  IFNULL(SUM(total_tag_Price_03),0)AS total_tag_Price_03,
+		  IFNULL(SUM(total_amount_unit_cost_03),0)AS total_amount_unit_cost_03,
+		  IFNULL(SUM(total_amount_region_cost_03),0)AS total_amount_region_cost_03,
+		  IFNULL(SUM(total_amount_headquarter_cost_03),0)AS total_amount_headquarter_cost_03,
+		  
+		  IFNULL(SUM(total_qty_04),0)AS total_qty_04,
+		  IFNULL(SUM(total_amount_04),0)AS total_amount_04,
+		  IFNULL(SUM(total_tag_Price_04),0)AS total_tag_Price_04,
+		  IFNULL(SUM(total_amount_unit_cost_04),0)AS total_amount_unit_cost_04,
+		  IFNULL(SUM(total_amount_region_cost_04),0)AS total_amount_region_cost_04,
+		  IFNULL(SUM(total_amount_headquarter_cost_04),0)AS total_amount_headquarter_cost_04,
+		  
+		  IFNULL(SUM(total_qty_05),0)AS total_qty_05,
+		  IFNULL(SUM(total_amount_05),0)AS total_amount_05,
+		  IFNULL(SUM(total_tag_Price_05),0)AS total_tag_Price_05,
+		  IFNULL(SUM(total_amount_unit_cost_05),0)AS total_amount_unit_cost_05,
+		  IFNULL(SUM(total_amount_region_cost_05),0)AS total_amount_region_cost_05,
+		  IFNULL(SUM(total_amount_headquarter_cost_05),0)AS total_amount_headquarter_cost_05,
+		  
+		  IFNULL(SUM(total_qty_06),0)AS total_qty_06,
+		  IFNULL(SUM(total_amount_06),0)AS total_amount_06,
+		  IFNULL(SUM(total_tag_Price_06),0)AS total_tag_Price_06,
+		  IFNULL(SUM(total_amount_unit_cost_06),0)AS total_amount_unit_cost_06,
+		  IFNULL(SUM(total_amount_region_cost_06),0)AS total_amount_region_cost_06,
+		  IFNULL(SUM(total_amount_headquarter_cost_06),0)AS total_amount_headquarter_cost_06,
+		  
+		  IFNULL(SUM(total_qty_07),0)AS total_qty_07,
+		  IFNULL(SUM(total_amount_07),0)AS total_amount_07,
+		  IFNULL(SUM(total_tag_Price_07),0)AS total_tag_Price_07,
+		  IFNULL(SUM(total_amount_unit_cost_07),0)AS total_amount_unit_cost_07,
+		  IFNULL(SUM(total_amount_region_cost_07),0)AS total_amount_region_cost_07,
+		  IFNULL(SUM(total_amount_headquarter_cost_07),0)AS total_amount_headquarter_cost_07	 -->	  
+   	FROM(
+			<include refid="salesBaseSql" />
+		)  s 
+	</select>
+	
+	
+	<sql id="queryPosListSql">
+		SELECT 
+	        om.company_no,
+	        om.company_name,
+	        g.organ_no,
+	        g.NAME AS organ_name,
+	        sp.shop_no,
+	        sp.short_name short_name,
+	        sp.shop_no shop_no1,
+	        CASE WHEN om.business_type = 3  THEN '内购' ELSE '门店' END biz_type,
+	        od.order_no,
+	        od.item_no,
+	        od.item_code,
+	        od.item_name,
+	        od.category_no,
+	        od.brand_unit_no,
+  			od.brand_unit_name,
+	        od.brand_no brand_no1,
+	        od.brand_name,
+	        om.out_date,
+	        od.qty,
+	        od.amount,
+	        od.tag_Price * IFNULL(od.qty, 0) tag_Price,
+	        IFNULL(od.unit_cost, 0) * IFNULL(od.qty, 0) unit_cost,
+	        IFNULL(od.region_cost, 0) * IFNULL(od.qty, 0) region_cost,
+	        IFNULL(od.headquarter_cost, 0) * IFNULL(od.qty, 0) headquarter_cost 
+	    FROM
+	        shop sp 
+	        LEFT JOIN organ bg 
+	        ON sp.biz_city_no = bg.organ_no
+			LEFT JOIN organ g 
+			ON bg.parent_no = g.organ_no
+	        STRAIGHT_JOIN order_main om
+	            ON om.shop_no = sp.shop_no 
+	        RIGHT JOIN order_dtl od 
+	            ON od.order_no = om.order_no
+	    WHERE om.status IN ('30', '41') 
+	    <if test="null!=params" >
+			<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+				AND om.out_date &gt;= #{params.saleStartDate}
+			</if>
+			<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+				AND om.out_date &lt;= #{params.saleEndDate}
+			</if>
+			<if test="null!=params.queryCondition1 and ''!=params.queryCondition1">
+				AND om.business_type IN(${params.queryCondition1})
+			</if>
+			<!-- <if test="null == params.queryCondition1" >
+				AND om.business_type IN (0, 1, 2, 3, 6) 
+			</if> -->
+			<if test="null!=params.itemSql and ''!=params.itemSql" >
+				AND od.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+	  		</if>
+	  		<if test="null!=params.brandNo and ''!=params.brandNo">
+       	  		 and od.brand_no in ${params.brandNo}
+      		</if>
+	  		<if test="null!=params.organNo and ''!=params.organNo">
+				and g.organ_no in ${params.organNo}
+			</if>
+			<if test="null!= params.categoryNos and ''!=params.categoryNos">
+				AND (left(od.category_no,2) IN 
+				<foreach collection="params.categoryNos" index="index" item="categoryNo" open="(" separator="," close=")">
+					${categoryNo}
+				</foreach>
+				<if test="null!= params.otherCategoryNo and ''!=params.otherCategoryNo and '07'== params.otherCategoryNo" >
+					OR left(od.category_no,2) NOT IN (${params.notInNo})
+				</if>)
+			</if>
+			<if test="null!= params.otherCategoryNo and ''!=params.otherCategoryNo 
+			and '07'== params.otherCategoryNo and null == params.categoryNos">
+				AND left(od.category_no,2) NOT IN (${params.notInNo})
+			</if>
+		</if> 
+	 	UNION ALL 
+	    SELECT 
+	        om.company_no,
+	        om.company_name,
+	        g.organ_no,
+	        g.NAME AS organ_name,
+	        sp.shop_no,
+	        sp.short_name short_name,
+	        sp.shop_no shop_no1,
+	        CASE WHEN om.business_type = 3 THEN '内购' ELSE '门店' END biz_type,
+	        od.business_no order_no,
+	        od.item_no,
+	        od.item_code,
+	        od.item_name,
+	        od.category_no,
+	        od.brand_unit_no,
+  			od.brand_unit_name,
+	        od.brand_no  brand_no1,
+	        od.brand_name,
+	        om.out_date,
+	        od.qty,
+	        od.amount,
+	        od.tag_Price * IFNULL(od.qty, 0) tag_Price,
+	        IFNULL(od.unit_cost, 0) * IFNULL(od.qty, 0) unit_cost,
+	        IFNULL(od.region_cost, 0) * IFNULL(od.qty, 0) region_cost,
+	        IFNULL(od.headquarter_cost, 0) * IFNULL(od.qty, 0) headquarter_cost 
+	    FROM
+	        return_exchange_dtl od 
+	        LEFT JOIN return_exchange_main om 
+	            ON od.business_no = om.business_no 
+	        INNER JOIN shop sp 
+	            ON om.shop_no = sp.shop_no 
+            LEFT JOIN organ bg 
+	        	ON sp.biz_city_no = bg.organ_no
+			LEFT JOIN organ g 
+				ON bg.parent_no = g.organ_no
+	    WHERE om.status IN ('30', '41') 
+	    <if test="null!=params" >
+			<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+				AND om.out_date &gt;= #{params.saleStartDate}
+			</if>
+			<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+				AND om.out_date &lt;= #{params.saleEndDate}
+			</if>
+			<if test="null!=params.queryCondition1 and ''!=params.queryCondition1">
+				AND om.business_type IN(${params.queryCondition1})
+			</if>
+			<!-- <if test="null == params.queryCondition1" >
+				AND om.business_type IN (0, 1, 2, 3, 6) 
+			</if> -->
+			<if test="null!=params.itemSql and ''!=params.itemSql" >
+				AND od.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+	  		</if>
+	  		<if test="null!=params.brandNo and ''!=params.brandNo">
+       	  		 and od.brand_no in ${params.brandNo}
+      		</if>
+	  		 <if test="null!=params.organNo and ''!=params.organNo">
+				and g.organ_no in ${params.organNo}
+			</if>
+			<if test="null!= params.categoryNos and ''!=params.categoryNos">
+				AND (left(od.category_no,2) IN 
+				<foreach collection="params.categoryNos" index="index" item="categoryNo" open="(" separator="," close=")">
+					${categoryNo}
+				</foreach>
+				<if test="null!= params.otherCategoryNo and ''!=params.otherCategoryNo and '07'== params.otherCategoryNo">
+					OR left(od.category_no,2) NOT IN (${params.notInNo})
+				</if>)
+			</if>
+			<if test="null!= params.otherCategoryNo and ''!=params.otherCategoryNo 
+			and '07'== params.otherCategoryNo and null == params.categoryNos">
+				AND left(od.category_no,2) NOT IN (${params.notInNo})
+			</if>
+		</if>  
+	</sql>
+	
+	<sql id="queryGmsListSql">
+		SELECT 
+	        bsb.saler_no company_no,
+	        bsb.saler_name company_name,
+	        bsb.organ_no_from organ_no,
+			bsb.organ_name_from organ_name,
+	        bsb.buyer_no shop_no,
+	        bsb.buyer_name short_name,
+	        CASE WHEN ${params.transferSql} THEN '001'  WHEN ${params.otherSql} THEN '004' 
+			WHEN ${params.innerBuySql} THEN '002' WHEN ${params.wholesaleSql} THEN '003' END shop_no1,
+	       	CASE WHEN (${params.transferSql}) THEN '调货'  WHEN ${params.otherSql} THEN '其他' 
+			WHEN ${params.innerBuySql} THEN '内购' WHEN ${params.wholesaleSql} THEN '批发'  END  biz_type,
+	        bsb.bill_no order_no,
+	        bsb.item_no,
+	        bsb.item_code,
+	        bsb.item_name,
+	        bsb.category_no,
+	       	bsb.brand_unit_no,
+	        bsb.brand_unit_name,
+	        bsb.brand_no brand_no1,
+	        bsb.brand_name,
+	        bsb.send_date out_date,
+	        bsb.send_qty qty,
+	        bsb.cost * IFNULL(bsb.send_qty, 0) amount,
+	        bsb.tag_price * IFNULL(bsb.send_qty, 0) tag_price,
+	        IFNULL(bsb.unit_cost, 0) * IFNULL(bsb.send_qty, 0) unit_cost,
+	        IFNULL(bsb.region_cost, 0) * IFNULL(bsb.send_qty, 0) region_cost,
+	       IFNULL( bsb.headquarter_cost, 0) * IFNULL(bsb.send_qty, 0) headquarter_cost 
+	    FROM
+	        bill_sale_balance bsb 
+	    WHERE 1 = 1 
+	        AND (
+	          <if test="null!=params" >
+			    <if test="null!=params.queryCondition2 and ''!=params.queryCondition2" >
+			       ${params.queryCondition2}
+			    </if>
+			  </if>
+			  <!-- <if test="null == params.queryCondition2" >
+			    (
+			      bsb.bill_type = 1371
+			    ) 
+			    OR (
+			      bsb.bill_type = 1335 
+			      AND bsb.biz_type IN (3,21,22,30,29)3:其他出库 ;21:批发出库;22:过季退货;30:客残退货
+			    ) 
+			    OR (bsb.bill_type = 1361 AND bsb.biz_type IN (7,25) )
+				OR (bsb.bill_type = 1335 AND bsb.biz_type in (2,23,24,13))2:客残销售 ;23:团购出库;24:团购退货
+				OR bsb.bill_type = 1342报废单（直接）
+				OR (bsb.bill_type = 1355 AND bsb.biz_type in (8,10,26)) 索赔单, 10＝索赔单(库存盘差)
+				OR (bsb.bill_type = 2005 AND bsb.biz_type = 35)
+				OR (bsb.bill_type = 1355 AND bsb.biz_type = 10) 
+			   </if> -->
+	        ) 
+	    <if test="null!=params" >
+			<if test="null!=params.saleStartDate and ''!=params.saleStartDate" >
+				AND bsb.send_date &gt;= #{params.saleStartDate}
+			</if>
+			<if test="null!=params.saleEndDate and ''!=params.saleEndDate" >    
+				AND bsb.send_date &lt;= #{params.saleEndDate}
+			</if>
+			<!-- <if test="null == params.month or '' == params.month">
+	  			and bsb.send_date &gt;=  '${params.saleStartDate} 00:00:00' 
+	  			AND bsb.send_date &lt;=  '${params.saleEndDate} 23:59:59'
+	  		</if> -->
+	  		 <if test="null!=params.itemSql and ''!=params.itemSql" >
+				AND bsb.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+	  		</if>
+	  		<if test="null!=params.brandNo and ''!=params.brandNo">
+       	  		 and bsb.brand_no in ${params.brandNo}
+      		</if>
+	  		 <if test="null!=params.organNo and ''!=params.organNo">
+				and bsb.organ_no_from in ${params.organNo}
+			</if>
+			<if test="null!= params.categoryNos and ''!=params.categoryNos">
+				AND (left(bsb.category_no,2) IN 
+				<foreach collection="params.categoryNos" index="index" item="categoryNo" open="(" separator="," close=")">
+					${categoryNo}
+				</foreach>
+				<if test="null!= params.otherCategoryNo and ''!=params.otherCategoryNo and '07'== params.otherCategoryNo">
+					OR left(bsb.category_no,2) NOT IN (${params.notInNo})
+				</if>)
+			</if>
+			<if test="null!= params.otherCategoryNo and ''!=params.otherCategoryNo 
+			and '07'== params.otherCategoryNo and null == params.categoryNos">
+				AND left(bsb.category_no,2) NOT IN (${params.notInNo})
+			</if>
+			<if test="null!=params.customerNos and ''!=params.customerNos">
+				AND bsb.buyer_no IN
+				<foreach collection="params.customerNos" index="index" item="customerNo" open="(" separator="," close=")">
+					#{customerNo, jdbcType=CHAR}
+				</foreach>
+			</if>
+	  	</if> 
+	</sql>
+</mapper>

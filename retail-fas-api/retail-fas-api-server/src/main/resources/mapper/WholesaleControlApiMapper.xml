@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.WholesaleControlApiMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.dto.WholesaleControlApiDto" >
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+   	<result column="original_bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="send_date" property="billDate" jdbcType="TIMESTAMP" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="remainder_amount" property="remainderAmount" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="term_name" property="termName" jdbcType="CHAR" />
+    <result column="rebate_amount" property="rebateAmount" jdbcType="DECIMAL" />
+    <result column="margin_control_flag" property="marginControlFlag" jdbcType="INTEGER" />
+    <result column="margin_remainder_amount" property="marginRemainderAmount" jdbcType="DECIMAL" />
+    <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+    <result column="margin_amount" property="marginAmount" jdbcType="DECIMAL" />
+    <result column="pre_send_amount" property="preSendAmount" jdbcType="DECIMAL" />
+    <result column="pre_order_amount" property="preOrderAmount" jdbcType="DECIMAL" />
+    <result column="pre_send_control" property="preSendControl" jdbcType="INTEGER" />
+    <result column="pre_order_control" property="preOrderControl" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+  <resultMap id="NewResultMap" type="cn.wonhigh.retail.fas.api.dto.WholesaleControlApiDto" >
+  	<result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+    <result column="control_type" property="controlType" jdbcType="INTEGER" />
+    <result column="advance_scale" property="advanceScale" jdbcType="INTEGER"/>
+    <result column="cost" property="cost" jdbcType="DECIMAL"/>
+    <result column="term_no" property="termNo" jdbcType="CHAR" />
+    <result column="margin_control_flag" property="marginControlFlag" jdbcType="INTEGER" />
+    <result column="margin_remainder_amount" property="marginRemainderAmount" jdbcType="DECIMAL" />
+    <result column="margin_amount" property="marginAmount" jdbcType="DECIMAL" />
+    
+    <result column="rel_status" property="customerReceRelStatus" jdbcType="INTEGER" />
+    <result column="term_status" property="wholesaleReceTermStatus" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <select id="selectByBillNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	  SELECT 
+		  buyer_no,
+		  buyer_name,
+		  saler_no,
+		  saler_name,
+		  original_bill_no,
+		  ref_bill_no,
+		  send_date,
+		  send_qty,
+		  amount,
+		  rebate_amount,
+		  send_amount,
+		  WRT.name term_name,
+		  CRR.`margin_control_flag`,
+		  CRR.`margin_amount`,
+		  CRR.margin_remainder_amount,
+		  BP.paid_amount,
+		  BP.paid_amount - IFNULL(send_amount, 0) remainder_amount,
+		  DTL0.advance_type pre_order_control,
+		  (CASE WHEN DTL0.advance_type = 1 
+			THEN amount
+			WHEN DTL0.advance_type = 0 
+			THEN DTL0.advance_scale * amount / 100 
+			ELSE NULL
+			END) pre_order_amount,
+		  DTL1.advance_type pre_send_control,
+		 (DTL1.advance_scale * amount / 100 + IFNULL(DTL0.advance_scale * amount / 100,0)) pre_send_amount 
+		FROM
+		  (SELECT 
+		    B0.buyer_no,
+		    B0.buyer_name,
+		    B0.saler_no,
+		    B0.saler_name,
+		    B0.original_bill_no,
+		    B0.ref_bill_no,
+		    B0.send_date,
+		    SUM(B0.send_qty) send_qty,
+		    SUM(B0.cost * B0.send_qty) amount,
+		    B1.send_amount,
+		    B0.bill_cost rebate_amount 
+		  FROM
+		    bill_sale_balance B0 
+		    LEFT JOIN 
+		      (SELECT 
+		        SUM(send_qty * cost) send_amount,
+		        SUM(send_qty) send_qty,
+		        ref_bill_no 
+		      FROM
+		        bill_sale_balance 
+		      WHERE 1 = 1 
+		        AND (
+		          bill_type = 1335 
+		          OR biz_type IN (21, 22, 29, 30, 43)
+		        ) 
+		      GROUP BY ref_bill_no) B1 
+		      ON B1.`ref_bill_no` = B0.`original_bill_no` 
+		  WHERE 1 = 1 
+		    AND B0.bill_type = 1337 
+		    AND B0.biz_type = 21 
+		    AND B0.`original_bill_no` = #{billNo}
+		  GROUP BY B0.original_bill_no) B2 
+		  LEFT JOIN customer_rece_rel CRR 
+		    ON CRR.`company_no` = B2.`saler_no` 
+		    AND CRR.`customer_no` = B2.`buyer_no` 
+		    AND CRR.`status` = 1 
+		  LEFT JOIN 
+		    (SELECT 
+		      bill_pre_payment_nt.sale_order_no,
+		      SUM(
+		        bill_pre_payment_nt.`paid_amount`
+		      ) paid_amount 
+		    FROM
+		      bill_pre_payment_nt 
+		    WHERE bill_pre_payment_nt.`audit_status` = 1 
+		    GROUP BY bill_pre_payment_nt.sale_order_no) BP 
+		    ON BP.`sale_order_no` = B2.`original_bill_no` 
+		  LEFT JOIN wholesale_rece_term WRT 
+		    ON CRR.`term_no` = WRT.`term_no` 
+		    AND WRT.`status` = 1 
+		  LEFT JOIN wholesale_rece_term_dtl DTL0 
+		    ON WRT.`term_no` = DTL0.`term_no` 
+		    AND DTL0.`control_point` = 0 
+		  LEFT JOIN wholesale_rece_term_dtl DTL1 
+		    ON WRT.`term_no` = DTL1.`term_no` 
+		    AND DTL1.`control_point` = 1 
+  </select>
+  
+  <!-- 获取收款条款ByBillNo -->
+  <select id="selectWholesaleReceTermByBillNo" resultMap="NewResultMap" parameterType="map" >		
+		SELECT  w.term_no, IFNULL(w.control_type,0) control_type, IFNULL(w.status,0) term_status,IFNULL(t.status,0) rel_status, 
+				t.saler_no, t.saler_name, t.buyer_no, t.buyer_name, IFNULL(t.margin_control_flag,0) margin_control_flag,
+			 IFNULL(t.margin_amount,0) margin_amount, IFNULL(t.margin_remainder_amount,0) margin_remainder_amount 
+		FROM (SELECT b.saler_no, b.saler_name, b.buyer_no, b.buyer_name, c.term_no, c.status,c.margin_control_flag,c.margin_amount,c.margin_remainder_amount
+			FROM bill_sale_balance b 
+			LEFT JOIN customer_rece_rel c ON c.company_no = b.saler_no AND c.customer_no = b.buyer_no  
+			WHERE b.original_bill_no = #{params.billNo} 
+			GROUP BY original_bill_no 
+			) t
+		LEFT JOIN wholesale_rece_term w 
+		ON t.term_no = w.term_no 
+  </select>
+  
+  <!-- 获取收款条款ByCustomer -->
+  <select id="selectWholesaleReceTermByCustomer" resultMap="NewResultMap" parameterType="map" >
+  	SELECT w.term_no, w.control_type, c.company_no saler_no, c.company_name saler_name, c.customer_no buyer_no, 
+  			c.customer_name buyer_name, margin_control_flag, margin_amount, margin_remainder_amount 
+		FROM customer_rece_rel c 
+		LEFT JOIN wholesale_rece_term w ON c.term_no = w.term_no 
+		WHERE c.customer_no=#{params.buyerNo} 
+		AND c.company_no = (SELECT MAX(company_no) FROM order_unit WHERE order_unit_no = #{params.orderUnitNo}) 
+		AND w.status=1 AND c.status=1 
+		GROUP BY c.customer_no,c.company_no 
+  </select>
+  
+  <!-- 获取收款条款明细规则 -->
+  <select id="selectWholesaleReceTermDtlByTermNo" resultMap="NewResultMap" parameterType="map" >
+  	SELECT term_no,advance_scale,control_point 
+  		FROM wholesale_rece_term_dtl 
+  		WHERE 1=1 
+  		<if test="params.termNo != null and params.termNo != '' ">
+  			AND term_no=#{params.termNo} 
+  		</if>
+  		<if test="params.controlPoint != null and params.controlPoint != '' ">
+  			AND control_point = #{params.controlPoint}   
+  		</if>
+  		
+  </select>
+  
+  <!-- 获取订单收款、出库金额-->
+  <select id="selectOrderPreAmountByParams" resultMap="NewResultMap" parameterType="map" >
+ 	SELECT
+ 		buyer_no,
+ 		buyer_name,
+ 		saler_no,
+ 		saler_name,
+		IFNULL(send_amount,0) send_amount, 
+		IFNULL(SUM(paid_amount),0) paid_amount 
+  	FROM (SELECT 
+		buyer_no,
+		buyer_name,
+		saler_no,
+		saler_name,
+		original_bill_no,
+		SUM(cost * send_qty) send_amount 
+		FROM  bill_sale_balance 
+		WHERE original_bill_no = #{params.billNo} ) b 
+		LEFT JOIN bill_pre_payment_nt pre ON b.original_bill_no = pre.sale_order_no 
+		WHERE pre.audit_status = '1'
+  </select>
+   
+  <!-- 汇总客户预收款 -->
+  <select id="selectCalcPaidAmountByParams" resultMap="NewResultMap" parameterType="map">
+  	SELECT IFNULL(SUM(paid_amount),0) paid_amount 
+  	FROM bill_pre_payment_nt 
+  	WHERE customer_no = #{params.buyerNo} 
+  		AND company_no = (SELECT MAX(company_no) FROM order_unit WHERE order_unit_no = #{params.orderUnitNo}) 
+  		AND paid_type IN ('0','2') AND audit_status = '1' 
+  </select>
+  
+  <!-- 汇总客户已出库金额 -->
+  <select id="selectCalcSendAmountByParams" resultMap="NewResultMap" parameterType="map">
+  	SELECT
+ 		(SELECT MAX(customer_no) FROM customer WHERE customer_no = #{params.buyerNo}) buyer_no,
+ 		(SELECT MAX(short_name) FROM customer WHERE customer_no = #{params.buyerNo}) buyer_name,
+ 		(SELECT MAX(company_no) FROM order_unit WHERE order_unit_no = #{params.orderUnitNo}) saler_no,
+ 		(SELECT MAX(NAME) FROM company WHERE company_no = (SELECT MAX(company_no) FROM order_unit WHERE order_unit_no = #{params.orderUnitNo}) ) saler_name,
+  		IFNULL(SUM(cost * send_qty),0) send_amount 
+  	FROM bill_sale_balance 
+  	WHERE buyer_no = #{params.buyerNo} 
+  		AND saler_no = (SELECT MAX(company_no) FROM order_unit WHERE order_unit_no = #{params.orderUnitNo}) 
+  		AND bill_type='1335' AND biz_type IN (21,22,29,30,43) 
+  </select>
+  
+  <update id="batchUpdateBillCost" parameterType="java.util.List">
+        update bill_sale_balance
+            <trim prefix="set" suffixOverrides=",">
+	            <trim prefix="cost = case" suffix="end,">
+	                <foreach collection="list" item="item" index="index">
+	                        <if test="item.billNo!=null">
+	                         when (bill_no=#{item.billNo} and item_code=#{item.itemCode}) then #{item.cost}
+	                        </if>
+	                </foreach>
+	             </trim>
+             </trim>
+        where bill_no in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >  
+		        #{item.billNo}  
+		    </foreach>  
+    </update>
+
+</mapper>

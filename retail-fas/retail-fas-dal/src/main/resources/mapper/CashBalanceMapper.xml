@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CashBalanceMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CashBalance" >
+  	<result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="start_amount" property="startAmount" jdbcType="DECIMAL" />
+    <result column="current_amount" property="currentAmount" jdbcType="DECIMAL" />
+    <result column="current_deposit_amount" property="currentDepositAmount" jdbcType="DECIMAL" />
+    <result column="end_amount" property="endAmount" jdbcType="DECIMAL" />
+    <result column="prepare_cash" property="prepareCash" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <select id="findCashBalanceCount" resultType="java.lang.Integer">
+  	SELECT count(1) total
+	FROM (
+		SELECT 
+			s.shop_no,s.full_name shop_name,
+			IFNULL((
+				SELECT SUM(op.amount) FROM order_main om LEFT JOIN order_payway op ON om.order_no = op.order_no WHERE 1 = 1 AND om.shop_no = s.shop_no AND om.`status` IN (30,41) AND om.out_date &lt; '${params.startOutDate}' AND om.business_type IN (0, 1, 2, 6) AND op.pay_code = '01'
+			),0) om_amount,
+			IFNULL((
+				SELECT SUM(op.amount) FROM return_exchange_main rem LEFT JOIN order_payway op ON rem.business_no = op.order_no WHERE 1 = 1 AND rem.shop_no = s.shop_no AND rem.`status` IN (30,41) AND rem.out_date &lt; '${params.startOutDate}' AND rem.business_type IN (0, 1, 2, 6) AND op.pay_code = '01'
+			),0) rem_amount,
+			IFNULL((SELECT SUM(amount) amount FROM deposit_cash WHERE 1 = 1
+				AND shop_no = s.shop_no AND end_out_date &lt; '${params.startOutDate}' AND `status` = 0
+			),0) deposit_amount,
+			IFNULL((SELECT start_amount FROM deposit_set WHERE 1 = 1
+				AND shop_no = s.shop_no AND init_date &lt;= '${params.startOutDate}' LIMIT 0,1
+			),0) start_amount,
+			IFNULL((
+				SELECT SUM(op.amount) FROM order_main om LEFT JOIN order_payway op ON om.order_no = op.order_no WHERE 1 = 1 AND om.shop_no = s.shop_no AND om.`status` IN (30,41) AND om.out_date &gt;= '${params.startOutDate}' AND om.out_date &lt;= '${params.startOutDate}' AND om.business_type IN (0, 1, 2, 6) AND op.pay_code = '01'
+			),0) om_current_amount,
+			IFNULL((
+				SELECT SUM(op.amount) FROM return_exchange_main rem LEFT JOIN order_payway op ON rem.business_no = op.order_no WHERE 1 = 1 AND rem.shop_no = s.shop_no AND rem.`status` IN (30,41) AND rem.out_date &gt;= '${params.startOutDate}' AND rem.out_date &lt;= '${params.startOutDate}' AND rem.business_type IN (0, 1, 2, 6) AND op.pay_code = '01'
+			),0) rem_current_amount,
+			IFNULL((SELECT SUM(amount) amount FROM deposit_cash WHERE 1 = 1
+				AND shop_no = s.shop_no AND start_out_date &gt;= '${params.startOutDate}' AND end_out_date &lt;= '${params.endOutDate}' AND `status` = 0
+			),0) current_deposit_amount,
+			IFNULL((SELECT prepare_cash FROM deposit_set WHERE 1=1 AND shop_no = s.shop_no LIMIT 0,1),0) prepare_cash
+		FROM shop s WHERE 1=1
+		<if test="null!=params" >
+		  <if test="params.companyNo != null and params.companyNo!=''">  
+		     and s.company_no = #{params.companyNo}
+		  </if>
+		  <if test="params.shopNo != null and params.shopNo!=''">  
+		     and s.shop_no = #{params.shopNo}
+		  </if>
+		  <if test="null!=params.isCashRegister and 'true' ==params.isCashRegister">
+			AND EXISTS
+		    (
+				SELECT 1 FROM shop_extension e WHERE e.shop_no = s.shop_no AND e.attribute_detail_no = '20160420000019'      
+		    )
+		  </if>
+		</if>
+	) A
+  </select>
+  
+  <select id="findCashBalanceList" resultMap="BaseResultMap" parameterType="map">
+  	SELECT 
+  		A.shop_no,A.shop_name,
+  		(A.om_amount+A.rem_amount-A.deposit_amount+A.start_amount) start_amount,
+  		(A.om_current_amount+A.rem_current_amount) current_amount,A.current_deposit_amount,
+		(A.om_amount+A.rem_amount-A.deposit_amount+A.start_amount+A.om_current_amount+A.rem_current_amount-A.current_deposit_amount) end_amount,
+		A.prepare_cash
+	FROM (
+		SELECT 
+			s.shop_no,s.full_name shop_name,
+			IFNULL((
+				SELECT SUM(op.amount) FROM order_main om LEFT JOIN order_payway op ON om.order_no = op.order_no WHERE 1 = 1 AND om.shop_no = s.shop_no AND om.`status` IN (30,41) AND om.out_date &lt; '${params.startOutDate}' AND om.business_type IN (0, 1, 2, 6) AND op.pay_code = '01'
+			),0) om_amount,
+			IFNULL((
+				SELECT SUM(op.amount) FROM return_exchange_main rem LEFT JOIN order_payway op ON rem.business_no = op.order_no WHERE 1 = 1 AND rem.shop_no = s.shop_no AND rem.`status` IN (30,41) AND rem.out_date &lt; '${params.startOutDate}' AND rem.business_type IN (0, 1, 2, 6) AND op.pay_code = '01'
+			),0) rem_amount,
+			IFNULL((SELECT SUM(amount) amount FROM deposit_cash WHERE 1 = 1
+				AND shop_no = s.shop_no AND end_out_date &lt; '${params.startOutDate}' AND `status` = 0
+			),0) deposit_amount,
+			IFNULL((SELECT start_amount FROM deposit_set WHERE 1 = 1
+				AND shop_no = s.shop_no AND init_date &lt;= '${params.startOutDate}' LIMIT 0,1
+			),0) start_amount,
+			IFNULL((
+				SELECT SUM(op.amount) FROM order_main om LEFT JOIN order_payway op ON om.order_no = op.order_no WHERE 1 = 1 AND om.shop_no = s.shop_no AND om.`status` IN (30,41) AND om.out_date &gt;= '${params.startOutDate}' AND om.out_date &lt;= '${params.startOutDate}' AND om.business_type IN (0, 1, 2, 6) AND op.pay_code = '01'
+			),0) om_current_amount,
+			IFNULL((
+				SELECT SUM(op.amount) FROM return_exchange_main rem LEFT JOIN order_payway op ON rem.business_no = op.order_no WHERE 1 = 1 AND rem.shop_no = s.shop_no AND rem.`status` IN (30,41) AND rem.out_date &gt;= '${params.startOutDate}' AND rem.out_date &lt;= '${params.startOutDate}' AND rem.business_type IN (0, 1, 2, 6) AND op.pay_code = '01'
+			),0) rem_current_amount,
+			IFNULL((
+				SELECT SUM(amount) amount FROM deposit_cash WHERE 1 = 1 AND shop_no = s.shop_no AND start_out_date &gt;= '${params.startOutDate}' AND end_out_date &lt;= '${params.endOutDate}' AND `status` = 0
+			),0) current_deposit_amount,
+			IFNULL((SELECT prepare_cash FROM deposit_set WHERE 1=1 AND shop_no = s.shop_no LIMIT 0,1),0) prepare_cash
+		FROM shop s WHERE 1=1
+		<if test="null!=params" >
+		  <if test="params.companyNo != null and params.companyNo!=''">  
+		     and s.company_no = #{params.companyNo}
+		  </if>
+		  <if test="params.shopNo != null and params.shopNo!=''">  
+		     and s.shop_no = #{params.shopNo}
+		  </if>
+		  <if test="null!=params.isCashRegister and 'true' ==params.isCashRegister">
+			AND EXISTS
+		    (
+				SELECT 1 FROM shop_extension e WHERE e.shop_no = s.shop_no AND e.attribute_detail_no = '20160420000019'      
+		    )
+		  </if>
+		</if>
+	) A
+	<if test="orderByField != null and ''!=orderByField">
+		,${orderByField}
+		<if test="orderByField">
+			${orderBy}
+		</if>
+	</if>
+	LIMIT #{page.startRowNum} ,#{page.pageSize}
+  </select>
+</mapper>

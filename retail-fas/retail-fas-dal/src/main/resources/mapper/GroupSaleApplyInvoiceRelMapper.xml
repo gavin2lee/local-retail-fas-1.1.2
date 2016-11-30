@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.GroupSaleApplyInvoiceRelMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.GroupSaleApplyInvoiceRel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="CHAR" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="TIMESTAMP" />
+    <result column="invoice_no" property="invoiceNo" jdbcType="CHAR" />
+    <result column="invoice_date" property="invoiceDate" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_no, invoice_apply_no, invoice_apply_date, invoice_no, invoice_date, create_user, 
+    create_time, update_user, update_time
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null != params.orderNo and '' != params.orderNo">
+      	and order_no = #{params.orderNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM group_sale_apply_invoice_rel
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM group_sale_apply_invoice_rel WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM group_sale_apply_invoice_rel WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM group_sale_apply_invoice_rel WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM group_sale_apply_invoice_rel
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.GroupSaleApplyInvoiceRel" >
+    DELETE FROM group_sale_apply_invoice_rel
+    WHERE id = #{id,jdbcType=INTEGER}
+    or invoice_apply_no = #{invoiceApplyNo,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.GroupSaleApplyInvoiceRel" >
+    INSERT INTO group_sale_apply_invoice_rel (id, order_no, invoice_apply_no, 
+      invoice_apply_date, invoice_no, invoice_date, 
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=CHAR}, #{invoiceApplyNo,jdbcType=CHAR}, 
+      #{invoiceApplyDate,jdbcType=TIMESTAMP}, #{invoiceNo,jdbcType=CHAR}, #{invoiceDate,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.GroupSaleApplyInvoiceRel" >
+    INSERT INTO group_sale_apply_invoice_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="invoiceApplyNo != null" >
+        invoice_apply_no,
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date,
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no,
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyNo != null" >
+        #{invoiceApplyNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        #{invoiceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invoiceNo != null" >
+        #{invoiceNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceDate != null" >
+        #{invoiceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.GroupSaleApplyInvoiceRel" >
+    UPDATE group_sale_apply_invoice_rel
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyNo != null" >
+        invoice_apply_no = #{invoiceApplyNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date = #{invoiceApplyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invoiceNo != null" >
+        invoice_no = #{invoiceNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date = #{invoiceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.GroupSaleApplyInvoiceRel" >
+    UPDATE group_sale_apply_invoice_rel
+    SET order_no = #{orderNo,jdbcType=CHAR},
+      invoice_apply_no = #{invoiceApplyNo,jdbcType=CHAR},
+      invoice_apply_date = #{invoiceApplyDate,jdbcType=TIMESTAMP},
+      invoice_no = #{invoiceNo,jdbcType=CHAR},
+      invoice_date = #{invoiceDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 发票登记时或删除时，需要根据开票申请号回写或清空发票号 -->
+  <update id="updateByInvoiceApplyNo" parameterType="cn.wonhigh.retail.fas.common.model.GroupSaleApplyInvoiceRel" >
+  	<if test="invoiceApplyNo != null">
+	    UPDATE group_sale_apply_invoice_rel
+	    SET invoice_no = #{invoiceNo},
+	      invoice_date = #{invoiceDate}
+	    WHERE invoice_apply_no = #{invoiceApplyNo}
+    </if>
+    <if test="invoiceApplyNo == null">
+    	UPDATE group_sale_apply_invoice_rel
+	    SET invoice_no = null,
+	      invoice_date = null
+	    WHERE invoice_no = #{invoiceNo}
+    </if>
+  </update>
+</mapper>

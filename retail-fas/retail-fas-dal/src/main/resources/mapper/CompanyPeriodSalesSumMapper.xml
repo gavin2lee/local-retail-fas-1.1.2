@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CompanyPeriodSalesSumMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CompanyPeriodSalesSum" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, year, month, item_no, item_code, brand_no, category_no, qty, amount, 
+    unit_cost, create_user, create_time, update_user, update_time, sharding_flag
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM company_period_sales_sum
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM company_period_sales_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM company_period_sales_sum WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM company_period_sales_sum WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM company_period_sales_sum
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.CompanyPeriodSalesSum" >
+    DELETE FROM company_period_sales_sum
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.CompanyPeriodSalesSum" >
+    INSERT INTO company_period_sales_sum (id, company_no, year, month, 
+      item_no, item_code, brand_no, category_no, 
+      qty, amount, unit_cost, 
+      create_user, create_time, update_user, 
+      update_time, sharding_flag)
+    VALUES (#{id,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, #{year,jdbcType=CHAR}, #{month,jdbcType=CHAR}, 
+      #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=CHAR}, #{brandNo,jdbcType=CHAR}, #{categoryNo,jdbcType=CHAR}, 
+      #{qty,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{unitCost,jdbcType=DECIMAL}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{shardingFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.CompanyPeriodSalesSum" >
+    INSERT INTO company_period_sales_sum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="unitCost != null" >
+        unit_cost,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=CHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        #{unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.CompanyPeriodSalesSum" >
+    UPDATE company_period_sales_sum
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=CHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        unit_cost = #{unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag = #{shardingFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.CompanyPeriodSalesSum" >
+    UPDATE company_period_sales_sum
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      year = #{year,jdbcType=CHAR},
+      month = #{month,jdbcType=CHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      qty = #{qty,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      unit_cost = #{unitCost,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sharding_flag = #{shardingFlag,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <delete id="deleteCompanySalesSum" parameterType="map" >
+    DELETE FROM company_period_sales_sum
+    	WHERE company_no = #{params.companyNo} AND year = #{params.year} 
+    	AND month= #{params.month} AND sharding_flag = #{params.shardingFlag} 
+  </delete>
+  
+  <select id="countTransferCompanySalesSum" resultType="java.lang.Integer" >
+		SELECT COUNT(1) FROM
+			(
+				SELECT
+					company_no,
+					item_no,
+					item_code,
+					category_no,
+					brand_no
+				FROM
+					(
+						SELECT
+							om.company_no,
+							od.item_no,
+							od.item_code,
+							od.category_no,
+							od.brand_no,
+							sum(od.qty) qty,
+							sum(od.amount) amount,
+							sum(IF(#{params.isPE}='true',od.unit_cost,ROUND(od.unit_cost,2)) * IFNULL(od.qty, 0)) unit_cost
+						FROM order_dtl od
+						INNER JOIN order_main om ON od.order_no = om.order_no
+						WHERE om.STATUS IN('30', '41')
+						AND om.out_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+						AND om.business_type IN(0, 1, 2, 3, 6)
+						AND om.company_no = #{params.companyNo}
+						GROUP BY company_no, item_no
+						UNION ALL
+							SELECT
+								om.company_no,
+								od.item_no,
+								od.item_code,
+								od.category_no,
+								od.brand_no,
+								sum(od.qty)qty,
+								sum(od.amount)amount,
+								sum(IF(#{params.isPE}='true',od.unit_cost,ROUND(od.unit_cost,2)) * IFNULL(od.qty, 0))unit_cost
+							FROM
+								return_exchange_dtl od
+							INNER JOIN return_exchange_main om ON od.business_no = om.business_no
+							WHERE om. STATUS IN('30', '41')
+							AND om.out_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+							AND om.company_no = #{params.companyNo}
+							GROUP BY company_no, item_no
+							UNION ALL
+								SELECT
+									bsb.saler_no company_no,
+									bsb.item_no,
+									bsb.item_code,
+									bsb.category_no,
+									bsb.brand_no,
+									sum(bsb.send_qty) qty,
+									sum(bsb.cost * IFNULL(bsb.send_qty, 0)) amount,
+									sum(IF(#{params.isPE}='true',bsb.unit_cost,ROUND(bsb.unit_cost,2)) * IFNULL(bsb.send_qty, 0)) unit_cost
+								FROM
+									bill_sale_balance bsb
+								WHERE 1 = 1
+								AND(
+									<choose>
+										<when test="'true'==params.isPE">
+											(	
+												bsb.bill_type = 1371
+												AND bsb.fas_bill_code NOT IN ('FG13710404','FG13710504','FG13714001','FG13714101','FG13710403','FG13710503')
+											)
+										</when>
+										<otherwise>
+											(	
+												bsb.bill_type = 1371
+												AND bsb.fas_bill_code NOT IN ('FG13710404','FG13710504','FG13714001','FG13714101')
+											) 
+										</otherwise>
+									</choose>
+									OR(
+										bsb.bill_type = 1335
+										AND bsb.biz_type IN(2, 3, 13, 14, 21, 22, 23, 24, 29, 30, 43)
+									)
+									OR(
+										bsb.bill_type = 1361
+										AND bsb.biz_type IN(7, 25)
+									)
+									OR bsb.bill_type = 1342
+									OR(
+										bsb.bill_type = 1355
+										AND bsb.biz_type IN(8, 10, 26)
+									)
+									OR(
+										bsb.bill_type = 2005
+										AND bsb.biz_type = 35
+									)
+								)
+								AND bsb.send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+								AND bsb.saler_no = #{params.companyNo}
+								GROUP BY company_no, item_no
+					) X GROUP BY company_no, item_no
+			)T
+  </select>
+  
+  <select id="getTransferCompanySalesSumByPage" resultMap="BaseResultMap" parameterType="map" >
+    		SELECT company_no,
+					item_no,
+					item_code,
+					category_no,
+					brand_no,
+					sum(qty) qty,
+					sum(amount) amount,
+					sum(unit_cost) unit_cost
+				FROM
+					(
+						SELECT
+							om.company_no,
+							od.item_no,
+							od.item_code,
+							od.category_no,
+							od.brand_no,
+							sum(od.qty) qty,
+							sum(od.amount) amount,
+							sum(IF(#{params.isPE}='true',od.unit_cost,ROUND(od.unit_cost,2)) * IFNULL(od.qty, 0)) unit_cost
+						FROM
+							order_dtl od
+						INNER JOIN order_main om ON od.order_no = om.order_no
+						WHERE om.STATUS IN('30', '41')
+						AND om.out_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+						AND om.business_type IN(0, 1, 2, 3, 6)
+						AND om.company_no = #{params.companyNo}
+						GROUP BY company_no, item_no
+						UNION ALL
+							SELECT
+								om.company_no,
+								od.item_no,
+								od.item_code,
+								od.category_no,
+								od.brand_no,
+								sum(od.qty) qty,
+								sum(od.amount) amount,
+								sum(IF(#{params.isPE}='true',od.unit_cost,ROUND(od.unit_cost,2)) * IFNULL(od.qty, 0)) unit_cost
+							FROM
+								return_exchange_dtl od
+							INNER JOIN return_exchange_main om ON od.business_no = om.business_no
+							WHERE om.STATUS IN('30', '41')
+							AND om.out_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+							AND om.company_no = #{params.companyNo}
+							GROUP BY company_no, item_no
+							UNION ALL
+								SELECT
+									bsb.saler_no company_no,
+									bsb.item_no,
+									bsb.item_code,
+									bsb.category_no,
+									bsb.brand_no,
+									sum(bsb.send_qty) qty,
+									sum(bsb.cost * IFNULL(bsb.send_qty, 0)) amount,
+									sum(IF(#{params.isPE}='true',bsb.unit_cost,ROUND(bsb.unit_cost,2)) * IFNULL(bsb.send_qty, 0)) unit_cost
+								FROM
+									bill_sale_balance bsb
+								WHERE
+									1 = 1
+								AND(
+									<choose>
+										<when test="'true'==params.isPE">
+											(	
+												bsb.bill_type = 1371
+												AND bsb.fas_bill_code NOT IN ('FG13710404','FG13710504','FG13714001','FG13714101','FG13710403','FG13710503')
+											)
+										</when>
+										<otherwise>
+											(	
+												bsb.bill_type = 1371
+												AND bsb.fas_bill_code NOT IN ('FG13710404','FG13710504','FG13714001','FG13714101')
+											) 
+										</otherwise>
+									</choose>
+									OR(
+										bsb.bill_type = 1335
+										AND bsb.biz_type IN(2, 3, 13, 14, 21, 22, 23, 24, 29, 30, 43)
+									)
+									OR(
+										bsb.bill_type = 1361
+										AND bsb.biz_type IN(7, 25)
+									)
+									OR bsb.bill_type = 1342
+									OR(
+										bsb.bill_type = 1355
+										AND bsb.biz_type IN(8, 10, 26)
+									)
+									OR(
+										bsb.bill_type = 2005
+										AND bsb.biz_type = 35
+									)
+								)
+								AND bsb.send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+								AND bsb.saler_no = #{params.companyNo}
+								GROUP BY company_no, item_no
+					) X GROUP BY company_no, item_no
+					LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <insert id="batchInsertPeriodSalesSum" parameterType="java.util.List" >
+   	INSERT INTO company_period_sales_sum (id, company_no, year, month, item_no, item_code, brand_no, category_no, qty, amount, 
+    unit_cost, create_user, create_time, update_user, update_time, sharding_flag)
+    VALUES 
+    <foreach collection="subList" item="item" index="index" separator="," >
+    (replace(uuid(), '-', ''), #{item.companyNo,jdbcType=CHAR}, #{item.year,jdbcType=CHAR}, #{item.month,jdbcType=CHAR}, 
+      #{item.itemNo,jdbcType=CHAR}, #{item.itemCode,jdbcType=CHAR}, #{item.brandNo,jdbcType=CHAR}, #{item.categoryNo,jdbcType=CHAR}, 
+      #{item.qty,jdbcType=INTEGER}, #{item.amount,jdbcType=DECIMAL}, #{item.unitCost,jdbcType=DECIMAL}, 
+      #{item.createUser,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateUser,jdbcType=VARCHAR}, 
+      #{item.updateTime,jdbcType=TIMESTAMP}, #{item.shardingFlag,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  
+  <insert id="transferCompanySalesSum" parameterType="map" >
+    INSERT INTO company_period_sales_sum (id, company_no, year, month, 
+      item_no, item_code, brand_no, category_no, qty, amount, unit_cost, 
+      create_user, create_time, update_user, update_time, sharding_flag)
+     SELECT replace(uuid(), '-', ''), company_no, YEAR(bill_date), MONTH(bill_date), 
+      item_no, item_code, brand_no, category_no, sum(qty) total_qty, sum(amount) total_amount, 
+      sum(unit_cost) total_cost, NULL, NOW(), NULL, NOW(), CONCAT('',${params.shardingFlag})
+		  	FROM (
+			 SELECT 
+			    sp.company_no,
+			    od.item_no,
+			    od.item_code,
+			    od.category_no,
+			    od.brand_no,
+			    MIN(om.out_date) bill_date,
+			    sum(od.qty) qty,
+			    sum(od.amount) amount,
+			    sum(od.unit_cost * IFNULL(od.qty, 0)) unit_cost
+			  FROM
+			    order_dtl od 
+			    LEFT JOIN order_main om 
+			      ON od.order_no = om.order_no 
+			    INNER JOIN shop sp 
+			      ON om.shop_no = sp.shop_no 
+			    INNER JOIN company co 
+			      ON sp.company_no = co.company_no 
+			  WHERE om.status IN ('30', '41') 
+			    AND om.out_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+			    AND om.business_type IN (0, 1, 2, 3, 6) 
+			    AND co.company_no = #{params.companyNo} AND sharding_flag = #{params.shardingFlag}
+			 group by company_no,item_no,item_code, category_no, brand_no
+			  UNION ALL 
+			  SELECT 
+			    sp.company_no,
+			    od.item_no,
+			    od.item_code,
+			    od.category_no,
+			    od.brand_no,
+			    MIN(om.out_date) bill_date,
+			    sum(od.qty) qty,
+			    sum(od.amount) amount,
+			    sum(od.unit_cost * IFNULL(od.qty, 0)) unit_cost
+			  FROM
+			    return_exchange_dtl od 
+			    LEFT JOIN return_exchange_main om 
+			      ON od.business_no = om.business_no 
+			    INNER JOIN shop sp 
+			      ON om.shop_no = sp.shop_no 
+			    INNER JOIN company co 
+			      ON sp.company_no = co.company_no 
+			  WHERE om.status IN ('30', '41') 
+			    AND om.out_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+			    AND co.company_no = #{params.companyNo} AND sharding_flag = #{params.shardingFlag}
+			 group by company_no,item_no,item_code, category_no, brand_no
+			  UNION ALL 
+			  SELECT 
+			    bsb.saler_no company_no,
+			    bsb.item_no,
+			    bsb.item_code,
+			    bsb.category_no,
+			    bsb.brand_no,
+			    MIN(bsb.send_date) bill_date,
+			    sum(bsb.send_qty) qty,
+			    sum(bsb.cost * IFNULL(bsb.send_qty, 0)) amount,
+			    sum(bsb.unit_cost * IFNULL(bsb.send_qty, 0)) unit_cost
+			  FROM
+			    bill_sale_balance bsb 
+			  WHERE 1 = 1 
+			    AND ((bsb.bill_type = 1371) 
+						    OR (bsb.bill_type = 1335 AND bsb.biz_type IN (2, 3, 13, 14, 21, 22, 23, 24, 29, 30, 43)) 
+						    OR (bsb.bill_type = 1361 AND bsb.biz_type IN (7,25))
+							OR bsb.bill_type = 1342
+							OR (bsb.bill_type = 1355 AND bsb.biz_type in (8,10,26))
+							OR (bsb.bill_type = 2005 AND bsb.biz_type = 35)
+			    ) 
+			    AND bsb.send_date BETWEEN DATE_FORMAT(#{params.startDate},'%Y-%m-%d') AND DATE_FORMAT(#{params.endDate},'%Y-%m-%d')
+			    AND bsb.saler_no = #{params.companyNo}
+			 group by company_no,item_no,item_code, category_no, brand_no
+			) X group by company_no,item_no,item_code, category_no, brand_no
+  </insert>
+  
+</mapper>

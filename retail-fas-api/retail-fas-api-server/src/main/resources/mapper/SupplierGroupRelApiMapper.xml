@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.SupplierGroupRelApiMapper">
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.model.SupplierGroupRelModel" >
+    <result column="group_no" property="groupNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, group_no, supplier_no, supplier_name
+  </sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectBySupplierNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM supplier_group_rel
+    WHERE 1 = 1
+    <if test="null!=supplierNo and ''!=supplierNo" >
+       AND supplier_no = #{supplierNo,jdbcType=CHAR}
+    </if>
+  </select>
+  
+</mapper>

@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BackOrderSalesMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BackOrderSales" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="sum_owe_qty" property="sumOweQty" jdbcType="INTEGER" />
+    <result column="sum_owe_cost" property="sumOweCost" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, item_no, category_no, brand_no, year, month, sum_owe_qty, sum_owe_cost
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM back_order_sales
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM back_order_sales WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM back_order_sales WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM back_order_sales WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM back_order_sales
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BackOrderSales" >
+    DELETE FROM back_order_sales
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BackOrderSales" >
+    INSERT INTO back_order_sales (id, company_no, item_no, 
+      category_no, brand_no, year, month, 
+      sum_owe_qty, sum_owe_cost)
+    VALUES (#{id,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, #{itemNo,jdbcType=CHAR}, 
+      #{categoryNo,jdbcType=CHAR}, #{brandNo,jdbcType=CHAR}, #{year,jdbcType=CHAR}, #{month,jdbcType=CHAR}, 
+      #{sumOweQty,jdbcType=INTEGER}, #{sumOweCost,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BackOrderSales" >
+    INSERT INTO back_order_sales
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="sumOweQty != null" >
+        sum_owe_qty,
+      </if>
+      <if test="sumOweCost != null" >
+        sum_owe_cost,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=CHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="sumOweQty != null" >
+        #{sumOweQty,jdbcType=INTEGER},
+      </if>
+      <if test="sumOweCost != null" >
+        #{sumOweCost,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BackOrderSales" >
+    UPDATE back_order_sales
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=CHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="sumOweQty != null" >
+        sum_owe_qty = #{sumOweQty,jdbcType=INTEGER},
+      </if>
+      <if test="sumOweCost != null" >
+        sum_owe_cost = #{sumOweCost,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BackOrderSales" >
+    UPDATE back_order_sales
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      year = #{year,jdbcType=CHAR},
+      month = #{month,jdbcType=CHAR},
+      sum_owe_qty = #{sumOweQty,jdbcType=INTEGER},
+      sum_owe_cost = #{sumOweCost,jdbcType=DECIMAL}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <select id="selectCompanyOwerGuestCount" resultType="java.lang.Integer" >
+	SELECT COUNT(1) FROM(
+	 	SELECT 
+	  		A.company_no,A.item_no,A.category_no,A.brand_no,
+	  		CONCAT(YEAR (DATE_FORMAT(#{params.lastMonthDate}, '%Y-%m-%d')),'') YEAR,
+			CONCAT(MONTH (DATE_FORMAT(#{params.lastMonthDate}, '%Y-%m-%d')),'') MONTH,
+	  		SUM(A.sum_owe_qty) sum_owe_qty,SUM(A.sum_owe_cost) sum_owe_cost
+		FROM 
+	  	(
+			SELECT
+				POS_SALE.company_no,
+				POS_SALE.item_no,POS_SALE.category_no,POS_SALE.brand_no,
+				POS_SALE.sale_qty - IFNULL(POS_SHIP.send_qty, 0) sum_owe_qty,
+				IF(#{params.isPE}='true',IFNULL(POS_SALE.unit_cost, 0),ROUND(IFNULL(POS_SALE.unit_cost, 0),2)) * (POS_SALE.sale_qty - IFNULL(POS_SHIP.send_qty, 0)) sum_owe_cost
+			FROM
+				(
+					SELECT
+						om.company_no,od.order_no,om.out_date,
+						od.item_no,
+						od.sku_no,
+						od.unit_cost,
+						SUM(od.qty) sale_qty,
+						od.category_no,
+						od.brand_name,
+						od.brand_no,
+						across_sale_flag,
+						om.`status`
+					FROM
+						order_main om
+					INNER JOIN order_dtl od ON om.`order_no` = od.`order_no`
+					WHERE om.`status` NOT IN (10, 11) AND om.take_off_type = 1
+					AND om.`out_date` &lt;= DATE_FORMAT(#{params.lastMonthDate},'%Y-%m-%d')
+					AND om.company_no = #{params.companyNo}
+					GROUP BY OD.`order_no`, OM.OUT_DATE, OD.SKU_NO
+				) POS_SALE
+			LEFT JOIN (
+				SELECT
+					bh.ref_bill_no,
+					bd.`sku_no`,
+					MAX(bh.sale_date),
+					SUM(IF(bh.bill_type = 1374, - 1 * bd.send_out_qty, bd.send_out_qty)) send_qty
+				FROM
+					order_main om1
+				INNER JOIN bill_sale_out bh ON om1.order_no = bh.ref_bill_no
+				INNER JOIN bill_sale_out_dtl bd ON bh.`bill_no` = bd.`bill_no`
+				WHERE bh.`biz_type` &gt;= 50
+				AND om1.take_off_type = 1 AND om1.company_no = #{params.companyNo}
+				AND bh.sale_date &lt;= DATE_FORMAT(#{params.lastMonthDate},'%Y-%m-%d')
+				GROUP BY bh.`ref_bill_no`, bd.`sku_no`
+			) POS_SHIP ON POS_SALE.order_no = POS_SHIP.ref_bill_no
+			AND POS_SALE.sku_no = POS_SHIP.sku_no
+			UNION ALL
+			SELECT
+				POS_SALE.company_no,
+				POS_SALE.item_no,POS_SALE.category_no,POS_SALE.brand_no,
+				POS_SALE.sale_qty - IFNULL(POS_SHIP.send_qty, 0) sum_owe_qty,
+				IF(#{params.isPE}='true',IFNULL(POS_SALE.unit_cost, 0),ROUND(IFNULL(POS_SALE.unit_cost, 0),2)) * (POS_SALE.sale_qty - IFNULL(POS_SHIP.send_qty, 0)) sum_owe_cost
+			FROM
+				(
+					SELECT
+						om.company_no,
+						od.business_no,
+						om.shop_no,
+						om.shop_name,
+						om.out_date,
+						od.item_no,
+						od.sku_no,
+						od.size_no,
+						od.item_code,
+						od.item_name,
+						od.unit_cost,
+						SUM(od.qty) sale_qty,
+						od.category_no,
+						od.brand_name,
+						od.brand_no,
+						om.`status`
+					FROM
+						return_exchange_main om
+					INNER JOIN return_exchange_dtl od ON om.`business_no` = od.`business_no`
+					WHERE om.`status` NOT IN (10, 11) AND om.refund_type = 1
+					AND om.`out_date` &lt;= DATE_FORMAT(#{params.lastMonthDate},'%Y-%m-%d')
+					AND om.company_no = #{params.companyNo}
+					GROUP BY OD.`business_no`, OM.OUT_DATE, OD.SKU_NO
+				) POS_SALE
+			LEFT JOIN (
+				SELECT
+					bh.ref_bill_no,
+					bd.`sku_no`,
+					MAX(bh.sale_date),
+					SUM(IF(bh.bill_type = 1374, - 1 * bd.send_out_qty, bd.send_out_qty)) send_qty
+				FROM
+					return_exchange_main om1
+				INNER JOIN bill_sale_out bh ON om1.business_no = bh.ref_bill_no
+				INNER JOIN bill_sale_out_dtl bd ON bh.`bill_no` = bd.`bill_no`
+				WHERE bh.`biz_type` &gt;= 50 AND om1.refund_type = 1 AND om1.company_no = #{params.companyNo}
+				AND bh.sale_date &lt;= DATE_FORMAT(#{params.lastMonthDate},'%Y-%m-%d')
+				GROUP BY bh.`ref_bill_no`, bd.`sku_no`
+			) POS_SHIP ON POS_SALE.business_no = POS_SHIP.ref_bill_no
+			AND POS_SALE.sku_no = POS_SHIP.sku_no
+		) A
+		WHERE 1=1
+		AND A.sum_owe_qty !=0
+		GROUP BY A.company_no,A.item_no
+	) T
+  </select>
+  
+  <select id="selectCompanyOwerGuestByPage" resultMap="BaseResultMap" parameterType="map" >
+  	SELECT 
+  		A.company_no,A.item_no,A.category_no,A.brand_no,
+  		CONCAT(YEAR (DATE_FORMAT(#{params.lastMonthDate}, '%Y-%m-%d')),'') YEAR,
+		CONCAT(MONTH (DATE_FORMAT(#{params.lastMonthDate}, '%Y-%m-%d')),'') MONTH,
+  		SUM(A.sum_owe_qty) sum_owe_qty,SUM(A.sum_owe_cost) sum_owe_cost
+	FROM 
+  	(
+		SELECT
+			POS_SALE.company_no,
+			POS_SALE.item_no,POS_SALE.category_no,POS_SALE.brand_no,
+			POS_SALE.sale_qty - IFNULL(POS_SHIP.send_qty, 0) sum_owe_qty,
+			IF(#{params.isPE}='true',IFNULL(POS_SALE.unit_cost, 0),ROUND(IFNULL(POS_SALE.unit_cost, 0),2)) * (POS_SALE.sale_qty - IFNULL(POS_SHIP.send_qty, 0)) sum_owe_cost
+		FROM
+			(
+				SELECT
+					om.company_no,od.order_no,om.out_date,
+					od.item_no,
+					od.sku_no,
+					od.unit_cost,
+					SUM(od.qty) sale_qty,
+					od.category_no,
+					od.brand_name,
+					od.brand_no,
+					across_sale_flag,
+					om.`status`
+				FROM
+					order_main om
+				INNER JOIN order_dtl od ON om.`order_no` = od.`order_no`
+				WHERE om.`status` NOT IN (10, 11) AND om.take_off_type = 1
+				AND om.`out_date` &lt;= DATE_FORMAT(#{params.lastMonthDate},'%Y-%m-%d')
+				AND om.company_no = #{params.companyNo}
+				GROUP BY OD.`order_no`, OM.OUT_DATE, OD.SKU_NO
+			) POS_SALE
+		LEFT JOIN (
+			SELECT
+				bh.ref_bill_no,
+				bd.`sku_no`,
+				MAX(bh.sale_date),
+				SUM(IF(bh.bill_type = 1374, - 1 * bd.send_out_qty, bd.send_out_qty)) send_qty
+			FROM
+				order_main om1
+			INNER JOIN bill_sale_out bh ON om1.order_no = bh.ref_bill_no
+			INNER JOIN bill_sale_out_dtl bd ON bh.`bill_no` = bd.`bill_no`
+			WHERE bh.`biz_type` &gt;= 50
+			AND om1.take_off_type = 1 AND om1.company_no = #{params.companyNo}
+			AND bh.sale_date &lt;= DATE_FORMAT(#{params.lastMonthDate},'%Y-%m-%d')
+			GROUP BY bh.`ref_bill_no`, bd.`sku_no`
+		) POS_SHIP ON POS_SALE.order_no = POS_SHIP.ref_bill_no
+		AND POS_SALE.sku_no = POS_SHIP.sku_no
+		UNION ALL
+		SELECT
+			POS_SALE.company_no,
+			POS_SALE.item_no,POS_SALE.category_no,POS_SALE.brand_no,
+			POS_SALE.sale_qty - IFNULL(POS_SHIP.send_qty, 0) sum_owe_qty,
+			IF(#{params.isPE}='true',IFNULL(POS_SALE.unit_cost, 0),ROUND(IFNULL(POS_SALE.unit_cost, 0),2)) * (POS_SALE.sale_qty - IFNULL(POS_SHIP.send_qty, 0)) sum_owe_cost
+		FROM
+			(
+				SELECT
+					om.company_no,
+					od.business_no,
+					om.shop_no,
+					om.shop_name,
+					om.out_date,
+					od.item_no,
+					od.sku_no,
+					od.size_no,
+					od.item_code,
+					od.item_name,
+					od.unit_cost,
+					SUM(od.qty) sale_qty,
+					od.category_no,
+					od.brand_name,
+					od.brand_no,
+					om.`status`
+				FROM
+					return_exchange_main om
+				INNER JOIN return_exchange_dtl od ON om.`business_no` = od.`business_no`
+				WHERE om.`status` NOT IN (10, 11) AND om.refund_type = 1
+				AND om.`out_date` &lt;= DATE_FORMAT(#{params.lastMonthDate},'%Y-%m-%d')
+				AND om.company_no = #{params.companyNo}
+				GROUP BY OD.`business_no`, OM.OUT_DATE, OD.SKU_NO
+			) POS_SALE
+		LEFT JOIN (
+			SELECT
+				bh.ref_bill_no,
+				bd.`sku_no`,
+				MAX(bh.sale_date),
+				SUM(IF(bh.bill_type = 1374, - 1 * bd.send_out_qty, bd.send_out_qty)) send_qty
+			FROM
+				return_exchange_main om1
+			INNER JOIN bill_sale_out bh ON om1.business_no = bh.ref_bill_no
+			INNER JOIN bill_sale_out_dtl bd ON bh.`bill_no` = bd.`bill_no`
+			WHERE bh.`biz_type` &gt;= 50 AND om1.refund_type = 1 AND om1.company_no = #{params.companyNo}
+			AND bh.sale_date &lt;= DATE_FORMAT(#{params.lastMonthDate},'%Y-%m-%d')
+			GROUP BY bh.`ref_bill_no`, bd.`sku_no`
+		) POS_SHIP ON POS_SALE.business_no = POS_SHIP.ref_bill_no
+		AND POS_SALE.sku_no = POS_SHIP.sku_no
+	) A
+	WHERE 1=1
+	AND A.sum_owe_qty !=0
+	GROUP BY A.company_no,A.item_no
+    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <insert id="batchInsertCompanyOwerGuest" parameterType="java.util.List" >
+   	INSERT INTO back_order_sales (id, company_no, item_no, category_no, brand_no,
+      year, month, sum_owe_qty, sum_owe_cost)
+    VALUES 
+    <foreach collection="subList" item="item" index="index" separator="," >
+    (replace(uuid(), '-', ''), #{item.companyNo,jdbcType=CHAR}, #{item.itemNo,jdbcType=CHAR}, 
+      #{item.categoryNo,jdbcType=CHAR}, #{item.brandNo,jdbcType=CHAR}, #{item.year,jdbcType=CHAR}, #{item.month,jdbcType=CHAR}, 
+      #{item.sumOweQty,jdbcType=INTEGER}, #{item.sumOweCost,jdbcType=DECIMAL})
+    </foreach>
+  </insert>
+  
+  <delete id="deleteCompanyOwerGuestCount" parameterType="map" >
+    DELETE FROM back_order_sales
+    	WHERE company_no = #{params.companyNo} AND year = #{params.year} AND month= #{params.month}
+  </delete>
+  
+</mapper>

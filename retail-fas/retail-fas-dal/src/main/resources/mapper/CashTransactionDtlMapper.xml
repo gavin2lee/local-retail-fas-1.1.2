@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CashTransactionDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CashTransactionDtl" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="card_number" property="cardNumber" jdbcType="CHAR" />
+    <result column="deposit_cash_time" property="depositCashTime" jdbcType="TIMESTAMP" />
+    <result column="deposit_amount" property="depositAmount" jdbcType="DECIMAL" />
+    <result column="deposit_site" property="depositSite" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="mall_no" property="mallNo" jdbcType="CHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, card_number, deposit_cash_time, deposit_amount, deposit_site, shop_no,shop_name, mall_no, mall_name, 
+    auditor, audit_time, create_user, create_time, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+       <if test="null!=params.createTimeStart and ''!=params.createTimeStart">
+       	   and deposit_cash_time &gt;= #{params.createTimeStart}
+      </if>
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd">
+       	   and deposit_cash_time &lt;= #{params.createTimeEnd}
+      </if>
+      <if test="null!=params.cardNumber and ''!=params.cardNumber">
+      	and card_number = #{params.cardNumber}
+      </if>
+      <if test="null!=params.mallNo and ''!=params.mallNo">
+      	and card_number IN (SELECT deposit_account FROM self_shop_deposit_account WHERE mall_no = #{params.mallNo})
+      </if>
+      <if test="null!=params.shopNo and ''!=params.shopNo">
+      	and shop_no = #{params.shopNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM cash_transaction_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM cash_transaction_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM cash_transaction_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField">
+		ORDER BY create_time DESC
+	</if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM cash_transaction_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  
+  <select id="queryCashTransactionRecord" parameterType="map" resultMap="BaseResultMap">
+  	Select  
+	 <include refid="Base_Column_List" />
+ 	from cash_transaction_dtl where 1=1
+ 	<if test="accessList!=null">
+	 	and card_number in  
+	 	<foreach item="item" index="index" collection="accessList" open="(" separator="," close=")">  
+	  		#{item}  
+		</foreach>
+ 	</if>
+	<if test="null!=startDate">
+		and deposit_cash_time &gt;= #{startDate}
+	</if>  
+	<if test="null!=endDate">
+		and deposit_cash_time &lt;= #{endDate}
+	</if>
+  </select>
+  
+  <select id="getSumActualInComeAmount" resultType="java.math.BigDecimal" parameterType="map" >
+  	SELECT SUM(deposit_amount) FROM cash_transaction_dtl WHERE 1=1 
+  	<if test="cardNumber != null and ''!=cardNumber">
+  		and card_number = #{cardNumber}
+  	</if>
+  	<if test="dealTime != null and ''!=dealTime">
+  		 AND DATE_FORMAT(deposit_cash_time,'%Y-%m-%d') = DATE_FORMAT(#{dealTime},'%Y-%m-%d')
+  	</if>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM cash_transaction_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.CashTransactionDtl" >
+    DELETE FROM cash_transaction_dtl
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.CashTransactionDtl" >
+    INSERT INTO cash_transaction_dtl (id, card_number, deposit_cash_time, 
+      deposit_amount, deposit_site, shop_no,shop_name, mall_no, 
+      mall_name, auditor, audit_time, 
+      create_user, create_time, remark)
+    VALUES (#{id,jdbcType=CHAR}, #{cardNumber,jdbcType=CHAR}, #{depositCashTime,jdbcType=TIMESTAMP}, 
+      #{depositAmount,jdbcType=DECIMAL},#{depositSite,jdbcType=VARCHAR},#{shopNo,jdbcType=CHAR},{shopName,jdbcType=VARCHAR} , #{mallNo,jdbcType=CHAR}, 
+      #{mallName,jdbcType=VARCHAR}, #{auditor,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.CashTransactionDtl" >
+    INSERT INTO cash_transaction_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cardNumber != null" >
+        card_number,
+      </if>
+      <if test="depositCashTime != null" >
+        deposit_cash_time,
+      </if>
+      <if test="depositAmount != null" >
+        deposit_amount,
+      </if>
+      <if test="depositSite != null" >
+        deposit_site,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopName != null">
+      	shop_name,
+      </if>
+      <if test="mallNo != null" >
+        mall_no,
+      </if>
+      <if test="mallName != null" >
+        mall_name,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="cardNumber != null" >
+        #{cardNumber,jdbcType=CHAR},
+      </if>
+      <if test="depositCashTime != null" >
+        #{depositCashTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="depositAmount != null" >
+        #{depositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="depositSite != null" >
+        #{depositSite,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null">
+      	#{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.CashTransactionDtl" >
+    UPDATE cash_transaction_dtl
+    <set >
+      <if test="cardNumber != null" >
+        card_number = #{cardNumber,jdbcType=CHAR},
+      </if>
+      <if test="depositCashTime != null" >
+        deposit_cash_time = #{depositCashTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="depositAmount != null" >
+        deposit_amount = #{depositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="depositSite != null" >
+        deposit_site = #{depositSite,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=CHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallNo != null" >
+        mall_no = #{mallNo,jdbcType=CHAR},
+      </if>
+      <if test="mallName != null" >
+        mall_name = #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.CashTransactionDtl" >
+    UPDATE cash_transaction_dtl
+    SET card_number = #{cardNumber,jdbcType=CHAR},
+      deposit_cash_time = #{depositCashTime,jdbcType=TIMESTAMP},
+      deposit_amount = #{depositAmount,jdbcType=DECIMAL},
+      deposit_site = #{depositSite,jdbcType=VARCHAR},
+      shop_no = #{shopNo,jdbcType=CHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      mall_no = #{mallNo,jdbcType=CHAR},
+      mall_name = #{mallName,jdbcType=VARCHAR},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

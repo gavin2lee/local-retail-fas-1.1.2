@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillInvCostAdjustMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillInvCostAdjust" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="CHAR" />
+    <result column="month" property="month" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    <result column="stock_detail_total" property="stockDetailTotal" jdbcType="DECIMAL" />
+    <result column="zone_yyyymm" property="zoneYyyymm" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bill_no, bill_type, company_no, company_name, year, month, status, create_user, 
+    create_time, auditor, audit_time, remark, update_time, sharding_flag, stock_detail_total, 
+    zone_yyyymm
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.shardingFlagIn and ''!=params.shardingFlagIn">
+		and sharding_flag in (${params.shardingFlagIn})
+	  </if>
+	  <if test="null!=params.shardingFlag and ''!=params.shardingFlag">
+		and sharding_flag = #{params.shardingFlag,jdbcType=VARCHAR}
+	  </if>
+      <if test="null!=params.billNoCondition and ''!=params.billNoCondition" >
+        AND bill_no LIKE CONCAT('%',#{params.billNoCondition},'%')
+      </if>
+      <if test="null!=params.billNoIn and ''!=params.billNoIn">
+			and bill_no in (${params.billNoIn})
+		</if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+       <if test="null!=params.companyName and ''!=params.companyName" >
+        AND company_name LIKE CONCAT('%',#{params.companyName},'%')
+      </if>
+      <if test="null!=params.year and ''!=params.year" >
+        AND year = #{params.year}
+      </if>
+      <if test="null!=params.yearCondition and ''!=params.yearCondition" >
+        AND year = #{params.yearCondition}
+      </if>
+      <if test="null!=params.month and ''!=params.month" >
+        AND month = #{params.month}
+      </if>
+      <if test="null!=params.monthCondition and ''!=params.monthCondition" >
+        AND month = #{params.monthCondition}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+        AND status = #{params.status}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjust" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_inv_cost_adjust
+    WHERE 1=1
+    <if test="null!=id  and  ''!=id">
+		and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="null!=billNo  or  ''!=billNo">
+		and bill_no = #{billNo,jdbcType=VARCHAR}
+	</if>
+	<if test="null!=shardingFlag and ''!=shardingFlag">
+		and sharding_flag = #{shardingFlag,jdbcType=VARCHAR}
+	</if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_inv_cost_adjust WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_inv_cost_adjust WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_inv_cost_adjust WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_inv_cost_adjust
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjust" >
+    DELETE FROM bill_inv_cost_adjust
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjust" >
+    INSERT INTO bill_inv_cost_adjust (id, bill_no, bill_type, 
+      company_no, company_name, year, 
+      month, status, create_user, 
+      create_time, auditor, audit_time, 
+      remark, update_time, sharding_flag, 
+      stock_detail_total, zone_yyyymm)
+    VALUES (#{id,jdbcType=CHAR}, #{billNo,jdbcType=CHAR}, #{billType,jdbcType=INTEGER}, 
+      #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{year,jdbcType=CHAR}, 
+      #{month,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{auditor,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{shardingFlag,jdbcType=CHAR}, 
+      #{stockDetailTotal,jdbcType=DECIMAL}, #{zoneYyyymm,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjust" >
+    INSERT INTO bill_inv_cost_adjust
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="auditor != null" >
+        auditor,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+      <if test="stockDetailTotal != null" >
+        stock_detail_total,
+      </if>
+      <if test="zoneYyyymm != null" >
+        zone_yyyymm,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=CHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+      <if test="stockDetailTotal != null" >
+        #{stockDetailTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="zoneYyyymm != null" >
+        #{zoneYyyymm,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjust" >
+    UPDATE bill_inv_cost_adjust
+    <set >
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=CHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditor != null" >
+        auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stockDetailTotal != null" >
+        stock_detail_total = #{stockDetailTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="zoneYyyymm != null" >
+        zone_yyyymm = #{zoneYyyymm,jdbcType=CHAR},
+      </if>
+    </set>
+    WHERE 1=1
+    <if test="null!=id  and  ''!=id">
+		and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="null==id  or  ''==id">
+		and bill_no = #{billNo,jdbcType=VARCHAR}
+	</if>
+	<if test="shardingFlag!=null and ''!=shardingFlag">
+		and sharding_flag=#{shardingFlag}
+	</if>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillInvCostAdjust" >
+    UPDATE bill_inv_cost_adjust
+    SET bill_no = #{billNo,jdbcType=CHAR},
+      bill_type = #{billType,jdbcType=INTEGER},
+      company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      year = #{year,jdbcType=CHAR},
+      month = #{month,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      auditor = #{auditor,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sharding_flag = #{shardingFlag,jdbcType=CHAR},
+      stock_detail_total = #{stockDetailTotal,jdbcType=DECIMAL},
+      zone_yyyymm = #{zoneYyyymm,jdbcType=CHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <!--  结算公司相关 -->
+   <resultMap id="CompanyBaseResultMap" type="cn.wonhigh.retail.fas.common.model.Company" >
+	    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+	    <result column="name" property="companyName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Company_Base_Column_List" >
+    	company_no, name
+  </sql>
+  
+  <sql id="companyCondition" >
+    <if test="null!=params" >
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+       AND company_no = #{params.companyNo}
+      </if>
+       <if test="null!=params.companyName and ''!=params.companyName" >
+       AND NAME LIKE CONCAT('%',#{params.companyName},'%')
+      </if>
+    </if>
+  </sql>
+  
+  <select id="findCompanyCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM company WHERE 1=1 
+    <include refid="companyCondition" />
+  </select>
+  <select id="findCompanyByPage" resultMap="CompanyBaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Company_Base_Column_List" />
+     FROM company WHERE 1=1 
+    <include refid="companyCondition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+   <!--  汇总指定公司、货号、年、月调整的差额值 -->
+  <select id="sumDiverAmount" resultType="java.math.BigDecimal" parameterType="map">
+	SELECT SUM((D.adjust_cost - D.unit_cost) * D.closing_qty),company_no, item_no, YEAR, month
+		FROM bill_inv_cost_adjust T
+  			INNER JOIN bill_inv_cost_adjust_dtl D
+		ON D.bill_no = T.bill_no
+    	WHERE T.status = #{params.status}
+			AND company_no = #{params.companyNo}
+	 		AND item_no = #{params.itemNo}
+	 		AND YEAR = #{params.year}
+	 		AND MONTH = #{params.month}
+	 		AND T.bill_no != #{params.billNo}
+    GROUP BY company_no, item_no, YEAR, month
+   </select>
+</mapper>

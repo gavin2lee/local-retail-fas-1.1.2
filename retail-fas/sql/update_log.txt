@@ -1,0 +1,59 @@
+ALTER TABLE `bill_shop_balance_deduct` ADD COLUMN `mall_deduction_name`  varchar(255) NULL DEFAULT NULL COMMENT '商场扣费名称' AFTER `rate_type`;
+
+
+CREATE TABLE `cost_compute_rule` (
+`id`  int(11) NOT NULL AUTO_INCREMENT COMMENT '主键' ,
+`rule_code`  char(18) NULL DEFAULT NULL COMMENT '规则编码' ,
+`company_no`  char(18) NULL DEFAULT NULL COMMENT '公司编码' ,
+`company_name`  varchar(200) NULL DEFAULT NULL COMMENT '公司名称' ,
+`brand_no`  char(18) NULL DEFAULT NULL COMMENT '品牌编码' ,
+`brand_name`  varchar(60) NULL DEFAULT NULL COMMENT '品牌名称' ,
+`start_year_code`  char(18) NULL DEFAULT NULL COMMENT '起始年份编码' ,
+`start_year_name`  char(4) NULL DEFAULT NULL COMMENT '起始年份名称' ,
+`start_season_code`  char(18) NULL DEFAULT NULL COMMENT '起始季节编码' ,
+`start_season_name`  char(4) NULL DEFAULT NULL COMMENT '起始季节名称' ,
+`end_year_code`  char(18) NULL DEFAULT NULL COMMENT '终止年份编码' ,
+`end_year_name`  char(4) NULL DEFAULT NULL COMMENT '终止年份名称' ,
+`end_season_code`  char(18) NULL DEFAULT NULL COMMENT '终止季节编码' ,
+`end_season_name`  char(4) NULL DEFAULT NULL COMMENT '终止季节名称' ,
+`compute_rule`  tinyint(3) NULL DEFAULT NULL COMMENT '结算规则 1、乘 2、加' ,
+`weighted_cost_coeff`  decimal(20,2) NULL DEFAULT 0.00 COMMENT '加权成本系数' ,
+`hq_cost_coeff`  decimal(20,2) NULL DEFAULT 0.00 COMMENT '总部成本系数' ,
+`area_cost_coeff`  decimal(20,2) NULL DEFAULT 0.00 COMMENT '地区成本系数' ,
+`status`  tinyint(3) NULL DEFAULT NULL COMMENT '启用状态 1、启用 0、停用' ,
+`create_user`  varchar(32) NULL DEFAULT NULL COMMENT '建档人' ,
+`create_time`  datetime NULL DEFAULT NULL COMMENT '建档时间' ,
+`update_user`  varchar(32) NULL DEFAULT NULL COMMENT '修改人' ,
+`update_time`  datetime NULL DEFAULT NULL COMMENT '修改时间' ,
+`brand_unit_no`  char(18) NULL DEFAULT NULL COMMENT '品牌部编码(备用)' ,
+`brand_unit_name`  varchar(60) NULL DEFAULT NULL COMMENT '品牌部名称(备用)' ,
+`start_year_season`  varchar(60) NULL DEFAULT NULL COMMENT '起始年份季节(备用)' ,
+`end_year_season`  varchar(60) NULL DEFAULT NULL COMMENT '终止年份季节(备用)' ,
+`remark`  varchar(255) NULL DEFAULT NULL COMMENT '备注' ,
+PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+
+;
+
+ALTER TABLE `order_dtl` ADD COLUMN `pickup_status`  tinyint(1) NULL DEFAULT 1 COMMENT '明细提货状态, 1-未提 2-已提 3-已提未扣(预留) 4-已提已扣(预留)' AFTER `zone_yyyymm`;
+
+ALTER TABLE `order_dtl` ADD COLUMN `take_off_type`  tinyint(1) NULL DEFAULT 0 COMMENT '欠客类型,0-正常 1-欠客 2-有实物无库存(预留)' AFTER `pickup_status`;
+
+ALTER TABLE `order_promotion_dtl` ADD COLUMN `launch_type`  tinyint(4) NULL DEFAULT 2 COMMENT '活动来源,1-公司活动 2-商场活动' AFTER `update_time`;
+
+ALTER TABLE `order_promotion_dtl` ADD COLUMN `rate_code`  varchar(10) NULL DEFAULT NULL COMMENT '扣率代码,A B...' AFTER `launch_type`;
+
+ALTER TABLE `order_promotion_dtl` ADD COLUMN `start_date`  date NULL DEFAULT NULL COMMENT '开始日期' AFTER `rate_code`;
+
+ALTER TABLE `order_promotion_dtl` ADD COLUMN `end_date`  date NULL DEFAULT NULL COMMENT '结束日期' AFTER `start_date`;
+
+ALTER TABLE `order_promotion_dtl` ADD COLUMN `activity_describe`  varchar(255) NULL DEFAULT NULL COMMENT '活动描述' AFTER `end_date`;
+
+ALTER TABLE `return_exchange_dtl` ADD COLUMN `pickup_status`  tinyint(1) NULL DEFAULT 1 COMMENT '明细提货状态, 1-未提 2-已提 3-已提未扣(预留) 4-已提已扣(预留)' AFTER `zone_yyyymm`;
+
+ALTER TABLE `return_exchange_dtl` ADD COLUMN `take_off_type`  tinyint(1) NULL DEFAULT 0 COMMENT '欠客类型,0-正常 1-欠客 2-有实物无库存(预留)' AFTER `pickup_status`;
+
+ALTER TABLE `system_param_set` MODIFY COLUMN `param_name`  tinyint(3) NULL DEFAULT NULL COMMENT '参数名称' AFTER `param_code`;
+
+ALTER TABLE `shop_group` MODIFY COLUMN `template_no`  char(25) NULL DEFAULT NULL COMMENT '发票模板编码' AFTER `invoice_name`;

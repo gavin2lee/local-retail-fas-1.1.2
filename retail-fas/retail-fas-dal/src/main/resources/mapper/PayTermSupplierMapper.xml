@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PayTermSupplierMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PayTermSupplier" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="term_no" property="termNo" jdbcType="CHAR" />
+    <result column="term_name" property="termName" jdbcType="VARCHAR" />
+    <result column="term_type" property="termType" jdbcType="VARCHAR" />
+    <result column="fixed_day" property="fixedDay" jdbcType="INTEGER" />
+    <result column="days" property="days" jdbcType="INTEGER" />
+    <result column="is_prepay" property="isPrepay" jdbcType="TINYINT" />
+    <result column="forward_proportion" property="forwardProportion" jdbcType="DECIMAL" />
+    <result column="spot_proportion" property="spotProportion" jdbcType="DECIMAL" />
+    <result column="effective_date" property="effectiveDate" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, company_name, supplier_no, supplier_name, term_no, term_name, term_type, 
+    fixed_day, days, is_prepay, forward_proportion, spot_proportion, create_time, create_user, 
+    update_time, update_user,effective_date
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+        AND company_no in ${params.multiCompanyNo}
+      </if>    
+	  <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+        AND supplier_no in ${params.multiSupplierNo}
+      </if>  
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+        AND company_no = #{params.companyNo}
+      </if>
+      <if test="null!=params.supplierNo and ''!=params.supplierNo" >
+        AND supplier_no = #{params.supplierNo}
+      </if> 
+      <if test="null!=params.termNo and ''!=params.termNo" >
+        AND term_no = #{params.termNo}
+      </if>
+      <if test="null!=params.termType and ''!=params.termType" >
+        AND term_type = #{params.termType}
+      </if>      
+      <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+        AND create_time &gt;= '${params.createTimeStart} 00:00:00'
+      </if>  
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+        AND create_time &lt;= '${params.createTimeEnd} 23:59:59'
+      </if>  
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM pay_term_supplier
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM pay_term_supplier WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM pay_term_supplier WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or ''==orderByField" >
+    ORDER BY create_time DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM pay_term_supplier WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM pay_term_supplier
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.PayTermSupplier" >
+    DELETE FROM pay_term_supplier
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.PayTermSupplier" >
+    INSERT INTO pay_term_supplier (id, company_no, company_name, 
+      supplier_no, supplier_name, term_no, 
+      term_name, term_type, fixed_day, 
+      days, is_prepay, forward_proportion, 
+      spot_proportion, create_time, create_user, 
+      update_time, effective_date, update_user)
+    VALUES (#{id,jdbcType=CHAR}, #{companyNo,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{supplierNo,jdbcType=CHAR}, #{supplierName,jdbcType=VARCHAR}, #{termNo,jdbcType=CHAR}, 
+      #{termName,jdbcType=VARCHAR}, #{termType,jdbcType=VARCHAR}, #{fixedDay,jdbcType=INTEGER}, 
+      #{days,jdbcType=INTEGER}, #{isPrepay,jdbcType=TINYINT}, #{forwardProportion,jdbcType=DECIMAL}, 
+      #{spotProportion,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{effectiveDate,jdbcType=DATE}, #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.PayTermSupplier" >
+    INSERT INTO pay_term_supplier
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="termNo != null" >
+        term_no,
+      </if>
+      <if test="termName != null" >
+        term_name,
+      </if>
+      <if test="termType != null" >
+        term_type,
+      </if>
+      <if test="fixedDay != null" >
+        fixed_day,
+      </if>
+      <if test="days != null" >
+        days,
+      </if>
+      <if test="isPrepay != null" >
+        is_prepay,
+      </if>
+      <if test="forwardProportion != null" >
+        forward_proportion,
+      </if>
+      <if test="spotProportion != null" >
+        spot_proportion,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="termNo != null" >
+        #{termNo,jdbcType=CHAR},
+      </if>
+      <if test="termName != null" >
+        #{termName,jdbcType=VARCHAR},
+      </if>
+      <if test="termType != null" >
+        #{termType,jdbcType=VARCHAR},
+      </if>
+      <if test="fixedDay != null" >
+        #{fixedDay,jdbcType=INTEGER},
+      </if>
+      <if test="days != null" >
+        #{days,jdbcType=INTEGER},
+      </if>
+      <if test="isPrepay != null" >
+        #{isPrepay,jdbcType=TINYINT},
+      </if>
+      <if test="forwardProportion != null" >
+        #{forwardProportion,jdbcType=DECIMAL},
+      </if>
+      <if test="spotProportion != null" >
+        #{spotProportion,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveDate != null" >
+        #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.PayTermSupplier" >
+    UPDATE pay_term_supplier
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="termNo != null" >
+        term_no = #{termNo,jdbcType=CHAR},
+      </if>
+      <if test="termName != null" >
+        term_name = #{termName,jdbcType=VARCHAR},
+      </if>
+      <if test="termType != null" >
+        term_type = #{termType,jdbcType=VARCHAR},
+      </if>
+      <if test="fixedDay != null" >
+        fixed_day = #{fixedDay,jdbcType=INTEGER},
+      </if>
+      <if test="days != null" >
+        days = #{days,jdbcType=INTEGER},
+      </if>
+      <if test="isPrepay != null" >
+        is_prepay = #{isPrepay,jdbcType=TINYINT},
+      </if>
+      <if test="forwardProportion != null" >
+        forward_proportion = #{forwardProportion,jdbcType=DECIMAL},
+      </if>
+      <if test="spotProportion != null" >
+        spot_proportion = #{spotProportion,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date = #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.PayTermSupplier" >
+    UPDATE pay_term_supplier
+    SET company_no = #{companyNo,jdbcType=CHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      term_no = #{termNo,jdbcType=CHAR},
+      term_name = #{termName,jdbcType=VARCHAR},
+      term_type = #{termType,jdbcType=VARCHAR},
+      fixed_day = #{fixedDay,jdbcType=INTEGER},
+      days = #{days,jdbcType=INTEGER},
+      is_prepay = #{isPrepay,jdbcType=TINYINT},
+      forward_proportion = #{forwardProportion,jdbcType=DECIMAL},
+      spot_proportion = #{spotProportion,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      effective_date = #{effectiveDate,jdbcType=DATE},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.HqOtherStockOutDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSaleBalance" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="ref_bill_type" property="refBillType" jdbcType="INTEGER" />
+    <result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="send_store_no" property="sendStoreNo" jdbcType="CHAR" />
+    <result column="send_store_name" property="sendStoreName" jdbcType="CHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="sku_id" property="skuId" jdbcType="CHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="bill_cost" property="billCost" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="exclusive_cost" property="exclusiveCost" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="balance_status" property="balanceStatus" jdbcType="TINYINT" />
+    <result column="is_split" property="isSplit" jdbcType="INTEGER" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+    <result column="is_bill_invoice" property="isBillInvoice" jdbcType="INTEGER" />
+    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="VARCHAR" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="DATE" />
+    <result column="cost_checked" property="costChecked" jdbcType="INTEGER"/>
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+	id, bill_no, bill_type, biz_type, ref_bill_no, ref_bill_type, original_bill_no, status, 
+    buyer_no, buyer_name, saler_no, saler_name, send_date, receive_date, send_store_no, 
+    send_store_name, receive_store_no, receive_store_name, sku_id, sku_no, supplier_no, 
+    supplier_name, item_no, item_code, item_name, brand_no, brand_name, category_no, 
+    category_name, cost, bill_cost, tax_rate, exclusive_cost, send_qty, receive_qty, 
+    order_no, balance_no, balance_type, balance_status, is_split, path_no, order_unit_no, 
+    order_unit_name, organ_no, organ_name, order_unit_no_from, order_unit_name_from, 
+    organ_no_from, organ_name_from, zone_no, zone_name, zone_no_from, zone_name_from, 
+    is_bill_invoice, invoice_apply_no, invoice_apply_date,create_user,create_time
+  </sql>
+  
+   <sql id="Conn_Column_List" >
+	B.id,
+	B.bill_no,
+	B.bill_type,
+	B.create_user,
+	B.ref_bill_no,
+	B.ref_bill_type,
+	B.status,
+	B.buyer_no,
+	B.buyer_name,
+	B.saler_no,
+	B.saler_name,
+	B.organ_no_from,
+    B.organ_name_from,
+    B.order_unit_no_from,
+    B.order_unit_name_from,
+	B.send_date,
+	B.receive_date,
+	B.send_store_no,
+	B.send_store_name,
+	B.receive_store_no,
+	B.receive_store_name,
+	B.sku_id,
+	B.sku_no,
+	B.supplier_no,
+	B.item_no,
+	B.item_code,
+	B.item_name,
+	B.brand_no,
+	B.brand_name,
+	(SELECT
+	brand_unit.`name`
+	FROM
+	brand_unit,
+	brand
+	WHERE brand.`sys_no` = brand_unit.`code`
+	AND brand.`brand_no` = B.`brand_no`) brand_unit_name,
+	B.category_no,
+	B.category_name,
+	B.cost,
+	B.bill_cost,
+	B.tax_rate,
+	B.exclusive_cost,
+	B.send_qty,
+	B.receive_qty,
+	B.order_no,
+	B.balance_no,
+	B.is_split,
+	C1.category_no one_level_category_no,
+	C1.name one_level_category_name,
+	C2.category_no two_level_category_no,
+	C2.name two_level_category_name,
+	B.order_unit_no_from,
+	B.order_unit_name_from,
+	B.organ_no_from,
+	B.organ_name_from,
+	B.order_unit_no,
+	B.order_unit_name,
+	B.organ_no,
+	B.organ_name,
+	B.zone_no,
+	B.zone_name,
+	B.zone_no_from,
+	B.zone_name_from,
+	B.cost_checked,
+	(B.send_qty * B.cost) send_amount
+  </sql>
+  
+  <sql id="condition">
+    -- AND @B.brand_no
+    -- AND @B.company_no!saler_no
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.salerNo and ''!=params.salerNo">
+			AND B.saler_no = #{params.salerNo}
+		</if>
+		<if test="null!=params.organNoFrom and ''!=params.organNoFrom">
+			AND B.organ_no_from = #{params.organNoFrom}
+		</if>
+		<if test="null!=params.buyerNo and ''!=params.buyerNo">
+			AND B.buyer_no = #{params.buyerNo}
+		</if>
+		<if test="null!=params.billType and ''!=params.billType">
+			AND B.bill_type = #{params.billType}
+		</if>
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND B.brand_no like '${params.brandUnitNo}%'
+		</if>
+		<if test="null!=params.brandNo and ''!=params.brandNo">
+			AND B.brand_no = #{params.brandNo}
+		</if>
+		<if test="null!=params.brandUnitNoLike and ''!=params.brandUnitNoLike">
+			AND B.brand_unit_no in ${params.brandUnitNoLike}
+		</if>
+		<if test="null!=params.brandNoLike and ''!=params.brandNoLike">
+			AND B.brand_no in ${params.brandNoLike}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart">
+			AND B.send_date &gt;= #{params.sendDateStart}
+		</if>
+		<if test="null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND B.send_date &lt;= #{params.sendDateEnd}
+		</if>
+		<if test="null!=params.billNo and ''!=params.billNo">
+			AND B.bill_no = #{params.billNo}
+		</if>
+		<if test="null!=params.balanceNo and ''!=params.balanceNo">
+			AND B.balance_no = #{params.balanceNo}
+		</if>
+		<if test="null!=params.itemCode and ''!=params.itemCode">
+			AND B.item_code = #{params.itemCode}
+		</if>
+		<if test="null!=params.oneLevelCategoryNo and ''!=params.oneLevelCategoryNo">
+			AND B.category_no like '${params.oneLevelCategoryNo}%'
+		</if>
+
+		<!-- 选单查询条件 -->
+		<if test="null!=params.balanceStartDate and ''!=params.balanceStartDate">
+			AND B.send_date &gt;= #{params.balanceStartDate}
+		</if>
+		<if test="null!=params.balanceEndDate and ''!=params.balanceEndDate">
+			AND B.send_date &lt;= #{params.balanceEndDate}
+		</if>
+		<if test="null!=params.balanceNoFlag and ''!=params.balanceNoFlag">
+			AND B.balance_no IS NULL
+		</if>
+		<if test="null!=params.brandNoFlag and ''!=params.brandNoFlag">
+			AND B.brand_no in ${params.brandNoFlag}
+		</if>
+		<if test="null!=params.itemSql and ''!=params.itemSql" >
+			AND B.item_no IN (SELECT item_no FROM item WHERE 1=1 AND ${params.itemSql})
+		</if>
+		
+	</if>
+</sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bill_sale_balance
+		WHERE id = #{id,jdbcType=CHAR}
+  </select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+	SELECT 
+		COUNT(1) as s 
+	FROM
+		bill_sale_balance B
+	LEFT JOIN category C1
+		ON LEFT(B.`category_no`, 2) = C1.`category_no`
+	LEFT JOIN category C2
+		ON LEFT(B.`category_no`, 4) = C2.`category_no`
+	WHERE 1 = 1
+		 AND (
+		      B.bill_type = 2006 
+		      AND B.biz_type = '36'
+		  ) 
+    <include refid="condition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Conn_Column_List" />
+	FROM
+		bill_sale_balance B
+	LEFT JOIN category C1
+		ON LEFT(B.`category_no`, 2) = C1.`category_no`
+	LEFT JOIN category C2
+		ON LEFT(B.`category_no`, 4) = C2.`category_no`
+	WHERE 1 = 1
+		 AND (
+		      B.bill_type = 2006 
+		      AND B.biz_type = '36'
+		  ) 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField" >
+      ORDER BY B.send_date DESC 
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+   <include refid="Conn_Column_List" />
+	FROM
+		bill_sale_balance B
+	LEFT JOIN category C1
+		ON LEFT(B.`category_no`, 2) = C1.`category_no`
+	LEFT JOIN category C2
+		ON LEFT(B.`category_no`, 4) = C2.`category_no`
+	WHERE 1 = 1
+		  AND (
+		      B.bill_type = 2006 
+		      AND B.biz_type = '36'
+		  ) 
+    <include refid="condition" />
+     <if test="params.groupBy != null and ''!=params.groupBy" >
+      	GROUP BY #{params.groupBy}
+     </if>
+  </select>
+  
+<!-- 查询出库明细合计行 -->
+<select id="selectTotalRow" resultMap="BaseResultMap" parameterType="map">
+	SELECT
+		'合计' BUYER_NAME,
+		IFNULL(SUM(B.send_Qty), 0) send_qty,
+		IFNULL(SUM(B.send_Qty * B.cost), 0) send_amount
+	FROM
+		bill_sale_balance B
+	WHERE 1 = 1
+		 AND (
+		      B.bill_type = 2006 
+		      AND B.biz_type = '36'
+		  ) 
+		<include refid="condition" />
+</select>
+
+</mapper>

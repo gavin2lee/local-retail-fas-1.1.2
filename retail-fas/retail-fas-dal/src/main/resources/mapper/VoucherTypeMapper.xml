@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.VoucherTypeMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.VoucherType" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="vouch_type_code" property="vouchTypeCode" jdbcType="VARCHAR" />
+    <result column="vouch_type_name" property="vouchTypeName" jdbcType="VARCHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="show_order" property="showOrder" jdbcType="TINYINT" />
+    <result column="company_no" property="companyNo" jdbcType="CHAR" />
+    <result column="currency_code" property="currencyCode" jdbcType="CHAR" />
+    <result column="seal_flag" property="sealFlag" jdbcType="TINYINT" />
+    <result column="glorg_book" property="glorgBook" jdbcType="CHAR" />
+    <result column="vouch_type" property="vouchType" jdbcType="TINYINT" />
+    <result column="restrict_flag" property="restrictFlag" jdbcType="TINYINT" />
+    <result column="print_template" property="printTemplate" jdbcType="CHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    
+     <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+  	 <result column="currency_name" property="currencyName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, vouch_type_code, vouch_type_name, short_name, show_order, company_no, currency_code, 
+    seal_flag, glorg_book, vouch_type, restrict_flag, print_template, del_flag, status, 
+    create_user, create_time, update_user, update_time
+  </sql>
+  
+   <!-- 关联公司和币种 -->
+  <sql id="Conn_Column_List" >
+	A.id,
+	vouch_type_code,
+	vouch_type_name,
+	short_name,
+	show_order,
+	A.company_no,
+	A.currency_code,
+	seal_flag,
+	glorg_book,
+	vouch_type,
+	restrict_flag,
+	print_template,
+	del_flag,
+	A.status,
+	A.create_user,
+	A.create_time,
+	A.update_user,
+	A.update_time,
+	B.currency_name currency_name, 
+	C.name company_name
+  </sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+     </if>
+		<if test="null!=params.vouchTypeName and ''!=params.vouchTypeName">
+			and A.vouch_type_name like '%${params.vouchTypeName}%'
+		</if>
+		<if test="null!=params.companyNo and ''!=params.companyNo">
+			and C.company_no like '%${params.companyNo}%'
+		</if>
+	 	<if test="null!=params.status and ''!=params.status" >
+       	 	and A.status = #{params.status}
+     	 </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM voucher_type
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s  
+    FROM
+	voucher_type A
+	LEFT JOIN currency_management B
+	ON B.`currency_code` = A.`currency_code`
+	LEFT JOIN company C
+	ON C.`company_no` = A.`company_no`
+	WHERE 1 = 1   
+    <include refid="condition" />
+  </select>
+   <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Conn_Column_List" />
+	FROM
+	voucher_type A
+	LEFT JOIN currency_management B
+	ON B.`currency_code` = A.`currency_code`
+	LEFT JOIN company C
+	ON C.`company_no` = A.`company_no`
+	WHERE 1 = 1  
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Conn_Column_List" />
+    FROM
+	voucher_type A
+	LEFT JOIN currency_management B
+	ON B.`currency_code` = A.`currency_code`
+	LEFT JOIN company C
+	ON C.`company_no` = A.`company_no`
+	WHERE 1 = 1   
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM voucher_type
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.VoucherType" >
+    DELETE FROM voucher_type
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.VoucherType" >
+    INSERT INTO voucher_type (id, vouch_type_code, vouch_type_name, 
+      short_name, show_order, company_no, 
+      currency_code, seal_flag, glorg_book, 
+      vouch_type, restrict_flag, print_template, 
+      del_flag, status, create_user, 
+      create_time, update_user, update_time
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{vouchTypeCode,jdbcType=VARCHAR}, #{vouchTypeName,jdbcType=VARCHAR}, 
+      #{shortName,jdbcType=VARCHAR}, #{showOrder,jdbcType=TINYINT}, #{companyNo,jdbcType=CHAR}, 
+      #{currencyCode,jdbcType=CHAR}, #{sealFlag,jdbcType=TINYINT}, #{glorgBook,jdbcType=CHAR}, 
+      #{vouchType,jdbcType=TINYINT}, #{restrictFlag,jdbcType=TINYINT}, #{printTemplate,jdbcType=CHAR}, 
+      #{delFlag,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.VoucherType" >
+    INSERT INTO voucher_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="vouchTypeCode != null" >
+        vouch_type_code,
+      </if>
+      <if test="vouchTypeName != null" >
+        vouch_type_name,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="showOrder != null" >
+        show_order,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="currencyCode != null" >
+        currency_code,
+      </if>
+      <if test="sealFlag != null" >
+        seal_flag,
+      </if>
+      <if test="glorgBook != null" >
+        glorg_book,
+      </if>
+      <if test="vouchType != null" >
+        vouch_type,
+      </if>
+      <if test="restrictFlag != null" >
+        restrict_flag,
+      </if>
+      <if test="printTemplate != null" >
+        print_template,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="vouchTypeCode != null" >
+        #{vouchTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vouchTypeName != null" >
+        #{vouchTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="showOrder != null" >
+        #{showOrder,jdbcType=TINYINT},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="currencyCode != null" >
+        #{currencyCode,jdbcType=CHAR},
+      </if>
+      <if test="sealFlag != null" >
+        #{sealFlag,jdbcType=TINYINT},
+      </if>
+      <if test="glorgBook != null" >
+        #{glorgBook,jdbcType=CHAR},
+      </if>
+      <if test="vouchType != null" >
+        #{vouchType,jdbcType=TINYINT},
+      </if>
+      <if test="restrictFlag != null" >
+        #{restrictFlag,jdbcType=TINYINT},
+      </if>
+      <if test="printTemplate != null" >
+        #{printTemplate,jdbcType=CHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.VoucherType" >
+    UPDATE voucher_type
+    <set >
+      <if test="vouchTypeCode != null" >
+        vouch_type_code = #{vouchTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vouchTypeName != null" >
+        vouch_type_name = #{vouchTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="showOrder != null" >
+        show_order = #{showOrder,jdbcType=TINYINT},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=CHAR},
+      </if>
+      <if test="currencyCode != null" >
+        currency_code = #{currencyCode,jdbcType=CHAR},
+      </if>
+      <if test="sealFlag != null" >
+        seal_flag = #{sealFlag,jdbcType=TINYINT},
+      </if>
+      <if test="glorgBook != null" >
+        glorg_book = #{glorgBook,jdbcType=CHAR},
+      </if>
+      <if test="vouchType != null" >
+        vouch_type = #{vouchType,jdbcType=TINYINT},
+      </if>
+      <if test="restrictFlag != null" >
+        restrict_flag = #{restrictFlag,jdbcType=TINYINT},
+      </if>
+      <if test="printTemplate != null" >
+        print_template = #{printTemplate,jdbcType=CHAR},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.VoucherType" >
+    UPDATE voucher_type
+    SET vouch_type_code = #{vouchTypeCode,jdbcType=VARCHAR},
+      vouch_type_name = #{vouchTypeName,jdbcType=VARCHAR},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=TINYINT},
+      company_no = #{companyNo,jdbcType=CHAR},
+      currency_code = #{currencyCode,jdbcType=CHAR},
+      seal_flag = #{sealFlag,jdbcType=TINYINT},
+      glorg_book = #{glorgBook,jdbcType=CHAR},
+      vouch_type = #{vouchType,jdbcType=TINYINT},
+      restrict_flag = #{restrictFlag,jdbcType=TINYINT},
+      print_template = #{printTemplate,jdbcType=CHAR},
+      del_flag = #{delFlag,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

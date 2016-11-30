@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BAReceiptMapper" >
+   <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.BAReceiptDto" >
+   		<id column="id" property="id" jdbcType="CHAR" />
+   		<result column="item_no" property="itemNo" jdbcType="CHAR" />
+		<result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+		<result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+		<result column="saler_no" property="salerNo" jdbcType="CHAR" />
+		<result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+		<result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+		<result column="saler_name" property="salerName" jdbcType="CHAR" />
+		<result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+		<result column="send_date" property="sendDate" jdbcType="DATE" />
+		<result column="receive_date" property="receiveDate" jdbcType="DATE" />
+		<result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+		<result column="item_code" property="itemCode" jdbcType="CHAR" />
+		<result column="item_name" property="itemName" jdbcType="CHAR" />
+		<result column="brand_name" property="brandName" jdbcType="CHAR" />
+		<result column="brand_no" property="brandNo" jdbcType="CHAR" />
+		<result column="brand_unit_name" property="brandUnitName" jdbcType="CHAR" />
+		<result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+		<result column="category_name" property="categoryName" jdbcType="CHAR" />
+		<result column="category_no" property="categoryNo" jdbcType="CHAR" />
+		<result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="CHAR" />
+		<result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="CHAR" />
+		<result column="order_no" property="orderNo" jdbcType="CHAR" />
+		<result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+		<result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+		<result column="organ_name" property="organName" jdbcType="VARCHAR" />
+		<result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+   		<result column="cost" property="cost" jdbcType="DECIMAL" />
+   		<result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+		<result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+		<result column="tag_amount" property="tagAmount" jdbcType="DECIMAL" />
+		<result column="purchase_amount" property="purchaseAmount" jdbcType="DECIMAL" />
+   		<result column="currency_name" property="currencyName" jdbcType="CHAR" />
+		<result column="exchange_rate" property="exchangeRate" jdbcType="DECIMAL" />
+   		<result column="standard_currency_name" property="standardCurrencyName" jdbcType="CHAR" />
+		<result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+		<result column="style_no" property="styleNo" jdbcType="CHAR" />
+		<result column="remark" property="remark" jdbcType="CHAR" />
+		<result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+		<result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+   </resultMap>
+    <sql id="condition" >
+	    <if test="null!=params" >
+	      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+	        ${params.queryCondition}
+	      </if>
+	      <if test="null!=params.originalBillNo and ''!=params.originalBillNo" >
+	        AND buy.original_bill_no = #{params.originalBillNo}
+	      </if>
+	      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+	        AND buy.balance_no = #{params.balanceNo}
+	      </if>
+	      <if test="null!=params.orderNo and ''!=params.orderNo" >
+	        AND order_no = #{params.orderNo}
+	      </if>
+	      <if test="null!=params.HQCompanyNo and ''!=params.HQCompanyNo" >
+	        AND buyer_no IN (${params.HQCompanyNo})
+	      </if>
+	      <if test="null!=params.salerNo and ''!=params.salerNo" >
+	        AND saler_no = #{params.salerNo}
+	      </if>
+	      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+	        AND buyer_no = #{params.buyerNo}
+	      </if>
+	      <if test="null!=params.multiSupplierNo and ''!=params.multiSupplierNo" >
+	        AND buy.saler_no IN ${params.multiSupplierNo}
+	      </if>
+	      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+	        AND buy.buyer_no IN ${params.multiCompanyNo}
+	      </if>
+	      <if test="null!=params.receiveDateStart and ''!=params.receiveDateStart" >
+	        AND receive_date &gt;= #{params.receiveDateStart} 
+	      </if> 
+	      <if test="null!=params.receiveDateEnd and ''!=params.receiveDateEnd" >
+	        AND receive_date &lt;= #{params.receiveDateEnd} 
+	      </if>
+	     </if>
+     </sql> 
+   <select id="findReceiptItemCount" resultType="java.lang.Integer" >
+   		SELECT 
+		  COUNT(1) 
+		FROM
+		  bill_buy_balance_additional additional
+		  INNER JOIN item im on  additional.item_code = im.item_no 
+		  INNER JOIN bill_buy_balance buy 
+		    ON additional.original_bill_no = buy.original_bill_no 
+		    AND additional.item_code = buy.item_no 
+		  WHERE 1 = 1  
+		 <include refid="condition" />
+		 <if test="null!=params.styleNo and ''!=params.styleNo" >
+        	AND im.style_no = #{params.styleNo}
+       	</if>
+       	<if test="null!=params.costZero and ''!=params.costZero" >
+       		<if test="'true'==params.costZero">
+       			AND buy.cost = 0
+       		</if>
+       	</if> 
+   </select>
+   
+   <select id="findReceiptBillCount" resultType="java.lang.Integer" >
+   		SELECT 
+		  COUNT(1) 
+		FROM
+		  (SELECT 
+		    1 
+		  FROM
+		    bill_buy_balance_additional additional 
+		    INNER JOIN bill_buy_balance buy 
+		      ON additional.original_bill_no = buy.original_bill_no 
+		      AND additional.item_code = buy.item_no 
+		    WHERE 1 = 1  
+		 	<include refid="condition" />  
+		  GROUP BY buy.original_bill_no) G 
+   </select>
+   
+   <select id="findReceiptItemList" resultMap="BaseResultMap" parameterType="map">
+   		SELECT
+   		  im.style_no, 
+   		  buy.original_bill_no,
+   		  buy.supplier_no,
+   		  buy.supplier_name,
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name,
+		  brand_unit_name,
+          brand_unit_no,
+		  brand_name,
+		  send_date,
+		  receive_date,
+		  receive_qty,
+		  buy.item_no,
+		  buy.item_code,
+		  buy.item_name,
+		  order_unit_name,
+		  organ_name,
+		  order_no,
+		  balance_no,
+		  cost,
+		  buy.tag_price,
+		  buy.tag_price * receive_qty tag_amount,
+		  cost*receive_qty purchase_amount,
+		  round(cost * additional.exchange_rate,2) * receive_qty as total_amount,
+		  additional.currency_name,
+		  additional.standard_currency_name,
+		  additional.exchange_rate,
+		  C1.name one_level_category_name,
+		  C2.name two_level_category_name,
+		  buy.category_name,
+		  buy.receive_store_no,
+		  s.short_name as receive_store_name,
+		  buy.remark 
+		FROM
+		  bill_buy_balance_additional additional
+		  INNER JOIN item im on  additional.item_code = im.item_no
+		  INNER JOIN bill_buy_balance buy 
+		    ON additional.original_bill_no = buy.original_bill_no 
+		    AND additional.item_code = buy.item_no 
+		  INNER JOIN category C1 ON C1.category_no = LEFT(buy.category_no,2)  
+		  INNER JOIN category C2 ON C2.category_no = LEFT(buy.category_no,4)
+		  LEFT JOIN store s on buy.receive_store_no = s.store_no  
+		 WHERE 1 = 1  
+		 <include refid="condition" />
+	 	<if test="null!=params.styleNo and ''!=params.styleNo" >
+        	AND im.style_no = #{params.styleNo}
+       	</if>
+       	<if test="null!=params.costZero and ''!=params.costZero" >
+       		<if test="'true'==params.costZero">
+       			AND buy.cost = 0
+       		</if>
+       	</if> 
+		 <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+	    <if test="orderByField == null or  ''==orderByField " >
+	      ORDER BY receive_date,buy.id DESC
+	    </if>
+     	LIMIT #{page.startRowNum} ,#{page.pageSize}     
+   </select>
+   
+   <select id="findReceiptBillList" resultMap="BaseResultMap" parameterType="map">
+   	   SELECT
+   		  buy.brand_unit_name,
+          buy.brand_unit_no,
+		  buy.category_name,
+	      buy.category_no,
+   		  buy.original_bill_no,
+   		  buy.supplier_no,
+   		  buy.supplier_name,
+		  saler_name,
+		  buyer_name,
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name,
+		  send_date,
+		  receive_date,
+		  order_unit_name,
+		  organ_name,
+		  order_no,
+		  balance_no,
+		  SUM(receive_qty) receive_qty,
+		  SUM(cost * receive_qty) purchase_amount,
+		  SUM(tag_price * receive_qty) tag_amount,
+		  SUM(round(cost * additional.exchange_rate,2) * receive_qty) total_amount,
+		  additional.currency_name,
+		  additional.standard_currency_name,
+		  additional.exchange_rate 
+		FROM
+		  bill_buy_balance_additional additional 
+		  INNER JOIN bill_buy_balance buy 
+		    ON additional.original_bill_no = buy.original_bill_no 
+		    AND additional.item_code = buy.item_no 
+		 WHERE 1 = 1  
+		 <include refid="condition" />   
+		GROUP BY buy.original_bill_no 
+		  <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+	    <if test="orderByField == null or  ''==orderByField " >
+	      ORDER BY receive_date,buy.id DESC
+	    </if>
+     	LIMIT #{page.startRowNum} ,#{page.pageSize}  
+   </select>
+   
+   <select id="findReceiptFooter" resultMap="BaseResultMap" parameterType="map">
+   		SELECT
+		  SUM(buy.receive_qty) receive_qty,
+		  SUM(buy.receive_qty * buy.tag_price) tag_amount,
+		  SUM(buy.receive_qty * buy.cost) purchase_amount,
+		  SUM(round(cost * additional.exchange_rate,2)*buy.receive_qty) total_amount
+		FROM
+		  bill_buy_balance_additional additional
+		  INNER JOIN item im on  additional.item_code = im.item_no
+		  INNER JOIN bill_buy_balance buy 
+		    ON additional.original_bill_no = buy.original_bill_no 
+		    AND additional.item_code = buy.item_no 
+		 WHERE 1 = 1
+		<if test="null!=params.styleNo and ''!=params.styleNo" >
+        	AND im.style_no = #{params.styleNo}
+       	</if>
+       	<if test="null!=params.costZero and ''!=params.costZero" >
+       		<if test="'true'==params.costZero">
+       			AND buy.cost = 0
+       		</if>
+       	</if>   
+		 <include refid="condition" />   
+   </select>
+
+   <select id="selectNeedUpdatePurchaseList" resultMap="BaseResultMap" parameterType="java.lang.String">
+   		SELECT 
+		  buy.id,
+		  item.tag_price,
+		  pp.purchase_price cost 
+		FROM
+		  bill_buy_balance buy 
+		  INNER JOIN purchase_price pp 
+		    ON buy.saler_no = pp.supplier_no 
+		    AND buy.item_no = pp.item_no 
+		  INNER JOIN item 
+		  	ON buy.item_no = item.item_no 
+		WHERE 1 = 1 
+		  AND pp.status = 100 
+		  AND (buy.cost != pp.purchase_price OR buy.tag_price != item.tag_price)
+		  AND buy.original_bill_no = #{originalBillNo}
+   </select>
+    <select id="getItemNos" resultType="java.lang.String" parameterType="java.lang.String">
+   		select DISTINCT item_no
+		from bill_buy_balance
+		where original_bill_no = #{originalBillNo}
+   </select>
+   
+   <update id="updateCostById" parameterType="cn.wonhigh.retail.fas.common.dto.BAReceiptDto" >
+  	UPDATE bill_buy_balance 
+		SET cost = #{cost},
+		tag_price = #{tagPrice}
+	WHERE 1 = 1 
+	AND id = #{id}	
+  </update>
+  
+  <update id="updateBuyBalanceNo" parameterType="map" >
+  	UPDATE bill_buy_balance 
+		SET balance_no = #{params.balanceNo}
+	WHERE 1 = 1 
+	AND original_bill_no IN ${params.multiOriginalBillNo}	
+	AND saler_no = #{params.salerNo}
+  </update>
+  
+  <update id="updateBuyBalanceNoByItem" parameterType="map" >
+  	UPDATE bill_buy_balance 
+		SET balance_no = #{params.balanceNo}
+	WHERE 1 = 1 
+	AND original_bill_no = #{params.originalBillNo}
+	AND item_no = #{params.itemNo}	
+	AND saler_no = #{params.salerNo}
+  </update>
+  
+  <select id="getReceiptForUpdate" resultMap="BaseResultMap" parameterType="map">
+   	   select 
+			bbb.id,
+			bbb.item_no,
+			i.tag_price
+	   from bill_buy_balance bbb LEFT JOIN item i  on bbb.item_no = i.item_no  
+	   WHERE 1 = 1  
+	   <if test="null!=params" >
+	      <if test="null!=params.multiCompanyNo and ''!=params.multiCompanyNo" >
+	        AND bbb.buyer_no IN ${params.multiCompanyNo}
+	      </if>
+	      <if test="null!=params.receiveDateStart and ''!=params.receiveDateStart" >
+	        AND bbb.receive_date &gt;= #{params.receiveDateStart} 
+	      </if> 
+	      <if test="null!=params.receiveDateEnd and ''!=params.receiveDateEnd" >
+	        AND bbb.receive_date &lt;= #{params.receiveDateEnd} 
+	      </if>
+	     </if>
+   </select>
+   
+   <update id="updateBuyBalanceTagPrice" parameterType="map" >
+	  	UPDATE bill_buy_balance 
+			SET tag_price = #{params.tagPrice}
+		WHERE 1 = 1 
+		AND id = #{params.id}
+  </update>
+</mapper>

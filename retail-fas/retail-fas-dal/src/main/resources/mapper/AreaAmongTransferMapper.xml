@@ -1,0 +1,1087 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.AreaAmongTransferMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSaleBalance" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="CHAR" />
+    <result column="ref_bill_type" property="refBillType" jdbcType="INTEGER" />
+    <result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="send_store_no" property="sendStoreNo" jdbcType="CHAR" />
+    <result column="send_store_name" property="sendStoreName" jdbcType="CHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="sku_id" property="skuId" jdbcType="CHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="bill_cost" property="billCost" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="exclusive_cost" property="exclusiveCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL"/>
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="balance_status" property="balanceStatus" jdbcType="TINYINT" />
+    <result column="is_split" property="isSplit" jdbcType="INTEGER" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+    <result column="is_bill_invoice" property="isBillInvoice" jdbcType="INTEGER" />
+    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="VARCHAR" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="DATE" />
+    <result column="cost_checked" property="costChecked" jdbcType="INTEGER"/>
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    
+    <result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+    <result column="purchase_Amount" property="purchaseAmount" jdbcType="DECIMAL" />
+    <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="one_level_category_no" property="oneLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="two_level_category_no" property="twoLevelCategoryNo" jdbcType="VARCHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="tagPrice_Amount" property="tagPriceAmount" jdbcType="DECIMAL" />
+    <result column="ts_Rebate" property="tsRebate" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="condition">
+	-- AND @B.brand_no
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<!-- 权限控制 -->
+		<if test="null!=params.aToA and 'ys'==params.aToA">
+			-- AND @B.company_no!saler_no
+		</if>
+		<if test="null!=params.aToA and 'yf'==params.aToA">
+			-- AND @B.company_no!buyer_no
+		</if>
+		<if test="null!=params.salerNo and ''!=params.salerNo">
+			AND B.saler_no = #{params.salerNo}
+		</if>
+		<if test="null!=params.buyerNo and ''!=params.buyerNo">
+			AND B.buyer_no = #{params.buyerNo}
+		</if>
+		<if test="null!=params.organNo and ''!=params.organNo">
+			AND B.organ_no=#{params.organNo}
+		</if>
+		<if test="null!=params.organNoFrom and ''!=params.organNoFrom">
+			AND B.organ_no_from=#{params.organNoFrom}
+		</if>
+		<if test="null!=params.orderUnitNoFrom and ''!=params.orderUnitNoFrom">
+			AND B.order_unit_no_from=#{params.orderUnitNoFrom}
+		</if>
+		<if test="null!=params.orderUnitNo and ''!=params.orderUnitNo">
+			AND B.order_unit_no=#{params.orderUnitNo}
+		</if>
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND B.brand_unit_no in ${params.brandUnitNo}
+		</if>
+		<if test="null!=params.brandNo and ''!=params.brandNo">
+			AND B.brand_no in ${params.brandNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart">
+			AND B.send_date &gt;= #{params.sendDateStart}
+		</if>
+		<if test="null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND B.send_date &lt;= #{params.sendDateEnd}
+		</if>
+		<if test="null!=params.billNo and ''!=params.billNo">
+			AND B.original_bill_no = #{params.billNo}
+		</if>
+		<if test="null!=params.balanceNo and ''!=params.balanceNo">
+			AND B.balance_no = #{params.balanceNo}
+		</if>
+		<if test="null!=params.itemCode and ''!=params.itemCode">
+			AND B.item_code = #{params.itemCode}
+		</if>
+		<if test="null!=params.oneLevelCategoryNo and ''!=params.oneLevelCategoryNo">
+			AND LEFT(B.category_no,2) in ${params.oneLevelCategoryNo}
+		</if>
+
+		<!-- 选单查询条件 -->
+		<if test="null!=params.balanceStartDate and ''!=params.balanceStartDate">
+			AND B.send_date &gt;= #{params.balanceStartDate}
+		</if>
+		<if test="null!=params.balanceEndDate and ''!=params.balanceEndDate">
+			AND B.send_date &lt;= #{params.balanceEndDate}
+		</if>
+		<if test="null!=params.balanceNoFlag and ''!=params.balanceNoFlag">
+			AND B.BALANCE_NO IS NULL
+		</if>
+	</if>
+</sql>
+  
+  <sql id="Base_Column_List" >
+    id, bill_no, bill_type, biz_type, ref_bill_no, ref_bill_type, original_bill_no, status, 
+    buyer_no, buyer_name, saler_no, saler_name, send_date, receive_date, send_store_no, 
+    send_store_name, receive_store_no, receive_store_name, sku_id, sku_no, supplier_no, 
+    supplier_name, item_no, item_code, item_name, brand_no, brand_name, category_no, 
+    category_name, cost, bill_cost, tax_rate, exclusive_cost, send_qty, receive_qty,unit_cost, 
+    order_no, balance_no, balance_type, balance_status, is_split, path_no, order_unit_no, 
+    order_unit_name, organ_no, organ_name, order_unit_no_from, order_unit_name_from, 
+    organ_no_from, organ_name_from, zone_no, zone_name, zone_no_from, zone_name_from, 
+    is_bill_invoice, invoice_apply_no, invoice_apply_date,create_user,create_time,purchase_Price
+  </sql>
+   
+<!-- 调拨出库结果集 -->
+<sql id="Conn_Column_List" >
+  B.ID,B.original_bill_no,B.BILL_TYPE,B.CREATE_USER,B.BIZ_TYPE,B.STATUS,B.ZONE_NO_FROM,B.ZONE_NAME_FROM,
+  B.SALER_NO,B.SALER_NAME,B.ORDER_UNIT_NO_FROM,B.ORDER_UNIT_NAME_FROM,B.ORGAN_NO_FROM,B.ORGAN_NAME_FROM,
+  B.SEND_STORE_NO,B.SEND_STORE_NAME,B.ZONE_NO,B.ZONE_NAME,
+  B.BUYER_NO,B.BUYER_NAME,B.ORDER_UNIT_NO,B.ORDER_UNIT_NAME,B.ORGAN_NO,B.RECEIVE_STORE_NO,B.RECEIVE_STORE_NAME,B.ORGAN_NAME,
+  B.SEND_DATE,B.RECEIVE_DATE,B.ITEM_NO,B.ITEM_CODE,B.ITEM_NAME,B.BRAND_UNIT_NAME,B.BRAND_NO,B.BRAND_NAME,
+  B.CATEGORY_NO,B.CATEGORY_NAME,C1.CATEGORY_NO ONE_LEVEL_CATEGORY_NO,C1.NAME ONE_LEVEL_CATEGORY_NAME,C2.CATEGORY_NO TWO_LEVEL_CATEGORY_NO,C2.NAME TWO_LEVEL_CATEGORY_NAME,
+  B.COST,B.BILL_COST,B.UNIT_COST,B.PURCHASE_PRICE,B.TAG_PRICE,
+  (b.send_qty * b.purchase_price) purchase_amount,b.send_qty,
+  b.receive_qty,(b.send_qty * b.cost) send_amount,B.BALANCE_NO,B.BALANCE_TYPE,
+  B.BALANCE_STATUS,B.IS_SPLIT,B.PATH_NO,B.COST_CHECKED,LE1.NAME AS YEARS,LE2.NAME AS SEASON,
+  (b.send_qty * b.tag_price) tagPrice_Amount,ROUND(B.Cost/B.tag_price,4) ts_Rebate
+</sql>
+  
+  <sql id="subtotal_Column_List">
+  	SELECT 
+	  NUll as ID,NUll as original_bill_no,NUll as BILL_TYPE,NUll as CREATE_USER,NUll as BIZ_TYPE,NUll as STATUS,
+	  NUll as ZONE_NO_FROM,NUll as ZONE_NAME_FROM,NUll as SALER_NO,NUll as SALER_NAME,NUll as ORDER_UNIT_NO_FROM,
+	  NUll as ORDER_UNIT_NAME_FROM,NUll as ORGAN_NO_FROM,NUll as ORGAN_NAME_FROM,NUll as SEND_STORE_NO,NUll as SEND_STORE_NAME,
+	  NUll as ZONE_NO,'小计' zone_name,BUYER_NO,BUYER_NAME,NUll as ORDER_UNIT_NO,NUll as ORDER_UNIT_NAME,NUll as ORGAN_NO,
+	  NUll as RECEIVE_STORE_NO,NUll as RECEIVE_STORE_NAME,NUll as ORGAN_NAME,NULL SEND_DATE,NULL RECEIVE_DATE,
+	  NUll as ITEM_NO,NUll as ITEM_CODE,NUll as ITEM_NAME,NUll as BRAND_UNIT_NAME,NUll as BRAND_NO,NUll as BRAND_NAME,
+	  NUll as CATEGORY_NO,NUll as CATEGORY_NAME,NUll as ONE_LEVEL_CATEGORY_NO,NUll as ONE_LEVEL_CATEGORY_NAME,
+	  NUll as TWO_LEVEL_CATEGORY_NO,NUll as TWO_LEVEL_CATEGORY_NAME,NULL COST,NUll as BILL_COST,NULL UNIT_COST,
+	  NULL PURCHASE_PRICE,NULL TAG_PRICE,sum(send_qty*purchase_price) purchase_amount,sum(send_qty) send_qty,sum(receive_qty) receive_qty,
+	  sum(send_qty * cost) send_amount,NUll as BALANCE_NO,NUll as BALANCE_TYPE,NUll as BALANCE_STATUS,NUll as IS_SPLIT,NUll as PATH_NO,
+	  NULL COST_CHECKED,NULL AS YEARS,NULL AS SEASON,null as  tagPrice_Amount,null as ts_Rebate
+	FROM
+	  BILL_SALE_BALANCE B 
+	WHERE 1 = 1 
+  	 AND B.BILL_TYPE = 1371 
+  </sql>
+  
+   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_sale_balance
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+	SELECT COUNT(1) as s 
+	FROM 
+	(SELECT 
+   		 <include refid="Conn_Column_List" />
+	FROM 
+		 BILL_SALE_BALANCE B 
+    LEFT JOIN CATEGORY C1 ON LEFT(B.CATEGORY_NO, 2) = C1.CATEGORY_NO 
+	LEFT JOIN CATEGORY C2 ON LEFT(B.CATEGORY_NO, 4) = C2.CATEGORY_NO
+	LEFT JOIN LOOKUP_ENTRY LE1 ON B.YEARS = LE1.CODE AND LE1.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'YEAR') 
+    LEFT JOIN LOOKUP_ENTRY LE2 ON B.SEASON = LE2.CODE  AND LE2.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'SELL_SEASON') 
+	WHERE 1 = 1 
+	    AND B.BILL_TYPE=1371
+    	<include refid="condition" />
+    <!-- 带小计行 -->
+    <if test="null!=params.subTotal and ''!=params.subTotal and 'yes'==params.subTotal">
+         UNION ALL 
+         <include refid="subtotal_Column_List"/>
+  		 <include refid="condition" />
+	     GROUP BY BUYER_NO 
+	     ORDER BY BUYER_NO DESC, SEND_DATE DESC
+	</if>) TMP
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+   		 <include refid="Conn_Column_List" />
+	FROM 
+		 BILL_SALE_BALANCE B 
+    LEFT JOIN CATEGORY C1 ON LEFT(B.CATEGORY_NO, 2) = C1.CATEGORY_NO 
+	LEFT JOIN CATEGORY C2 ON LEFT(B.CATEGORY_NO, 4) = C2.CATEGORY_NO
+	LEFT JOIN LOOKUP_ENTRY LE1 ON B.YEARS = LE1.CODE AND LE1.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'YEAR') 
+    LEFT JOIN LOOKUP_ENTRY LE2 ON B.SEASON = LE2.CODE AND LE2.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'SELL_SEASON') 
+	WHERE 1 = 1 
+	    AND B.BILL_TYPE=1371
+    	<include refid="condition" />
+    <!-- 带小计行 -->
+    <if test="null!=params.subTotal and ''!=params.subTotal and 'yes'==params.subTotal">
+         UNION ALL 
+         <include refid="subtotal_Column_List"/>
+  		 <include refid="condition" />
+	     GROUP BY BUYER_NO 
+	     ORDER BY BUYER_NO DESC, SEND_DATE DESC
+	</if>
+	<if test="null==params.subTotal and ''==params.subTotal">
+		 ORDER BY B.SEND_DATE DESC
+    </if>
+	     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+   		<include refid="Conn_Column_List" />
+	FROM 
+		 BILL_SALE_BALANCE B 
+    LEFT JOIN CATEGORY C1 ON LEFT(B.CATEGORY_NO, 2) = C1.CATEGORY_NO 
+	LEFT JOIN CATEGORY C2 ON LEFT(B.CATEGORY_NO, 4) = C2.CATEGORY_NO
+	LEFT JOIN LOOKUP_ENTRY LE1 ON B.YEARS = LE1.CODE AND LE1.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'YEAR') 
+    LEFT JOIN LOOKUP_ENTRY LE2 ON B.SEASON = LE2.CODE AND LE2.LOOKUP_ID IN (SELECT LK.ID FROM LOOKUP LK WHERE LK.CODE = 'SELL_SEASON') 
+	WHERE 1 = 1 
+	    AND B.BILL_TYPE=1371
+   		 <include refid="condition" />
+    <!-- 带小计行 -->
+    <if test="null!=params.subTotal and ''!=params.subTotal and 'yes'==params.subTotal">
+         UNION ALL 
+         <include refid="subtotal_Column_List"/>
+  		 <include refid="condition" />
+	     GROUP BY BUYER_NO 
+	     ORDER BY BUYER_NO DESC, SEND_DATE DESC
+	</if>
+  </select>
+  
+  <!-- 合计行属性 -->
+  <resultMap id="TotalResultMap" type="cn.wonhigh.retail.fas.common.dto.TotalDto">
+		<result column="total_out_qty" property="totalOutQty" jdbcType="INTEGER" />
+		<result column="total_entry_qty" property="totalEntryQty" jdbcType="INTEGER" />
+		<result column="total_out_amount" property="totalOutAmount" jdbcType="DECIMAL" />
+		<result column="total_entry_amount" property="totalEntryAmount" jdbcType="DECIMAL" />
+		<result column="total_Purchase_Amount" property="totalPurchaseAmount" jdbcType="DECIMAL" />
+  </resultMap>
+
+  <!-- 查询合计行 -->
+  <select id="selectTotalRow" resultMap="TotalResultMap" parameterType="map">
+		SELECT
+			IFNULL(SUM(B.SEND_QTY), 0) TOTAL_OUT_QTY,
+  			IFNULL(SUM(B.SEND_QTY * B.COST), 0) TOTAL_OUT_AMOUNT,
+  			IFNULL(SUM(B.SEND_QTY * B.PURCHASE_PRICE), 0) total_Purchase_Amount
+		FROM
+		 	BILL_SALE_BALANCE B 
+		WHERE 1 = 1 
+		  	AND B.BILL_TYPE=1371
+			<include refid="condition" />
+  </select>
+
+ <!-- 发最大日期区间 -->
+ <sql id = "date_section">
+	<if test="null!=params" >
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart and  
+		null!=params.sendDateEnd and ''!=params.sendDateEnd"> 
+			 BETWEEN  &apos;${params.sendDateStart}&apos; AND &apos;${params.sendDateEnd}&apos;
+		 </if>
+	 </if>
+  </sql>
+
+<!-- 收发汇总结果集 -->	
+<sql id="Gather_Column_List" >
+  C.ID,C.BILL_NO,C.BILL_TYPE,C.ZONE_NO_FROM,C.ZONE_NAME_FROM,C.SALER_NO,C.SALER_NAME,
+  C.ORDER_UNIT_NO_FROM,C.ORDER_UNIT_NAME_FROM,C.ORGAN_NO_FROM,C.ORGAN_NAME_FROM,C.SEND_STORE_NO,
+  C.SEND_STORE_NAME,C.ZONE_NO,C.ZONE_NAME,C.BUYER_NO,C.BUYER_NAME,C.ORDER_UNIT_NO,
+  C.ORDER_UNIT_NAME,C.ORGAN_NO,C.ORGAN_NAME,C.RECEIVE_STORE_NO,C.RECEIVE_STORE_NAME,
+  C.SEND_DATE,C.RECEIVE_DATE,C.ITEM_NO,C.ITEM_CODE,C.ITEM_NAME,C.BRAND_NO,C.BRAND_NAME,
+  C.BRAND_UNIT_NO,C.BRAND_UNIT_NAME,C.CATEGORY_NO,C.CATEGORY_NAME,C.BILL_COST,C.BALANCE_NO,
+  C.STATUS,C.ONE_LEVEL_CATEGORY_NO,C.ONE_LEVEL_CATEGORY_NAME,C.TWO_LEVEL_CATEGORY_NO,
+  C.TWO_LEVEL_CATEGORY_NAME,AVG(C.COST) COST,
+  SUM(
+    CASE
+      WHEN C.SEND_DATE <include refid ="date_section"/>
+      THEN C.SEND_QTY 
+      ELSE 0 
+    END
+  ) SEND_QTY,
+  SUM(
+    CASE
+      WHEN C.RECEIVE_DATE <include refid ="date_section"/>
+      THEN C.RECEIVE_QTY 
+      ELSE 0 
+    END
+  ) RECEIVE_QTY,
+  IFNULL(
+    SUM(
+      CASE
+        WHEN C.SEND_DATE <include refid ="date_section"/>
+        THEN C.SEND_QTY 
+        ELSE 0 
+      END
+    ) * AVG(C.COST),
+    0
+  ) SEND_AMOUNT,
+  IFNULL(
+    SUM(
+      CASE
+        WHEN C.RECEIVE_DATE <include refid ="date_section"/>
+        THEN C.RECEIVE_QTY 
+        ELSE 0 
+      END
+    ) * AVG(C.COST),
+    0
+  ) RECEIVE_AMOUNT 
+  </sql>
+  
+  <sql id="conn_condition">
+	 (SELECT 
+    IF(A_ID IS NULL, B_ID, A_ID) ID,
+    IF(
+      A_BILL_NO IS NULL,
+      B_BILL_NO,
+      A_BILL_NO
+    ) BILL_NO,
+    IF(
+      B_BILL_TYPE IS NOT NULL,
+      B_BILL_TYPE,
+      A_BILL_TYPE
+    ) BILL_TYPE,
+    IF(
+      A_BUYER_NO IS NULL,
+      B_BUYER_NO,
+      A_BUYER_NO
+    ) BUYER_NO,
+    IF(
+      A_BUYER_NAME IS NULL,
+      B_BUYER_NAME,
+      A_BUYER_NAME
+    ) BUYER_NAME,
+    IF(
+      A_SALER_NO IS NULL,
+      B_SALER_NO,
+      A_SALER_NO
+    ) SALER_NO,
+    IF(
+      A_SALER_NAME IS NULL,
+      B_SALER_NAME,
+      A_SALER_NAME
+    ) SALER_NAME,
+    IF(
+      A_ORDER_UNIT_NO_FROM IS NULL,
+      B_ORDER_UNIT_NO_FROM,
+      A_ORDER_UNIT_NO_FROM
+    ) ORDER_UNIT_NO_FROM,
+    IF(
+      A_ORDER_UNIT_NAME_FROM IS NULL,
+      B_ORDER_UNIT_NAME_FROM,
+      A_ORDER_UNIT_NAME_FROM
+    ) ORDER_UNIT_NAME_FROM,
+    IF(
+      A_ORGAN_NAME_FROM IS NULL,
+      B_ORGAN_NAME_FROM,
+      A_ORGAN_NAME_FROM
+    ) ORGAN_NAME_FROM,
+    IF(
+      A_ORGAN_NO_FROM IS NULL,
+      B_ORGAN_NO_FROM,
+      A_ORGAN_NO_FROM
+    ) ORGAN_NO_FROM,
+    IF(
+      A_ORDER_UNIT_NO IS NULL,
+      B_ORDER_UNIT_NO,
+      A_ORDER_UNIT_NO
+    ) ORDER_UNIT_NO,
+    IF(
+      A_ORDER_UNIT_NAME IS NULL,
+      B_ORDER_UNIT_NAME,
+      A_ORDER_UNIT_NAME
+    ) ORDER_UNIT_NAME,
+    IF(
+      A_ORGAN_NO IS NULL,
+      B_ORGAN_NO,
+      A_ORGAN_NO
+    ) ORGAN_NO,
+    IF(
+      A_ORGAN_NAME IS NULL,
+      B_ORGAN_NAME,
+      A_ORGAN_NAME
+    ) ORGAN_NAME,
+    IF(
+      A_ZONE_NO IS NULL,
+      B_ZONE_NO,
+      A_ZONE_NO
+    ) ZONE_NO,
+    IF(
+      A_ZONE_NAME IS NULL,
+      B_ZONE_NAME,
+      A_ZONE_NAME
+    ) ZONE_NAME,
+    IF(
+      A_ZONE_NAME_FROM IS NULL,
+      B_ZONE_NAME_FROM,
+      A_ZONE_NAME_FROM
+    ) ZONE_NAME_FROM,
+    IF(
+      A_ZONE_NO_FROM IS NULL,
+      B_ZONE_NO_FROM,
+      A_ZONE_NO_FROM
+    ) ZONE_NO_FROM,
+    IF(
+      A_SEND_DATE IS NULL,
+      B_SEND_DATE,
+      A_SEND_DATE
+    ) SEND_DATE,
+    IF(
+      A_RECEIVE_DATE IS NULL,
+      B_RECEIVE_DATE,
+      A_RECEIVE_DATE
+    ) RECEIVE_DATE,
+    IF(
+      A_SEND_STORE_NO IS NULL,
+      B_SEND_STORE_NO,
+      A_SEND_STORE_NO
+    ) SEND_STORE_NO,
+    IF(
+      A_SEND_STORE_NAME IS NULL,
+      B_SEND_STORE_NAME,
+      A_SEND_STORE_NAME
+    ) SEND_STORE_NAME,
+    IF(
+      A_RECEIVE_STORE_NO IS NULL,
+      B_RECEIVE_STORE_NO,
+      A_RECEIVE_STORE_NO
+    ) RECEIVE_STORE_NO,
+    IF(
+      A_RECEIVE_STORE_NAME IS NULL,
+      B_RECEIVE_STORE_NAME,
+      A_RECEIVE_STORE_NAME
+    ) RECEIVE_STORE_NAME,
+    IF(
+      A_ITEM_NO IS NULL,
+      B_ITEM_NO,
+      A_ITEM_NO
+    ) ITEM_NO,
+    IF(
+      A_ITEM_CODE IS NULL,
+      B_ITEM_CODE,
+      A_ITEM_CODE
+    ) ITEM_CODE,
+    IF(
+      A_ITEM_NAME IS NULL,
+      B_ITEM_NAME,
+      A_ITEM_NAME
+    ) ITEM_NAME,
+    IF(
+      A_BRAND_NO IS NULL,
+      B_BRAND_NO,
+      A_BRAND_NO
+    ) BRAND_NO,
+    IF(
+      A_BRAND_NAME IS NULL,
+      B_BRAND_NAME,
+      A_BRAND_NAME
+    ) BRAND_NAME,
+    (SELECT 
+      BRAND_UNIT.`CODE` 
+    FROM
+      BRAND_UNIT 
+      INNER JOIN BRAND 
+        ON BRAND.`SYS_NO` = BRAND_UNIT.CODE 
+    WHERE BRAND.`BRAND_NO` = IF(
+        A_BRAND_NO IS NULL,
+        B_BRAND_NO,
+        A_BRAND_NO
+      )) BRAND_UNIT_NO,
+    (SELECT 
+      BRAND_UNIT.`NAME` 
+    FROM
+      BRAND_UNIT 
+      INNER JOIN BRAND 
+        ON BRAND.`SYS_NO` = BRAND_UNIT.CODE 
+    WHERE BRAND.`BRAND_NO` = IF(
+        A_BRAND_NO IS NULL,
+        B_BRAND_NO,
+        A_BRAND_NO
+      )) BRAND_UNIT_NAME,
+    IF(
+      A_CATEGORY_NO IS NULL,
+      B_CATEGORY_NO,
+      A_CATEGORY_NO
+    ) CATEGORY_NO,
+    IF(
+      A_CATEGORY_NAME IS NULL,
+      B_CATEGORY_NAME,
+      A_CATEGORY_NAME
+    ) CATEGORY_NAME,
+    IF(
+      (A_COST IS NULL) 
+      OR (A_COST = 0),
+      B_COST,
+      A_COST
+    ) COST,
+    IF(
+      A_BILL_COST IS NULL,
+      B_BILL_COST,
+      A_BILL_COST
+    ) BILL_COST,
+    IF(
+      (A_SEND_QTY IS NULL) 
+      OR (A_SEND_QTY = 0),
+      0,
+      A_SEND_QTY
+    ) SEND_QTY,
+    IF(
+      B_BILL_NO IS NOT NULL,
+      B_RECEIVE_QTY,
+      0
+    ) RECEIVE_QTY,
+    IF(
+      A_BALANCE_NO IS NULL,
+      B_BALANCE_NO,
+      A_BALANCE_NO
+    ) BALANCE_NO,
+    IF(
+      B_BILL_NO IS NOT NULL,
+      B_STATUS,
+      A_STATUS
+    ) STATUS,
+    IF(
+      A_CATEGORY_NO IS NULL,
+      LEFT(B_CATEGORY_NO, 2),
+      LEFT(A_CATEGORY_NO, 2)
+    ) ONE_LEVEL_CATEGORY_NO,
+    (SELECT 
+      NAME 
+    FROM
+      CATEGORY 
+    WHERE CATEGORY_NO = IF(
+        A_CATEGORY_NO IS NULL,
+        LEFT(B_CATEGORY_NO, 2),
+        LEFT(A_CATEGORY_NO, 2)
+      )) ONE_LEVEL_CATEGORY_NAME,
+    IF(
+      A_CATEGORY_NO IS NULL,
+      LEFT(B_CATEGORY_NO, 4),
+      LEFT(A_CATEGORY_NO, 4)
+    ) TWO_LEVEL_CATEGORY_NO,
+    (SELECT 
+      NAME 
+    FROM
+      CATEGORY 
+    WHERE CATEGORY_NO = IF(
+        A_CATEGORY_NO IS NULL,
+        LEFT(B_CATEGORY_NO, 4),
+        LEFT(A_CATEGORY_NO, 4)
+      )) TWO_LEVEL_CATEGORY_NAME 
+  FROM
+    (SELECT 
+      A.ID A_ID,
+      A.BILL_NO A_BILL_NO,
+      A.BILL_TYPE A_BILL_TYPE,
+      A.BIZ_TYPE A_BIZ_TYPE,
+      A.REF_BILL_NO A_REF_BILL_NO,
+      A.REF_BILL_TYPE A_REF_BILL_TYPE,
+      A.ORIGINAL_BILL_NO A_ORIGINAL_BILL_NO,
+      A.STATUS A_STATUS,
+      A.BUYER_NO A_BUYER_NO,
+      A.BUYER_NAME A_BUYER_NAME,
+      A.SALER_NO A_SALER_NO,
+      A.SALER_NAME A_SALER_NAME,
+      A.SEND_DATE A_SEND_DATE,
+      A.RECEIVE_DATE A_RECEIVE_DATE,
+      A.SEND_STORE_NO A_SEND_STORE_NO,
+      A.SEND_STORE_NAME A_SEND_STORE_NAME,
+      A.RECEIVE_STORE_NO A_RECEIVE_STORE_NO,
+      A.RECEIVE_STORE_NAME A_RECEIVE_STORE_NAME,
+      A.SKU_ID A_SKU_ID,
+      A.SKU_NO A_SKU_NO,
+      A.SUPPLIER_NO A_SUPPLIER_NO,
+      A.SUPPLIER_NAME A_SUPPLIER_NAME,
+      A.ITEM_NO A_ITEM_NO,
+      A.ITEM_CODE A_ITEM_CODE,
+      A.ITEM_NAME A_ITEM_NAME,
+      A.BRAND_NO A_BRAND_NO,
+      A.BRAND_NAME A_BRAND_NAME,
+      A.CATEGORY_NO A_CATEGORY_NO,
+      A.CATEGORY_NAME A_CATEGORY_NAME,
+      A.COST A_COST,
+      A.BILL_COST A_BILL_COST,
+      A.TAX_RATE A_TAX_RATE,
+      A.EXCLUSIVE_COST A_EXCLUSIVE_COST,
+      A.SEND_QTY A_SEND_QTY,
+      A.RECEIVE_QTY A_RECEIVE_QTY,
+      A.ORDER_NO A_ORDER_NO,
+      A.BALANCE_NO A_BALANCE_NO,
+      A.BALANCE_TYPE A_BALANCE_TYPE,
+      A.BALANCE_STATUS A_BALANCE_STATUS,
+      A.IS_SPLIT A_IS_SPLIT,
+      A.PATH_NO A_PATH_NO,
+      A.ORDER_UNIT_NO A_ORDER_UNIT_NO,
+      A.ORDER_UNIT_NO_FROM A_ORDER_UNIT_NO_FROM,
+      A.ORDER_UNIT_NAME_FROM A_ORDER_UNIT_NAME_FROM,
+      A.ORGAN_NAME_FROM A_ORGAN_NAME_FROM,
+      A.ORDER_UNIT_NAME A_ORDER_UNIT_NAME,
+      A.ORGAN_NAME A_ORGAN_NAME,
+      A.ZONE_NO A_ZONE_NO,
+      A.ZONE_NAME A_ZONE_NAME,
+      A.ZONE_NO_FROM A_ZONE_NO_FROM,
+      A.ZONE_NAME_FROM A_ZONE_NAME_FROM,
+      A.ORGAN_NO A_ORGAN_NO,
+      A.ORGAN_NO_FROM A_ORGAN_NO_FROM,
+      B.ID B_ID,
+      B.BILL_NO B_BILL_NO,
+      B.BILL_TYPE B_BILL_TYPE,
+      B.BIZ_TYPE B_BIZ_TYPE,
+      B.REF_BILL_NO B_REF_BILL_NO,
+      B.REF_BILL_TYPE B_REF_BILL_TYPE,
+      B.ORIGINAL_BILL_NO B_ORIGINAL_BILL_NO,
+      B.STATUS B_STATUS,
+      B.BUYER_NO B_BUYER_NO,
+      B.BUYER_NAME B_BUYER_NAME,
+      B.SALER_NO B_SALER_NO,
+      B.SALER_NAME B_SALER_NAME,
+      B.SEND_DATE B_SEND_DATE,
+      B.RECEIVE_DATE B_RECEIVE_DATE,
+      B.SEND_STORE_NO B_SEND_STORE_NO,
+      B.SEND_STORE_NAME B_SEND_STORE_NAME,
+      B.RECEIVE_STORE_NO B_RECEIVE_STORE_NO,
+      B.RECEIVE_STORE_NAME B_RECEIVE_STORE_NAME,
+      B.SKU_ID B_SKU_ID,
+      B.SKU_NO B_SKU_NO,
+      B.SUPPLIER_NO B_SUPPLIER_NO,
+      B.SUPPLIER_NAME B_SUPPLIER_NAME,
+      B.ITEM_NO B_ITEM_NO,
+      B.ITEM_CODE B_ITEM_CODE,
+      B.ITEM_NAME B_ITEM_NAME,
+      B.BRAND_NO B_BRAND_NO,
+      B.BRAND_NAME B_BRAND_NAME,
+      B.CATEGORY_NO B_CATEGORY_NO,
+      B.CATEGORY_NAME B_CATEGORY_NAME,
+      B.COST B_COST,
+      B.BILL_COST B_BILL_COST,
+      B.TAX_RATE B_TAX_RATE,
+      B.EXCLUSIVE_COST B_EXCLUSIVE_COST,
+      B.SEND_QTY B_SEND_QTY,
+      B.RECEIVE_QTY B_RECEIVE_QTY,
+      B.ORDER_NO B_ORDER_NO,
+      B.BALANCE_NO B_BALANCE_NO,
+      B.BALANCE_STATUS B_BALANCE_STATUS,
+      B.BALANCE_TYPE B_BALANCE_TYPE,
+      B.IS_SPLIT B_IS_SPLIT,
+      B.PATH_NO B_PATH_NO,
+      B.ORDER_UNIT_NO B_ORDER_UNIT_NO,
+      B.ORDER_UNIT_NO_FROM B_ORDER_UNIT_NO_FROM,
+      B.ORDER_UNIT_NAME_FROM B_ORDER_UNIT_NAME_FROM,
+      B.ORGAN_NAME_FROM B_ORGAN_NAME_FROM,
+      B.ORDER_UNIT_NAME B_ORDER_UNIT_NAME,
+      B.ORGAN_NAME B_ORGAN_NAME,
+      B.ZONE_NO B_ZONE_NO,
+      B.ZONE_NAME B_ZONE_NAME,
+      B.ZONE_NO_FROM B_ZONE_NO_FROM,
+      B.ZONE_NAME_FROM B_ZONE_NAME_FROM,
+      B.ORGAN_NO B_ORGAN_NO,
+      B.ORGAN_NO_FROM B_ORGAN_NO_FROM 
+    FROM
+      BILL_BUY_BALANCE B 
+      LEFT JOIN BILL_SALE_BALANCE A 
+        ON (B.BILL_NO = A.BILL_NO) 
+        AND (B.ITEM_NO = A.ITEM_NO) 
+    WHERE B.BILL_TYPE = '1372' 
+    UNION
+    SELECT 
+      A.ID A_ID,
+      A.BILL_NO A_BILL_NO,
+      A.BILL_TYPE A_BILL_TYPE,
+      A.BIZ_TYPE A_BIZ_TYPE,
+      A.REF_BILL_NO A_REF_BILL_NO,
+      A.REF_BILL_TYPE A_REF_BILL_TYPE,
+      A.ORIGINAL_BILL_NO A_ORIGINAL_BILL_NO,
+      A.STATUS A_STATUS,
+      A.BUYER_NO A_BUYER_NO,
+      A.BUYER_NAME A_BUYER_NAME,
+      A.SALER_NO A_SALER_NO,
+      A.SALER_NAME A_SALER_NAME,
+      A.SEND_DATE A_SEND_DATE,
+      A.RECEIVE_DATE A_RECEIVE_DATE,
+      A.SEND_STORE_NO A_SEND_STORE_NO,
+      A.SEND_STORE_NAME A_SEND_STORE_NAME,
+      A.RECEIVE_STORE_NO A_RECEIVE_STORE_NO,
+      A.RECEIVE_STORE_NAME A_RECEIVE_STORE_NAME,
+      A.SKU_ID A_SKU_ID,
+      A.SKU_NO A_SKU_NO,
+      A.SUPPLIER_NO A_SUPPLIER_NO,
+      A.SUPPLIER_NAME A_SUPPLIER_NAME,
+      A.ITEM_NO A_ITEM_NO,
+      A.ITEM_CODE A_ITEM_CODE,
+      A.ITEM_NAME A_ITEM_NAME,
+      A.BRAND_NO A_BRAND_NO,
+      A.BRAND_NAME A_BRAND_NAME,
+      A.CATEGORY_NO A_CATEGORY_NO,
+      A.CATEGORY_NAME A_CATEGORY_NAME,
+      A.COST A_COST,
+      A.BILL_COST A_BILL_COST,
+      A.TAX_RATE A_TAX_RATE,
+      A.EXCLUSIVE_COST A_EXCLUSIVE_COST,
+      A.SEND_QTY A_SEND_QTY,
+      A.RECEIVE_QTY A_RECEIVE_QTY,
+      A.ORDER_NO A_ORDER_NO,
+      A.BALANCE_NO A_BALANCE_NO,
+      A.BALANCE_TYPE A_BALANCE_TYPE,
+      A.BALANCE_STATUS A_BALANCE_STATUS,
+      A.IS_SPLIT A_IS_SPLIT,
+      A.PATH_NO A_PATH_NO,
+      A.ORDER_UNIT_NO A_ORDER_UNIT_NO,
+      A.ORDER_UNIT_NO_FROM A_ORDER_UNIT_NO_FROM,
+      A.ORDER_UNIT_NAME_FROM A_ORDER_UNIT_NAME_FROM,
+      A.ORGAN_NAME_FROM A_ORGAN_NAME_FROM,
+      A.ORDER_UNIT_NAME A_ORDER_UNIT_NAME,
+      A.ORGAN_NAME A_ORGAN_NAME,
+      A.ZONE_NO A_ZONE_NO,
+      A.ZONE_NAME A_ZONE_NAME,
+      A.ZONE_NO_FROM A_ZONE_NO_FROM,
+      A.ZONE_NAME_FROM A_ZONE_NAME_FROM,
+      A.ORGAN_NO A_ORGAN_NO,
+      A.ORGAN_NO_FROM A_ORGAN_NO_FROM,
+      B.ID B_ID,
+      B.BILL_NO B_BILL_NO,
+      B.BILL_TYPE B_BILL_TYPE,
+      B.BIZ_TYPE B_BIZ_TYPE,
+      B.REF_BILL_NO B_REF_BILL_NO,
+      B.REF_BILL_TYPE B_REF_BILL_TYPE,
+      B.ORIGINAL_BILL_NO B_ORIGINAL_BILL_NO,
+      B.STATUS B_STATUS,
+      B.BUYER_NO B_BUYER_NO,
+      B.BUYER_NAME B_BUYER_NAME,
+      B.SALER_NO B_SALER_NO,
+      B.SALER_NAME B_SALER_NAME,
+      B.SEND_DATE B_SEND_DATE,
+      B.RECEIVE_DATE B_RECEIVE_DATE,
+      B.SEND_STORE_NO B_SEND_STORE_NO,
+      B.SEND_STORE_NAME B_SEND_STORE_NAME,
+      B.RECEIVE_STORE_NO B_RECEIVE_STORE_NO,
+      B.RECEIVE_STORE_NAME B_RECEIVE_STORE_NAME,
+      B.SKU_ID B_SKU_ID,
+      B.SKU_NO B_SKU_NO,
+      B.SUPPLIER_NO B_SUPPLIER_NO,
+      B.SUPPLIER_NAME B_SUPPLIER_NAME,
+      B.ITEM_NO B_ITEM_NO,
+      B.ITEM_CODE B_ITEM_CODE,
+      B.ITEM_NAME B_ITEM_NAME,
+      B.BRAND_NO B_BRAND_NO,
+      B.BRAND_NAME B_BRAND_NAME,
+      B.CATEGORY_NO B_CATEGORY_NO,
+      B.CATEGORY_NAME B_CATEGORY_NAME,
+      B.COST B_COST,
+      B.BILL_COST B_BILL_COST,
+      B.TAX_RATE B_TAX_RATE,
+      B.EXCLUSIVE_COST B_EXCLUSIVE_COST,
+      B.SEND_QTY B_SEND_QTY,
+      B.RECEIVE_QTY B_RECEIVE_QTY,
+      B.ORDER_NO B_ORDER_NO,
+      B.BALANCE_NO B_BALANCE_NO,
+      B.BALANCE_STATUS B_BALANCE_STATUS,
+      B.BALANCE_TYPE B_BALANCE_TYPE,
+      B.IS_SPLIT B_IS_SPLIT,
+      B.PATH_NO B_PATH_NO,
+      B.ORDER_UNIT_NO B_ORDER_UNIT_NO,
+      B.ORDER_UNIT_NO_FROM B_ORDER_UNIT_NO_FROM,
+      B.ORDER_UNIT_NAME_FROM B_ORDER_UNIT_NAME_FROM,
+      B.ORGAN_NAME_FROM B_ORGAN_NAME_FROM,
+      B.ORDER_UNIT_NAME B_ORDER_UNIT_NAME,
+      B.ORGAN_NAME B_ORGAN_NAME,
+      B.ZONE_NO B_ZONE_NO,
+      B.ZONE_NAME B_ZONE_NAME,
+      B.ZONE_NO_FROM B_ZONE_NO_FROM,
+      B.ZONE_NAME_FROM B_ZONE_NAME_FROM,
+      B.ORGAN_NO B_ORGAN_NO,
+      B.ORGAN_NO_FROM B_ORGAN_NO_FROM 
+    FROM
+      BILL_SALE_BALANCE A 
+      LEFT JOIN BILL_BUY_BALANCE B 
+        ON (A.BILL_NO = B.BILL_NO) 
+        AND (A.ITEM_NO = B.ITEM_NO) 
+    WHERE A.BILL_TYPE = '1371') TEMP) C 
+	WHERE 1 = 1 
+		AND (
+	    (
+	      C.SEND_DATE <include refid ="date_section"/>
+	    ) 
+	    OR (
+	      C.RECEIVE_DATE <include refid ="date_section"/>
+	    )
+	  ) 
+  </sql>
+
+<!-- 收发汇总查询条件 -->
+<sql id="Gathercondition">
+	-- AND @C.brand_no
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<!-- 权限控制 -->
+		<if test="null!=params.RToS and 'ys'==params.RToS">
+			-- AND @C.company_no!saler_no
+			<!-- AND @C.zone_no!zone_no_from -->
+		</if>
+		<if test="null!=params.RToS and 'yf'==params.RToS">
+			-- AND @C.company_no!buyer_no
+			<!-- AND @C.zone_no -->
+		</if>
+		<if test="null!=params.salerNo and ''!=params.salerNo">
+			AND C.saler_no = #{params.salerNo}
+		</if>
+		<if test="null!=params.buyerNo and ''!=params.buyerNo">
+			AND C.buyer_no = #{params.buyerNo}
+		</if>
+		<if test="null!=params.organNo and ''!=params.organNo">
+			AND C.organ_no=#{params.organNo}
+		</if>
+		<if test="null!=params.organNoFrom and ''!=params.organNoFrom">
+			AND C.organ_no_from=#{params.organNoFrom}
+		</if>
+		<if test="null!=params.orderUnitNoFrom and ''!=params.orderUnitNoFrom">
+			AND C.order_unit_no_from=#{params.orderUnitNoFrom}
+		</if>
+		<if test="null!=params.orderUnitNo and ''!=params.orderUnitNo">
+			AND C.order_unit_no=#{params.orderUnitNo}
+		</if>
+		<if test="null!=params.itemCode and ''!=params.itemCode">
+			AND C.item_code = #{params.itemCode}
+		</if>
+		<if test="null!=params.oneLevelCategoryNo and ''!=params.oneLevelCategoryNo">
+			AND LEFT(C.category_no,2) IN ${params.oneLevelCategoryNo}
+		</if>
+		<if test="null!=params.brandNo and ''!=params.brandNo">
+			AND C.brand_no in ${params.brandNo}
+		</if>
+		<if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+			AND C.brand_unit_no in ${params.brandUnitNo}
+		</if>
+	</if>
+</sql>
+	
+	<!-- 查询收发汇总数量 -->
+	<select id="selectSummaryCount" resultType="java.lang.Integer">
+	SELECT
+		COUNT(*)
+	FROM
+		(SELECT COUNT(1) as s FROM
+		<include refid="conn_condition" />
+   		<include refid="Gathercondition" />
+   	GROUP BY 
+   		  C.ITEM_CODE,
+		  C.SALER_NO,
+		  C.BUYER_NO,
+		  C.ORDER_UNIT_NO_FROM,
+		  C.ORDER_UNIT_NO,
+		  C.ORGAN_NO_FROM,
+		  C.ORGAN_NO,
+		  C.SEND_STORE_NO,
+		  C.RECEIVE_STORE_NO 
+   	) D 
+	</select>
+	
+	<!-- 分页查询收发汇总 -->
+	<select id="selectSummaryByPage" resultMap="BaseResultMap" parameterType="map" >
+		SELECT
+		<include refid="Gather_Column_List" />
+		FROM
+		<include refid="conn_condition" />
+		<include refid="Gathercondition" />
+		GROUP BY 
+		  C.ITEM_CODE,
+		  C.SALER_NO,
+		  C.BUYER_NO,
+		  C.ORDER_UNIT_NO_FROM,
+		  C.ORDER_UNIT_NO,
+		  C.ORGAN_NO_FROM,
+		  C.ORGAN_NO,
+		  C.SEND_STORE_NO,
+		  C.RECEIVE_STORE_NO 
+		<if test="orderByField == null || ''==orderByField">
+			<!-- 排序控制 -->
+			<if test="null!=params.RToS and 'ys'==params.RToS">
+				ORDER BY
+					  C.ZONE_NO_FROM,
+					  C.SALER_NO,
+					  C.ORDER_UNIT_NO_FROM,
+					  C.ORGAN_NO_FROM,
+					  C.SEND_STORE_NO,
+					  C.ZONE_NO,
+					  C.BUYER_NO,
+					  C.ORDER_UNIT_NO,
+					  C.ORGAN_NO,
+					  C.RECEIVE_STORE_NO DESC 
+			</if>
+			<if test="null!=params.RToS and 'yf'==params.RToS">
+				ORDER BY 
+					  C.ZONE_NO,
+					  C.BUYER_NO,
+					  C.ORDER_UNIT_NO,
+					  C.ORGAN_NO,
+					  C.RECEIVE_STORE_NO,
+					  C.ZONE_NO_FROM,
+					  C.SALER_NO,
+					  C.ORDER_UNIT_NO_FROM,
+					  C.ORGAN_NO_FROM,
+					  C.SEND_STORE_NO DESC 
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+   </select>
+   
+   <!-- 查询收发汇总合计行 -->
+	<select id="selectSummaryTotalRow" resultMap="TotalResultMap" parameterType="map">
+		SELECT
+			IFNULL(SUM(SEND_QTY), 0) TOTAL_OUT_QTY,
+			IFNULL(SUM(RECEIVE_QTY), 0) TOTAL_ENTRY_QTY,
+			IFNULL(SUM(SEND_QTY * COST), 0) TOTAL_OUT_AMOUNT,
+			IFNULL(SUM(RECEIVE_QTY * COST), 0) TOTAL_ENTRY_AMOUNT
+		FROM
+		(SELECT
+		<include refid="Gather_Column_List" />
+		FROM
+		<include refid="conn_condition" />
+		<include refid="Gathercondition" />
+		GROUP BY 
+		  C.ITEM_CODE,
+		  C.SALER_NO,
+		  C.BUYER_NO,
+		  C.ORDER_UNIT_NO_FROM,
+		  C.ORDER_UNIT_NO,
+		  C.ORGAN_NO_FROM,
+		  C.ORGAN_NO,
+		  C.SEND_STORE_NO,
+		  C.RECEIVE_STORE_NO 
+		<if test="params.orderByField == null || ''==params.orderByField">
+			<!-- 排序控制 -->
+			<if test="null!=params.RToS and 'ys'==params.RToS">
+				ORDER BY
+					  C.ZONE_NO_FROM,
+					  C.SALER_NO,
+					  C.ORDER_UNIT_NO_FROM,
+					  C.ORGAN_NO_FROM,
+					  C.SEND_STORE_NO,
+					  C.ZONE_NO,
+					  C.BUYER_NO,
+					  C.ORDER_UNIT_NO,
+					  C.ORGAN_NO,
+					  C.RECEIVE_STORE_NO DESC 
+			</if>
+			<if test="null!=params.RToS and 'yf'==params.RToS">
+				ORDER BY 
+					  C.ZONE_NO,
+					  C.BUYER_NO,
+					  C.ORDER_UNIT_NO,
+					  C.ORGAN_NO,
+					  C.RECEIVE_STORE_NO,
+					  C.ZONE_NO_FROM,
+					  C.SALER_NO,
+					  C.ORDER_UNIT_NO_FROM,
+					  C.ORGAN_NO_FROM,
+					  C.SEND_STORE_NO DESC 
+			</if>
+		</if> ) temp
+	</select>
+	
+	<!-- 结算单明细汇总结果集 -->
+	<sql id="group_Column_List" >
+	B.ID,
+	B.BILL_NO,
+	B.BILL_TYPE,
+	B.ZONE_NO_FROM,
+	B.ZONE_NAME_FROM,
+	B.SALER_NO,
+	B.SALER_NAME,
+	B.ORDER_UNIT_NO_FROM,
+	B.ORDER_UNIT_NAME_FROM,
+	B.ORGAN_NO_FROM,
+	B.ORGAN_NAME_FROM,
+	B.SEND_STORE_NO,
+	B.SEND_STORE_NAME,
+	B.ZONE_NO,
+	B.ZONE_NAME,
+	B.BUYER_NO,
+	B.BUYER_NAME,
+	B.ORDER_UNIT_NO,
+	B.ORDER_UNIT_NAME,
+	B.ORGAN_NO,
+	B.ORGAN_NAME,
+	B.RECEIVE_STORE_NO,
+	B.RECEIVE_STORE_NAME,
+	B.SEND_DATE,
+	B.RECEIVE_DATE,
+	B.ITEM_NO,
+	B.ITEM_CODE,
+	B.ITEM_NAME,
+	B.BRAND_NO,
+	B.BRAND_NAME,
+	B.BRAND_UNIT_NAME,
+	B.CATEGORY_NO,
+	B.CATEGORY_NAME,
+	B.BILL_COST,
+	C1.CATEGORY_NO ONE_LEVEL_CATEGORY_NO,
+	C1.NAME ONE_LEVEL_CATEGORY_NAME,
+	C2.CATEGORY_NO TWO_LEVEL_CATEGORY_NO,
+	C2.NAME TWO_LEVEL_CATEGORY_NAME,
+	B.COST,
+	SUM(B.SEND_QTY) SEND_QTY,
+	SUM((B.SEND_QTY * B.COST)) SEND_AMOUNT,
+	B.BALANCE_NO 
+  </sql>
+	
+	<!-- 查询结算单明细汇总数量 -->
+	<select id="selectGatherCount" resultType="java.lang.Integer">
+	SELECT COUNT(DISTINCT(ITEM_CODE)) AS S
+	FROM
+		BILL_SALE_BALANCE B
+	LEFT JOIN CATEGORY C1
+		ON LEFT(B.`CATEGORY_NO`, 2) = C1.`CATEGORY_NO`
+	LEFT JOIN CATEGORY C2
+		ON LEFT(B.`CATEGORY_NO`, 4) = C2.`CATEGORY_NO`
+	WHERE 1 = 1
+		AND B.BILL_TYPE=1371
+   		<include refid="condition" />
+	</select>
+	
+	<!-- 查询结算单明细汇总 -->
+	<select id="selectGatherListByPage" resultMap="BaseResultMap" parameterType="map" >
+		SELECT
+			<include refid="group_Column_List" />
+		FROM
+			BILL_SALE_BALANCE B
+		LEFT JOIN CATEGORY C1
+			ON LEFT(B.`CATEGORY_NO`, 2) = C1.`CATEGORY_NO`
+		LEFT JOIN CATEGORY C2
+			ON LEFT(B.`CATEGORY_NO`, 4) = C2.`CATEGORY_NO`
+		WHERE 1 = 1
+			AND B.BILL_TYPE=1371
+		<include refid="condition" />
+			GROUP BY B.ITEM_CODE
+		<if test="orderByField == null || ''==orderByField">
+			ORDER BY 
+				B.SEND_DATE DESC
+		</if>
+			LIMIT #{page.startRowNum} ,#{page.pageSize} 
+   </select>
+  
+</mapper>

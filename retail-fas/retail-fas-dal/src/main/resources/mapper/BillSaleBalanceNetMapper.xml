@@ -1,0 +1,1073 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillSaleBalanceNetMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSaleBalanceNet" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="fas_bill_code" property="fasBillCode" jdbcType="VARCHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="INTEGER" />
+    <result column="ref_bill_no" property="refBillNo" jdbcType="VARCHAR" />
+    <result column="ref_bill_type" property="refBillType" jdbcType="INTEGER" />
+    <result column="original_bill_no" property="originalBillNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="send_store_no" property="sendStoreNo" jdbcType="CHAR" />
+    <result column="send_store_name" property="sendStoreName" jdbcType="VARCHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="VARCHAR" />
+    <result column="sku_id" property="skuId" jdbcType="CHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="CHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="bill_cost" property="billCost" jdbcType="DECIMAL" />
+    <result column="actual_cost" property="actualCost" jdbcType="DECIMAL" />
+    <result column="other_deduct_cost" property="otherDeductCost" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="exclusive_cost" property="exclusiveCost" jdbcType="DECIMAL" />
+    <result column="headquarter_cost" property="headquarterCost" jdbcType="DECIMAL" />
+    <result column="region_cost" property="regionCost" jdbcType="DECIMAL" />
+    <result column="region_cost_second" property="regionCostSecond" jdbcType="DECIMAL" />
+    <result column="unit_cost" property="unitCost" jdbcType="DECIMAL" />
+    <result column="unit_cost_second" property="unitCostSecond" jdbcType="DECIMAL" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="material_price" property="materialPrice" jdbcType="DECIMAL" />
+    <result column="factory_price" property="factoryPrice" jdbcType="DECIMAL" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="balance_status" property="balanceStatus" jdbcType="TINYINT" />
+    <result column="is_split" property="isSplit" jdbcType="TINYINT" />
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="organ_no" property="organNo" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no_from" property="orderUnitNoFrom" jdbcType="CHAR" />
+    <result column="order_unit_name_from" property="orderUnitNameFrom" jdbcType="VARCHAR" />
+    <result column="organ_no_from" property="organNoFrom" jdbcType="CHAR" />
+    <result column="organ_name_from" property="organNameFrom" jdbcType="VARCHAR" />
+    <result column="zone_no" property="zoneNo" jdbcType="CHAR" />
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="zone_no_from" property="zoneNoFrom" jdbcType="CHAR" />
+    <result column="zone_name_from" property="zoneNameFrom" jdbcType="VARCHAR" />
+    <result column="is_bill_invoice" property="isBillInvoice" jdbcType="TINYINT" />
+    <result column="invoice_apply_no" property="invoiceApplyNo" jdbcType="VARCHAR" />
+    <result column="invoice_apply_date" property="invoiceApplyDate" jdbcType="DATE" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="orderfrom" property="orderfrom" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="tag_price_nation" property="tagPriceNation" jdbcType="DECIMAL" />
+    <result column="zone_yyyymm" property="zoneYyyymm" jdbcType="CHAR" />
+    <result column="cost_checked" property="costChecked" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="sharding_flag" property="shardingFlag" jdbcType="CHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="claim_no" property="claimNo" jdbcType="CHAR" />
+    <result column="return_no" property="returnNo" jdbcType="CHAR" />
+    <result column="bill_rebate_amount" property="billRebateAmount" jdbcType="DECIMAL" />
+    <result column="bill_rebate_discount" property="billRebateDiscount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, fas_bill_code, bill_no, bill_type, biz_type, ref_bill_no, ref_bill_type, original_bill_no, 
+    status, buyer_no, buyer_name, saler_no, saler_name, send_date, receive_date, send_store_no, 
+    send_store_name, receive_store_no, receive_store_name, sku_id, sku_no, supplier_no, 
+    supplier_name, item_no, item_code, item_name, brand_no, brand_name, brand_unit_no, 
+    brand_unit_name, category_no, category_name, cost, bill_cost, actual_cost, other_deduct_cost, 
+    tax_rate, exclusive_cost, headquarter_cost, region_cost, region_cost_second, unit_cost, 
+    unit_cost_second, purchase_price, material_price, factory_price, send_qty, receive_qty, 
+    order_no, balance_no, balance_type, balance_status, is_split, path_no, order_unit_no, 
+    order_unit_name, organ_no, organ_name, order_unit_no_from, order_unit_name_from, 
+    organ_no_from, organ_name_from, zone_no, zone_name, zone_no_from, zone_name_from, 
+    is_bill_invoice, invoice_apply_no, invoice_apply_date, years, season, orderfrom, 
+    gender, tag_price, tag_price_nation, zone_yyyymm, cost_checked, create_user, create_time, 
+    sharding_flag, update_time, claim_no, return_no, bill_rebate_amount, bill_rebate_discount
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM bill_sale_balance_net
+    WHERE id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM bill_sale_balance_net WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_sale_balance_net WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM bill_sale_balance_net WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM bill_sale_balance_net
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.BillSaleBalanceNet" >
+    DELETE FROM bill_sale_balance_net
+    WHERE id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillSaleBalanceNet" >
+    INSERT INTO bill_sale_balance_net (id, fas_bill_code, bill_no, 
+      bill_type, biz_type, ref_bill_no, 
+      ref_bill_type, original_bill_no, status, 
+      buyer_no, buyer_name, saler_no, 
+      saler_name, send_date, receive_date, 
+      send_store_no, send_store_name, receive_store_no, 
+      receive_store_name, sku_id, sku_no, 
+      supplier_no, supplier_name, item_no, 
+      item_code, item_name, brand_no, 
+      brand_name, brand_unit_no, brand_unit_name, 
+      category_no, category_name, cost, 
+      bill_cost, actual_cost, other_deduct_cost, 
+      tax_rate, exclusive_cost, headquarter_cost, 
+      region_cost, region_cost_second, unit_cost, 
+      unit_cost_second, purchase_price, material_price, 
+      factory_price, send_qty, receive_qty, 
+      order_no, balance_no, balance_type, 
+      balance_status, is_split, path_no, 
+      order_unit_no, order_unit_name, organ_no, 
+      organ_name, order_unit_no_from, order_unit_name_from, 
+      organ_no_from, organ_name_from, zone_no, 
+      zone_name, zone_no_from, zone_name_from, 
+      is_bill_invoice, invoice_apply_no, invoice_apply_date, 
+      years, season, orderfrom, 
+      gender, tag_price, tag_price_nation, 
+      zone_yyyymm, cost_checked, create_user, 
+      create_time, sharding_flag, update_time, 
+      claim_no, return_no, bill_rebate_amount, 
+      bill_rebate_discount)
+    VALUES (#{id,jdbcType=CHAR}, #{fasBillCode,jdbcType=VARCHAR}, #{billNo,jdbcType=CHAR}, 
+      #{billType,jdbcType=INTEGER}, #{bizType,jdbcType=INTEGER}, #{refBillNo,jdbcType=VARCHAR}, 
+      #{refBillType,jdbcType=INTEGER}, #{originalBillNo,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
+      #{buyerNo,jdbcType=CHAR}, #{buyerName,jdbcType=VARCHAR}, #{salerNo,jdbcType=CHAR}, 
+      #{salerName,jdbcType=VARCHAR}, #{sendDate,jdbcType=DATE}, #{receiveDate,jdbcType=DATE}, 
+      #{sendStoreNo,jdbcType=CHAR}, #{sendStoreName,jdbcType=VARCHAR}, #{receiveStoreNo,jdbcType=CHAR}, 
+      #{receiveStoreName,jdbcType=VARCHAR}, #{skuId,jdbcType=CHAR}, #{skuNo,jdbcType=CHAR}, 
+      #{supplierNo,jdbcType=CHAR}, #{supplierName,jdbcType=VARCHAR}, #{itemNo,jdbcType=CHAR}, 
+      #{itemCode,jdbcType=CHAR}, #{itemName,jdbcType=VARCHAR}, #{brandNo,jdbcType=CHAR}, 
+      #{brandName,jdbcType=CHAR}, #{brandUnitNo,jdbcType=CHAR}, #{brandUnitName,jdbcType=VARCHAR}, 
+      #{categoryNo,jdbcType=CHAR}, #{categoryName,jdbcType=VARCHAR}, #{cost,jdbcType=DECIMAL}, 
+      #{billCost,jdbcType=DECIMAL}, #{actualCost,jdbcType=DECIMAL}, #{otherDeductCost,jdbcType=DECIMAL}, 
+      #{taxRate,jdbcType=DECIMAL}, #{exclusiveCost,jdbcType=DECIMAL}, #{headquarterCost,jdbcType=DECIMAL}, 
+      #{regionCost,jdbcType=DECIMAL}, #{regionCostSecond,jdbcType=DECIMAL}, #{unitCost,jdbcType=DECIMAL}, 
+      #{unitCostSecond,jdbcType=DECIMAL}, #{purchasePrice,jdbcType=DECIMAL}, #{materialPrice,jdbcType=DECIMAL}, 
+      #{factoryPrice,jdbcType=DECIMAL}, #{sendQty,jdbcType=INTEGER}, #{receiveQty,jdbcType=INTEGER}, 
+      #{orderNo,jdbcType=CHAR}, #{balanceNo,jdbcType=CHAR}, #{balanceType,jdbcType=TINYINT}, 
+      #{balanceStatus,jdbcType=TINYINT}, #{isSplit,jdbcType=TINYINT}, #{pathNo,jdbcType=CHAR}, 
+      #{orderUnitNo,jdbcType=CHAR}, #{orderUnitName,jdbcType=VARCHAR}, #{organNo,jdbcType=CHAR}, 
+      #{organName,jdbcType=VARCHAR}, #{orderUnitNoFrom,jdbcType=CHAR}, #{orderUnitNameFrom,jdbcType=VARCHAR}, 
+      #{organNoFrom,jdbcType=CHAR}, #{organNameFrom,jdbcType=VARCHAR}, #{zoneNo,jdbcType=CHAR}, 
+      #{zoneName,jdbcType=VARCHAR}, #{zoneNoFrom,jdbcType=CHAR}, #{zoneNameFrom,jdbcType=VARCHAR}, 
+      #{isBillInvoice,jdbcType=TINYINT}, #{invoiceApplyNo,jdbcType=VARCHAR}, #{invoiceApplyDate,jdbcType=DATE}, 
+      #{years,jdbcType=VARCHAR}, #{season,jdbcType=VARCHAR}, #{orderfrom,jdbcType=VARCHAR}, 
+      #{gender,jdbcType=VARCHAR}, #{tagPrice,jdbcType=DECIMAL}, #{tagPriceNation,jdbcType=DECIMAL}, 
+      #{zoneYyyymm,jdbcType=CHAR}, #{costChecked,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{shardingFlag,jdbcType=CHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{claimNo,jdbcType=CHAR}, #{returnNo,jdbcType=CHAR}, #{billRebateAmount,jdbcType=DECIMAL}, 
+      #{billRebateDiscount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillSaleBalanceNet" >
+    INSERT INTO bill_sale_balance_net
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fasBillCode != null" >
+        fas_bill_code,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="billType != null" >
+        bill_type,
+      </if>
+      <if test="bizType != null" >
+        biz_type,
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no,
+      </if>
+      <if test="refBillType != null" >
+        ref_bill_type,
+      </if>
+      <if test="originalBillNo != null" >
+        original_bill_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="salerName != null" >
+        saler_name,
+      </if>
+      <if test="sendDate != null" >
+        send_date,
+      </if>
+      <if test="receiveDate != null" >
+        receive_date,
+      </if>
+      <if test="sendStoreNo != null" >
+        send_store_no,
+      </if>
+      <if test="sendStoreName != null" >
+        send_store_name,
+      </if>
+      <if test="receiveStoreNo != null" >
+        receive_store_no,
+      </if>
+      <if test="receiveStoreName != null" >
+        receive_store_name,
+      </if>
+      <if test="skuId != null" >
+        sku_id,
+      </if>
+      <if test="skuNo != null" >
+        sku_no,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no,
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="billCost != null" >
+        bill_cost,
+      </if>
+      <if test="actualCost != null" >
+        actual_cost,
+      </if>
+      <if test="otherDeductCost != null" >
+        other_deduct_cost,
+      </if>
+      <if test="taxRate != null" >
+        tax_rate,
+      </if>
+      <if test="exclusiveCost != null" >
+        exclusive_cost,
+      </if>
+      <if test="headquarterCost != null" >
+        headquarter_cost,
+      </if>
+      <if test="regionCost != null" >
+        region_cost,
+      </if>
+      <if test="regionCostSecond != null" >
+        region_cost_second,
+      </if>
+      <if test="unitCost != null" >
+        unit_cost,
+      </if>
+      <if test="unitCostSecond != null" >
+        unit_cost_second,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="materialPrice != null" >
+        material_price,
+      </if>
+      <if test="factoryPrice != null" >
+        factory_price,
+      </if>
+      <if test="sendQty != null" >
+        send_qty,
+      </if>
+      <if test="receiveQty != null" >
+        receive_qty,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="balanceStatus != null" >
+        balance_status,
+      </if>
+      <if test="isSplit != null" >
+        is_split,
+      </if>
+      <if test="pathNo != null" >
+        path_no,
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no,
+      </if>
+      <if test="orderUnitName != null" >
+        order_unit_name,
+      </if>
+      <if test="organNo != null" >
+        organ_no,
+      </if>
+      <if test="organName != null" >
+        organ_name,
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        order_unit_no_from,
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        order_unit_name_from,
+      </if>
+      <if test="organNoFrom != null" >
+        organ_no_from,
+      </if>
+      <if test="organNameFrom != null" >
+        organ_name_from,
+      </if>
+      <if test="zoneNo != null" >
+        zone_no,
+      </if>
+      <if test="zoneName != null" >
+        zone_name,
+      </if>
+      <if test="zoneNoFrom != null" >
+        zone_no_from,
+      </if>
+      <if test="zoneNameFrom != null" >
+        zone_name_from,
+      </if>
+      <if test="isBillInvoice != null" >
+        is_bill_invoice,
+      </if>
+      <if test="invoiceApplyNo != null" >
+        invoice_apply_no,
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date,
+      </if>
+      <if test="years != null" >
+        years,
+      </if>
+      <if test="season != null" >
+        season,
+      </if>
+      <if test="orderfrom != null" >
+        orderfrom,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="tagPrice != null" >
+        tag_price,
+      </if>
+      <if test="tagPriceNation != null" >
+        tag_price_nation,
+      </if>
+      <if test="zoneYyyymm != null" >
+        zone_yyyymm,
+      </if>
+      <if test="costChecked != null" >
+        cost_checked,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="claimNo != null" >
+        claim_no,
+      </if>
+      <if test="returnNo != null" >
+        return_no,
+      </if>
+      <if test="billRebateAmount != null" >
+        bill_rebate_amount,
+      </if>
+      <if test="billRebateDiscount != null" >
+        bill_rebate_discount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="fasBillCode != null" >
+        #{fasBillCode,jdbcType=VARCHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="bizType != null" >
+        #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="refBillNo != null" >
+        #{refBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refBillType != null" >
+        #{refBillType,jdbcType=INTEGER},
+      </if>
+      <if test="originalBillNo != null" >
+        #{originalBillNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sendDate != null" >
+        #{sendDate,jdbcType=DATE},
+      </if>
+      <if test="receiveDate != null" >
+        #{receiveDate,jdbcType=DATE},
+      </if>
+      <if test="sendStoreNo != null" >
+        #{sendStoreNo,jdbcType=CHAR},
+      </if>
+      <if test="sendStoreName != null" >
+        #{sendStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveStoreNo != null" >
+        #{receiveStoreNo,jdbcType=CHAR},
+      </if>
+      <if test="receiveStoreName != null" >
+        #{receiveStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null" >
+        #{skuId,jdbcType=CHAR},
+      </if>
+      <if test="skuNo != null" >
+        #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="billCost != null" >
+        #{billCost,jdbcType=DECIMAL},
+      </if>
+      <if test="actualCost != null" >
+        #{actualCost,jdbcType=DECIMAL},
+      </if>
+      <if test="otherDeductCost != null" >
+        #{otherDeductCost,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="exclusiveCost != null" >
+        #{exclusiveCost,jdbcType=DECIMAL},
+      </if>
+      <if test="headquarterCost != null" >
+        #{headquarterCost,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCost != null" >
+        #{regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCostSecond != null" >
+        #{regionCostSecond,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        #{unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCostSecond != null" >
+        #{unitCostSecond,jdbcType=DECIMAL},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materialPrice != null" >
+        #{materialPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="factoryPrice != null" >
+        #{factoryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sendQty != null" >
+        #{sendQty,jdbcType=INTEGER},
+      </if>
+      <if test="receiveQty != null" >
+        #{receiveQty,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="balanceStatus != null" >
+        #{balanceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isSplit != null" >
+        #{isSplit,jdbcType=TINYINT},
+      </if>
+      <if test="pathNo != null" >
+        #{pathNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNo != null" >
+        #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitName != null" >
+        #{orderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="organName != null" >
+        #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        #{orderUnitNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        #{orderUnitNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="organNoFrom != null" >
+        #{organNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="organNameFrom != null" >
+        #{organNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNoFrom != null" >
+        #{zoneNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="zoneNameFrom != null" >
+        #{zoneNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="isBillInvoice != null" >
+        #{isBillInvoice,jdbcType=TINYINT},
+      </if>
+      <if test="invoiceApplyNo != null" >
+        #{invoiceApplyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        #{invoiceApplyDate,jdbcType=DATE},
+      </if>
+      <if test="years != null" >
+        #{years,jdbcType=VARCHAR},
+      </if>
+      <if test="season != null" >
+        #{season,jdbcType=VARCHAR},
+      </if>
+      <if test="orderfrom != null" >
+        #{orderfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="tagPrice != null" >
+        #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tagPriceNation != null" >
+        #{tagPriceNation,jdbcType=DECIMAL},
+      </if>
+      <if test="zoneYyyymm != null" >
+        #{zoneYyyymm,jdbcType=CHAR},
+      </if>
+      <if test="costChecked != null" >
+        #{costChecked,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        #{shardingFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="claimNo != null" >
+        #{claimNo,jdbcType=CHAR},
+      </if>
+      <if test="returnNo != null" >
+        #{returnNo,jdbcType=CHAR},
+      </if>
+      <if test="billRebateAmount != null" >
+        #{billRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="billRebateDiscount != null" >
+        #{billRebateDiscount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillSaleBalanceNet" >
+    UPDATE bill_sale_balance_net
+    <set >
+      <if test="fasBillCode != null" >
+        fas_bill_code = #{fasBillCode,jdbcType=VARCHAR},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="billType != null" >
+        bill_type = #{billType,jdbcType=INTEGER},
+      </if>
+      <if test="bizType != null" >
+        biz_type = #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="refBillNo != null" >
+        ref_bill_no = #{refBillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refBillType != null" >
+        ref_bill_type = #{refBillType,jdbcType=INTEGER},
+      </if>
+      <if test="originalBillNo != null" >
+        original_bill_no = #{originalBillNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        saler_name = #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sendDate != null" >
+        send_date = #{sendDate,jdbcType=DATE},
+      </if>
+      <if test="receiveDate != null" >
+        receive_date = #{receiveDate,jdbcType=DATE},
+      </if>
+      <if test="sendStoreNo != null" >
+        send_store_no = #{sendStoreNo,jdbcType=CHAR},
+      </if>
+      <if test="sendStoreName != null" >
+        send_store_name = #{sendStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveStoreNo != null" >
+        receive_store_no = #{receiveStoreNo,jdbcType=CHAR},
+      </if>
+      <if test="receiveStoreName != null" >
+        receive_store_name = #{receiveStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null" >
+        sku_id = #{skuId,jdbcType=CHAR},
+      </if>
+      <if test="skuNo != null" >
+        sku_no = #{skuNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=CHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitNo != null" >
+        brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="brandUnitName != null" >
+        brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="billCost != null" >
+        bill_cost = #{billCost,jdbcType=DECIMAL},
+      </if>
+      <if test="actualCost != null" >
+        actual_cost = #{actualCost,jdbcType=DECIMAL},
+      </if>
+      <if test="otherDeductCost != null" >
+        other_deduct_cost = #{otherDeductCost,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        tax_rate = #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="exclusiveCost != null" >
+        exclusive_cost = #{exclusiveCost,jdbcType=DECIMAL},
+      </if>
+      <if test="headquarterCost != null" >
+        headquarter_cost = #{headquarterCost,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCost != null" >
+        region_cost = #{regionCost,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCostSecond != null" >
+        region_cost_second = #{regionCostSecond,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCost != null" >
+        unit_cost = #{unitCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCostSecond != null" >
+        unit_cost_second = #{unitCostSecond,jdbcType=DECIMAL},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materialPrice != null" >
+        material_price = #{materialPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="factoryPrice != null" >
+        factory_price = #{factoryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sendQty != null" >
+        send_qty = #{sendQty,jdbcType=INTEGER},
+      </if>
+      <if test="receiveQty != null" >
+        receive_qty = #{receiveQty,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="balanceStatus != null" >
+        balance_status = #{balanceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isSplit != null" >
+        is_split = #{isSplit,jdbcType=TINYINT},
+      </if>
+      <if test="pathNo != null" >
+        path_no = #{pathNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNo != null" >
+        order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitName != null" >
+        order_unit_name = #{orderUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="organNo != null" >
+        organ_no = #{organNo,jdbcType=CHAR},
+      </if>
+      <if test="organName != null" >
+        organ_name = #{organName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUnitNoFrom != null" >
+        order_unit_no_from = #{orderUnitNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="orderUnitNameFrom != null" >
+        order_unit_name_from = #{orderUnitNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="organNoFrom != null" >
+        organ_no_from = #{organNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="organNameFrom != null" >
+        organ_name_from = #{organNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNo != null" >
+        zone_no = #{zoneNo,jdbcType=CHAR},
+      </if>
+      <if test="zoneName != null" >
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneNoFrom != null" >
+        zone_no_from = #{zoneNoFrom,jdbcType=CHAR},
+      </if>
+      <if test="zoneNameFrom != null" >
+        zone_name_from = #{zoneNameFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="isBillInvoice != null" >
+        is_bill_invoice = #{isBillInvoice,jdbcType=TINYINT},
+      </if>
+      <if test="invoiceApplyNo != null" >
+        invoice_apply_no = #{invoiceApplyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceApplyDate != null" >
+        invoice_apply_date = #{invoiceApplyDate,jdbcType=DATE},
+      </if>
+      <if test="years != null" >
+        years = #{years,jdbcType=VARCHAR},
+      </if>
+      <if test="season != null" >
+        season = #{season,jdbcType=VARCHAR},
+      </if>
+      <if test="orderfrom != null" >
+        orderfrom = #{orderfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="tagPrice != null" >
+        tag_price = #{tagPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tagPriceNation != null" >
+        tag_price_nation = #{tagPriceNation,jdbcType=DECIMAL},
+      </if>
+      <if test="zoneYyyymm != null" >
+        zone_yyyymm = #{zoneYyyymm,jdbcType=CHAR},
+      </if>
+      <if test="costChecked != null" >
+        cost_checked = #{costChecked,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shardingFlag != null" >
+        sharding_flag = #{shardingFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="claimNo != null" >
+        claim_no = #{claimNo,jdbcType=CHAR},
+      </if>
+      <if test="returnNo != null" >
+        return_no = #{returnNo,jdbcType=CHAR},
+      </if>
+      <if test="billRebateAmount != null" >
+        bill_rebate_amount = #{billRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="billRebateDiscount != null" >
+        bill_rebate_discount = #{billRebateDiscount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillSaleBalanceNet" >
+    UPDATE bill_sale_balance_net
+    SET fas_bill_code = #{fasBillCode,jdbcType=VARCHAR},
+      bill_no = #{billNo,jdbcType=CHAR},
+      bill_type = #{billType,jdbcType=INTEGER},
+      biz_type = #{bizType,jdbcType=INTEGER},
+      ref_bill_no = #{refBillNo,jdbcType=VARCHAR},
+      ref_bill_type = #{refBillType,jdbcType=INTEGER},
+      original_bill_no = #{originalBillNo,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      buyer_no = #{buyerNo,jdbcType=CHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      saler_no = #{salerNo,jdbcType=CHAR},
+      saler_name = #{salerName,jdbcType=VARCHAR},
+      send_date = #{sendDate,jdbcType=DATE},
+      receive_date = #{receiveDate,jdbcType=DATE},
+      send_store_no = #{sendStoreNo,jdbcType=CHAR},
+      send_store_name = #{sendStoreName,jdbcType=VARCHAR},
+      receive_store_no = #{receiveStoreNo,jdbcType=CHAR},
+      receive_store_name = #{receiveStoreName,jdbcType=VARCHAR},
+      sku_id = #{skuId,jdbcType=CHAR},
+      sku_no = #{skuNo,jdbcType=CHAR},
+      supplier_no = #{supplierNo,jdbcType=CHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=CHAR},
+      brand_unit_no = #{brandUnitNo,jdbcType=CHAR},
+      brand_unit_name = #{brandUnitName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      cost = #{cost,jdbcType=DECIMAL},
+      bill_cost = #{billCost,jdbcType=DECIMAL},
+      actual_cost = #{actualCost,jdbcType=DECIMAL},
+      other_deduct_cost = #{otherDeductCost,jdbcType=DECIMAL},
+      tax_rate = #{taxRate,jdbcType=DECIMAL},
+      exclusive_cost = #{exclusiveCost,jdbcType=DECIMAL},
+      headquarter_cost = #{headquarterCost,jdbcType=DECIMAL},
+      region_cost = #{regionCost,jdbcType=DECIMAL},
+      region_cost_second = #{regionCostSecond,jdbcType=DECIMAL},
+      unit_cost = #{unitCost,jdbcType=DECIMAL},
+      unit_cost_second = #{unitCostSecond,jdbcType=DECIMAL},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      material_price = #{materialPrice,jdbcType=DECIMAL},
+      factory_price = #{factoryPrice,jdbcType=DECIMAL},
+      send_qty = #{sendQty,jdbcType=INTEGER},
+      receive_qty = #{receiveQty,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=CHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      balance_type = #{balanceType,jdbcType=TINYINT},
+      balance_status = #{balanceStatus,jdbcType=TINYINT},
+      is_split = #{isSplit,jdbcType=TINYINT},
+      path_no = #{pathNo,jdbcType=CHAR},
+      order_unit_no = #{orderUnitNo,jdbcType=CHAR},
+      order_unit_name = #{orderUnitName,jdbcType=VARCHAR},
+      organ_no = #{organNo,jdbcType=CHAR},
+      organ_name = #{organName,jdbcType=VARCHAR},
+      order_unit_no_from = #{orderUnitNoFrom,jdbcType=CHAR},
+      order_unit_name_from = #{orderUnitNameFrom,jdbcType=VARCHAR},
+      organ_no_from = #{organNoFrom,jdbcType=CHAR},
+      organ_name_from = #{organNameFrom,jdbcType=VARCHAR},
+      zone_no = #{zoneNo,jdbcType=CHAR},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      zone_no_from = #{zoneNoFrom,jdbcType=CHAR},
+      zone_name_from = #{zoneNameFrom,jdbcType=VARCHAR},
+      is_bill_invoice = #{isBillInvoice,jdbcType=TINYINT},
+      invoice_apply_no = #{invoiceApplyNo,jdbcType=VARCHAR},
+      invoice_apply_date = #{invoiceApplyDate,jdbcType=DATE},
+      years = #{years,jdbcType=VARCHAR},
+      season = #{season,jdbcType=VARCHAR},
+      orderfrom = #{orderfrom,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      tag_price = #{tagPrice,jdbcType=DECIMAL},
+      tag_price_nation = #{tagPriceNation,jdbcType=DECIMAL},
+      zone_yyyymm = #{zoneYyyymm,jdbcType=CHAR},
+      cost_checked = #{costChecked,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      sharding_flag = #{shardingFlag,jdbcType=CHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      claim_no = #{claimNo,jdbcType=CHAR},
+      return_no = #{returnNo,jdbcType=CHAR},
+      bill_rebate_amount = #{billRebateAmount,jdbcType=DECIMAL},
+      bill_rebate_discount = #{billRebateDiscount,jdbcType=DECIMAL}
+    WHERE id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

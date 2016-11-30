@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.ExchangeRateSetupMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.ExchangeRateSetup" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="exchange_rate_code" property="exchangeRateCode" jdbcType="VARCHAR" />
+    <result column="source_currency" property="sourceCurrency" jdbcType="VARCHAR" />
+    <result column="target_currency" property="targetCurrency" jdbcType="VARCHAR" />
+    <result column="conversion_factor" property="conversionFactor" jdbcType="DECIMAL" />
+    <result column="effective_date" property="effectiveDate" jdbcType="DATE" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    
+    <result column="source_currency_name" property="sourceCurrencyName" jdbcType="VARCHAR" />
+    <result column="target_currency_name" property="targetCurrencyName" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, exchange_rate_code, source_currency, target_currency, conversion_factor, effective_date, 
+    company_no, status, create_user, create_time, update_user, update_time
+  </sql>
+  
+   <sql id="Conn_Column_List" >
+	id, exchange_rate_code, source_currency, target_currency,
+	conversion_factor, company_no,effective_date,create_user, 
+	status,create_time, update_user, update_time,
+	(SELECT company.name FROM company WHERE company.company_no = exchange_rate_setup.company_no) company_name,
+	(SELECT currency_management.currency_name FROM currency_management WHERE exchange_rate_setup.source_currency = currency_management.currency_code) source_currency_name,
+	(SELECT currency_management.currency_name FROM currency_management WHERE exchange_rate_setup.target_currency = currency_management.currency_code) target_currency_name  
+	</sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+       <if test="null!=params.exchangeRateCode and ''!=params.exchangeRateCode" >
+     	and  exchange_rate_code like '%${params.exchangeRateCode}%'  
+      </if>
+       <if test="null!=params.status and ''!=params.status" >
+       	 and status = #{params.status}
+      </if>
+      <if test="null!=params.companyNo and ''!=params.companyNo" >
+       	 and company_no = #{params.companyNo}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM exchange_rate_setup
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM exchange_rate_setup WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Conn_Column_List" />
+     FROM exchange_rate_setup WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null || ''==orderByField">
+       ORDER BY CREATE_TIME DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Conn_Column_List" />
+     FROM exchange_rate_setup WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM exchange_rate_setup
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.ExchangeRateSetup" >
+    DELETE FROM exchange_rate_setup
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.ExchangeRateSetup" >
+    INSERT INTO exchange_rate_setup (id, exchange_rate_code, source_currency, 
+      target_currency, conversion_factor, effective_date, 
+      company_no, status, create_user, 
+      create_time, update_user, update_time
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{exchangeRateCode,jdbcType=VARCHAR}, #{sourceCurrency,jdbcType=VARCHAR}, 
+      #{targetCurrency,jdbcType=VARCHAR}, #{conversionFactor,jdbcType=DECIMAL}, #{effectiveDate,jdbcType=DATE}, 
+      #{companyNo,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.ExchangeRateSetup" >
+    INSERT INTO exchange_rate_setup
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="exchangeRateCode != null" >
+        exchange_rate_code,
+      </if>
+      <if test="sourceCurrency != null" >
+        source_currency,
+      </if>
+      <if test="targetCurrency != null" >
+        target_currency,
+      </if>
+      <if test="conversionFactor != null" >
+        conversion_factor,
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeRateCode != null" >
+        #{exchangeRateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceCurrency != null" >
+        #{sourceCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="targetCurrency != null" >
+        #{targetCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="conversionFactor != null" >
+        #{conversionFactor,jdbcType=DECIMAL},
+      </if>
+      <if test="effectiveDate != null" >
+        #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.ExchangeRateSetup" >
+    UPDATE exchange_rate_setup
+    <set >
+      <if test="exchangeRateCode != null" >
+        exchange_rate_code = #{exchangeRateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceCurrency != null" >
+        source_currency = #{sourceCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="targetCurrency != null" >
+        target_currency = #{targetCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="conversionFactor != null" >
+        conversion_factor = #{conversionFactor,jdbcType=DECIMAL},
+      </if>
+      <if test="effectiveDate != null" >
+        effective_date = #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.ExchangeRateSetup" >
+    UPDATE exchange_rate_setup
+    SET exchange_rate_code = #{exchangeRateCode,jdbcType=VARCHAR},
+      source_currency = #{sourceCurrency,jdbcType=VARCHAR},
+      target_currency = #{targetCurrency,jdbcType=VARCHAR},
+      conversion_factor = #{conversionFactor,jdbcType=DECIMAL},
+      effective_date = #{effectiveDate,jdbcType=DATE},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

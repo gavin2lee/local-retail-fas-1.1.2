@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+			http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 扫描本工程bean -->
+	<context:component-scan base-package="cn.wonhigh.retail.fas.api.manager" />
+	<!-- 加载base工程配置 -->
+	<import resource="classpath:META-INF/spring-base-manager.xml" />
+
+	<!-- 加载依赖service层配置 -->
+	<import resource="classpath:META-INF/spring/spring-fas-service.xml" />
+
+	<dubbo:consumer check="false" />
+	<!-- 提供方应用信息，用于计算依赖关系 ; 不是匹配条件，不要与提供方一样 -->
+	<dubbo:application name="${fas.dubbo.service.name}"
+		owner="fas-api" />
+
+	<!-- 使用zookeeper暴露服务地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+
+	<!-- 用dubbo协议在20898端口暴露服务 -->
+	<dubbo:protocol name="dubbo" port="${fas.dubbo.service.port}"
+		dispather="all" threadpool="cached" threads="5000" />
+
+	<!-- 调用服务x秒超时,不重试 -->
+	<dubbo:provider timeout="${fas.dubbo.provider.timeout}"
+		retries="${fas.dubbo.provider.retries}" />
+
+	<!-- 监控 -->
+	<dubbo:monitor protocol="registry" />
+
+	<!--声明需要暴露的服务接口列表 -->
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.CostAccountingApi"
+		ref="costAccountingManagerImplApi" version="${dubbo.fas.api.version}" />
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.BillBuyBalanceApi"
+		ref="billBuyBalanceApiManager" version="${dubbo.fas.api.version}" />
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.BillSaleBalanceApi"
+		ref="billSaleBalanceApiManager" version="${dubbo.fas.api.version}" />
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.ShopSettlementApi"
+		ref="shopSettlementManagerImplApi" version="${dubbo.fas.api.version}" />
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.OrderInfoApi"
+		ref="orderInfoManagerImplApi" version="${dubbo.fas.api.version}" />
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.CurrencyApi"
+		ref="currencyManagerImpl" version="${dubbo.fas.api.version}" />
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.SupplierRateSetApi"
+		ref="supplierRateSetApiManagerImpl" version="${dubbo.fas.api.version}" />
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.WholesaleControlApi"
+		ref="wholesaleControlApiManagerImpl" version="${dubbo.fas.api.version}" />
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.InsideBizTypeApi"
+		ref="insideBizTypeManagerImplApi" version="${dubbo.fas.api.version}" />
+
+	<dubbo:reference
+		interface="cn.wonhigh.retail.mps.api.client.service.price.SalePriceApi"
+		id="salePriceApi" version="${dubbo.mps.api.version}">
+	</dubbo:reference>
+
+	<dubbo:service
+		interface="cn.wonhigh.retail.fas.api.service.PriceEffectiveDateApi"
+		ref="priceEffectiveDateApiManagerImpl" version="${dubbo.fas.api.version}" />
+
+
+	<dubbo:service interface="cn.wonhigh.retail.fas.api.service.RegisterInvoiceApi"
+		ref="registerInvoiceManagerImpl" version="${dubbo.fas.api.version}" />
+
+	<dubbo:reference interface="cn.wonhigh.retail.mdm.api.CompanyApi"
+		id="companyApi" version="${dubbo.mdm.api.version}" injvm="${dubbo.mdm.injvm:false}" />
+	<dubbo:reference interface="cn.wonhigh.retail.pms.api.service.BillPurchaseOrderApi"
+		id="BillPurchaseOrderApi" version="${dubbo.pms.api.version}" injvm="${dubbo.pms.injvm:false}" />	
+	<dubbo:service
+		interface="cn.wonhigh.retail.fas.api.service.TransferBalanceDateApi"
+		ref="transferBalanceDateApiManagerImpl" version="${dubbo.fas.api.version}" />
+</beans>

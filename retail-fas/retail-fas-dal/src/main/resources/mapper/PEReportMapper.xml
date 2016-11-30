@@ -1,0 +1,1486 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PEReportMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.PEAPDto" >
+    <result column="zone_name" property="zoneName" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_unit_no" property="brandUnitNo" jdbcType="VARCHAR" />
+    <result column="brand_unit_name" property="brandUnitName" jdbcType="VARCHAR" />
+    <result column="all_qty" property="allQty" jdbcType="INTEGER" />  
+    <result column="all_amount" property="allAmount" jdbcType="DECIMAL" />  
+    <result column="no_due_amount" property="noDueAmount" jdbcType="DECIMAL" />  
+    <result column="due_30_amount" property="due30Amount" jdbcType="DECIMAL" />  
+    <result column="due_60_amount" property="due60Amount" jdbcType="DECIMAL" />  
+    <result column="due_90_amount" property="due90Amount" jdbcType="DECIMAL" /> 
+    <result column="due_91_amount" property="due91Amount" jdbcType="DECIMAL" /> 
+    <result column="due_null_amount" property="dueNULLAmount" jdbcType="DECIMAL" /> 
+    <result column="due_date" property="dueDate" jdbcType="DATE" /> 
+    <result column="due_week_date" property="dueWeekDate" jdbcType="VARCHAR" /> 
+    <result column="due_month_date" property="dueMonthDate" jdbcType="VARCHAR" /> 
+    <result column="shoes_qty" property="shoesQty" jdbcType="INTEGER" />  
+    <result column="clothes_qty" property="clothesQty" jdbcType="INTEGER" />  
+    <result column="parts_qty" property="partsQty" jdbcType="INTEGER" />  
+    <result column="shoes_amount" property="shoesAmount" jdbcType="DECIMAL" />  
+    <result column="clothes_amount" property="clothesAmount" jdbcType="DECIMAL" />  
+    <result column="parts_amount" property="partsAmount" jdbcType="DECIMAL" />
+    <result column="supplier_amount" property="supplierAmount" jdbcType="DECIMAL" />  
+    <result column="zone_amount" property="zoneAmount" jdbcType="DECIMAL" />
+    <result column="refer_amount" property="referAmount" jdbcType="DECIMAL" /> 
+    <result column="diff_amount1" property="diffAmount1" jdbcType="DECIMAL" />  
+    <result column="diff_amount2" property="diffAmount2" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="report_send_condition" >
+    AND pr.business_biz_type IN (0,1,60)
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND pr.supplier_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND pr.buyer_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND pr.brand_no in ${params.multiBrandNo}
+      </if>
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+        AND pr.bill_date &gt;= #{params.sendDateStart}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND pr.bill_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.isBalance and '1'.toString()==params.isBalance" >
+        AND pr.balance_no IS NOT NULL
+      </if>
+      <if test="null!=params.isBalance and '0'.toString()==params.isBalance" >
+        AND (pr.balance_no IS NULL OR pr.balance_no = '') 
+      </if>
+      <if test="null!=params.peBizType and '0'.toString()==params.peBizType" >
+        AND pr.business_biz_type IN (0,1)
+      </if>
+      <if test="null!=params.peBizType and '1'.toString()==params.peBizType" >
+        AND pr.business_biz_type = 60
+      </if>
+      <if test="null!=params.balanceFlag and ''!=params.balanceFlag" >
+        AND pr.balance_flag = #{params.balanceFlag}
+      </if>
+      <if test="null!=params.listItem and ''!=params.listItem" >
+        	<foreach collection="params.listItem" item="item" separator="OR" open="AND (" close=")" index=""> 
+				(pr.supplier_no = #{item.salerNo} AND pr.buyer_no = #{item.buyerNo}
+				 <if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+			        AND sale.brand_no = #{item.brandNo}
+			     </if>
+			     <if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+			        AND sale.brand_unit_no = #{item.brandUnitNo}
+			     </if>
+				)
+			</foreach>
+      </if>
+    </if>
+   </sql>
+   <sql id="send_bill_purchase_condition" >
+    AND bill.status = 1
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.peBizType and '1'.toString()==params.peBizType" >
+        AND 1 != 1
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND bill.supplier_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND bill.buyer_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND dtl.brand_no in ${params.multiBrandNo}
+      </if>
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+        AND bill.purchase_date &gt;= #{params.sendDateStart}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND bill.purchase_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.isBalance and '1'.toString()==params.isBalance" >
+        AND dtl.balance_no IS NOT NULL
+      </if>
+      <if test="null!=params.isBalance and '0'.toString()==params.isBalance" >
+        AND (dtl.balance_no IS NULL OR dtl.balance_no = '') 
+      </if>
+      <if test="null!=params.listItem and ''!=params.listItem" >
+        	<foreach collection="params.listItem" item="item" separator="OR" open="AND (" close=")" index=""> 
+				(bill.supplier_no = #{item.salerNo} AND bill.buyer_no = #{item.buyerNo}
+				 <if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+			        AND dtl.brand_no = #{item.brandNo}
+			     </if>
+			     <if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+			        AND BU.brand_unit_no = #{item.brandUnitNo}
+			     </if>
+				)
+			</foreach>
+      </if>
+    </if>
+   </sql>
+   <sql id="send_other_deduction_condition" >
+   		AND balance_type IN(16)
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.peBizType and '1'.toString()==params.peBizType" >
+        AND 1 != 1
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND OD.saler_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND OD.buyer_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+        AND OD.brand_no in ${params.multiBrandNo}
+      </if>
+      <if test="null!=params.sendDateStart and ''!=params.sendDateStart" >
+        AND OD.deduction_date &gt;= #{params.sendDateStart}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND OD.deduction_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.isBalance and '1'.toString()==params.isBalance" >
+        AND OD.balance_no IS NOT NULL
+      </if>
+      <if test="null!=params.isBalance and '0'.toString()==params.isBalance" >
+        AND (OD.balance_no IS NULL OR OD.balance_no = '') 
+      </if>
+      <if test="null!=params.listItem and ''!=params.listItem" >
+        	<foreach collection="params.listItem" item="item" separator="OR" open="AND (" close=")" index=""> 
+				(OD.saler_no = #{item.salerNo} AND OD.buyer_no = #{item.buyerNo}
+				 <if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+			        AND OD.brand_no = #{item.brandNo}
+			     </if>
+			     <if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+			        AND BU.brand_unit_no = #{item.brandUnitNo}
+			     </if>
+				)
+			</foreach>
+      </if>
+    </if>
+   </sql>
+   <sql id="pay_relationship_condition" >
+    AND pay_status IN (0, 1)
+    AND business_biz_type IN (0,1)
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND supplier_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND saler_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND bill_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.dueDateStart and ''!=params.dueDateStart and null!=params.dueDateEnd and ''!=params.dueDateEnd" >
+        AND ((due_date &gt;= #{params.dueDateStart} AND due_date &lt;= #{params.dueDateEnd}) OR due_date IS NULL)
+      </if>
+      <if test="null!=params.isBalance and 'true'==params.isBalance" >
+        AND balance_no IS NOT NULL
+      </if>
+      <if test="null!=params.listItem and ''!=params.listItem" >
+        	<foreach collection="params.listItem" item="item" separator="OR" open="AND (" close=")" index=""> 
+				(supplier_no = #{item.salerNo} AND saler_no = #{item.buyerNo})
+			</foreach>
+      </if>
+    </if>
+   </sql>
+   <sql id="other_deduction_condition" >
+    AND balance_type = 16
+    AND pay_status IN (0, 1)
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND saler_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND buyer_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND deduction_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.dueDateStart and ''!=params.dueDateStart and null!=params.dueDateEnd and ''!=params.dueDateEnd" >
+        AND ((due_date &gt;= #{params.dueDateStart} AND due_date &lt;= #{params.dueDateEnd}) OR due_date IS NULL)
+      </if>
+      <if test="null!=params.isBalance and 'true'==params.isBalance" >
+        AND balance_no IS NOT NULL
+      </if>
+      <if test="null!=params.listItem and ''!=params.listItem" >
+        	<foreach collection="params.listItem" item="item" separator="OR" open="AND (" close=")" index=""> 
+				(saler_no = #{item.salerNo} AND buyer_no = #{item.buyerNo})
+			</foreach>
+      </if>
+    </if>
+   </sql>
+   <sql id="initial_amount_condition" >
+      AND pay_status IN (0, 1)
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND supplier_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND company_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND initial_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.dueDateStart and ''!=params.dueDateStart and null!=params.dueDateEnd and ''!=params.dueDateEnd" >
+        AND ((due_date &gt;= #{params.dueDateStart} AND due_date &lt;= #{params.dueDateEnd}) OR due_date IS NULL)
+      </if>
+      <if test="null!=params.listItem and ''!=params.listItem" >
+        	<foreach collection="params.listItem" item="item" separator="OR" open="AND (" close=")" index=""> 
+				(supplier_no = #{item.salerNo} AND company_no = #{item.buyerNo})
+			</foreach>
+      </if>
+     </if>
+   </sql>
+   <sql id="to_register_condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND supplier_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND company_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND payment_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.dueDateStart and ''!=params.dueDateStart and null!=params.dueDateEnd and ''!=params.dueDateEnd" >
+        AND ((payment_date &gt;= #{params.dueDateStart} AND payment_date &lt;= #{params.dueDateEnd}) OR payment_date IS NULL)
+      </if>
+      <if test="null!=params.listItem and ''!=params.listItem" >
+        	<foreach collection="params.listItem" item="item" separator="OR" open="AND (" close=")" index=""> 
+				(supplier_no = #{item.salerNo} AND company_no = #{item.buyerNo})
+			</foreach>
+      </if>
+     </if>
+   </sql>
+   <sql id="bill_purchase_condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+        AND supplier_no in ${params.multiSalerNo}
+      </if>    
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+        AND saler_no in ${params.multiBuyerNo}
+      </if>
+      <if test="null!=params.sendDateEnd and ''!=params.sendDateEnd" >
+        AND purchase_date &lt;= #{params.sendDateEnd}
+      </if>
+      <if test="null!=params.dueDateStart and ''!=params.dueDateStart and null!=params.dueDateEnd and ''!=params.dueDateEnd" >
+        AND ((due_date &gt;= #{params.dueDateStart} AND due_date &lt;= #{params.dueDateEnd}) OR due_date IS NULL)
+      </if>
+      <if test="null!=params.isBalance and 'true'==params.isBalance" >
+        AND balance_no IS NOT NULL
+      </if>
+      <if test="null!=params.listItem and ''!=params.listItem" >
+        	<foreach collection="params.listItem" item="item" separator="OR" open="AND (" close=")" index=""> 
+				(supplier_no = #{item.salerNo} AND saler_no = #{item.buyerNo})
+			</foreach>
+      </if>
+     </if>
+   </sql>
+   <select id="findAPAgingCount" resultType="java.lang.Integer" >
+  		SELECT COUNT(1) FROM (
+	  		SELECT 
+			  1
+			FROM
+			  (SELECT 
+			    supplier_no saler_no,
+			    saler_no buyer_no
+			  FROM
+			    pay_relationship 
+			  WHERE 1 = 1 
+			  <include refid="pay_relationship_condition" />
+			  GROUP BY saler_no,
+			    buyer_no 
+			  UNION
+			  ALL
+			  SELECT 
+			    supplier_no saler_no,
+			    saler_no buyer_no
+			  FROM
+			    bill_purchase_adjust 
+			  WHERE 1 = 1 
+			  <include refid="bill_purchase_condition" />
+			  GROUP BY supplier_no,
+			    saler_no 
+			  UNION
+			  ALL 
+			  SELECT 
+			    saler_no,
+			    buyer_no
+			  FROM
+			    other_deduction 
+			  WHERE 1 = 1 
+			  <include refid="other_deduction_condition" />
+			  GROUP BY saler_no,
+			    buyer_no 
+			  UNION
+			  ALL 
+			  SELECT 
+			    supplier_no saler_no,
+			    company_no buyer_no
+			  FROM
+			    initial_amount 
+			  WHERE 1 = 1 
+			  <include refid="initial_amount_condition" />
+			  GROUP BY company_no,
+			    supplier_no) G 
+			GROUP BY saler_no,
+			  buyer_no 
+  		) T
+    </select>
+    <select id="findAPAgingByPage" resultMap="BaseResultMap" parameterType="map">
+  		SELECT 
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name,
+		  SUM(all_amount) all_amount,
+		  SUM(no_due_amount) no_due_amount,
+		  SUM(due_30_amount) due_30_amount,
+		  SUM(due_60_amount) due_60_amount,
+		  SUM(due_90_amount) due_90_amount,
+		  SUM(due_91_amount) due_91_amount,
+		  SUM(due_null_amount) due_null_amount 
+		FROM
+		  (SELECT 
+		    supplier_no saler_no,
+		    supplier_name saler_name,
+		    saler_no buyer_no,
+		    saler_name buyer_name,
+		    SUM(no_pay_amount) all_amount,
+		    SUM(
+		      IF(
+		        due_date &gt; #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) no_due_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 30 DAY) 
+		        AND #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_30_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 60 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 31 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_60_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 90 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 61 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_90_amount,
+		    SUM(
+		      IF(
+		        due_date &lt;= DATE_ADD(#{params.currentDate}, INTERVAL - 91 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_91_amount,
+		    SUM(
+		      IF(
+		        due_date IS NULL,
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_null_amount 
+		  FROM
+		    pay_relationship 
+		  WHERE 1 = 1 
+		    <include refid="pay_relationship_condition" />
+		  GROUP BY supplier_no,
+		    saler_no 
+		  UNION 
+		  ALL
+		  SELECT 
+		    supplier_no saler_no,
+		    supplier_name saler_name,
+		    saler_no buyer_no,
+		    saler_name buyer_name,
+		    SUM(no_pay_amount) all_amount,
+		    SUM(
+		      IF(
+		        due_date &gt; #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) no_due_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 30 DAY) 
+		        AND #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_30_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 60 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 31 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_60_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 90 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 61 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_90_amount,
+		    SUM(
+		      IF(
+		        due_date &lt;= DATE_ADD(#{params.currentDate}, INTERVAL - 91 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_91_amount,
+		    SUM(
+		      IF(
+		        due_date IS NULL,
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_null_amount 
+		  FROM
+		    bill_purchase_adjust 
+		  WHERE 1 = 1 
+		    <include refid="bill_purchase_condition" />
+		  GROUP BY supplier_no,
+		    saler_no   
+		  UNION
+		  ALL 
+		  SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    SUM(no_pay_amount) all_amount,
+		    SUM(
+		      IF(
+		        due_date &gt; #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) no_due_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 30 DAY) 
+		        AND #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_30_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 60 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 31 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_60_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 90 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 61 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_90_amount,
+		    SUM(
+		      IF(
+		        due_date &lt;= DATE_ADD(#{params.currentDate}, INTERVAL - 91 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_91_amount,
+		    SUM(
+		      IF(
+		        due_date IS NULL,
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_null_amount 
+		  FROM
+		    other_deduction 
+		  WHERE 1 = 1 
+		   <include refid="other_deduction_condition" />
+		  GROUP BY saler_no,
+		    buyer_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    supplier_no saler_no,
+		    supplier_name saler_name,
+		    company_no buyer_no,
+		    company_name buyer_name,
+		    SUM(amount) all_amount,
+		    SUM(
+		      IF(due_date &gt; #{params.currentDate}, amount, 0)
+		    ) no_due_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 30 DAY) 
+		        AND #{params.currentDate},
+		        amount,
+		        0
+		      )
+		    ) due_30_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 60 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 31 DAY),
+		        amount,
+		        0
+		      )
+		    ) due_60_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 90 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 61 DAY),
+		        amount,
+		        0
+		      )
+		    ) due_90_amount,
+		    SUM(
+		      IF(
+		        due_date &lt;= DATE_ADD(#{params.currentDate}, INTERVAL - 91 DAY),
+		        amount,
+		        0
+		      )
+		    ) due_91_amount,
+		    SUM(
+		      IF(
+		        due_date IS NULL,
+		        amount,
+		        0
+		      )
+		    ) due_null_amount 
+		  FROM
+		    initial_amount 
+		  WHERE 1 = 1 
+		    <include refid="initial_amount_condition" />
+		  GROUP BY supplier_no,
+		    company_no
+		  ) G 
+		GROUP BY saler_no,
+		  buyer_no 
+		LIMIT #{page.startRowNum} ,#{page.pageSize}  
+    </select>
+    <select id="findAPAgingFooter" resultMap="BaseResultMap" parameterType="map">
+  		SELECT 
+		  '合计' buyer_name,
+		  SUM(all_amount) all_amount,
+		  SUM(no_due_amount) no_due_amount,
+		  SUM(due_30_amount) due_30_amount,
+		  SUM(due_60_amount) due_60_amount,
+		  SUM(due_90_amount) due_90_amount,
+		  SUM(due_91_amount) due_91_amount,
+		  SUM(due_null_amount) due_null_amount  
+		FROM
+		  (SELECT 
+		    supplier_no saler_no,
+		    supplier_name saler_name,
+		    saler_no buyer_no,
+		    saler_name buyer_name,
+		    SUM(no_pay_amount) all_amount,
+		    SUM(
+		      IF(
+		        due_date &gt; #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) no_due_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 30 DAY) 
+		        AND #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_30_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 60 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 31 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_60_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 90 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 61 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_90_amount,
+		    SUM(
+		      IF(
+		        due_date &lt;= DATE_ADD(#{params.currentDate}, INTERVAL - 91 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_91_amount,
+		    SUM(
+		      IF(
+		        due_date IS NULL,
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_null_amount  
+		  FROM
+		    pay_relationship 
+		  WHERE 1 = 1 
+		    <include refid="pay_relationship_condition" />
+		  GROUP BY saler_no,
+		    buyer_no 
+		  UNION 
+		  ALL
+		  SELECT 
+		    supplier_no saler_no,
+		    supplier_name saler_name,
+		    saler_no buyer_no,
+		    saler_name buyer_name,
+		    SUM(no_pay_amount) all_amount,
+		    SUM(
+		      IF(
+		        due_date &gt; #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) no_due_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 30 DAY) 
+		        AND #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_30_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 60 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 31 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_60_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 90 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 61 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_90_amount,
+		    SUM(
+		      IF(
+		        due_date &lt;= DATE_ADD(#{params.currentDate}, INTERVAL - 91 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_91_amount,
+		    SUM(
+		      IF(
+		        due_date IS NULL,
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_null_amount 
+		  FROM
+		    bill_purchase_adjust 
+		  WHERE 1 = 1 
+		    <include refid="bill_purchase_condition" />
+		  GROUP BY supplier_no,
+		    saler_no   
+		  UNION
+		  ALL 
+		  SELECT 
+		    saler_no,
+		    saler_name,
+		    buyer_no,
+		    buyer_name,
+		    SUM(no_pay_amount) all_amount,
+		    SUM(
+		      IF(
+		        due_date &gt; #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) no_due_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 30 DAY) 
+		        AND #{params.currentDate},
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_30_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 60 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 31 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_60_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 90 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 61 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_90_amount,
+		    SUM(
+		      IF(
+		        due_date &lt;= DATE_ADD(#{params.currentDate}, INTERVAL - 91 DAY),
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_91_amount,
+		    SUM(
+		      IF(
+		        due_date IS NULL,
+		        no_pay_amount,
+		        0
+		      )
+		    ) due_null_amount  
+		  FROM
+		    other_deduction 
+		  WHERE 1 = 1 
+		    <include refid="other_deduction_condition" />
+		  GROUP BY saler_no,
+		    buyer_no 
+		  UNION
+		  ALL 
+		  SELECT 
+		    supplier_no saler_no,
+		    supplier_name saler_name,
+		    company_no buyer_no,
+		    company_name buyer_name,
+		    SUM(amount) all_amount,
+		    SUM(
+		      IF(due_date &gt; #{params.currentDate}, amount, 0)
+		    ) no_due_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 30 DAY) 
+		        AND #{params.currentDate},
+		        amount,
+		        0
+		      )
+		    ) due_30_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 60 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 31 DAY),
+		        amount,
+		        0
+		      )
+		    ) due_60_amount,
+		    SUM(
+		      IF(
+		        due_date BETWEEN DATE_ADD(#{params.currentDate}, INTERVAL - 90 DAY) 
+		        AND DATE_ADD(#{params.currentDate}, INTERVAL - 61 DAY),
+		        amount,
+		        0
+		      )
+		    ) due_90_amount,
+		    SUM(
+		      IF(
+		        due_date &lt;= DATE_ADD(#{params.currentDate}, INTERVAL - 91 DAY),
+		        amount,
+		        0
+		      )
+		    ) due_91_amount,
+		    SUM(
+		      IF(
+		        due_date IS NULL,
+		        amount,
+		        0
+		      )
+		    ) due_null_amount  
+		  FROM
+		    initial_amount 
+		  WHERE 1 = 1 
+		    <include refid="initial_amount_condition" />
+		  GROUP BY supplier_no,
+		    company_no
+		  ) G 
+   </select>
+   <sql id="plan_pay_relationship_sql" >
+	 	SELECT 
+		  supplier_no saler_no,
+		  supplier_name saler_name,
+		  saler_no buyer_no,
+		  saler_name buyer_name,
+		  due_date,
+		  no_pay_amount
+		FROM pay_relationship
+		WHERE 1 = 1
+		<include refid="pay_relationship_condition" />
+   </sql>
+   <sql id="plan_other_deduction_sql" >
+   		SELECT 
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name,
+		  due_date,
+		  no_pay_amount
+		FROM other_deduction
+		WHERE 1 = 1
+		<include refid="other_deduction_condition" />
+   </sql>
+   <sql id="plan_initial_amount_sql" >
+   		SELECT 
+		  supplier_no saler_no,
+		  supplier_name saler_name,
+		  company_no buyer_no,
+		  company_name buyer_name,
+		  due_date,
+		  amount no_pay_amount
+		FROM initial_amount
+		WHERE 1 = 1
+		<include refid="initial_amount_condition" />
+   </sql>
+   <sql id="plan_to_register_sql" >
+   		SELECT 
+		  supplier_no saler_no,
+		  supplier_name saler_name,
+		  company_no buyer_no,
+		  company_name buyer_name,
+		  payment_date due_date,
+		  -1*payment_amount no_pay_amount
+		FROM to_register
+		WHERE 1 = 1
+		<include refid="to_register_condition" />
+   </sql>
+   <sql id="plan_bill_adjust_sql" >
+   		SELECT 
+		  supplier_no saler_no,
+		  supplier_name saler_name,
+		  saler_no buyer_no,
+		  saler_name buyer_name,
+		  due_date,
+		  no_pay_amount
+		FROM bill_purchase_adjust
+		WHERE 1 = 1
+		<include refid="bill_purchase_condition" />
+   </sql>
+   <select id="findPlanPageCondition" resultMap="BaseResultMap" parameterType="map" >
+			SELECT 
+			  saler_no,buyer_no
+			  FROM (
+			<include refid="plan_pay_relationship_sql" />
+			UNION ALL
+			<include refid="plan_bill_adjust_sql" />
+			UNION ALL
+			<include refid="plan_other_deduction_sql" />
+			UNION ALL
+			<include refid="plan_initial_amount_sql" />
+			UNION ALL
+			<include refid="plan_to_register_sql" />
+			) G
+			GROUP BY saler_no,buyer_no
+			LIMIT #{page.startRowNum} ,#{page.pageSize}  
+    </select>
+   <select id="findAPPlanCount" resultType="java.lang.Integer" >
+  		SELECT COUNT(1) FROM (
+			SELECT 
+			  1
+			  FROM (
+			<include refid="plan_pay_relationship_sql" />
+			UNION ALL
+			<include refid="plan_bill_adjust_sql" />
+			UNION ALL
+			<include refid="plan_other_deduction_sql" />
+			UNION ALL
+			<include refid="plan_initial_amount_sql" />
+			UNION ALL
+			<include refid="plan_to_register_sql" />
+			) G
+			GROUP BY saler_no,buyer_no
+		) T
+    </select>
+    <select id="findAPPlanColumn" resultMap="BaseResultMap" parameterType="map">
+  		SELECT 
+		  due_date,
+		  CONCAT(YEAR(due_date),'-',WEEK(due_date)) due_week_date,
+  		  CONCAT(YEAR(due_date),'-',MONTH(due_date)) due_month_date
+		  FROM (
+			<include refid="plan_pay_relationship_sql" />
+			UNION ALL
+			<include refid="plan_bill_adjust_sql" />
+			UNION ALL
+			<include refid="plan_other_deduction_sql" />
+			UNION ALL
+			<include refid="plan_initial_amount_sql" />
+			UNION ALL
+			<include refid="plan_to_register_sql" />
+		) G
+		GROUP BY 
+	  <if test="null!=params.sumType and 'day'==params.sumType" >
+        due_date
+      </if>
+      <if test="null!=params.sumType and 'week'==params.sumType" >
+        CONCAT(YEAR(due_date),'-',WEEK(due_date))
+      </if>
+      <if test="null!=params.sumType and 'month'==params.sumType" >
+        CONCAT(YEAR(due_date),'-',MONTH(due_date))
+      </if>
+      ORDER BY due_date ASC
+    </select>
+    <select id="findAPPlanListByPage" resultMap="BaseResultMap" parameterType="map">
+  		SELECT 
+		  saler_no,
+		  saler_name,
+		  buyer_no,
+		  buyer_name, 
+		  IFNULL(SUM(no_pay_amount),0) all_amount,
+		  due_date,
+		  CONCAT(YEAR(due_date),'-',WEEK(due_date)) due_week_date,
+  		  CONCAT(YEAR(due_date),'-',MONTH(due_date)) due_month_date
+		  FROM (
+			<include refid="plan_pay_relationship_sql" />
+			UNION ALL
+			<include refid="plan_bill_adjust_sql" />
+			UNION ALL
+			<include refid="plan_other_deduction_sql" />
+			UNION ALL
+			<include refid="plan_initial_amount_sql" />
+			UNION ALL
+			<include refid="plan_to_register_sql" />
+		) G
+		GROUP BY saler_no,buyer_no
+	  <if test="null!=params.sumType and 'day'==params.sumType" >
+        ,due_date
+      </if>
+      <if test="null!=params.sumType and 'week'==params.sumType" >
+        ,CONCAT(YEAR(due_date),'-',WEEK(due_date))
+      </if>
+      <if test="null!=params.sumType and 'month'==params.sumType" >
+        ,CONCAT(YEAR(due_date),'-',MONTH(due_date))
+      </if>
+    </select>
+    <select id="findAPPlanFooter" resultMap="BaseResultMap" parameterType="map">
+  		SELECT 
+		  '合计' buyer_name, 
+		  IFNULL(SUM(no_pay_amount),0) all_amount,
+		  due_date,
+		  CONCAT(YEAR(due_date),'-',WEEK(due_date)) due_week_date,
+  		  CONCAT(YEAR(due_date),'-',MONTH(due_date)) due_month_date
+		  FROM (
+			<include refid="plan_pay_relationship_sql" />
+			UNION ALL
+			<include refid="plan_bill_adjust_sql" />
+			UNION ALL
+			<include refid="plan_other_deduction_sql" />
+			UNION ALL
+			<include refid="plan_initial_amount_sql" />
+			UNION ALL
+			<include refid="plan_to_register_sql" />
+		) G
+		GROUP BY 
+	  <if test="null!=params.sumType and 'day'==params.sumType" >
+        due_date
+      </if>
+      <if test="null!=params.sumType and 'week'==params.sumType" >
+        CONCAT(YEAR(due_date),'-',WEEK(due_date))
+      </if>
+      <if test="null!=params.sumType and 'month'==params.sumType" >
+        CONCAT(YEAR(due_date),'-',MONTH(due_date))
+      </if>
+    </select>
+    
+    
+    <sql id="send_bill_purchase_sql" >
+      	  SELECT 
+		    zone_info.name zone_name,
+		    '' business_bill_no,
+		    bill.buyer_no,
+		    bill.buyer_name,
+		    bill.supplier_no saler_no,
+		    bill.supplier_name saler_name,
+		    -1*dtl.supplier_amount,
+		    dtl.brand_no,
+		    dtl.brand_name,
+		    BU.brand_unit_no,
+		    BU.name brand_unit_name,
+		    -1*dtl.refer_amount,
+		    0 all_qty,
+		    -1*dtl.amount zone_amount,
+		    0 shoes_qty,
+		    0 clothes_qty,
+		    0 parts_qty,
+		    IF(
+		        LEFT(dtl.category_no, 2) = '41',
+		        -1*amount,
+		        0
+		      ) shoes_amount,
+		    IF(
+		        LEFT(dtl.category_no, 2) = '46',
+		        -1*amount,
+		        0
+		      ) clothes_amount,
+		    IF(
+		        LEFT(dtl.category_no, 2) = '47',
+		        -1*amount,
+		        0
+		      ) parts_amount,
+		   NULL remark   
+		   FROM bill_purchase_adjust bill 
+		  INNER JOIN bill_purchase_adjust_dtl dtl
+		      ON bill.bill_no = dtl.bill_no
+		  INNER JOIN company 
+		      ON company.company_no = bill.buyer_no 
+		  INNER JOIN brand 
+		      ON brand.brand_no = dtl.brand_no
+		  INNER JOIN brand_unit BU
+		      ON brand.sys_no = BU.brand_unit_no        
+		  INNER JOIN zone_info 
+		      ON zone_info.zone_no = company.zone_no 
+		  WHERE 1 = 1 
+		  <include refid="send_bill_purchase_condition" />
+    </sql>
+    <sql id="send_other_deduction_sql" >
+      	SELECT 
+		  zone_info.name zone_name,
+		  buyer_no,
+		  buyer_name,
+		  saler_no,
+		  saler_name,
+		  	<if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+		        BU.brand_unit_no,BU.name brand_unit_name,brand.brand_no,brand.name brand_name,
+	      	</if>
+	      	<if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+	        	BU.brand_unit_no,BU.name brand_unit_name,
+	     	</if>
+		  0 all_qty,
+		  -1*deduction_amount supplier_amount,
+		  0 refer_amount,
+		  0 zone_amount,
+		  0 diff_amount1,
+		  0 diff_amount2,
+		  0 shoes_qty,
+		  0 clothes_qty,
+		  0 parts_qty,
+		  0 shoes_amount,
+		  0 clothes_amount,
+		  0 parts_amount,
+ 		  OD.deduction_name remark
+		  FROM other_deduction OD
+		  INNER JOIN company 
+		      ON company.company_no = OD.buyer_no 
+		  INNER JOIN zone_info 
+		      ON zone_info.zone_no = company.zone_no    
+		  INNER JOIN brand 
+		      ON brand.brand_no = OD.brand_no
+		  INNER JOIN brand_unit BU
+		      ON brand.sys_no = BU.brand_unit_no     
+		  WHERE 1= 1
+		  <include refid="send_other_deduction_condition" />
+    </sql>
+    <select id="findReportSendCount" resultType="java.lang.Integer" >
+  		SELECT 
+		  COUNT(1) 
+		FROM
+		  (
+		  SELECT 1 FROM
+		 (SELECT 
+		    buyer_no,
+		    supplier_no,
+		    brand.brand_no,
+		    brand.sys_no brand_unit_no 
+		  FROM
+		    pay_relationship pr 
+		    INNER JOIN brand ON pr.brand_no = brand.brand_no
+		  WHERE 1 = 1
+		    <include refid="report_send_condition" />
+		    UNION ALL
+		    SELECT 
+		        buyer_no,
+			    supplier_no,
+			    brand.brand_no,
+			    brand.sys_no brand_unit_no
+			   FROM bill_purchase_adjust bill 
+			  INNER JOIN bill_purchase_adjust_dtl dtl
+		      ON bill.bill_no = dtl.bill_no
+		      INNER JOIN brand 
+		      ON brand.brand_no = dtl.brand_no
+		  WHERE 1 = 1 
+		  <include refid="send_bill_purchase_condition" />) G
+		  GROUP BY buyer_no,
+		    supplier_no
+		     <if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+		        ,brand_no
+		     </if>
+		     <if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+		        ,brand_unit_no
+		     </if>
+		    UNION ALL
+			  SELECT 
+		  	   1
+			  FROM other_deduction OD
+			  INNER JOIN brand 
+			      ON brand.brand_no = OD.brand_no
+			  WHERE 1= 1
+			  <include refid="send_other_deduction_condition" />
+		    ) T
+    </select>
+    <select id="findSendPageCondition" resultMap="BaseResultMap" parameterType="map">
+	   SELECT 
+	     buyer_no,
+	     saler_no
+		 <if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+		    ,brand_no
+	     </if>
+	     <if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+	       	,brand_unit_no
+	     </if>
+	     FROM (   
+	  		 SELECT 
+			  buyer_no,
+			  supplier_no saler_no,
+	          brand.brand_no,
+	       	  brand.sys_no brand_unit_no
+			FROM
+			  pay_relationship pr 
+			  INNER JOIN brand ON pr.brand_no = brand.brand_no
+			WHERE 1 = 1
+			<include refid="report_send_condition" />
+			UNION ALL
+			SELECT 
+			  buyer_no,
+			  supplier_no saler_no,
+			  brand.brand_no,
+		      brand.sys_no brand_unit_no
+			FROM
+			  bill_purchase_adjust bill 
+			  INNER JOIN bill_purchase_adjust_dtl dtl
+			      ON bill.bill_no = dtl.bill_no
+			  INNER JOIN brand ON dtl.brand_no = brand.brand_no
+			  WHERE 1 = 1
+			  <include refid="send_bill_purchase_condition" />
+		  ) G
+		GROUP BY buyer_no,
+		  saler_no
+		  <if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+		        ,brand_no
+	      </if>
+	      <if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+	        	,brand_unit_no
+	      </if>
+	    UNION ALL
+		  SELECT 
+		  	  buyer_no,
+			  saler_no
+			  <if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+			        ,brand.brand_no
+		      </if>
+		      <if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+		        	,brand.sys_no brand_unit_no
+		      </if>
+		  FROM other_deduction OD
+		  INNER JOIN brand 
+		      ON brand.brand_no = OD.brand_no
+		  WHERE 1= 1
+		  <include refid="send_other_deduction_condition" />
+		LIMIT #{page.startRowNum} ,#{page.pageSize} 
+		  
+    </select>
+    <select id="findSendListByPage" resultMap="BaseResultMap" parameterType="map">
+  		SELECT 
+			zone_name,
+			buyer_no,
+			buyer_name,
+			saler_no,
+			saler_name,
+			<if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+		        brand_unit_no,brand_unit_name,brand_no,brand_name,
+	      	</if>
+	      	<if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+	        	brand_unit_no,brand_unit_name,
+	     	 </if>
+			SUM(all_qty) all_qty,
+			SUM(supplier_amount) supplier_amount,
+			SUM(refer_amount) refer_amount,
+			SUM(zone_amount) zone_amount,
+			SUM(supplier_amount) - SUM(refer_amount) diff_amount1,
+			SUM(zone_amount) - SUM(refer_amount) diff_amount2,
+			SUM(shoes_qty) shoes_qty,
+			SUM(clothes_qty) clothes_qty,
+			SUM(parts_qty) parts_qty,
+			SUM(shoes_amount) shoes_amount,
+			SUM(clothes_amount) clothes_amount,
+			SUM(parts_amount) parts_amount,
+			remark
+			FROM (
+		SELECT 
+		    zone_info.name zone_name,
+		    pr.business_bill_no,
+		    pr.buyer_no,
+		    pr.buyer_name,
+		    pr.supplier_no saler_no,
+		    pr.supplier_name saler_name,
+		    pr.supplier_amount,
+		    sale.brand_no,
+		    sale.brand_name,
+		    sale.brand_unit_no,
+		    sale.brand_unit_name,
+		    ROUND(
+		        IF(
+		          cd.refer_discount1 IS NOT NULL 
+		          AND cd.refer_discount2 IS NOT NULL
+		          AND cd.discount1 = pr.zone_original_discount1 
+		          AND cd.discount2 = pr.zone_original_discount2,
+				  SUM(
+					CASE cd.algorithm 
+					WHEN 'A' THEN IFNULL(ROUND(ROUND(ROUND(sale.tag_price * cd.refer_discount1,2) / 1.17,2) * cd.refer_discount2 *1.17,2),0.00) * sale.send_qty
+					WHEN 'B' THEN IFNULL(ROUND(ROUND(ROUND(sale.tag_price * cd.refer_discount1,0) / 1.17,2) * cd.refer_discount2 *1.17,2),0.00) * sale.send_qty
+					WHEN 'C' THEN IFNULL(ROUND(sale.tag_price * cd.refer_discount1 * cd.refer_discount2,2),0.00) * sale.send_qty
+					ELSE sale.send_qty * sale.cost  
+					END 
+				  )
+		          ,
+		          SUM(sale.send_qty*sale.cost)
+		          ),
+		        2
+		    ) refer_amount,
+		    SUM(sale.send_qty) all_qty,
+		    SUM(sale.send_qty*sale.cost) zone_amount,
+		    SUM(IF(LEFT(sale.category_no,2) = '41', sale.send_qty, 0)) shoes_qty,
+		    SUM(IF(LEFT(sale.category_no,2) = '46', sale.send_qty, 0)) clothes_qty,
+		    SUM(IF(LEFT(sale.category_no,2) = '47', sale.send_qty, 0)) parts_qty,
+		    SUM(
+		      IF(
+			LEFT(sale.category_no,2) = '41',
+		        sale.send_qty*sale.cost,
+		        0
+		      )
+		    ) shoes_amount,
+		    SUM(
+		      IF(
+		        LEFT(sale.category_no,2) = '46',
+		        sale.send_qty*sale.cost,
+		        0
+		      )
+		    ) clothes_amount,
+		    SUM(
+		      IF(
+		        LEFT(sale.category_no,2) = '47',
+		        sale.send_qty*sale.cost,
+		        0
+		      )
+		    ) parts_amount,
+		    NULL remark 
+		  FROM
+		    pay_relationship pr 
+		    INNER JOIN bill_sale_balance sale
+		      ON pr.business_bill_no = sale.original_bill_no
+		    INNER JOIN company 
+		      ON company.company_no = pr.buyer_no 
+		    INNER JOIN zone_info 
+		      ON zone_info.zone_no = company.zone_no 
+		    LEFT JOIN contract_discount cd 
+		      ON cd.contract_discount_no = pr.company_contract_discount_no 
+		  WHERE 1 = 1 
+		      <include refid="report_send_condition" />
+			  GROUP BY sale.original_bill_no 
+			  UNION ALL
+			  <include refid="send_bill_purchase_sql" />
+			  ) G
+			  GROUP BY buyer_no,saler_no
+			  <if test="null!=params.gatherBy and 'brand'==params.gatherBy" >
+			        ,brand_no
+		      </if>
+		      <if test="null!=params.gatherBy and 'brandUnit'==params.gatherBy" >
+		        	,brand_unit_no
+		      </if>
+		 UNION ALL
+		 <include refid="send_other_deduction_sql" />
+    </select>
+    <select id="findReportSendFooter" resultMap="BaseResultMap" parameterType="map">
+    	SELECT 
+    	   '合计' zone_name,
+    	   SUM(all_qty) all_qty,
+    	   SUM(supplier_amount) supplier_amount,
+    	   SUM(refer_amount) refer_amount,
+    	   SUM(zone_amount) zone_amount,
+    	   SUM(diff_amount1) diff_amount1,
+    	   SUM(diff_amount2) diff_amount2,
+    	   SUM(shoes_qty) shoes_qty,
+    	   SUM(clothes_qty) clothes_qty,
+    	   SUM(parts_qty) parts_qty,
+    	   SUM(shoes_amount) shoes_amount,
+    	   SUM(clothes_amount) clothes_amount,
+    	   SUM(parts_amount) parts_amount
+    	   FROM (
+    	SELECT 
+			SUM(all_qty) all_qty,
+			SUM(supplier_amount) supplier_amount,
+			SUM(refer_amount) refer_amount,
+			SUM(zone_amount) zone_amount,
+			SUM(supplier_amount) - SUM(refer_amount) diff_amount1,
+			SUM(zone_amount) - SUM(refer_amount) diff_amount2,
+			SUM(shoes_qty) shoes_qty,
+			SUM(clothes_qty) clothes_qty,
+			SUM(parts_qty) parts_qty,
+			SUM(shoes_amount) shoes_amount,
+			SUM(clothes_amount) clothes_amount,
+			SUM(parts_amount) parts_amount
+			FROM (
+		SELECT 
+		    pr.supplier_amount,
+		    ROUND(
+		        IF(
+		          cd.refer_discount1 IS NOT NULL 
+		          AND cd.refer_discount2 IS NOT NULL
+		          AND cd.discount1 = pr.zone_original_discount1 
+		          AND cd.discount2 = pr.zone_original_discount2,
+			  SUM(
+				CASE cd.algorithm 
+				WHEN 'A' THEN IFNULL(ROUND(ROUND(ROUND(sale.tag_price * cd.refer_discount1,2) / 1.17,2) * cd.refer_discount2 *1.17,2),0.00) * sale.send_qty
+				WHEN 'B' THEN IFNULL(ROUND(ROUND(ROUND(sale.tag_price * cd.refer_discount1,0) / 1.17,2) * cd.refer_discount2 *1.17,2),0.00) * sale.send_qty
+				WHEN 'C' THEN IFNULL(ROUND(sale.tag_price * cd.refer_discount1 * cd.refer_discount2,2),0.00) * sale.send_qty
+				ELSE sale.send_qty * sale.cost  
+				END 
+			  )
+		          ,
+		          SUM(sale.send_qty*sale.cost)
+		          ),
+		        2
+		    ) refer_amount,
+		    SUM(sale.send_qty) all_qty,
+		    SUM(sale.send_qty*sale.cost) zone_amount,
+		    SUM(IF(LEFT(sale.category_no,2) = '41', sale.send_qty, 0)) shoes_qty,
+		    SUM(IF(LEFT(sale.category_no,2) = '46', sale.send_qty, 0)) clothes_qty,
+		    SUM(IF(LEFT(sale.category_no,2) = '47', sale.send_qty, 0)) parts_qty,
+		    SUM(
+		      IF(
+			LEFT(sale.category_no,2) = '41',
+		        sale.send_qty*sale.cost,
+		        0
+		      )
+		    ) shoes_amount,
+		    SUM(
+		      IF(
+		        LEFT(sale.category_no,2) = '46',
+		        sale.send_qty*sale.cost,
+		        0
+		      )
+		    ) clothes_amount,
+		    SUM(
+		      IF(
+		        LEFT(sale.category_no,2) = '47',
+		        sale.send_qty*sale.cost,
+		        0
+		      )
+		    ) parts_amount 
+		  FROM
+		    pay_relationship pr 
+		    INNER JOIN bill_sale_balance sale
+		      ON pr.business_bill_no = sale.original_bill_no
+		    INNER JOIN company 
+		      ON company.company_no = pr.buyer_no 
+		    INNER JOIN zone_info 
+		      ON zone_info.zone_no = company.zone_no 
+		    LEFT JOIN contract_discount cd 
+		      ON cd.contract_discount_no = pr.company_contract_discount_no 
+		  WHERE 1 = 1 
+		    <include refid="report_send_condition" />
+		    GROUP BY sale.original_bill_no 
+		    UNION ALL
+			SELECT 
+			    -1*dtl.supplier_amount,
+			    -1*dtl.refer_amount,
+			    0 all_qty,
+			    -1*dtl.amount zone_amount,
+			    0 shoes_qty,
+			    0 clothes_qty,
+			    0 parts_qty,
+			    IF(
+			      LEFT(dtl.category_no, 2) = '41',
+			      -1*amount,
+			      0
+			    ) shoes_amount,
+			    IF(
+			      LEFT(dtl.category_no, 2) = '46',
+			      -1*amount,
+			      0
+			    ) clothes_amount,
+			    IF(
+			      LEFT(dtl.category_no, 2) = '47',
+			      -1*amount,
+			      0
+			    ) parts_amount 
+			  FROM
+			    bill_purchase_adjust bill 
+			    INNER JOIN bill_purchase_adjust_dtl dtl 
+			      ON bill.bill_no = dtl.bill_no 
+			  WHERE 1 = 1 
+			  <include refid="send_bill_purchase_condition" />
+			) G
+			 UNION ALL
+			 SELECT 	
+			    0 all_qty,
+			    -1*deduction_amount supplier_amount,
+			    0 refer_amount,
+			    0 zone_amount,
+			    0 diff_amount1,
+			    0 diff_amount2,
+			    0 shoes_qty,
+			    0 clothes_qty,
+			    0 parts_qty,
+			    0 shoes_amount,
+			    0 clothes_amount,
+			    0 parts_amount 
+			  FROM
+			    other_deduction OD 
+			  WHERE 1 = 1 
+   			<include refid="send_other_deduction_condition" />
+   			) T
+    </select>
+</mapper>

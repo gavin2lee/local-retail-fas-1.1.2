@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.WholesaleReceTermDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.dto.WholesaleReceTermDtlDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="term_no" property="termNo" jdbcType="CHAR" />
+    <result column="advance_type" property="advanceType" jdbcType="INTEGER" />
+    <result column="advance_scale" property="advanceScale" jdbcType="DECIMAL" />
+    <result column="control_point" property="controlPoint" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, term_no, advance_type, advance_scale, control_point, remark
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.termNo and ''!=params.termNo" >
+        AND term_no = #{params.termNo,jdbcType=VARCHAR}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM wholesale_rece_term_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM wholesale_rece_term_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM wholesale_rece_term_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM wholesale_rece_term_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM wholesale_rece_term_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleReceTermDtl" >
+    DELETE FROM wholesale_rece_term_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleReceTermDtl" >
+    INSERT INTO wholesale_rece_term_dtl (id, term_no, advance_scale, 
+      control_point, remark)
+    VALUES (#{id,jdbcType=INTEGER}, #{termNo,jdbcType=CHAR}, #{advanceScale,jdbcType=DECIMAL}, 
+      #{controlPoint,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleReceTermDtl" >
+    INSERT INTO wholesale_rece_term_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="termNo != null" >
+        term_no,
+      </if>
+      <if test="advanceType != null" >
+        advance_type,
+      </if>
+      <if test="advanceScale != null" >
+        advance_scale,
+      </if>
+      <if test="controlPoint != null" >
+        control_point,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="termNo != null" >
+        #{termNo,jdbcType=CHAR},
+      </if>
+       <if test="advanceType != null" >
+        #{advanceType,jdbcType=INTEGER},
+      </if>
+      <if test="advanceScale != null" >
+        #{advanceScale,jdbcType=DECIMAL},
+      </if>
+      <if test="controlPoint != null" >
+        #{controlPoint,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleReceTermDtl" >
+    UPDATE wholesale_rece_term_dtl
+    <set >
+      <if test="termNo != null" >
+        term_no = #{termNo,jdbcType=CHAR},
+      </if>
+      <if test="advanceType != null" >
+        advance_type = #{advanceType,jdbcType=INTEGER},
+      </if>
+      <if test="advanceScale != null" >
+        advance_scale = #{advanceScale,jdbcType=DECIMAL},
+      </if>
+      <if test="advanceScale == null" >
+        advance_scale = #{advanceScale,jdbcType=TINYINT},
+      </if>
+      <if test="controlPoint != null" >
+        control_point = #{controlPoint,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.WholesaleReceTermDtl" >
+    UPDATE wholesale_rece_term_dtl
+    SET term_no = #{termNo,jdbcType=CHAR},
+      advance_type = #{advanceType,jdbcType=INTEGER},
+      advance_scale = #{advanceScale,jdbcType=DECIMAL},
+      control_point = #{controlPoint,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

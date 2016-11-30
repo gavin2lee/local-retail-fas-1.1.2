@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillBalanceInvoiceDtlMapper">
+	<resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillBalanceInvoiceDtl">
+		<id column="id" property="id" jdbcType="CHAR" />
+		<result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+		<result column="balance_no" property="balanceNo" jdbcType="VARCHAR" />
+		<result column="balance_start_date" property="balanceStartDate" jdbcType="TIMESTAMP" />
+		<result column="balance_end_date" property="balanceEndDate" jdbcType="TIMESTAMP" />
+		<result column="brand_Name" property="brandName" jdbcType="VARCHAR" />
+		<result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+		<result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+		<result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+		<result column="organ_no" property="organNo" jdbcType="CHAR" />
+		<result column="organ_name" property="organName" jdbcType="VARCHAR" />
+		<result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+		<result column="qty" property="qty" jdbcType="INTEGER" />
+		<result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+		<result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+		<result column="tax_amount" property="taxAmount" jdbcType="DECIMAL" />
+		<result column="no_tax_amount" property="noTaxAmount" jdbcType="DECIMAL" />
+		<result column="estimated_amount" property="estimatedAmount" jdbcType="DECIMAL" />
+		<result column="pos_earning_amount" property="posEarningAmount" jdbcType="DECIMAL" />
+		<result column="short_name" property="shortName" jdbcType="VARCHAR" />
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+		<result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+		<result column="retail_type" property="retailType" jdbcType="VARCHAR" />
+		<result column="contract_rate" property="contractRate" jdbcType="DECIMAL" />
+		<result column="actual_rate" property="actualRate" jdbcType="DECIMAL" />
+		<result column="cost_total" property="costTotal" jdbcType="DECIMAL" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="cate_no" property="cateNo" jdbcType="VARCHAR" />
+		<result column="cate_name" property="cateName" jdbcType="VARCHAR" />
+		<result column="saler_no" property="salerNo" jdbcType="CHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, bill_no, balance_no, balance_start_date, balance_end_date, brand_Name, brand_no, 
+		category_no, category_name, organ_no, organ_name, saler_name, qty, send_amount, tax_rate, 
+		tax_amount, no_tax_amount, estimated_amount, pos_earning_amount, short_name, full_name, 
+		shop_no, retail_type, contract_rate, actual_rate, cost_total, remark, cate_no, cate_name, saler_no
+	</sql>
+	<sql id="condition">
+		<if test="null!=params">
+			<if test="(null != params.billNo and '' != params.billNo) or (null != params.id and '' != params.id)">
+				 /*ignore_sharding_flag*/
+			</if>
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.billNo and ''!=params.billNo">
+				AND bill_no = #{params.billNo}
+			</if>
+			<if test="null!=params.balanceNo and ''!=params.balanceNo">
+				AND balance_no = #{params.balanceNo}
+			</if>
+		</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		/*ignore_sharding_flag*/ 
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bill_balance_invoice_dtl
+		WHERE id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) as s FROM bill_balance_invoice_dtl WHERE 1=1
+		<include refid="condition" />
+	</select>
+	<select id="selectByPage" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bill_balance_invoice_dtl WHERE 1=1
+		<include refid="condition" />
+		<if test="orderByField != null and ''!=orderByField">
+			ORDER BY ${orderByField}
+			<if test="orderByField">
+				${orderBy}
+			</if>
+		</if>
+		LIMIT #{page.startRowNum} ,#{page.pageSize}
+	</select>
+	<select id="selectByParams" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bill_balance_invoice_dtl WHERE 1=1
+		<include refid="condition" />
+	     <if test="params.groupBy != null and ''!=params.groupBy" >
+	      	GROUP BY ${params.groupBy}
+	     </if>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		DELETE FROM bill_balance_invoice_dtl
+		WHERE id = #{id,jdbcType=CHAR}
+	</delete>
+	<delete id="deleteByPrimarayKeyForModel"
+		parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoiceDtl">
+		DELETE FROM bill_balance_invoice_dtl
+		WHERE id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoiceDtl">
+	  INSERT INTO bill_balance_invoice_dtl (sharding_flag, id, bill_no, balance_no, 
+      balance_start_date, balance_end_date, brand_Name, 
+      brand_no, category_no, category_name, 
+      organ_no, organ_name, saler_name, 
+      qty, send_amount, tax_rate, 
+      tax_amount, no_tax_amount, estimated_amount, 
+      pos_earning_amount, short_name, full_name, 
+      shop_no, retail_type, contract_rate, 
+      actual_rate, cost_total, remark, cate_no, cate_name, 
+      saler_no)
+    VALUES (#{shardingFlag,jdbcType=CHAR},#{id,jdbcType=CHAR}, #{billNo,jdbcType=VARCHAR}, #{balanceNo,jdbcType=VARCHAR}, 
+      #{balanceStartDate,jdbcType=TIMESTAMP}, #{balanceEndDate,jdbcType=TIMESTAMP}, #{brandName,jdbcType=VARCHAR}, 
+      #{brandNo,jdbcType=VARCHAR}, #{categoryNo,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
+      #{organNo,jdbcType=CHAR}, #{organName,jdbcType=VARCHAR}, #{salerName,jdbcType=VARCHAR}, 
+      #{qty,jdbcType=INTEGER}, #{sendAmount,jdbcType=DECIMAL}, #{taxRate,jdbcType=DECIMAL}, 
+      #{taxAmount,jdbcType=DECIMAL}, #{noTaxAmount,jdbcType=DECIMAL}, #{estimatedAmount,jdbcType=DECIMAL}, 
+      #{posEarningAmount,jdbcType=DECIMAL}, #{shortName,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, 
+      #{shopNo,jdbcType=VARCHAR}, #{retailType,jdbcType=VARCHAR}, #{contractRate,jdbcType=DECIMAL}, 
+      #{actualRate,jdbcType=DECIMAL}, #{costTotal,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{cateNo,jdbcType=VARCHAR}, 
+      #{cateName,jdbcType=VARCHAR} , #{salerNo,jdbcType=CHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoiceDtl">
+		INSERT INTO bill_balance_invoice_dtl
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shardingFlag != null" >
+	       		sharding_flag,
+	        </if>
+			<if test="id != null">
+				id,
+			</if>
+			<if test="billNo != null">
+				bill_no,
+			</if>
+			<if test="balanceNo != null">
+				balance_no,
+			</if>
+			<if test="balanceStartDate != null">
+				balance_start_date,
+			</if>
+			<if test="balanceEndDate != null">
+				balance_end_date,
+			</if>
+			<if test="brandName != null">
+				brand_Name,
+			</if>
+			<if test="brandNo != null">
+				brand_no,
+			</if>
+			<if test="categoryNo != null">
+				category_no,
+			</if>
+			<if test="categoryName != null">
+				category_name,
+			</if>
+			<if test="organNo != null" >
+				organ_no,
+		    </if>
+		    <if test="organName != null" >
+				organ_name,
+		    </if>
+			<if test="salerName != null">
+				saler_name,
+			</if>
+			<if test="qty != null">
+				qty,
+			</if>
+			<if test="sendAmount != null">
+				send_amount,
+			</if>
+			<if test="taxRate != null">
+				tax_rate,
+			</if>
+			<if test="taxAmount != null">
+				tax_amount,
+			</if>
+			<if test="noTaxAmount != null">
+				no_tax_amount,
+			</if>
+			<if test="estimatedAmount != null">
+				estimated_amount,
+			</if>
+			<if test="posEarningAmount != null">
+				pos_earning_amount,
+			</if>
+			<if test="shortName != null">
+				short_name,
+			</if>
+			<if test="fullName != null">
+				full_name,
+			</if>
+			<if test="shopNo != null">
+				shop_no,
+			</if>
+			<if test="retailType != null" >
+				retail_type,
+			</if>
+			<if test="contractRate != null">
+				contract_rate,
+			</if>
+			<if test="actualRate != null">
+				actual_rate,
+			</if>
+			<if test="costTotal != null" >
+				cost_total,
+			</if>
+			<if test="remark != null" >
+				remark,
+			</if>
+			<if test="cateNo != null">
+				cate_no,
+			</if>
+			<if test="cateName != null">
+				cate_name,
+			</if>
+			<if test="salerNo != null" >
+        		saler_no,
+      		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="shardingFlag != null" >
+	        	#{shardingFlag,jdbcType=CHAR},
+	        </if> 
+			<if test="id != null">
+				#{id,jdbcType=CHAR},
+			</if>
+			<if test="billNo != null">
+				#{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="balanceNo != null">
+				#{balanceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="balanceStartDate != null">
+				#{balanceStartDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="balanceEndDate != null">
+				#{balanceEndDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="brandName != null">
+				#{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="brandNo != null">
+				#{brandNo,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryNo != null">
+				#{categoryNo,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryName != null">
+				#{categoryName,jdbcType=VARCHAR},
+			</if>
+			<if test="organNo != null" >
+				#{organNo,jdbcType=CHAR},
+			</if>
+			<if test="organName != null" >
+				#{organName,jdbcType=VARCHAR},
+			</if>
+			<if test="salerName != null">
+				#{salerName,jdbcType=VARCHAR},
+			</if>
+			<if test="qty != null">
+				#{qty,jdbcType=INTEGER},
+			</if>
+			<if test="sendAmount != null">
+				#{sendAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="taxRate != null">
+				#{taxRate,jdbcType=DECIMAL},
+			</if>
+			<if test="taxAmount != null">
+				#{taxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="noTaxAmount != null">
+				#{noTaxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="estimatedAmount != null">
+				#{estimatedAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="posEarningAmount != null">
+				#{posEarningAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="shortName != null">
+				#{shortName,jdbcType=VARCHAR},
+			</if>
+			<if test="fullName != null">
+				#{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="shopNo != null">
+				#{shopNo,jdbcType=VARCHAR},
+			</if>
+			<if test="retailType != null" >
+				#{retailType,jdbcType=VARCHAR},
+			</if>
+			<if test="contractRate != null">
+				#{contractRate,jdbcType=DECIMAL},
+			</if>
+			<if test="actualRate != null">
+				#{actualRate,jdbcType=DECIMAL},
+			</if>
+			<if test="costTotal != null" >
+				#{costTotal,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null" >
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="cateNo != null">
+				#{cateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="cateName != null">
+				#{cateName,jdbcType=VARCHAR},
+			</if>
+			<if test="salerNo != null" >
+        		#{salerNo,jdbcType=CHAR},
+      		</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoiceDtl">
+		UPDATE bill_balance_invoice_dtl
+		<set>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="balanceNo != null">
+				balance_no = #{balanceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="balanceStartDate != null">
+				balance_start_date = #{balanceStartDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="balanceEndDate != null">
+				balance_end_date = #{balanceEndDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="brandName != null">
+				brand_Name = #{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="brandNo != null">
+				brand_no = #{brandNo,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryNo != null">
+				category_no = #{categoryNo,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryName != null">
+				category_name = #{categoryName,jdbcType=VARCHAR},
+			</if>
+			<if test="organNo != null" >
+				organ_no = #{organNo,jdbcType=CHAR},
+			</if>
+			<if test="organName != null" >
+				organ_name = #{organName,jdbcType=VARCHAR},
+			</if>
+			<if test="salerName != null">
+				saler_name = #{salerName,jdbcType=VARCHAR},
+			</if>
+			<if test="qty != null">
+				qty = #{qty,jdbcType=INTEGER},
+			</if>
+			<if test="sendAmount != null">
+				send_amount = #{sendAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate,jdbcType=DECIMAL},
+			</if>
+			<if test="taxAmount != null">
+				tax_amount = #{taxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="noTaxAmount != null">
+				no_tax_amount = #{noTaxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="estimatedAmount != null">
+				estimated_amount = #{estimatedAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="posEarningAmount != null">
+				pos_earning_amount = #{posEarningAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="shortName != null">
+				short_name = #{shortName,jdbcType=VARCHAR},
+			</if>
+			<if test="fullName != null">
+				full_name = #{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="shopNo != null">
+				shop_no = #{shopNo,jdbcType=VARCHAR},
+			</if>
+			<if test="retailType != null" >
+				retail_type = #{retailType,jdbcType=VARCHAR},
+			</if>
+			<if test="contractRate != null">
+				contract_rate = #{contractRate,jdbcType=DECIMAL},
+			</if>
+			<if test="actualRate != null">
+				actual_rate = #{actualRate,jdbcType=DECIMAL},
+			</if>
+			<if test="costTotal != null" >
+				cost_total = #{costTotal,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null" >
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="cateNo != null">
+				cate_no = #{cateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="cateName != null">
+				cate_name = #{cateName,jdbcType=VARCHAR},
+			</if>
+			<if test="salerNo != null" >
+        		saler_no = #{salerNo,jdbcType=CHAR},
+      		</if>
+		</set>
+		WHERE id = #{id,jdbcType=CHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.BillBalanceInvoiceDtl">
+		UPDATE bill_balance_invoice_dtl
+		SET bill_no = #{billNo,jdbcType=VARCHAR},
+		balance_no = #{balanceNo,jdbcType=VARCHAR},
+		balance_start_date = #{balanceStartDate,jdbcType=TIMESTAMP},
+		balance_end_date = #{balanceEndDate,jdbcType=TIMESTAMP},
+		brand_Name = #{brandName,jdbcType=VARCHAR},
+		brand_no = #{brandNo,jdbcType=VARCHAR},
+		category_no = #{categoryNo,jdbcType=VARCHAR},
+		category_name = #{categoryName,jdbcType=VARCHAR},
+		organ_no = #{organNo,jdbcType=CHAR},
+		organ_name = #{organName,jdbcType=VARCHAR},
+		saler_name = #{salerName,jdbcType=VARCHAR},
+		qty = #{qty,jdbcType=INTEGER},
+		send_amount = #{sendAmount,jdbcType=DECIMAL},
+		tax_rate = #{taxRate,jdbcType=DECIMAL},
+		tax_amount = #{taxAmount,jdbcType=DECIMAL},
+		no_tax_amount = #{noTaxAmount,jdbcType=DECIMAL},
+		estimated_amount = #{estimatedAmount,jdbcType=DECIMAL},
+		pos_earning_amount = #{posEarningAmount,jdbcType=DECIMAL},
+		short_name = #{shortName,jdbcType=VARCHAR},
+		full_name = #{fullName,jdbcType=VARCHAR},
+		shop_no = #{shopNo,jdbcType=VARCHAR},
+		retail_type = #{retailType,jdbcType=VARCHAR},
+		contract_rate = #{contractRate,jdbcType=DECIMAL},
+		actual_rate = #{actualRate,jdbcType=DECIMAL},
+		cost_total = #{costTotal,jdbcType=DECIMAL},
+		remark = #{remark,jdbcType=VARCHAR},
+		cate_no = #{cateNo,jdbcType=VARCHAR},
+		cate_name = #{cateName,jdbcType=VARCHAR},
+      	saler_no = #{salerNo,jdbcType=CHAR}
+		WHERE id = #{id,jdbcType=CHAR}
+	</update>
+
+	<delete id="deleteInvoiceDtl" parameterType="java.lang.String">
+		DELETE FROM
+		bill_balance_invoice_dtl
+		WHERE bill_no = #{billNo,jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="selectByGroupByParams" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+			id,
+			bill_no,
+			balance_no,
+			balance_start_date,
+			balance_end_date,
+			brand_Name,
+			brand_no,
+			category_no,
+			category_name,
+			cate_no,
+			cate_name,
+			organ_no,
+			organ_name,
+			saler_name,
+			saler_no,
+			SUM(qty) qty,
+			SUM(send_amount) send_amount,
+			tax_rate,
+			SUM(tax_amount) tax_amount,
+			SUM(no_tax_amount) no_tax_amount,
+			SUM(estimated_amount) estimated_amount,
+			SUM(pos_earning_amount) pos_earning_amount,
+			short_name,
+			full_name,
+			shop_no,
+			retail_type,
+			SUM(contract_rate) contract_rate,
+			SUM(actual_rate) actual_rate,
+			SUM(cost_total) cost_total,
+			remark
+		FROM bill_balance_invoice_dtl WHERE 1=1
+		<include refid="condition" />
+	     <if test="params.groupBy != null and ''!=params.groupBy" >
+	      	GROUP BY ${params.groupBy}
+	     </if>
+	</select>
+	
+	<select id="selectByGroupByParamExport" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+			id,
+			bill_no,
+			balance_no,
+			balance_start_date,
+			balance_end_date,
+			brand_Name,
+			brand_no,
+			category_no,
+			category_name,
+			cate_no,
+			cate_name,
+			organ_no,
+			organ_name,
+			saler_name,
+			saler_no,
+			SUM(qty) qty,
+			SUM(send_amount) send_amount,
+			tax_rate,
+			SUM(tax_amount) tax_amount,
+			SUM(no_tax_amount) no_tax_amount,
+			SUM(estimated_amount) estimated_amount,
+			SUM(pos_earning_amount) pos_earning_amount,
+			short_name,
+			full_name,
+			shop_no,
+			retail_type,
+			contract_rate,
+			actual_rate,
+			SUM(cost_total) cost_total,
+			remark
+		FROM bill_balance_invoice_dtl WHERE 1=1
+		<include refid="condition" />
+	     <if test="params.groupBy != null and ''!=params.groupBy" >
+	      	GROUP BY ${params.groupBy}
+	     </if>
+	</select>
+
+</mapper>

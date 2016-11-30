@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.BillSplitDataDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.BillSplitDataDtl" >
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="send_out_qty" property="sendOutQty" jdbcType="INTEGER" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="cost" property="supplierCost" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    t2.bill_no, t2.item_no, item.name item_name, item.code item_code, t2.brand_no, t2.send_out_qty, item.root_category_no category_no, 
+    item.years, item.sell_season seson, t2.cost,
+    (SELECT NAME FROM category WHERE category.category_no = item.root_category_no) category_name
+  </sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo">
+		and bill_no = #{params.billNo,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.brandNo and ''!=params.brandNo">
+		and brand_no = #{params.brandNo,jdbcType=VARCHAR}
+	  </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+	FROM
+		(SELECT
+			T.bill_no,
+			T.item_no,
+			T.brand_no,
+			SUM(T.send_out_qty) send_out_qty,
+			T.cost
+		FROM bill_asn_dtl T
+		<!-- 
+		FROM bill_return_dtl T
+		 -->
+		WHERE 1= 1 
+			AND T.split_flag != 1
+			<include refid="condition" />
+			GROUP BY T.item_no
+		) t2
+	INNER JOIN item ON t2.item_no = item.item_no 
+	</select>
+	
+	<update id="updateSplitFlag" parameterType="map">
+		update bill_asn_dtl set split_flag = 1 where 1 = 1
+		<include refid="condition"/>
+	</update>
+</mapper>

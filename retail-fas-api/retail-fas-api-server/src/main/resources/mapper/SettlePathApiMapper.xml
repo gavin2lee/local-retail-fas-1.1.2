@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.SettlePathApiMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.api.model.SettlePathModel" >
+    <result column="path_no" property="pathNo" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="bill_basis" property="billBasis" jdbcType="INTEGER" />
+    <result column="bill_type" property="billType" jdbcType="CHAR" />
+    <result column="settle_category_no" property="settleCategoryNo" jdbcType="CHAR" />
+    <result column="style_no" property="styleNo" jdbcType="CHAR" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, path_no, name, bill_basis, bill_type, settle_category_no, style_no, start_date, end_date, status
+  </sql>
+  
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.name and ''!=params.name" >
+         AND T.name like '%${params.name}%'
+      </if>
+      <if test="null!=params.billType and ''!=params.billType" >
+         AND FIND_IN_SET(#{params.billType}, T.bill_type)
+      </if>
+      <if test="null!=params.billBasis and ''!=params.billBasis">
+         AND T.bill_basis = #{params.billBasis}
+      </if>
+      <if test="null!=params.status and ''!=params.status">
+         AND T.status = #{params.status}
+      </if>
+      <if test="null!=params.auditStatus and ''!=params.auditStatus">
+         AND T.audit_status = #{params.auditStatus}
+      </if>
+      <if test="null!=params.styleNo and ''!=params.styleNo">
+         AND T.style_no = #{params.styleNo}
+      </if>
+      <if test="null!=params.queryDate and ''!=params.queryDate">
+         AND ((T.start_date &lt;= #{params.queryDate} OR T.start_date IS NULL) AND (T.end_date &gt;= #{params.queryDate} OR T.end_date IS NULL))
+      </if>
+       <if test="null!=params.brandUnitNo and ''!=params.brandUnitNo">
+	  	 AND EXISTS (SELECT 1 FROM settle_path_brand_rel r WHERE r.brand_unit_no=#{params.brandUnitNo,jdbcType=VARCHAR}
+	  	 				 AND r.path_no = T.path_no)
+	  </if>
+	  <if test="null!=params.categoryNo and ''!=params.categoryNo">
+		  AND EXISTS (SELECT 1 FROM settle_category_dtl d WHERE d.category_no = #{params.categoryNo,jdbcType=VARCHAR}
+		  				AND d.settle_category_no = T.settle_category_no)
+	  </if>
+	  <if test="null!=params.supplierNo and ''!=params.supplierNo">
+		 AND EXISTS(SELECT 1 FROM settle_path_dtl d INNER JOIN supplier_group_rel r
+               			ON d.company_no = r.group_no 
+                   			WHERE r.supplier_no = #{params.supplierNo,jdbcType=VARCHAR}
+			                   AND d.path_order = 1
+			                   AND d.path_no = T.path_no)
+	  </if>
+	  <if test="null!=params.returnOwnFlag and ''!=params.returnOwnFlag">
+         AND T.return_own_flag = #{params.returnOwnFlag}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+  		SELECT 
+	  	<include refid="Base_Column_List" />
+			FROM settle_path T 
+			WHERE 1 = 1
+			<include refid="condition"/>
+  </select>
+  
+  <select id="selectRefBizType" resultType="java.lang.Integer">
+  			SELECT 
+	  	 		biz_type
+			FROM bill_buy_balance 
+			WHERE 1 = 1 AND original_bill_no = #{refBillNo}
+			LIMIT 1
+  </select>
+  
+</mapper>

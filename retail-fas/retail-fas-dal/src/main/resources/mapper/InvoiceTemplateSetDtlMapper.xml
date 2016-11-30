@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.InvoiceTemplateSetDtlMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.InvoiceTemplateSetDtl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="invoicetemp_dtl_no" property="invoicetempDtlNo" jdbcType="CHAR" />
+    <result column="invoice_temp_no" property="invoiceTempNo" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="type_model" property="typeModel" jdbcType="VARCHAR" />
+    <result column="invoice_name" property="invoiceName" jdbcType="VARCHAR" />
+    <result column="qty_control_flag" property="qtyControlFlag" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, invoicetemp_dtl_no, invoice_temp_no, category_no, category_name, type_model, 
+    invoice_name, qty_control_flag, remark
+  </sql>
+     <resultMap id="InvoiceCategoryCommonMap" type="cn.wonhigh.retail.fas.common.dto.InvoiceCategoryCommonDto">
+		<result column="categoryNo" property="categoryNo" jdbcType="VARCHAR" />
+		<result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
+		<result column="invoiceName" property="invoiceName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="condition">
+		<if test="null!=params">
+			<if test="null!=params.queryCondition and ''!=params.queryCondition">
+				${params.queryCondition}
+			</if>
+			<if test="null!=params.invoiceTempNo and ''!=params.invoiceTempNo">
+				AND invoice_temp_no = #{params.invoiceTempNo}
+			</if>
+			<if test="null!=params.categoryNo and ''!=params.categoryNo">
+				AND category_no = #{params.categoryNo}
+			</if>
+		</if>
+	</sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM invoice_template_set_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM invoice_template_set_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM invoice_template_set_dtl WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectInvoiceTemplateDtlMaxBillNo" resultType="java.lang.String"
+		parameterType="cn.wonhigh.retail.fas.common.model.InvoiceTemplateSetDtl">
+		SELECT ifNULL(MAX(invoicetemp_dtl_no),'00') FROM
+		invoice_template_set_dtl where 1 = 1 AND invoicetemp_dtl_no like
+		'%${invoicetempDtlNo}%'
+	</select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM invoice_template_set_dtl WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM invoice_template_set_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceTemplateSetDtl" >
+    DELETE FROM invoice_template_set_dtl
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceTemplateSetDtl" >
+    INSERT INTO invoice_template_set_dtl (id, invoicetemp_dtl_no, invoice_temp_no, 
+      category_no, category_name, type_model, 
+      invoice_name, qty_control_flag, remark
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{invoicetempDtlNo,jdbcType=CHAR}, #{invoiceTempNo,jdbcType=CHAR}, 
+      #{categoryNo,jdbcType=CHAR}, #{categoryName,jdbcType=VARCHAR}, #{typeModel,jdbcType=VARCHAR}, 
+      #{invoiceName,jdbcType=VARCHAR}, #{qtyControlFlag,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceTemplateSetDtl" >
+    INSERT INTO invoice_template_set_dtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="invoicetempDtlNo != null" >
+        invoicetemp_dtl_no,
+      </if>
+      <if test="invoiceTempNo != null" >
+        invoice_temp_no,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="typeModel != null" >
+        type_model,
+      </if>
+      <if test="invoiceName != null" >
+        invoice_name,
+      </if>
+      <if test="qtyControlFlag != null" >
+        qty_control_flag,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="invoicetempDtlNo != null" >
+        #{invoicetempDtlNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceTempNo != null" >
+        #{invoiceTempNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeModel != null" >
+        #{typeModel,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceName != null" >
+        #{invoiceName,jdbcType=VARCHAR},
+      </if>
+      <if test="qtyControlFlag != null" >
+        #{qtyControlFlag,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceTemplateSetDtl" >
+    UPDATE invoice_template_set_dtl
+    <set >
+      <if test="invoicetempDtlNo != null" >
+        invoicetemp_dtl_no = #{invoicetempDtlNo,jdbcType=CHAR},
+      </if>
+      <if test="invoiceTempNo != null" >
+        invoice_temp_no = #{invoiceTempNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeModel != null" >
+        type_model = #{typeModel,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceName != null" >
+        invoice_name = #{invoiceName,jdbcType=VARCHAR},
+      </if>
+      <if test="qtyControlFlag != null" >
+        qty_control_flag = #{qtyControlFlag,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.InvoiceTemplateSetDtl" >
+    UPDATE invoice_template_set_dtl
+    SET invoicetemp_dtl_no = #{invoicetempDtlNo,jdbcType=CHAR},
+      invoice_temp_no = #{invoiceTempNo,jdbcType=CHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      type_model = #{typeModel,jdbcType=VARCHAR},
+      invoice_name = #{invoiceName,jdbcType=VARCHAR},
+      qty_control_flag = #{qtyControlFlag,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectCateInfo" resultMap="InvoiceCategoryCommonMap"
+		parameterType="map">
+		SELECT
+			categoryNo,
+			categoryName,
+			invoiceName
+		FROM
+			(
+				SELECT
+					t.category_no AS categoryNo,
+					t.category_name AS categoryName,
+					t.invoice_name AS invoiceName
+				FROM
+					invoice_template_set_dtl t
+				INNER JOIN (
+					SELECT
+						t1.template_no
+					FROM
+						shop_group t1
+					INNER JOIN (
+						SELECT
+							shop_group_dtl.shop_group_no
+						FROM
+							shop_group_dtl
+						WHERE
+							shop_group_dtl.shop_no = #{params.shopNo}
+					) t2 ON t1.shop_group_no = t2.shop_group_no
+				) tt ON t.invoice_temp_no = tt.template_no
+				where t.category_no = #{params.categoryNo}
+			) TT
+	</select>
+</mapper>

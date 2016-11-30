@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PreWarnTemplateMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.PreWarnTemplate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="node_name" property="nodeName" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="TINYINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="tab_title" property="tabTitle" jdbcType="VARCHAR" />
+    <result column="pre_title" property="preTitle" jdbcType="VARCHAR" />
+    <result column="suf_title" property="sufTitle" jdbcType="VARCHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="extend_status" property="extendStatus" jdbcType="CHAR" />
+    <result column="sql_statement" property="sqlStatement" jdbcType="VARCHAR" />
+    <result column="sql_delete_statement" property="sqlDeleteStatement" jdbcType="VARCHAR" />
+    <result column="job_sql_statement" property="jobSqlStatement" jdbcType="VARCHAR" />
+    <result column="datagrid_id" property="datagridId" jdbcType="VARCHAR" />
+    <result column="post_url" property="postUrl" jdbcType="VARCHAR" />
+    <result column="show_url" property="showUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, node_name, code, type, tab_title, pre_title, suf_title, balance_type, status, extend_status, sql_statement, 
+    sql_delete_statement, job_sql_statement, datagrid_id, post_url, show_url
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceType and ''!=params.balanceType">
+      	AND balance_type = ${params.balanceType}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="querySqlStatement" resultType="java.lang.Integer" parameterType="java.lang.String">
+    ${sqlStr}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from pre_warn_template
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from pre_warn_template where 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from pre_warn_template where 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      order by ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+     from pre_warn_template where 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pre_warn_template
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="java.lang.Integer" >
+    delete from pre_warn_template
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.PreWarnTemplate" >
+    insert into pre_warn_template (id, node_name, code, type, 
+      tab_title, pre_title, suf_title, balance_type, 
+      status, extend_status, sql_statement, sql_delete_statement, job_sql_statement,
+      datagrid_id, post_url, show_url
+      )
+    values (#{id,jdbcType=INTEGER}, #{nodeName,jdbcType=VARCHAR}, #{code,jdbcType=TINYINT},#{type,jdbcType=TINYINT}, 
+      #{tabTitle,jdbcType=VARCHAR}, #{preTitle,jdbcType=VARCHAR}, #{sufTitle,jdbcType=VARCHAR}, #{balanceType,jdbcType=CHAR}, 
+      #{status,jdbcType=CHAR}, #{extendStatus,jdbcType=CHAR}, #{sqlStatement,jdbcType=VARCHAR}, #{sqlDeleteStatement,jdbcType=VARCHAR},
+      #{jobSqlDeleteStatement,jdbcType=VARCHAR},#{datagridId,jdbcType=VARCHAR}, #{postUrl,jdbcType=VARCHAR}, #{showUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.PreWarnTemplate" >
+    insert into pre_warn_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="nodeName != null" >
+        node_name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="tabTitle != null" >
+        tab_title,
+      </if>
+      <if test="preTitle != null" >
+        pre_title,
+      </if>
+      <if test="sufTitle != null" >
+        suf_title,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="extendStatus != null" >
+        extend_status,
+      </if>
+      <if test="sqlStatement != null" >
+        sql_statement,
+      </if>
+      <if test="sqlDeleteStatement != null" >
+        sql_delete_statement,
+      </if>
+      <if test="jobSqlStatement != null" >
+        job_sql_statement,
+      </if>
+      <if test="datagridId != null" >
+        datagrid_id,
+      </if>
+      <if test="postUrl != null" >
+        post_url,
+      </if>
+      <if test="showUrl != null" >
+        show_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="nodeName != null" >
+        #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="tabTitle != null" >
+        #{tabTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="preTitle != null" >
+        #{preTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="sufTitle != null" >
+        #{sufTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="extendStatus != null" >
+        #{extendStatus,jdbcType=CHAR},
+      </if>
+      <if test="sqlStatement != null" >
+        #{sqlStatement,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlDeleteStatement != null" >
+        #{sqlDeleteStatement,jdbcType=VARCHAR},
+      </if>
+      <if test="jobSqlStatement != null" >
+        #{jobSqlStatement,jdbcType=VARCHAR},
+      </if>
+      <if test="datagridId != null" >
+        #{datagridId,jdbcType=VARCHAR},
+      </if>
+      <if test="postUrl != null" >
+        #{postUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="showUrl != null" >
+        #{showUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.PreWarnTemplate" >
+    update pre_warn_template
+    <set >
+      <if test="nodeName != null" >
+        node_name = #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="tabTitle != null" >
+        tab_title = #{tabTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="preTitle != null" >
+        pre_title = #{preTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="sufTitle != null" >
+        suf_title = #{sufTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="balance_type != null" >
+        balance_type = #{balanceType,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="extendStatus != null" >
+        extend_status = #{extendStatus,jdbcType=CHAR},
+      </if>
+      <if test="sqlStatement != null" >
+        sql_statement = #{sqlStatement,jdbcType=VARCHAR},
+      </if>
+      <if test="sqlDeleteStatement != null" >
+        sql_delete_statement = #{sqlDeleteStatement,jdbcType=VARCHAR},
+      </if>
+      <if test="jobSqlStatement != null" >
+        job_sql_statement = #{jobSqlStatement,jdbcType=VARCHAR},
+      </if>
+      <if test="datagridId != null" >
+        datagrid_id = #{datagridId,jdbcType=VARCHAR},
+      </if>
+      <if test="postUrl != null" >
+        post_url = #{postUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="showUrl != null" >
+        show_url = #{showUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.PreWarnTemplate" >
+    update pre_warn_template
+    set node_name = #{nodeName,jdbcType=VARCHAR},
+      code = #{code,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT},
+      tab_title = #{preTitle,jdbcType=VARCHAR},
+      pre_title = #{preTitle,jdbcType=VARCHAR},
+      suf_title = #{sufTitle,jdbcType=VARCHAR},
+      balance_type = #{balanceType,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      extend_status = #{extendStatus,jdbcType=CHAR},
+      sql_statement = #{sqlStatement,jdbcType=VARCHAR},
+      sql_delete_statement = #{sqlDeleteStatement,jdbcType=VARCHAR},
+      job_sql_statement = #{jobSqlStatement,jdbcType=VARCHAR},
+      datagrid_id = #{datagridId,jdbcType=VARCHAR},
+      post_url = #{postUrl,jdbcType=VARCHAR},
+      show_url = #{showUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

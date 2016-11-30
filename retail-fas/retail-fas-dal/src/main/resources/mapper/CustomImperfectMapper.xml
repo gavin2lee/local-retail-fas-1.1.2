@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.CustomImperfectMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.CustomImperfect" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="buyer_no" property="buyerNo" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="VARCHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="return_date" property="returnDate" jdbcType="DATE" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="size_no" property="sizeNo" jdbcType="CHAR" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="opinion" property="opinion" jdbcType="VARCHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="one_level_category_name" property="oneLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="two_level_category_name" property="twoLevelCategoryName" jdbcType="VARCHAR" />
+    <result column="years" property="years" jdbcType="VARCHAR" />
+    <result column="years_name" property="yearsName" jdbcType="VARCHAR" />
+    <result column="season" property="season" jdbcType="VARCHAR" />
+    <result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="gender_name" property="genderName" jdbcType="VARCHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="balance_status" property="balanceStatus" jdbcType="TINYINT" />
+    <result column="balance_no" property="balanceNo" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, buyer_no, buyer_name, saler_no, saler_name, return_date, item_no, item_code, 
+    item_name, size_no, qty, purchase_price, amount, reason, opinion, brand_no, brand_name, 
+    category_no, category_name, years, years_name, season, season_name, gender, gender_name, 
+    balance_type, balance_status, balance_no, create_time, create_user, update_time, update_user
+    ,(SELECT NAME FROM CATEGORY C1 WHERE C1.CATEGORY_NO = LEFT(custom_imperfect.category_no,2)) one_level_category_name
+    ,(SELECT NAME FROM CATEGORY C2 WHERE C2.CATEGORY_NO = LEFT(custom_imperfect.category_no,4)) two_level_category_name
+  </sql>
+  <sql id="condition" >
+    -- AND @brand_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+        AND balance_no = #{params.balanceNo}
+      </if>
+      <if test="null!=params.balanceType and ''!=params.balanceType" >
+        AND balance_type = #{params.balanceType}
+      </if>
+      <if test="null!=params.buyerNo and ''!=params.buyerNo" >
+        AND buyer_no = #{params.buyerNo}
+      </if>
+      <if test="null!=params.salerNo and ''!=params.salerNo" >
+        AND saler_no = #{params.salerNo}
+      </if>
+      <if test="null!=params.brandNo and ''!=params.brandNo" >
+        AND brand_no = #{params.brandNo}
+      </if>
+      <if test="null!=params.categoryNo and ''!=params.categoryNo" >
+        AND category_no = #{params.categoryNo}
+      </if>
+      <if test="null!=params.oneLevelCategoryNo and ''!=params.oneLevelCategoryNo" >
+        AND LEFT(category_no,2) = #{params.oneLevelCategoryNo}
+      </if>
+      <if test="params.brandUnitNo != null and ''!=params.brandUnitNo" >
+		AND brand_no IN  (SELECT brand_no FROM brand WHERE brand.`sys_no` = #{params.brandUnitNo})
+	  </if>
+      <if test="null!=params.multiSalerNo and ''!=params.multiSalerNo" >
+ 		AND	saler_no in ${params.multiSalerNo}
+	  </if>
+	  <if test="null!=params.multiBuyerNo and ''!=params.multiBuyerNo" >
+ 		AND	buyer_no in ${params.multiBuyerNo}
+	  </if>
+	  <if test="null!=params.multiBrandNo and ''!=params.multiBrandNo" >
+ 		AND	brand_no in ${params.multiBrandNo}
+	  </if>
+	  <if test="null!=params.multiOneLevelCategoryNo and ''!=params.multiOneLevelCategoryNo" >
+ 		AND LEFT(category_no,2) in ${params.multiOneLevelCategoryNo}
+	  </if>	
+	  <if test="null!=params.multiCategoryNo and ''!=params.multiCategoryNo" >
+ 		AND	category_no  in ${params.multiCategoryNo}
+	  </if>	
+	  <if test="null!=params.multiItemCode and ''!=params.multiItemCode" >
+ 		AND	item_code  in ${params.multiItemCode}
+	  </if>
+	  <if test="null!=params.balanceNo and ''!=params.balanceNo" >
+ 		AND	balance_no = #{params.balanceNo}
+	  </if>		
+	  <if test="null!=params.balanceNoLike and ''!=params.balanceNoLike" >
+ 		AND	balance_no LIKE '%${params.balanceNoLike}%'
+	  </if>		
+	  <if test="null!=params.balanceStartDate and ''!=params.balanceStartDate" >
+        AND return_date &gt;= #{params.balanceStartDate}
+      </if>
+      <if test="null!=params.balanceEndDate and ''!=params.balanceEndDate" >
+        AND return_date &lt;= #{params.balanceEndDate}
+      </if>
+      <if test="null!=params.returnDateStart and ''!=params.returnDateStart" >
+        AND return_date &gt;= #{params.returnDateStart}
+      </if>
+      <if test="null!=params.returnDateEnd and ''!=params.returnDateEnd" >
+        AND return_date &lt;= #{params.returnDateEnd}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM custom_imperfect 
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM custom_imperfect WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM custom_imperfect WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+    <if test="orderByField == null or  ''==orderByField " >
+      ORDER BY create_time DESC
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM custom_imperfect WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM custom_imperfect
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.CustomImperfect" >
+    DELETE FROM custom_imperfect
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.CustomImperfect" >
+    INSERT INTO custom_imperfect (id, buyer_no, buyer_name, 
+      saler_no, saler_name, return_date, 
+      item_no, item_code, item_name, 
+      size_no, qty, purchase_price, 
+      amount, reason, opinion, 
+      brand_no, brand_name, category_no, 
+      category_name, years, years_name, 
+      season, season_name, gender, 
+      gender_name, balance_no, create_time, 
+      create_user, update_time, update_user
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{buyerNo,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, 
+      #{salerNo,jdbcType=VARCHAR}, #{salerName,jdbcType=VARCHAR}, #{returnDate,jdbcType=DATE}, 
+      #{itemNo,jdbcType=CHAR}, #{itemCode,jdbcType=CHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{sizeNo,jdbcType=CHAR}, #{qty,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, 
+      #{amount,jdbcType=DECIMAL}, #{reason,jdbcType=VARCHAR}, #{opinion,jdbcType=VARCHAR}, 
+      #{brandNo,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, #{categoryNo,jdbcType=VARCHAR}, 
+      #{categoryName,jdbcType=VARCHAR}, #{years,jdbcType=VARCHAR}, #{yearsName,jdbcType=VARCHAR}, 
+      #{season,jdbcType=VARCHAR}, #{seasonName,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, 
+      #{genderName,jdbcType=VARCHAR}, #{balanceNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.CustomImperfect" >
+    INSERT INTO custom_imperfect
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="salerName != null" >
+        saler_name,
+      </if>
+      <if test="returnDate != null" >
+        return_date,
+      </if>
+      <if test="itemNo != null" >
+        item_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="sizeNo != null" >
+        size_no,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="opinion != null" >
+        opinion,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="years != null" >
+        years,
+      </if>
+      <if test="yearsName != null" >
+        years_name,
+      </if>
+      <if test="season != null" >
+        season,
+      </if>
+      <if test="seasonName != null" >
+        season_name,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="genderName != null" >
+        gender_name,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="balanceStatus != null" >
+        balance_status,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="salerName != null" >
+        #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="returnDate != null" >
+        #{returnDate,jdbcType=DATE},
+      </if>
+      <if test="itemNo != null" >
+        #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeNo != null" >
+        #{sizeNo,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="opinion != null" >
+        #{opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="years != null" >
+        #{years,jdbcType=VARCHAR},
+      </if>
+      <if test="yearsName != null" >
+        #{yearsName,jdbcType=VARCHAR},
+      </if>
+      <if test="season != null" >
+        #{season,jdbcType=VARCHAR},
+      </if>
+      <if test="seasonName != null" >
+        #{seasonName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="genderName != null" >
+        #{genderName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="balanceStatus != null" >
+        #{balanceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.CustomImperfect" >
+    UPDATE custom_imperfect
+    <set >
+      <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="salerName != null" >
+        saler_name = #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="returnDate != null" >
+        return_date = #{returnDate,jdbcType=DATE},
+      </if>
+      <if test="itemNo != null" >
+        item_no = #{itemNo,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeNo != null" >
+        size_no = #{sizeNo,jdbcType=CHAR},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=INTEGER},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="opinion != null" >
+        opinion = #{opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="years != null" >
+        years = #{years,jdbcType=VARCHAR},
+      </if>
+      <if test="yearsName != null" >
+        years_name = #{yearsName,jdbcType=VARCHAR},
+      </if>
+      <if test="season != null" >
+        season = #{season,jdbcType=VARCHAR},
+      </if>
+      <if test="seasonName != null" >
+        season_name = #{seasonName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="genderName != null" >
+        gender_name = #{genderName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="balanceStatus != null" >
+        balance_status = #{balanceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.CustomImperfect" >
+    UPDATE custom_imperfect
+    SET buyer_no = #{buyerNo,jdbcType=VARCHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      saler_no = #{salerNo,jdbcType=VARCHAR},
+      saler_name = #{salerName,jdbcType=VARCHAR},
+      return_date = #{returnDate,jdbcType=DATE},
+      item_no = #{itemNo,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=CHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      size_no = #{sizeNo,jdbcType=CHAR},
+      qty = #{qty,jdbcType=INTEGER},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      amount = #{amount,jdbcType=DECIMAL},
+      reason = #{reason,jdbcType=VARCHAR},
+      opinion = #{opinion,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      years = #{years,jdbcType=VARCHAR},
+      years_name = #{yearsName,jdbcType=VARCHAR},
+      season = #{season,jdbcType=VARCHAR},
+      season_name = #{seasonName,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      gender_name = #{genderName,jdbcType=VARCHAR},
+      balance_no = #{balanceNo,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+    <!-- 根据结算单查询客残明细 -->
+  <select id="selectByBillBalance" resultMap="BaseResultMap" parameterType="cn.wonhigh.retail.fas.common.model.BillBalance"  >
+	SELECT
+		SUM(qty) qty,
+		SUM(amount) amount
+	FROM
+		custom_imperfect
+	LEFT JOIN brand_unit B
+		ON LEFT(custom_imperfect.`brand_no`, 2) = B.`brand_unit_no`
+	LEFT JOIN category C
+		ON LEFT(custom_imperfect.`category_no`, 2) = C.`category_no`	
+	WHERE 1 = 1
+		AND (BALANCE_NO IS  NULL OR BALANCE_NO ='')
+		AND BALANCE_TYPE =  #{balanceType,jdbcType=TINYINT}
+		AND SALER_NO = #{salerNo,jdbcType=CHAR}
+		AND BUYER_NO = #{buyerNo,jdbcType=CHAR}
+		AND B.BRAND_UNIT_NO=#{brandUnitNo,jdbcType=CHAR}
+		AND C.CATEGORY_NO=#{categoryNo,jdbcType=CHAR}
+		AND RETURN_DATE &gt;= #{balanceStartDate,jdbcType=DATE}
+		AND RETURN_DATE &lt;= #{balanceEndDate,jdbcType=DATE}
+  </select>
+</mapper>

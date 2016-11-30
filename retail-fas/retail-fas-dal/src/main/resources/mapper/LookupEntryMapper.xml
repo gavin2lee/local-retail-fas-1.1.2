@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.LookupEntryMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.LookupEntry" >
+    <id column="lookup_entry_no" property="lookupEntryNo" jdbcType="CHAR" />
+    <result column="lookup_id" property="lookupId" jdbcType="INTEGER" />
+    <result column="opcode" property="opcode" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="default_flag" property="defaultFlag" jdbcType="CHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="organ_type_no" property="organTypeNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    lookup_entry_no, lookup_id, opcode, code, name, order_no, type, status, default_flag, 
+    create_user, create_time, update_user, update_time, organ_type_no
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.lookupId and ''!=params.lookupId">
+		and lookup_id=#{params.lookupId,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.code and ''!=params.code">
+		and code=#{params.code,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.name and ''!=params.name">
+		and name=#{params.name,jdbcType=VARCHAR}
+	  </if>
+	  <if test="null!=params.organTypeNo and ''!=params.organTypeNo">
+		and organ_type_no=#{params.organTypeNo,jdbcType=VARCHAR}
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM lookup_entry
+    WHERE lookup_entry_no = #{lookupEntryNo,jdbcType=CHAR}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM lookup_entry WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM lookup_entry WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM lookup_entry WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM lookup_entry
+    WHERE lookup_entry_no = #{lookupEntryNo,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.LookupEntry" >
+    DELETE FROM lookup_entry
+    WHERE lookup_entry_no = #{lookupEntryNo,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.LookupEntry" >
+    INSERT INTO lookup_entry (lookup_entry_no, lookup_id, opcode, 
+      code, name, order_no, 
+      type, status, default_flag, 
+      create_user, create_time, update_user, 
+      update_time)
+    VALUES (#{lookupEntryNo,jdbcType=CHAR}, #{lookupId,jdbcType=INTEGER}, #{opcode,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{orderNo,jdbcType=INTEGER}, 
+      #{type,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, #{defaultFlag,jdbcType=CHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.LookupEntry" >
+    INSERT INTO lookup_entry
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lookupEntryNo != null" >
+        lookup_entry_no,
+      </if>
+      <if test="lookupId != null" >
+        lookup_id,
+      </if>
+      <if test="opcode != null" >
+        opcode,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="defaultFlag != null" >
+        default_flag,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lookupEntryNo != null" >
+        #{lookupEntryNo,jdbcType=CHAR},
+      </if>
+      <if test="lookupId != null" >
+        #{lookupId,jdbcType=INTEGER},
+      </if>
+      <if test="opcode != null" >
+        #{opcode,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="defaultFlag != null" >
+        #{defaultFlag,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.LookupEntry" >
+    UPDATE lookup_entry
+    <set >
+      <if test="lookupId != null" >
+        lookup_id = #{lookupId,jdbcType=INTEGER},
+      </if>
+      <if test="opcode != null" >
+        opcode = #{opcode,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="defaultFlag != null" >
+        default_flag = #{defaultFlag,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE lookup_entry_no = #{lookupEntryNo,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.LookupEntry" >
+    UPDATE lookup_entry
+    SET lookup_id = #{lookupId,jdbcType=INTEGER},
+      opcode = #{opcode,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=INTEGER},
+      type = #{type,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      default_flag = #{defaultFlag,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    WHERE lookup_entry_no = #{lookupEntryNo,jdbcType=CHAR}
+  </update>
+  
+  <select id="getEntryNameByLookupIdEntryCode" resultType="java.lang.String" parameterType="map" >
+    SELECT a.name FROM lookup_entry a 
+    	INNER JOIN lookup b ON a.lookup_id = b.id 
+    	WHERE b.code = #{params.lookupCode,jdbcType=VARCHAR} 
+    	 AND a.code = #{params.entryCode,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.PhysicalBrandMapper" >
+  <!-- 已结算单据审核 -->
+  <resultMap id="SettledBillsMap" type="cn.wonhigh.retail.fas.common.dto.SettledBillsDto" >
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="order_type" property="orderType" jdbcType="INTEGER" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="receive_qty" property="receiveQty" jdbcType="INTEGER" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="settlement_Number" property="settlementNumber" jdbcType="VARCHAR" />
+    <result column="supplier_Discount1" property="supplierDiscount1" jdbcType="DECIMAL" />
+    <result column="supplier_discount2" property="supplierDiscount2" jdbcType="DECIMAL" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="receive_date" property="receiveDate" jdbcType="DATE" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="TINYINT" />
+    <result column="tag_price_amount" property="tagPriceAmount" jdbcType="DECIMAL" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="supplier_amount" property="supplierAmount" jdbcType="DECIMAL" />
+    <result column="diff_amount" property="diffAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="settledBillsCond">
+    -- AND @A.company_no!buyer_no
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.buyerNo and ''!=params.buyerNo">
+		   and A.buyer_no=#{params.buyerNo}
+		</if>
+		<if test="null!=params.billNo and ''!=params.billNo">
+		   and A.original_bill_no=#{params.billNo}
+		</if>
+		<if test="null!=params.balanceNo and ''!=params.balanceNo">
+		   and B.balance_no=#{params.balanceNo}
+		</if>
+		<if test="null!=params.settlementNumber and ''!=params.settlementNumber">
+		   and B.settlement_number=#{params.settlementNumber}
+		</if>
+		<if test="null!=params.salerNo and ''!=params.salerNo">
+		   and A.saler_No=#{params.salerNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart">
+			AND A.send_date &gt;= #{params.sendDateStart}
+		</if>
+		<if test="null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND A.send_date &lt;= #{params.sendDateEnd}
+		</if>
+	</if>
+  </sql>
+  
+  <!-- 明细查询 -->
+  <select id="selectSettledBillsCount" resultType="java.lang.Integer" >
+	SELECT 
+		COUNT(1) AS s 
+	FROM 
+		bill_buy_balance A 
+	LEFT JOIN pay_relationship B
+	  ON A.original_bill_no=B.business_bill_no
+	WHERE 1 = 1 
+	  AND A.BILL_TYPE = '1301' 
+	  AND B.BALANCE_NO IS NOT NULL 
+	  <include refid="settledBillsCond"/>
+  </select>
+
+   <select id="selectSettledBillsByPage" resultMap="SettledBillsMap" parameterType="map" >
+    select
+      A.SUPPLIER_NO,A.SUPPLIER_NAME,A.BILL_TYPE,A.ORIGINAL_BILL_NO BILL_NO,
+      A.ITEM_NO,A.ITEM_CODE,A.ITEM_NAME,A.BRAND_NO,A.BRAND_NAME,C1.CATEGORY_NO,C1.name CATEGORY_NAME,
+	  A.SEND_QTY,A.SEND_DATE,A.RECEIVE_DATE,A.ORDER_NO,B.BALANCE_NO,A.BUYER_NO,A.BUYER_NAME,
+	  A.ORDER_UNIT_NO,A.ORDER_UNIT_NAME,A.TAG_PRICE,A.SEND_QTY * A.TAG_PRICE AS TAG_PRICE_AMOUNT,
+	  A.send_qty*A.cost AS balance_amount,B.order_type,
+	  B.supplier_discount1 supplier_discount1,
+	  B.supplier_discount2 supplier_discount2,
+	  B.settlement_number settlement_number
+	FROM
+	  bill_buy_balance A 
+	LEFT JOIN pay_relationship B
+	  ON A.original_bill_no=B.business_bill_no
+	LEFT JOIN CATEGORY C1 ON LEFT(A.CATEGORY_NO, 2) = C1.CATEGORY_NO 
+	WHERE 1 = 1 
+	  AND A.BILL_TYPE = '1301' 
+	  AND B.BALANCE_NO IS NOT NULL 
+      <include refid="settledBillsCond" />
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <!-- 查询明细合计行 -->
+  <select id="selectSettledBillsListTotalRow" resultMap="SettledBillsMap" parameterType="map">
+	 SELECT 
+	    '合计' as  SUPPLIER_NAME,
+	    sum(a.send_qty) send_qty,
+	    sum(a.send_qty * a.tag_price) as tag_price_amount,
+	    sum(a.send_qty * a.cost) as balance_amount
+	  FROM
+	    BILL_BUY_BALANCE A 
+	  LEFT JOIN PAY_RELATIONSHIP B 
+	      ON A.ORIGINAL_BILL_NO = B.BUSINESS_BILL_NO 
+	  WHERE 1 = 1 
+	    AND A.BILL_TYPE = '1301' 
+	    AND B.BALANCE_NO IS NOT NULL 
+	    <include refid="settledBillsCond" />
+  </select>
+  
+   <!-- 汇总查询 -->
+   <select id="selectSettledBillsSumCount" resultType="java.lang.Integer" >
+	SELECT 
+	  COUNT(*) 
+	FROM
+	  (SELECT 
+		COUNT(1) AS s 
+	FROM bill_buy_balance A 
+	LEFT JOIN pay_relationship B
+	  ON A.original_bill_no=B.business_bill_no
+	WHERE 1 = 1 
+	  AND A.BILL_TYPE = '1301' 
+	  AND B.BALANCE_NO IS NOT NULL 
+	  <include refid="settledBillsCond"/> 
+	group by A.original_bill_no ) tmp
+  </select>
+
+   <select id="selectSettledBillsSumByPage" resultMap="SettledBillsMap" parameterType="map" >
+    select
+      A.SUPPLIER_NO,A.SUPPLIER_NAME,A.BILL_TYPE,A.ORIGINAL_BILL_NO BILL_NO,
+      A.ITEM_NO,A.ITEM_CODE,A.ITEM_NAME,A.BRAND_NO,A.BRAND_NAME,C1.CATEGORY_NO,C1.name CATEGORY_NAME,
+	  sum(a.send_qty) send_qty,A.SEND_DATE,A.RECEIVE_DATE,A.ORDER_NO,B.BALANCE_NO,A.BUYER_NO,A.BUYER_NAME,
+	  A.ORDER_UNIT_NO,A.ORDER_UNIT_NAME,A.TAG_PRICE,sum(a.send_qty * a.tag_price) as tag_price_amount,
+	  sum(a.send_qty*a.cost) as balance_amount,B.ORDER_TYPE,B.AUDIT_STATUS,
+	  B.SUPPLIER_DISCOUNT1 SUPPLIER_DISCOUNT1,
+	  B.SUPPLIER_DISCOUNT2 SUPPLIER_DISCOUNT2,
+	  B.SETTLEMENT_NUMBER SETTLEMENT_NUMBER,B.SUPPLIER_AMOUNT SUPPLIER_AMOUNT,
+	  b.supplier_amount-sum(a.send_qty*a.cost) as diff_amount
+	FROM
+	  BILL_BUY_BALANCE A 
+	LEFT JOIN PAY_RELATIONSHIP B
+	  ON A.ORIGINAL_BILL_NO=B.BUSINESS_BILL_NO
+	LEFT JOIN CATEGORY C1 
+	  ON LEFT(A.CATEGORY_NO, 2) = C1.CATEGORY_NO 
+	WHERE 1 = 1 
+	  AND A.BILL_TYPE = '1301' 
+	  AND B.BALANCE_NO IS NOT NULL 
+      <include refid="settledBillsCond" />
+     GROUP BY A.ORIGINAL_BILL_NO
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <!-- 查询汇总合计行 -->
+  <select id="selectSettledBillsSumTotalRow" resultMap="SettledBillsMap" parameterType="map">
+	 SELECT 
+	  '合计' SUPPLIER_NAME,
+	  SUM(send_qty) send_qty ,
+	  SUM(tag_price_amount) tag_price_amount,
+	  SUM(SUPPLIER_AMOUNT) SUPPLIER_AMOUNT,
+	  SUM(balance_amount) balance_amount,
+	  SUM(diff_amount) diff_amount
+	FROM
+	  (SELECT 
+	    A.SUPPLIER_NAME,
+	    SUM(a.send_qty) send_qty,
+	    SUM(a.send_qty * a.tag_price) AS tag_price_amount,
+	    B.SUPPLIER_AMOUNT SUPPLIER_AMOUNT,
+	    SUM(a.send_qty * a.cost) AS balance_amount,
+	    b.supplier_amount - SUM(a.send_qty * a.cost) AS diff_amount 
+	  FROM
+	    BILL_BUY_BALANCE A 
+	    LEFT JOIN PAY_RELATIONSHIP B 
+	      ON A.ORIGINAL_BILL_NO = B.BUSINESS_BILL_NO 
+	  WHERE 1 = 1 
+	    AND A.BILL_TYPE = '1301' 
+	    AND B.BALANCE_NO IS NOT NULL 
+	    <include refid="settledBillsCond" />
+	     GROUP BY A.ORIGINAL_BILL_NO ) AS tmp 
+  </select>
+
+  <!-- 审核-->
+  <update id="updateBillsAuditStatus"  parameterType="map">
+  	UPDATE pay_relationship 
+  	SET audit_status=1
+  	WHERE business_bill_no=#{params.billNo}
+  </update>
+  
+  <!-- 反审核-->
+  <update id="updateBillsUnAuditStatus"  parameterType="map">
+  	UPDATE pay_relationship 
+  	SET audit_status=0
+  	WHERE business_bill_no=#{params.billNo}
+  </update>
+  
+  <!-- 应付账款表 -->
+   <resultMap id="PayableAccountMap" type="cn.wonhigh.retail.fas.common.dto.PayableAccountDto" >
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="bill_type_name" property="billTypeName" jdbcType="CHAR" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="earlyPayable_amount" property="earlyPayableAmount" jdbcType="DECIMAL" />
+    <result column="currentPayable_amount" property="currentPayableAmount" jdbcType="DECIMAL" />
+    <result column="current_payment" property="currentPayment" jdbcType="DECIMAL" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="PayableAccountCond">
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.buyerNo and ''!=params.buyerNo">
+		    and tmp.buyer_no=#{params.buyerNo}
+		</if>
+		<if test="null!=params.salerNo and ''!=params.salerNo">
+		    and tmp.saler_No=#{params.salerNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart">
+			AND tmp.bill_date &gt;= #{params.sendDateStart}
+		</if>
+		<if test="null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND tmp.bill_date &lt;= #{params.sendDateEnd}
+		</if>
+	</if>
+  </sql>
+  
+  <sql id="refPayableAccount">
+    select 
+		saler_no as buyer_no,saler_name as buyer_name,supplier_no saler_no,supplier_name saler_name,business_bill_type as bill_type,business_bill_no bill_no,
+		bill_date as bill_date,amount as currentpayable_amount ,0 as current_payment,0 as earlypayable_amount,'到货单' as bill_type_name
+	from pay_relationship where business_bill_type='1301'
+	UNION ALL
+	SELECT 
+ 	    buyer_no,buyer_name,supplier_no saler_no,supplier_name saler_name,NULL AS bill_type,bill_no bill_no,
+        purchase_date AS bill_date,all_amount AS currentpayable_amount,0 AS current_payment,0 AS earlypayable_amount,'采购入库调整单' AS bill_type_name 
+	FROM
+	  bill_purchase_adjust 
+	WHERE 1=1 and STATUS = '1' 
+	UNION ALL
+	select 
+	    company_no buyer_no,company_name buyer_name,supplier_no saler_no,supplier_name saler_name,null as bill_type,
+	    null as  bill_no,initial_date as bill_date,0 as currentpayable_amount,0 as current_payment,amount as earlypayable_amount,'期初应付' as bill_type_name
+	from initial_amount
+	UNION ALL 
+	SELECT 
+		company_no buyer_no,company_name buyer_name,supplier_no saler_no,supplier_name saler_name,NULL AS bill_type,
+		NULL AS  bill_no,pay_date AS bill_date,0 AS currentpayable_amount,amount AS current_payment,0 AS earlypayable_amount,'期初应付(已付款)' AS bill_type_name
+	FROM initial_amount WHERE pay_status='1'
+	UNION ALL 
+	select 
+	    buyer_no buyer_no,buyer_name buyer_name,saler_no,saler_name,null as bill_type,
+	    null as  bill_no,deduction_date as bill_date,fine_amount as currentpayable_amount,0 as current_payment,0 as earlypayable_amount,'扣项' as bill_type_name
+	from other_deduction WHERE 1=1 and balance_type = '16' 
+	UNION ALL	
+	SELECT 
+	    tmp_dis.buyer_no buyer_no,tmp_dis.buyer_name buyer_name,tmp_dis.saler_no,tmp_dis.saler_name,NULL AS bill_type,
+	    tmp_dis.bill_no AS  bill_no,tmp_dis.bill_date AS bill_date,0 AS currentpayable_amount ,
+	    tmp_dis.money_discount AS current_payment,0 AS earlypayable_amount,'现金折扣' AS bill_type_name
+	FROM (
+	SELECT 
+	    A.BUYER_NO BUYER_NO,A.BUYER_NAME BUYER_NAME,A.SALER_NO,A.SALER_NAME,NULL AS BILL_TYPE,
+	    A.BILL_NO AS  BILL_NO,A.BILL_DATE AS BILL_DATE,
+	    SUM(B.MONEY_DISCOUNT) AS MONEY_DISCOUNT,
+		SUM(B.DISCOUNT_AMOUNT) AS DISCOUNT_AMOUNT
+	FROM
+	  BILL_PAYMENT A 
+	  LEFT JOIN  BILL_PAYMENT_DTL B 
+	    ON A.BILL_NO = B.BILL_NO 
+	GROUP BY A.BUYER_NO,A.SALER_NO,A.BILL_NO ) tmp_dis
+	UNION ALL 
+	SELECT 
+	    tmp_pay.buyer_no buyer_no,tmp_pay.buyer_name buyer_name,tmp_pay.saler_no,tmp_pay.saler_name,NULL AS bill_type,
+	    tmp_pay.bill_no AS  bill_no,tmp_pay.bill_date AS bill_date, 0 AS currentpayable_amount ,
+	    tmp_pay.discount_amount AS current_payment,0 AS earlypayable_amount,'付款单' AS bill_type_name
+	FROM (
+	SELECT 
+	    A.BUYER_NO BUYER_NO,A.BUYER_NAME BUYER_NAME,A.SALER_NO,A.SALER_NAME,NULL AS BILL_TYPE,
+	    A.BILL_NO AS  BILL_NO,A.BILL_DATE AS BILL_DATE,
+	    SUM(B.MONEY_DISCOUNT) AS MONEY_DISCOUNT,
+	    SUM(B.DISCOUNT_AMOUNT) AS DISCOUNT_AMOUNT
+	FROM
+	  BILL_PAYMENT A 
+	  LEFT JOIN  BILL_PAYMENT_DTL B 
+	    ON A.BILL_NO = B.BILL_NO 
+	GROUP BY A.BUYER_NO,A.SALER_NO,A.BILL_NO ) tmp_pay
+  </sql>
+  
+  <!-- 明细查询 -->
+  <select id="selectPayableAccountCount" resultType="java.lang.Integer" >
+	SELECT 
+     COUNT(1)
+	FROM(
+	  <include refid="refPayableAccount"/>
+	) tmp
+	WHERE 1=1 
+	  <include refid="PayableAccountCond"/>
+  </select>
+
+   <select id="selectPayableAccountByPage" resultMap="PayableAccountMap" parameterType="map" >
+    SELECT 
+      tmp.buyer_no,
+      tmp.buyer_name,
+      tmp.saler_no as supplier_no,
+      tmp.saler_name as supplier_name,
+      tmp.bill_type,
+      tmp.bill_type_name,
+      tmp.bill_no,
+      tmp.bill_date,
+      tmp.earlypayable_amount as earlypayable_amount,
+      tmp.currentpayable_amount as currentpayable_amount,
+      tmp.current_payment as current_payment,
+      (tmp.earlypayable_amount)+(tmp.currentpayable_amount)-(tmp.current_payment) balance
+	FROM(
+	  <include refid="refPayableAccount"/>
+	  ) tmp
+	WHERE 1=1 
+		<include refid="PayableAccountCond"/>
+	ORDER BY tmp.buyer_no,tmp.saler_no,tmp.bill_date
+    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <!-- 汇总查询 -->
+  <select id="selectPayableAccountSumCount" resultType="java.lang.Integer" >
+	SELECT 
+	  COUNT(*) 
+	FROM(
+	SELECT 
+     COUNT(1)
+	FROM(
+	  <include refid="refPayableAccount"/>
+	) tmp
+	WHERE 1=1 
+		<include refid="PayableAccountCond"/>
+	 GROUP BY tmp.buyer_no,tmp.saler_no 
+	) tmp_count
+  </select>
+
+   <select id="selectPayableAccountSumByPage" resultMap="PayableAccountMap" parameterType="map" >
+    SELECT 
+      tmp.buyer_no,
+      tmp.buyer_name,
+      tmp.saler_no as supplier_no,
+      tmp.saler_name as supplier_name,
+      tmp.bill_type,
+      tmp.bill_no,
+      tmp.bill_date,
+      sum(tmp.earlypayable_amount) as earlypayable_amount,
+      sum(tmp.currentpayable_amount) as currentpayable_amount,
+      sum(tmp.current_payment) as current_payment,
+      sum(tmp.earlypayable_amount)+sum(tmp.currentpayable_amount)-sum(tmp.current_payment) balance
+	FROM(
+	  <include refid="refPayableAccount"/>
+	  ) tmp
+	WHERE 1=1 
+		<include refid="PayableAccountCond"/>
+	    GROUP BY tmp.buyer_no,tmp.saler_no 
+    LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <!-- 代销商品销存Map -->
+  <resultMap id="SalesStorageMap" type="cn.wonhigh.retail.fas.common.dto.SalesStorageInquireDto" >
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="supplier_no" property="supplierNo" jdbcType="CHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="CHAR" />
+    <result column="send_date" property="sendDate" jdbcType="DATE" />
+    <result column="zone_name" property="zoneName" jdbcType="CHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="CHAR" />
+    <result column="organ_name" property="organName" jdbcType="VARCHAR" />
+    <result column="order_unit_no" property="orderUnitNo" jdbcType="CHAR" />
+    <result column="order_unit_name" property="orderUnitName" jdbcType="VARCHAR" />
+    <result column="receive_store_no" property="receiveStoreNo" jdbcType="CHAR" />
+    <result column="receive_store_name" property="receiveStoreName" jdbcType="CHAR" />
+    <result column="item_no" property="itemNo" jdbcType="CHAR" />
+    <result column="item_code" property="itemCode" jdbcType="CHAR" />
+    <result column="item_name" property="itemName" jdbcType="CHAR" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+    <result column="send_qty" property="sendQty" jdbcType="INTEGER" />
+    <result column="tag_price" property="tagPrice" jdbcType="DECIMAL" />
+    <result column="tag_price_amount" property="tagPriceAmount" jdbcType="DECIMAL" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL" />
+    <result column="discount1" property="discount1" jdbcType="DECIMAL" />
+    <result column="discount2" property="discount2" jdbcType="DECIMAL" />
+    <result column="specified_Price" property="specifiedPrice" jdbcType="DECIMAL" />
+    <result column="terminalSales_Amount" property="terminalSalesAmount" jdbcType="DECIMAL" />
+    <result column="early_qty" property="earlyQty" jdbcType="INTEGER" />
+    <result column="early_TagPriceAmount" property="earlyTagPriceAmount" jdbcType="DECIMAL" />
+    <result column="early_BalanceAmount" property="earlyBalanceAmount" jdbcType="DECIMAL" />
+    <result column="arrived_qty" property="arrivedQty" jdbcType="INTEGER" />
+    <result column="arrived_TagPriceAmount" property="arrivedTagPriceAmount" jdbcType="DECIMAL" />
+    <result column="arrived_BalanceAmount" property="arrivedBalanceAmount" jdbcType="DECIMAL" />
+    <result column="sales_qty" property="salesQty" jdbcType="INTEGER" />
+    <result column="sales_TagPriceAmount" property="salesTagPriceAmount" jdbcType="DECIMAL" />
+    <result column="sales_BalanceAmount" property="salesBalanceAmount" jdbcType="DECIMAL" />
+    <result column="check_qty" property="checkQty" jdbcType="INTEGER" />
+    <result column="check_TagPriceAmount" property="checkTagPriceAmount" jdbcType="DECIMAL" />
+    <result column="check_BalanceAmount" property="checkBalanceAmount" jdbcType="DECIMAL" />
+    <result column="inventory_qty" property="inventoryQty" jdbcType="INTEGER" />
+    <result column="inventory_TagPriceAmount" property="inventoryTagPriceAmount" jdbcType="DECIMAL" />
+    <result column="inventory_BalanceAmount" property="inventoryBalanceAmount" jdbcType="DECIMAL" />
+    <result column="deduction_Amount" property="deductionAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="SalesStorageCond">
+	<if test="null!=params">
+		<if test="null!=params.queryCondition and ''!=params.queryCondition">
+			${params.queryCondition}
+		</if>
+		<if test="null!=params.buyerNo and ''!=params.buyerNo">
+		   and buyer_no=#{params.buyerNo}
+		</if>
+		<if test="null!=params.salerNo and ''!=params.salerNo">
+		   and saler_No=#{params.salerNo}
+		</if>
+		<if test="null!=params.sendDateStart and ''!=params.sendDateStart">
+			AND send_date &gt;= #{params.sendDateStart}
+		</if>
+		<if test="null!=params.sendDateEnd and ''!=params.sendDateEnd">
+			AND send_date &lt;= #{params.sendDateEnd}
+		</if>
+	</if>
+  </sql>
+  
+  <!-- 明细查询 -->
+   <select id="selectSalesStorageInquireCount" resultType="java.lang.Integer" >
+	SELECT 
+		COUNT(1) AS s 
+	FROM 
+		BILL_BUY_BALANCE 
+	WHERE 1=1 
+		AND BILL_TYPE='1301'
+		<include refid="SalesStorageCond"/>
+  </select>
+
+   <select id="selectSalesStorageInquireByPage" resultMap="SalesStorageMap" parameterType="map" >
+    SELECT 
+	      SUPPLIER_NO,SUPPLIER_NAME,BILL_TYPE,ORIGINAL_BILL_NO BILL_NO,ITEM_NO,ITEM_CODE,ITEM_NAME,
+	      BRAND_NO,BRAND_NAME,CATEGORY_NO,CATEGORY_NAME,SEND_QTY,SEND_DATE,RECEIVE_DATE,
+	 	  ORDER_NO, ZONE_NAME,BUYER_NO,BUYER_NAME, organ_name,ORDER_UNIT_NO,ORDER_UNIT_NAME, receive_Store_Name,
+	 	  TAG_PRICE,(SEND_QTY * TAG_PRICE) AS TAG_PRICE_AMOUNT
+    FROM 
+    	bill_buy_balance 
+	WHERE 1=1 
+		  AND BILL_TYPE = '1301' 
+    	<include refid="SalesStorageCond" />
+	    <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+  <!-- 汇总查询 -->
+   <select id="selectSalesStorageSumCount" resultType="java.lang.Integer" >
+	SELECT 
+		COUNT(1) AS s 
+	FROM 
+		BILL_BUY_BALANCE 
+	WHERE 1=1 
+		AND BILL_TYPE='1301'
+		<include refid="SalesStorageCond"/>
+  </select>
+
+   <select id="selectSalesStorageSumByPage" resultMap="SalesStorageMap" parameterType="map" >
+    SELECT 
+	      SUPPLIER_NO,SUPPLIER_NAME,BILL_TYPE,ORIGINAL_BILL_NO BILL_NO,ITEM_NO,ITEM_CODE,ITEM_NAME,
+	      BRAND_NO,BRAND_NAME,CATEGORY_NO,CATEGORY_NAME,SEND_QTY,SEND_DATE,RECEIVE_DATE,
+	 	  ORDER_NO, ZONE_NAME,BUYER_NO,BUYER_NAME, organ_name,ORDER_UNIT_NO,ORDER_UNIT_NAME, receive_Store_Name,
+	 	  TAG_PRICE,(SEND_QTY * TAG_PRICE) AS TAG_PRICE_AMOUNT
+    FROM 
+    	bill_buy_balance 
+	WHERE 1=1 
+		  AND BILL_TYPE = '1301' 
+    	<include refid="SalesStorageCond" />
+    	  GROUP BY ORIGINAL_BILL_NO
+	    <if test="orderByField != null and ''!=orderByField" >
+	      ORDER BY ${orderByField}
+	      <if test="orderByField" >
+	        ${orderBy}
+	      </if>
+	    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  
+    <!-- 删除请款单 -->
+	<delete id="deleteAskpaymentBills" parameterType="map">
+		DELETE FROM BILL_Ask_payment
+		WHERE BILL_NO = #{params.billNo,jdbcType=CHAR}
+	</delete>
+	
+	  <!-- 删除请款单明细 -->
+	<delete id="deleteAskPaymentBillsDtl" parameterType="map">
+		DELETE FROM BILL_Ask_payment_dtl
+		WHERE BILL_NO = #{params.billNo,jdbcType=CHAR}
+	</delete>
+	
+	<!-- 修改请款单的状态 -->
+	<update id="auditAskpaymentBills" parameterType="map">
+	update
+		BILL_Ask_payment
+	SET
+		status = #{params.status,jdbcType=TINYINT},
+	    auditor = #{params.auditor,jdbcType=VARCHAR},
+		audit_time = #{params.auditTime,jdbcType=TIMESTAMP}
+	WHERE
+		bill_no = #{params.billNo,jdbcType=CHAR}
+	</update>
+	
+    <resultMap id="BillAskPaymentDtlMap" type="cn.wonhigh.retail.fas.common.model.BillAskPaymentDtl" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+	    <result column="settle_method_no" property="settleMethodNo" jdbcType="CHAR" />
+	    <result column="settle_method_name" property="settleMethodName" jdbcType="VARCHAR" />
+	    <result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+	    <result column="amount" property="amount" jdbcType="DECIMAL" />
+	    <result column="other_bank" property="otherBank" jdbcType="VARCHAR" />
+	    <result column="other_bank_account" property="otherBankAccount" jdbcType="VARCHAR" />
+	    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+	    <result column="brand_name" property="brandName" jdbcType="CHAR" />
+	    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+	    <result column="category_name" property="categoryName" jdbcType="CHAR" />
+	    <result column="qty" property="qty" jdbcType="INTEGER" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+	    <result column="sys_expiration_date" property="sysExpirationDate" jdbcType="DATE" />
+	    <result column="payment_date" property="paymentDate" jdbcType="DATE" />
+  </resultMap>
+  
+  <!-- 根据结算单号查询请款单明细 -->
+  <select id="selectBillAskPaymentDtl" resultMap="BillAskPaymentDtlMap" parameterType="cn.wonhigh.retail.fas.common.model.BillAskPaymentDtl">
+  	SELECT 
+		tmp.settle_method_no,
+		tmp.brand_no,
+		tmp.brand_name,
+		SUM(tmp.qty) AS qty,
+		SUM(tmp.amount) AS amount,
+		tmp.due_date AS sys_expiration_date
+	FROM (
+		SELECT 0 AS settle_method_no,brand_no,brand_name,due_date,qty,amount FROM pay_relationship WHERE balance_no=#{billNo,jdbcType=CHAR}
+		UNION ALL
+		SELECT 0 AS settle_method_no,brand_no,brand_name,due_date,deduction_qty AS qty,fine_amount AS amount 
+		FROM other_deduction WHERE balance_type='16' AND balance_no=#{billNo,jdbcType=CHAR}
+	) 
+	AS  tmp  
+	GROUP BY due_date
+  </select>
+</mapper>

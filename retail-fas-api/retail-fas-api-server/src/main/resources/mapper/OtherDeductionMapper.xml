@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.api.dal.OtherDeductionMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.OtherDeduction" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="area_buyer_no" property="areaBuyerNo" jdbcType="VARCHAR" />
+    <result column="area_buyer_name" property="areaBuyerName" jdbcType="VARCHAR" />
+    <result column="balance_no" property="balanceNo" jdbcType="CHAR" />
+    <result column="balance_type" property="balanceType" jdbcType="TINYINT" />
+    <result column="balance_status" property="balanceStatus" jdbcType="TINYINT" />
+    <result column="brand_no" property="brandNo" jdbcType="CHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="category_no" property="categoryNo" jdbcType="CHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="currency_no" property="currencyNo" jdbcType="CHAR" />
+    <result column="currency_name" property="currencyName" jdbcType="VARCHAR" />
+    <result column="deduction_category" property="deductionCategory" jdbcType="CHAR" />
+    <result column="deduction_name" property="deductionName" jdbcType="VARCHAR" />
+    <result column="deduction_qty" property="deductionQty" jdbcType="INTEGER" />
+    <result column="deduction_date" property="deductionDate" jdbcType="DATE" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="fine_amount" property="fineAmount" jdbcType="DECIMAL" />
+    <result column="deduction_amount" property="deductionAmount" jdbcType="DECIMAL" />
+    <result column="no_pay_amount" property="noPayAmount" jdbcType="DECIMAL" />
+    <result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+    <result column="due_date" property="dueDate" jdbcType="DATE" />
+    <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="CHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="bill_no" property="billNo" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="rebate_amount" property="rebateAmount" jdbcType="DECIMAL" />
+    <result column="other_price" property="otherPrice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, buyer_no, buyer_name, saler_no, saler_name, area_buyer_no, area_buyer_name, balance_no, 
+    balance_type, balance_status, brand_no, brand_name, category_no, category_name, currency_no, 
+    currency_name, deduction_category, deduction_name, deduction_qty, deduction_date, 
+    return_amount, fine_amount, deduction_amount, no_pay_amount, pay_amount, due_date, 
+    pay_status, create_time, create_user, update_time, update_user, remark, order_no, 
+    status, bill_no, type
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.billNo and ''!=params.billNo" >
+        AND bill_no = #{params.billNo}
+      </if>
+    </if>
+  </sql>
+  
+   <!-- 根据出库单号删除扣项 -->
+  <delete id="deleteByBillNo" parameterType="java.lang.String" >
+    DELETE FROM other_deduction
+    WHERE bill_no = #{billNo,jdbcType=CHAR}
+  </delete>
+  
+   <!-- 根据出库单号 查询返利,其他费用 -->
+  <select id="findRebateOtherPrcie" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+          sum(case when type=1 then deduction_amount  else 0 end) rebate_amount,
+          sum(case when type=2 then deduction_amount  else 0 end) other_price
+    FROM other_deduction 
+    WHERE bill_no = #{billNo,jdbcType=CHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM other_deduction
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM other_deduction WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM other_deduction WHERE 1=1 
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      ORDER BY ${orderByField}
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM other_deduction WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM other_deduction
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.OtherDeduction" >
+    DELETE FROM other_deduction
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.OtherDeduction" >
+    INSERT INTO other_deduction (id, buyer_no, buyer_name, 
+      saler_no, saler_name, area_buyer_no, 
+      area_buyer_name, balance_no, balance_type, 
+      balance_status, brand_no, brand_name, 
+      category_no, category_name, currency_no, 
+      currency_name, deduction_category, deduction_name, 
+      deduction_qty, deduction_date, return_amount, 
+      fine_amount, deduction_amount, no_pay_amount, 
+      pay_amount, due_date, pay_status, 
+      create_time, create_user, update_time, 
+      update_user, remark, order_no, 
+      status, bill_no, type)
+    VALUES (#{id,jdbcType=INTEGER}, #{buyerNo,jdbcType=CHAR}, #{buyerName,jdbcType=VARCHAR}, 
+      #{salerNo,jdbcType=CHAR}, #{salerName,jdbcType=VARCHAR}, #{areaBuyerNo,jdbcType=VARCHAR}, 
+      #{areaBuyerName,jdbcType=VARCHAR}, #{balanceNo,jdbcType=CHAR}, #{balanceType,jdbcType=TINYINT}, 
+      #{balanceStatus,jdbcType=TINYINT}, #{brandNo,jdbcType=CHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{categoryNo,jdbcType=CHAR}, #{categoryName,jdbcType=VARCHAR}, #{currencyNo,jdbcType=CHAR}, 
+      #{currencyName,jdbcType=VARCHAR}, #{deductionCategory,jdbcType=CHAR}, #{deductionName,jdbcType=VARCHAR}, 
+      #{deductionQty,jdbcType=INTEGER}, #{deductionDate,jdbcType=DATE}, #{returnAmount,jdbcType=DECIMAL}, 
+      #{fineAmount,jdbcType=DECIMAL}, #{deductionAmount,jdbcType=DECIMAL}, #{noPayAmount,jdbcType=DECIMAL}, 
+      #{payAmount,jdbcType=DECIMAL}, #{dueDate,jdbcType=DATE}, #{payStatus,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=CHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{orderNo,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{billNo,jdbcType=CHAR}, #{type,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.OtherDeduction" >
+    INSERT INTO other_deduction
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="salerName != null" >
+        saler_name,
+      </if>
+      <if test="areaBuyerNo != null" >
+        area_buyer_no,
+      </if>
+      <if test="areaBuyerName != null" >
+        area_buyer_name,
+      </if>
+      <if test="balanceNo != null" >
+        balance_no,
+      </if>
+      <if test="balanceType != null" >
+        balance_type,
+      </if>
+      <if test="balanceStatus != null" >
+        balance_status,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="categoryNo != null" >
+        category_no,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="currencyNo != null" >
+        currency_no,
+      </if>
+      <if test="currencyName != null" >
+        currency_name,
+      </if>
+      <if test="deductionCategory != null" >
+        deduction_category,
+      </if>
+      <if test="deductionName != null" >
+        deduction_name,
+      </if>
+      <if test="deductionQty != null" >
+        deduction_qty,
+      </if>
+      <if test="deductionDate != null" >
+        deduction_date,
+      </if>
+      <if test="returnAmount != null" >
+        return_amount,
+      </if>
+      <if test="fineAmount != null" >
+        fine_amount,
+      </if>
+      <if test="deductionAmount != null" >
+        deduction_amount,
+      </if>
+      <if test="noPayAmount != null" >
+        no_pay_amount,
+      </if>
+      <if test="payAmount != null" >
+        pay_amount,
+      </if>
+      <if test="dueDate != null" >
+        due_date,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaBuyerNo != null" >
+        #{areaBuyerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="areaBuyerName != null" >
+        #{areaBuyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceNo != null" >
+        #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="balanceStatus != null" >
+        #{balanceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyNo != null" >
+        #{currencyNo,jdbcType=CHAR},
+      </if>
+      <if test="currencyName != null" >
+        #{currencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="deductionCategory != null" >
+        #{deductionCategory,jdbcType=CHAR},
+      </if>
+      <if test="deductionName != null" >
+        #{deductionName,jdbcType=VARCHAR},
+      </if>
+      <if test="deductionQty != null" >
+        #{deductionQty,jdbcType=INTEGER},
+      </if>
+      <if test="deductionDate != null" >
+        #{deductionDate,jdbcType=DATE},
+      </if>
+      <if test="returnAmount != null" >
+        #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="fineAmount != null" >
+        #{fineAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductionAmount != null" >
+        #{deductionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="noPayAmount != null" >
+        #{noPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payAmount != null" >
+        #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dueDate != null" >
+        #{dueDate,jdbcType=DATE},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.OtherDeduction" >
+    UPDATE other_deduction
+    <set >
+      <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        saler_name = #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaBuyerNo != null" >
+        area_buyer_no = #{areaBuyerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="areaBuyerName != null" >
+        area_buyer_name = #{areaBuyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceNo != null" >
+        balance_no = #{balanceNo,jdbcType=CHAR},
+      </if>
+      <if test="balanceType != null" >
+        balance_type = #{balanceType,jdbcType=TINYINT},
+      </if>
+      <if test="balanceStatus != null" >
+        balance_status = #{balanceStatus,jdbcType=TINYINT},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=CHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryNo != null" >
+        category_no = #{categoryNo,jdbcType=CHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyNo != null" >
+        currency_no = #{currencyNo,jdbcType=CHAR},
+      </if>
+      <if test="currencyName != null" >
+        currency_name = #{currencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="deductionCategory != null" >
+        deduction_category = #{deductionCategory,jdbcType=CHAR},
+      </if>
+      <if test="deductionName != null" >
+        deduction_name = #{deductionName,jdbcType=VARCHAR},
+      </if>
+      <if test="deductionQty != null" >
+        deduction_qty = #{deductionQty,jdbcType=INTEGER},
+      </if>
+      <if test="deductionDate != null" >
+        deduction_date = #{deductionDate,jdbcType=DATE},
+      </if>
+      <if test="returnAmount != null" >
+        return_amount = #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="fineAmount != null" >
+        fine_amount = #{fineAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="deductionAmount != null" >
+        deduction_amount = #{deductionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="noPayAmount != null" >
+        no_pay_amount = #{noPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payAmount != null" >
+        pay_amount = #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dueDate != null" >
+        due_date = #{dueDate,jdbcType=DATE},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.OtherDeduction" >
+    UPDATE other_deduction
+    SET buyer_no = #{buyerNo,jdbcType=CHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      saler_no = #{salerNo,jdbcType=CHAR},
+      saler_name = #{salerName,jdbcType=VARCHAR},
+      area_buyer_no = #{areaBuyerNo,jdbcType=VARCHAR},
+      area_buyer_name = #{areaBuyerName,jdbcType=VARCHAR},
+      balance_no = #{balanceNo,jdbcType=CHAR},
+      balance_type = #{balanceType,jdbcType=TINYINT},
+      balance_status = #{balanceStatus,jdbcType=TINYINT},
+      brand_no = #{brandNo,jdbcType=CHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      category_no = #{categoryNo,jdbcType=CHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      currency_no = #{currencyNo,jdbcType=CHAR},
+      currency_name = #{currencyName,jdbcType=VARCHAR},
+      deduction_category = #{deductionCategory,jdbcType=CHAR},
+      deduction_name = #{deductionName,jdbcType=VARCHAR},
+      deduction_qty = #{deductionQty,jdbcType=INTEGER},
+      deduction_date = #{deductionDate,jdbcType=DATE},
+      return_amount = #{returnAmount,jdbcType=DECIMAL},
+      fine_amount = #{fineAmount,jdbcType=DECIMAL},
+      deduction_amount = #{deductionAmount,jdbcType=DECIMAL},
+      no_pay_amount = #{noPayAmount,jdbcType=DECIMAL},
+      pay_amount = #{payAmount,jdbcType=DECIMAL},
+      due_date = #{dueDate,jdbcType=DATE},
+      pay_status = #{payStatus,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=CHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=CHAR},
+      status = #{status,jdbcType=TINYINT},
+      bill_no = #{billNo,jdbcType=CHAR},
+      type = #{type,jdbcType=TINYINT}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wonhigh.retail.fas.dal.database.TransferBalanceDateMapper" >
+  <resultMap id="BaseResultMap" type="cn.wonhigh.retail.fas.common.model.TransferBalanceDate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="saler_no" property="salerNo" jdbcType="CHAR" />
+    <result column="saler_name" property="salerName" jdbcType="VARCHAR" />
+    <result column="buyer_no" property="buyerNo" jdbcType="CHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="balance_month" property="balanceMonth" jdbcType="CHAR" />
+    <result column="balance_start_date" property="balanceStartDate" jdbcType="DATE" />
+    <result column="balance_end_date" property="balanceEndDate" jdbcType="DATE" />
+    <result column="invoice_flag" property="invoiceFlag" jdbcType="TINYINT" />
+    <result column="balance_flag" property="balanceFlag" jdbcType="TINYINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, saler_no, saler_name, buyer_no, buyer_name, balance_month, balance_start_date, 
+    balance_end_date, invoice_flag, balance_flag, create_user, create_time, update_user, 
+    update_time, remark
+  </sql>
+  <sql id="condition" >
+    -- AND @company_no!saler_no
+    <if test="null!=params" >
+      <if test="null!=params.queryCondition and ''!=params.queryCondition" >
+        ${params.queryCondition}
+      </if>
+      <if test="null!=params.salerNo and ''!=params.salerNo">
+		AND saler_no = #{params.salerNo}
+	  </if>
+	  <if test="null!=params.buyerNo and ''!=params.buyerNo">
+		AND buyer_no = #{params.buyerNo}
+	  </if>
+	  <if test="null!=params.balanceMonth and ''!=params.balanceMonth">
+	  	AND balance_month = #{params.balanceMonth}
+	  </if>
+	  <if test="null != params.balanceDate and ''!= params.balanceDate">
+	  	AND balance_start_date &lt;= #{params.balanceDate} and balance_end_date &gt;= #{params.balanceDate} 
+	  	AND balance_month = EXTRACT(YEAR_MONTH FROM #{params.balanceDate})
+	  </if>
+	  <if test="null!=params.invoiceFlag and ''!=params.invoiceFlag">
+	  	AND invoice_flag = #{params.invoiceFlag}
+	  </if>
+	  <if test="null!=params.balanceFlag and ''!=params.balanceFlag">
+	  	AND balance_flag = #{params.balanceFlag}
+	  </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM transfer_balance_date
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    SELECT COUNT(1) as s FROM transfer_balance_date WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+        <include refid="Base_Column_List" />
+    FROM transfer_balance_date
+    WHERE 1=1 
+        <include refid="condition" />
+   		<if test="orderByField != null and ''!=orderByField" >
+      		ORDER BY ${orderByField}
+      	<if test="orderByField" >
+        	${orderBy}
+      	</if>
+    	</if>
+    	 <if test="orderByField == null || ''==orderByField" >
+    	 	ORDER BY create_time desc
+    	 </if>
+     LIMIT #{page.startRowNum} ,#{page.pageSize} 
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    SELECT 
+    <include refid="Base_Column_List" />
+     FROM transfer_balance_date WHERE 1=1 
+    <include refid="condition" />
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM transfer_balance_date
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="cn.wonhigh.retail.fas.common.model.TransferBalanceDate" >
+    DELETE FROM transfer_balance_date
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.wonhigh.retail.fas.common.model.TransferBalanceDate" >
+    INSERT INTO transfer_balance_date (id, saler_no, saler_name, 
+      buyer_no, buyer_name, balance_month, 
+      balance_start_date, balance_end_date, invoice_flag, 
+      balance_flag, create_user, create_time, 
+      update_user, update_time, remark
+      )
+    VALUES (#{id,jdbcType=INTEGER}, #{salerNo,jdbcType=CHAR}, #{salerName,jdbcType=VARCHAR}, 
+      #{buyerNo,jdbcType=CHAR}, #{buyerName,jdbcType=VARCHAR}, #{balanceMonth,jdbcType=CHAR}, 
+      #{balanceStartDate,jdbcType=DATE}, #{balanceEndDate,jdbcType=DATE}, #{invoiceFlag,jdbcType=TINYINT}, 
+      #{balanceFlag,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.wonhigh.retail.fas.common.model.TransferBalanceDate" >
+    INSERT INTO transfer_balance_date
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="salerNo != null" >
+        saler_no,
+      </if>
+      <if test="salerName != null" >
+        saler_name,
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="balanceMonth != null" >
+        balance_month,
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date,
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date,
+      </if>
+      <if test="invoiceFlag != null" >
+        invoice_flag,
+      </if>
+      <if test="balanceFlag != null" >
+        balance_flag,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="salerNo != null" >
+        #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerNo != null" >
+        #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceMonth != null" >
+        #{balanceMonth,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceFlag != null" >
+        #{invoiceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="balanceFlag != null" >
+        #{balanceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.wonhigh.retail.fas.common.model.TransferBalanceDate" >
+    UPDATE transfer_balance_date
+    <set >
+      <if test="salerNo != null" >
+        saler_no = #{salerNo,jdbcType=CHAR},
+      </if>
+      <if test="salerName != null" >
+        saler_name = #{salerName,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerNo != null" >
+        buyer_no = #{buyerNo,jdbcType=CHAR},
+      </if>
+      <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceMonth != null" >
+        balance_month = #{balanceMonth,jdbcType=CHAR},
+      </if>
+      <if test="balanceStartDate != null" >
+        balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      </if>
+      <if test="balanceEndDate != null" >
+        balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceFlag != null" >
+        invoice_flag = #{invoiceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="balanceFlag != null" >
+        balance_flag = #{balanceFlag,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.wonhigh.retail.fas.common.model.TransferBalanceDate" >
+    UPDATE transfer_balance_date
+    SET saler_no = #{salerNo,jdbcType=CHAR},
+      saler_name = #{salerName,jdbcType=VARCHAR},
+      buyer_no = #{buyerNo,jdbcType=CHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      balance_month = #{balanceMonth,jdbcType=CHAR},
+      balance_start_date = #{balanceStartDate,jdbcType=DATE},
+      balance_end_date = #{balanceEndDate,jdbcType=DATE},
+      invoice_flag = #{invoiceFlag,jdbcType=TINYINT},
+      balance_flag = #{balanceFlag,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
